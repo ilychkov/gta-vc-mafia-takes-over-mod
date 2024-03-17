@@ -10,10 +10,10 @@ var
 end
 set_fading_colour 0 0 0
 fade 0 (in) 0 ms
-set_total_number_of_missions 88
-set_progress_total 154
+set_total_number_of_missions 88 //todo
+set_progress_total 154 //todo
 set_max_wanted_level 2
-set_collectable1_total 10
+set_collectable1_total 0
 set_deatharrest_state 0
 set_wb_check_to 0
 set_time_of_day 2 0
@@ -42,13 +42,19 @@ Pickup.Create($120, #BRIBE, 15, -937.9, -114.1, 17.0)
 Pickup.Create($121, #BRIBE, 15, -1015.9, -627.9, 11.2)
 Pickup.Create($122, #BRIBE, 15, -906.3, -834.0, 15.7)
 
+$info_pickup_7_x = 364.5654
+$info_pickup_7_y = -505.397
+$info_pickup_7_z = 12.3246
+$info_pickup_7_moved_x = 372.1004
+$info_pickup_7_moved_y = -511.3845
+$info_pickup_7_moved_z = 12.3246
 Pickup.Create($info_pickup_1, #INFO, 3, -262.1507, -376.0211, 11.173)
 Pickup.Create($info_pickup_2, #INFO, 3, -255.3609, -334.4059, 10.2875)
 Pickup.Create($info_pickup_3, #INFO, 3, -261.4603, -297.7789, 10.6545) // -244.8365, -308.4459, 10.0173
 Pickup.Create($info_pickup_4, #INFO, 3, -224.1143, -300.3002, 10.0786)
 Pickup.Create($info_pickup_5, #INFO, 3, -168.7415, -382.0846, 17.5628)
 Pickup.Create($info_pickup_6, #INFO, 3, -178.7684, 443.1034, 12.2292)
-Pickup.Create($info_pickup_7, #INFO, 3, 364.5654, -505.397, 12.3246)
+Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_x, $info_pickup_7_y, $info_pickup_7_z)
 
 set_garage $681 = create_garage_type 5 door -914.129 -1263.54 10.706 to -906.3 -1266.9 14.421 depth -907.137 -1246.626
 set_garage $683 = create_garage_type 5 door -886.157 -115.158 9.992 to -876.7 -119.83 15.58 depth -882.699 -108.312
@@ -215,16 +221,22 @@ goto_if_false @INFOPICS_2
 Pickup.Destroy($info_pickup_1)
 $info_1_picked_up = 1
 $info_pickups_collected++
+player_made_progress 1
 Player.CanMove($player_char, False)
 switch_widescreen 1
 set_interpolation_parameters 0.0 3000
 Camera.SetPosition(-256.1952, -354.6713, 20.6009, 0.0, 0.0, 0.0)
-Camera.PointAt(-249.0279, -328.2032, 10.1777, 1)
-wait 3800
+Camera.PointAt(-249.0279, -328.2032, 12.1777, 1) // 10.1777
+wait 4300
 Player.CanMove($player_char, True)
 switch_widescreen 0
 Camera.Restore_WithJumpCut
 Camera.SetBehindPlayer
+if
+    $info_4_picked_up == 1
+then
+    INFOPICS_PRINT_COUNT()
+end
 goto @INFOPICS_LOOP
 
 :INFOPICS_2
@@ -237,9 +249,16 @@ goto_if_false @INFOPICS_3
 Pickup.Destroy($info_pickup_2)
 $info_2_picked_up = 1
 $info_pickups_collected++
+player_made_progress 1
 print_help 'INFO2'
 wait 5000
 print_help 'INFO2B'
+if
+    $info_4_picked_up == 1
+then
+    INFOPICS_PRINT_COUNT()
+end
+goto @INFOPICS_LOOP
 
 :INFOPICS_3
 if
@@ -251,7 +270,15 @@ goto_if_false @INFOPICS_4
 Pickup.Destroy($info_pickup_3)
 $info_3_picked_up = 1
 $info_pickups_collected++
+player_made_progress 1
 print_help 'INFO3'
+if
+    $info_4_picked_up == 1
+then
+    wait 5000
+    INFOPICS_PRINT_COUNT()
+end
+goto @INFOPICS_LOOP
 
 :INFOPICS_4
 if
@@ -263,9 +290,12 @@ goto_if_false @INFOPICS_5
 Pickup.Destroy($info_pickup_4)
 $info_4_picked_up = 1
 $info_pickups_collected++
+player_made_progress 1
 print_help 'INFO4'
 wait 5000
 print_help 'INFO4B'
+INFOPICS_PRINT_COUNT()
+goto @INFOPICS_LOOP
 
 :INFOPICS_5
 if
@@ -277,7 +307,11 @@ goto_if_false @INFOPICS_6
 Pickup.Destroy($info_pickup_5)
 $info_5_picked_up = 1
 $info_pickups_collected++
+player_made_progress 1
 print_help 'INFO5'
+wait 5000
+INFOPICS_PRINT_COUNT()
+goto @INFOPICS_LOOP
 
 :INFOPICS_6
 if
@@ -289,6 +323,7 @@ goto_if_false @INFOPICS_7
 Pickup.Destroy($info_pickup_6)
 $info_6_picked_up = 1
 $info_pickups_collected++
+player_made_progress 1
 Player.CanMove($player_char, False)
 set_fading_colour 0 0 0
 switch_widescreen 1
@@ -336,6 +371,9 @@ Camera.Restore_WithJumpCut
 Camera.SetBehindPlayer
 set_time_of_day 4@ 5@
 release_weather
+wait 1000
+INFOPICS_PRINT_COUNT()
+goto @INFOPICS_LOOP
 
 :INFOPICS_7
 if
@@ -347,8 +385,11 @@ goto_if_false @INFOPICS_7_TRICKERY
 Pickup.Destroy($info_pickup_7)
 $info_7_picked_up = 1
 $info_pickups_collected++
-print_help 'INFO7'
-goto @INFOPICS_8
+player_made_progress 1
+print_help 'INFO7C'
+wait 5000
+INFOPICS_PRINT_COUNT()
+goto @INFOPICS_LOOP
 
 :INFOPICS_7_TRICKERY
 if
@@ -358,11 +399,12 @@ if
     $info_7_moved == 0
 goto_if_false @INFOPICS_7_TRICKERY2
 if
-    locate_player_any_means_2d $player_char 0 364.5654 -505.397 radius 5.0 5.0
+    locate_player_any_means_2d $player_char 0 $info_pickup_7_x $info_pickup_7_y radius 5.0 5.0
 then
     Pickup.Destroy($info_pickup_7)
-    Pickup.Create($info_pickup_7, #INFO, 3, 372.1004, -511.3845, 12.3246)
+    Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_moved_x, $info_pickup_7_moved_y, $info_pickup_7_moved_z)
     $info_7_moved = 1
+    print_now 'INFO7A' time 5000 1
 end
 goto @INFOPICS_8
 
@@ -371,15 +413,21 @@ if
     $info_7_moved == 1
 goto_if_false @INFOPICS_8
 if
-    locate_player_any_means_2d $player_char 0 372.1004 -511.3845 radius 4.0 4.0
+    locate_player_any_means_2d $player_char 0 $info_pickup_7_moved_x $info_pickup_7_moved_y radius 4.0 4.0
 then
     Pickup.Destroy($info_pickup_7)
-    Pickup.Create($info_pickup_7, #INFO, 3, 364.5654, -505.397, 12.3246)
+    Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_x, $info_pickup_7_y, $info_pickup_7_z)
     $info_7_moved = 2
+    print_now 'INFO7B' time 5000 1
 end
 
 :INFOPICS_8
 goto @INFOPICS_LOOP
+
+:INFOPICS_PRINT_COUNT
+print_with_2_numbers_big 'INFOCNT' numbers $info_pickups_collected $info_pickups_total time 5000 style 6
+add_one_off_sound 1 at 0.0 0.0 0.0
+return
 
 //-------------Insane stunts script---------------
 //
@@ -2650,6 +2698,7 @@ script_name 'INITIAL'
 $default_wait_time = 250
 $save_pickup_1_exists = 0
 $info_pickups_collected = 0
+$info_pickups_total = 15
 $info_1_picked_up = 0
 $info_2_picked_up = 0
 $info_3_picked_up = 0
