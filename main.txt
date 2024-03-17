@@ -1,0 +1,3787 @@
+DEFINE MISSIONS 2
+DEFINE MISSION 0 AT @INITIAL           // Initial
+DEFINE MISSION 1 AT @INTRO             // Intro
+
+//-------------MAIN---------------
+thread 'MAIN'
+var
+    $player_char: Player
+    $player_actor: Actor
+end
+set_fading_colour 0 0 0
+fade 0 (in) 0 ms
+set_total_number_of_missions 88
+set_progress_total 154
+set_max_wanted_level 2
+set_collectable1_total 10
+set_deatharrest_state 0
+set_wb_check_to 0
+set_time_of_day 2 0
+const start_x = -256.4567, start_y = -375.562, start_z = 11.4109
+$skip_intro = 0
+request_collision start_x start_y
+Camera.SetAtPos(start_x, start_y, start_z)
+Player.Create($player_char, #NULL, start_x, start_y, start_z)
+Actor.EmulateFromPlayer($player_actor, $player_char)
+set_player_heading $player_char z_angle_to 94.052
+set_weather 0
+
+start_mission INITIAL
+
+Pickup.Create($110, #BRIBE, 15, 393.9, -60.2, 11.5)
+Pickup.Create($111, #BRIBE, 15, 116.0, -1313.1, 4.4)
+Pickup.Create($112, #BRIBE, 15, 393.7, -660.6, 10.7)
+Pickup.Create($113, #BRIBE, 15, 470.7, 70.1, 10.8)
+Pickup.Create($114, #BRIBE, 15, 382.7, 364.1, 10.8)
+Pickup.Create($115, #BRIBE, 15, 422.4, 971.2, 12.1)
+Pickup.Create($116, #BRIBE, 15, 89.1, 887.4, 10.5)
+Pickup.Create($117, #BRIBE, 15, -822.7, 1304.5, 11.7)
+Pickup.Create($118, #BRIBE, 15, -900.69, 251.4, 17.1)
+Pickup.Create($119, #BRIBE, 15, -973.7, 61.0, 10.4)
+Pickup.Create($120, #BRIBE, 15, -937.9, -114.1, 17.0)
+Pickup.Create($121, #BRIBE, 15, -1015.9, -627.9, 11.2)
+Pickup.Create($122, #BRIBE, 15, -906.3, -834.0, 15.7)
+
+Pickup.Create($info_pickup_1, #INFO, 3, -262.1507, -376.0211, 11.173)
+Pickup.Create($info_pickup_2, #INFO, 3, -255.3609, -334.4059, 10.2875)
+Pickup.Create($info_pickup_3, #INFO, 3, -261.4603, -297.7789, 10.6545) // -244.8365, -308.4459, 10.0173
+Pickup.Create($info_pickup_4, #INFO, 3, -224.1143, -300.3002, 10.0786)
+Pickup.Create($info_pickup_5, #INFO, 3, -168.7415, -382.0846, 17.5628)
+Pickup.Create($info_pickup_6, #INFO, 3, -178.7684, 443.1034, 12.2292)
+Pickup.Create($info_pickup_7, #INFO, 3, 364.5654, -505.397, 12.3246)
+
+set_garage $681 = create_garage_type 5 door -914.129 -1263.54 10.706 to -906.3 -1266.9 14.421 depth -907.137 -1246.626
+set_garage $683 = create_garage_type 5 door -886.157 -115.158 9.992 to -876.7 -119.83 15.58 depth -882.699 -108.312
+set_garage $684 = create_garage_type 5 door 323.9 427.4 10.0 to 313.9 430.53 15.7 depth 326.3 434.5
+set_garage $685 = create_garage_type 5 door -7.55 -1253.77 9.322 to 2.64 -1253.7 14.4 depth -7.55 -1261.2
+
+set_garage $garage1 = create_garage_type 16 door -265.1602 -308.2498 9.2968 to -276.1516 -293.8089 16.4036 depth -279.4287 -303.3422
+set_rotating_garage_door $garage1
+no_special_camera_for_this_garage $garage1
+set_maximum_number_of_cars_in_garage $garage1 max_cars_to 4
+
+declare_mission_flag $onmission
+wait 0
+if
+    NOT Actor.Dead($player_actor)
+then
+    undress_char $player_actor skin_to 'PLAYER'
+    load_all_models_now
+    dress_char $player_actor
+end
+//fade 1 (out) 1000 ms
+if
+    $player_char.Defined
+then
+    select_interior 0
+    Player.CanMove($player_char, False)
+    release_weather
+end
+wait 0
+wait 0
+
+start_mission INTRO
+start_new_script @PSAVE1
+start_new_script @INFOPICS
+launch_mission @HJ
+launch_mission @USJ
+launch_mission @CARGEN
+launch_mission @AUDIO
+
+:InfLoop
+wait 2500 ms
+jump @InfLoop
+
+//-------------Save pickups script---------------
+//
+
+:PSAVE1
+script_name 'PSAVE1'
+
+:PSAVE1_10
+wait 250
+if
+    Player.Defined($player_char)
+goto_if_false @PSAVE1_311
+if
+    is_player_in_zone $player_char in_zone 'STARI' // Starfish Island
+goto_if_false @PSAVE1_311
+if
+    Player.Controllable($player_char)
+goto_if_false @PSAVE1_311
+if
+    $onmission == 0
+goto_if_false @PSAVE1_281
+if
+    $save_pickup_1_exists == 0
+goto_if_false @PSAVE1_138
+Pickup.Create($save_pickup_1, #PICKUPSAVE, 3, -246.0713, -324.6199, 10.2586)
+$save_pickup_1_exists = 1
+
+:PSAVE1_138
+if
+    Pickup.Picked_up($save_pickup_1)
+goto_if_false @PSAVE1_274
+HELP_4118()
+if
+    Player.Defined($player_char)
+goto_if_false @PSAVE1_267
+Pickup.Destroy($save_pickup_1)
+Pickup.Create($save_pickup_1, #PICKUPSAVE, 3, -246.0713, -324.6199, 10.2586)
+do_fade 1 1000
+clear_area 1 at -248.4922 -327.0389 10.1529 range 1.0
+set_player_coordinates $player_char at -248.4922 -327.0389 10.1529
+set_player_heading $player_char z_angle_to 132.3809
+
+:PSAVE1_267
+HELP_4210()
+
+:PSAVE1_274
+goto @PSAVE1_311
+
+:PSAVE1_281
+if
+    $save_pickup_1_exists == 1
+goto_if_false @PSAVE1_311
+Pickup.Destroy($save_pickup_1)
+$save_pickup_1_exists = 0
+
+:PSAVE1_311
+goto @PSAVE1_10
+
+:HELP_4118
+$onmission = 1
+Player.CanMove($player_char, False)
+activate_save_menu
+wait 0
+
+:HELP_4138
+if
+    not has_save_game_finished
+goto_if_false @HELP_4162
+wait 0
+goto @HELP_4138
+
+:HELP_4162
+set_fading_colour 0 0 0
+do_fade 0 1000
+if
+    Player.Defined($player_char)
+goto_if_false @HELP_4208
+set_player_health $player_char health_to 200
+Player.CanMove($player_char, False)
+
+:HELP_4208
+return
+
+:HELP_4210
+if
+    Player.Defined($player_char)
+goto_if_false @HELP_4230
+Camera.Restore_WithJumpCut
+Camera.SetBehindPlayer
+
+:HELP_4230
+wait 500
+if
+    Player.Defined($player_char)
+goto_if_false @HELP_4265
+Player.CanMove($player_char, True)
+$onmission = 0
+
+:HELP_4265
+return
+
+//-------------Info pickups script---------------
+//
+
+:INFOPICS
+script_name 'INFOPIC'
+
+:INFOPICS_LOOP
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @INFOPICS_LOOP
+if
+    $onmission == 0
+goto_if_false @INFOPICS_LOOP
+if
+    $info_1_picked_up == 0
+goto_if_false @INFOPICS_2
+if
+    Pickup.Picked_up($info_pickup_1)
+goto_if_false @INFOPICS_2
+Pickup.Destroy($info_pickup_1)
+$info_1_picked_up = 1
+$info_pickups_collected++
+Player.CanMove($player_char, False)
+switch_widescreen 1
+set_interpolation_parameters 0.0 3000
+Camera.SetPosition(-256.1952, -354.6713, 20.6009, 0.0, 0.0, 0.0)
+Camera.PointAt(-249.0279, -328.2032, 10.1777, 1)
+wait 3800
+Player.CanMove($player_char, True)
+switch_widescreen 0
+Camera.Restore_WithJumpCut
+Camera.SetBehindPlayer
+goto @INFOPICS_LOOP
+
+:INFOPICS_2
+if
+    $info_2_picked_up == 0
+goto_if_false @INFOPICS_3
+if
+    Pickup.Picked_up($info_pickup_2)
+goto_if_false @INFOPICS_3
+Pickup.Destroy($info_pickup_2)
+$info_2_picked_up = 1
+$info_pickups_collected++
+print_help 'INFO2'
+wait 5000
+print_help 'INFO2B'
+
+:INFOPICS_3
+if
+    $info_3_picked_up == 0
+goto_if_false @INFOPICS_4
+if
+    Pickup.Picked_up($info_pickup_3)
+goto_if_false @INFOPICS_4
+Pickup.Destroy($info_pickup_3)
+$info_3_picked_up = 1
+$info_pickups_collected++
+print_help 'INFO3'
+
+:INFOPICS_4
+if
+    $info_4_picked_up == 0
+goto_if_false @INFOPICS_5
+if
+    Pickup.Picked_up($info_pickup_4)
+goto_if_false @INFOPICS_5
+Pickup.Destroy($info_pickup_4)
+$info_4_picked_up = 1
+$info_pickups_collected++
+print_help 'INFO4'
+wait 5000
+print_help 'INFO4B'
+
+:INFOPICS_5
+if
+    $info_5_picked_up == 0
+goto_if_false @INFOPICS_6
+if
+    Pickup.Picked_up($info_pickup_5)
+goto_if_false @INFOPICS_6
+Pickup.Destroy($info_pickup_5)
+$info_5_picked_up = 1
+$info_pickups_collected++
+print_help 'INFO5'
+
+:INFOPICS_6
+if
+    $info_6_picked_up == 0
+goto_if_false @INFOPICS_7
+if
+    Pickup.Picked_up($info_pickup_6)
+goto_if_false @INFOPICS_7
+Pickup.Destroy($info_pickup_6)
+$info_6_picked_up = 1
+$info_pickups_collected++
+Player.CanMove($player_char, False)
+set_fading_colour 0 0 0
+switch_widescreen 1
+set_interpolation_parameters 0.0 3000
+get_time_of_day 4@ 5@
+set_time_of_day 2 0 // 2 AM
+set_weather 4
+Camera.SetPosition(-173.0802, 445.9708, 19.1287, 0.0, 0.0, 0.0) // -173.0802, 445.9708, 12.2287
+Camera.PointAt(-173.7567, 444.1601, 18.915, 1) // -173.9067, 444.1601, 11.915
+wait 3000
+print_now 'INFO6' time 3000 2
+wait 2000
+// from 2 AM to 5:30 AM
+for 0@ = 120 to 330 step 4
+    if
+        210 > 0@
+    then
+        wait 20
+    else
+        if
+            270 > 0@
+        then
+            wait 60
+        else
+            wait 140
+        end
+    end
+    set_var_int_to_var_int 1@ = 0@
+    1@ /= 60
+    set_var_int_to_var_int 2@ = 1@
+    2@ *= 60
+    set_var_int_to_var_int 3@ = 0@
+    sub_int_var_from_int_var 3@ -= 2@
+    set_time_of_day 1@ 3@
+end
+wait 500
+print_now 'INFO6B' time 4500 2
+wait 4800
+fade 0 500
+wait 500
+fade 1 1000
+Player.CanMove($player_char, True)
+switch_widescreen 0
+Camera.Restore_WithJumpCut
+Camera.SetBehindPlayer
+set_time_of_day 4@ 5@
+release_weather
+
+:INFOPICS_7
+if
+    $info_7_picked_up == 0
+goto_if_false @INFOPICS_8
+if
+    Pickup.Picked_up($info_pickup_7)
+goto_if_false @INFOPICS_7_TRICKERY
+Pickup.Destroy($info_pickup_7)
+$info_7_picked_up = 1
+$info_pickups_collected++
+print_help 'INFO7'
+goto @INFOPICS_8
+
+:INFOPICS_7_TRICKERY
+if
+    is_player_in_zone $player_char in_zone 'BEACH2' // Washington Beach
+goto_if_false @INFOPICS_8
+if
+    $info_7_moved == 0
+goto_if_false @INFOPICS_7_TRICKERY2
+if
+    locate_player_any_means_2d $player_char 0 364.5654 -505.397 radius 5.0 5.0
+then
+    Pickup.Destroy($info_pickup_7)
+    Pickup.Create($info_pickup_7, #INFO, 3, 372.1004, -511.3845, 12.3246)
+    $info_7_moved = 1
+end
+goto @INFOPICS_8
+
+:INFOPICS_7_TRICKERY2
+if
+    $info_7_moved == 1
+goto_if_false @INFOPICS_8
+if
+    locate_player_any_means_2d $player_char 0 372.1004 -511.3845 radius 4.0 4.0
+then
+    Pickup.Destroy($info_pickup_7)
+    Pickup.Create($info_pickup_7, #INFO, 3, 364.5654, -505.397, 12.3246)
+    $info_7_moved = 2
+end
+
+:INFOPICS_8
+goto @INFOPICS_LOOP
+
+//-------------Insane stunts script---------------
+//
+
+:HJ
+set_deatharrest_state 0
+script_name 'HJ'
+$740 = 0
+
+:HJ_21
+wait 0
+if
+    not Player.Defined($player_char)
+goto_if_false @HJ_48
+goto @HJ_21
+
+:HJ_48
+if
+    are_any_car_cheats_activated
+goto_if_false @HJ_68
+goto @HJ_21
+
+:HJ_68
+if
+    is_player_in_flying_vehicle $player_char
+goto_if_false @HJ_91
+goto @HJ_21
+
+:HJ_91
+if
+    is_player_in_any_boat $player_char
+goto_if_false @HJ_114
+goto @HJ_21
+
+:HJ_114
+if
+    is_player_in_any_car $player_char
+goto_if_false @HJ_1591
+store_car_player_is_in_no_save $727 = player $player_char
+get_wheelie_stats $player_char two_wheels: $768 $772 wheelie: $775 $779 stoppie: $782 $786
+if
+    $768 > 0
+goto_if_false @HJ_355
+$768 /= 1000
+cset_var_int_to_var_float $769 = float_to_integer $772
+cset_var_float_to_var_int $773 = integer_to_float $769
+set_var_float_to_var_float $763 = $772
+sub_float_var_from_float_var $763 -= $773
+$763 *= 100.0
+cset_var_int_to_var_float $770 = float_to_integer $763
+set_var_int_to_var_int $726 = $768
+add_int_var_to_int_var $726 += $769
+$726 /= 2
+Player.Money($player_char) += $726
+if
+    are_measurements_in_metres
+goto_if_false @HJ_315
+print_with_4_numbers 'WHEEL01' $726 $769 $770 $768 time 3000 1 // TWO WHEELS DOUBLE BONUS: $ ~1~ Distance: ~1~.~1~m Time: ~1~ seconds
+goto @HJ_355
+
+:HJ_315
+convert_metres_to_feet $774 = meters $772
+cset_var_int_to_var_float $771 = float_to_integer $774
+print_with_3_numbers 'WHEEL02' $726 $771 $768 time time 3000 1 // TWO WHEELS DOUBLE BONUS: $ ~1~ Distance: ~1~ feet Time: ~1~ seconds
+
+:HJ_355
+if
+    $775 > 0
+goto_if_false @HJ_563
+$775 /= 1000
+cset_var_int_to_var_float $776 = float_to_integer $779
+cset_var_float_to_var_int $780 = integer_to_float $776
+set_var_float_to_var_float $763 = $779
+sub_float_var_from_float_var $763 -= $780
+$763 *= 100.0
+cset_var_int_to_var_float $777 = float_to_integer $763
+set_var_int_to_var_int $726 = $775
+add_int_var_to_int_var $726 += $776
+$726 *= 2
+$726 /= 5
+$726 /= 2
+Player.Money($player_char) += $726
+if
+    are_measurements_in_metres
+goto_if_false @HJ_523
+print_with_4_numbers 'WHEEL06' $726 $776 $777 $775 time 3000 1 // WHEELIE BONUS: $ ~1~ Distance: ~1~.~1~m Time: ~1~ seconds
+goto @HJ_563
+
+:HJ_523
+convert_metres_to_feet $781 = meters $779
+cset_var_int_to_var_float $778 = float_to_integer $781
+print_with_3_numbers 'WHEEL07' $726 $778 $775 time time 3000 1 // WHEELIE BONUS: $ ~1~ Distance: ~1~ feet Time: ~1~ seconds
+
+:HJ_563
+if
+    $782 > 0
+goto_if_false @HJ_757
+$782 /= 1000
+cset_var_int_to_var_float $783 = float_to_integer $786
+cset_var_float_to_var_int $787 = integer_to_float $783
+set_var_float_to_var_float $763 = $786
+sub_float_var_from_float_var $763 -= $787
+$763 *= 100.0
+cset_var_int_to_var_float $784 = float_to_integer $763
+set_var_int_to_var_int $726 = $782
+add_int_var_to_int_var $726 += $783
+$726 /= 2
+Player.Money($player_char) += $726
+if
+    are_measurements_in_metres
+goto_if_false @HJ_717
+print_with_4_numbers 'WHEEL11' $726 $783 $784 $782 time 3000 1 // STOPPIE BONUS: $ ~1~ Distance: ~1~.~1~m Time: ~1~ seconds
+goto @HJ_757
+
+:HJ_717
+convert_metres_to_feet $788 = meters $786
+cset_var_int_to_var_float $785 = float_to_integer $788
+print_with_3_numbers 'WHEEL12' $726 $785 $782 time time 3000 1 // STOPPIE BONUS: $ ~1~ Distance: ~1~ feet Time: ~1~ seconds
+
+:HJ_757
+if
+    is_car_in_air_proper $727
+goto_if_false @HJ_1577
+$739 = 0
+$762 = 0.0
+$730 = 0
+$737 = 0
+$733 = 0
+$732 = 0
+$738 = 0
+$731 = 0
+$728 = 0
+$729 = 0
+$749 = -100.0
+$750 = 0.0
+$751 = 0.0
+$752 = 0.0
+$753 = 0.0
+$754 = 0.0
+$755 = 0.0
+$756 = 0.0
+$757 = 0.0
+$758 = 0.0
+$759 = 0.0
+$760 = 0.0
+$761 = 0.0
+$736 = 0
+$735 = 0
+$734 = 0
+$763 = 0.0
+$765 = 0.0
+$767 = 0.0
+$766 = 0.0
+$764 = 0.0
+$741 = 0
+$742 = 0
+$743 = 0
+$744 = 0
+$745 = 0
+$746 = 0
+
+:HJ_1089
+if or
+    is_car_in_air_proper $727
+    10 > $746
+goto_if_false @HJ_1570
+$746 += 1
+Car.StorePos($727, $750, $751, $752)
+set_var_float_to_var_float $764 = $762
+if
+    $728 == 0
+goto_if_false @HJ_1198
+$764 = Car.Angle($727)
+set_var_float_to_var_float $753 = $750
+set_var_float_to_var_float $754 = $751
+set_var_float_to_var_float $755 = $752
+$728 = 1
+
+:HJ_1198
+wait 0
+if
+    Car.Wrecked($727)
+goto_if_false @HJ_1225
+goto @HJ_21
+
+:HJ_1225
+if
+    not Player.Defined($player_char)
+goto_if_false @HJ_1248
+goto @HJ_21
+
+:HJ_1248
+if
+    not is_player_in_any_car $player_char
+goto_if_false @HJ_1271
+goto @HJ_21
+
+:HJ_1271
+if and
+    not is_car_upright $727
+    $732 == 0
+goto_if_false @HJ_1301
+$732 = 1
+
+:HJ_1301
+if and
+    is_car_upright $727
+    $732 == 1
+goto_if_false @HJ_1338
+$733 += 1
+$732 = 0
+
+:HJ_1338
+$762 = Car.Angle($727)
+set_var_float_to_var_float $765 = $762
+sub_float_var_from_float_var $765 -= $764
+if
+    $765 > 180.0
+goto_if_false @HJ_1416
+set_var_float_to_var_float $766 = $765
+$765 = 360.0
+sub_float_var_from_float_var $765 -= $766
+goto @HJ_1463
+
+:HJ_1416
+if
+    -180.0 > $765
+goto_if_false @HJ_1463
+set_var_float_to_var_float $766 = $765
+$765 = 360.0
+add_float_var_to_float_var $765 += $766
+
+:HJ_1463
+if
+    0.0 > $765
+goto_if_false @HJ_1510
+set_var_float_to_var_float $766 = $765
+$765 = 0.0
+sub_float_var_from_float_var $765 -= $766
+
+:HJ_1510
+add_float_var_to_float_var $767 += $765
+cset_var_int_to_var_float $739 = float_to_integer $767
+if
+    is_float_var_greater_than_float_var $752 > $749
+goto_if_false @HJ_1553
+set_var_float_to_var_float $749 = $752
+
+:HJ_1553
+$752 = 0.0
+goto @HJ_1089
+
+:HJ_1570
+goto @HJ_1584
+
+:HJ_1577
+goto @HJ_21
+
+:HJ_1584
+goto @HJ_1598
+
+:HJ_1591
+goto @HJ_21
+
+:HJ_1598
+if
+    $728 == 1
+goto_if_false @HJ_1837
+Car.StorePos($727, $756, $757, $763)
+$737 = 0
+set_var_float_to_var_float $758 = $753
+sub_float_var_from_float_var $758 -= $756
+set_var_float_to_var_float $759 = $754
+sub_float_var_from_float_var $759 -= $757
+mult_float_var_by_float_var $758 *= $758
+mult_float_var_by_float_var $759 *= $759
+set_var_float_to_var_float $760 = $758
+add_float_var_to_float_var $760 += $759
+sqrt $761 = square_root $760
+register_jump_distance $761
+cset_var_int_to_var_float $736 = float_to_integer $761
+sub_float_var_from_float_var $749 -= $755
+register_jump_height $749
+cset_var_int_to_var_float $729 = float_to_integer $749
+cset_var_float_to_var_int $763 = integer_to_float $736
+sub_float_var_from_float_var $761 -= $763
+set_var_float_to_var_float $763 = $761
+$763 *= 100.0
+cset_var_int_to_var_float $735 = float_to_integer $763
+cset_var_float_to_var_int $763 = integer_to_float $729
+sub_float_var_from_float_var $749 -= $763
+set_var_float_to_var_float $763 = $749
+$763 *= 100.0
+cset_var_int_to_var_float $734 = float_to_integer $763
+register_jump_flips $733
+register_jump_spins $739
+
+:HJ_1837
+if
+    $749 > 4.0
+goto_if_false @HJ_1865
+$731 += 1
+
+:HJ_1865
+if
+    $736 > 40
+goto_if_false @HJ_1890
+$731 += 1
+
+:HJ_1890
+if
+    $733 > 1
+goto_if_false @HJ_1915
+$731 += 1
+
+:HJ_1915
+if
+    $739 > 360
+goto_if_false @HJ_1941
+$731 += 1
+
+:HJ_1941
+if
+    $738 > 60
+goto_if_false @HJ_1966
+$730 = 1
+
+:HJ_1966
+if
+    $731 > 0
+goto_if_false @HJ_2475
+set_var_int_to_var_int $747 = $733
+$747 *= 180
+add_int_var_to_int_var $747 += $739
+set_var_int_to_var_int $748 = $736
+$748 *= 6
+add_int_var_to_int_var $747 += $748
+set_var_int_to_var_int $748 = $729
+$748 *= 45
+add_int_var_to_int_var $747 += $748
+if
+    $730 == 1
+goto_if_false @HJ_2079
+$747 *= 2
+
+:HJ_2079
+mult_int_var_by_int_var $747 *= $731
+$747 /= 3
+$747 /= 5
+Player.Money($player_char) += $747
+if
+    $731 == 1
+goto_if_false @HJ_2149
+print_with_number 'HJ_IS' $747 time 2000 1 // INSANE STUNT BONUS: $~1~
+register_jump_stunt 1
+
+:HJ_2149
+if
+    $731 == 2
+goto_if_false @HJ_2189
+print_with_number 'HJ_DIS' $747 time 2000 1 // DOUBLE INSANE STUNT BONUS: $~1~
+register_jump_stunt 3
+
+:HJ_2189
+if
+    $731 == 3
+goto_if_false @HJ_2229
+print_with_number 'HJ_TIS' $747 time 2000 1 // TRIPLE INSANE STUNT BONUS: $~1~
+register_jump_stunt 5
+
+:HJ_2229
+if
+    $731 == 4
+goto_if_false @HJ_2269
+print_with_number 'HJ_QIS' $747 time 2000 1 // QUADRUPLE INSANE STUNT BONUS: $~1~
+register_jump_stunt 7
+
+:HJ_2269
+if
+    are_measurements_in_metres
+goto_if_false @HJ_2380
+if
+    $730 == 1
+goto_if_false @HJ_2340
+print_with_6_numbers 'HJSTATW' $736 $735 $729 $734 $733 $739 time 5000 5 // Distance: ~1~.~1~m Height: ~1~.~1~m Flips: ~1~ Rotation: ~1~_ And what a great landing!
+goto @HJ_2373
+
+:HJ_2340
+print_with_6_numbers 'HJSTAT' $736 $735 $729 $734 $733 $739 time 5000 5 // Distance: ~1~.~1~m Height: ~1~.~1~m Flips: ~1~ Rotation: ~1~_
+
+:HJ_2373
+goto @HJ_2475
+
+:HJ_2380
+convert_metres_to_feet_int $736 = meters $736
+convert_metres_to_feet_int $729 = meters $729
+if
+    $730 == 1
+goto_if_false @HJ_2448
+print_with_4_numbers 'HJSTAWF' $736 $729 $733 $739 time 5000 5 // Distance: ~1~ft Height: ~1~ft Flips: ~1~ Rotation: ~1~_ And what a great landing!
+goto @HJ_2475
+
+:HJ_2448
+print_with_4_numbers 'HJSTATF' $736 $729 $733 $739 time 5000 5 // Distance: ~1~ft Height: ~1~ft Flips: ~1~ Rotation: ~1~_
+
+:HJ_2475
+goto @HJ_21
+terminate_this_script
+
+//-------------Unique stunts script---------------
+//
+
+:USJ
+$795 = 0
+$796 = 0
+$797 = 0
+$798 = 0
+$799 = 0
+$800 = 0
+$801 = 0
+$802 = 0
+$803 = 0
+$804 = 0
+$805 = 0
+$806 = 0
+$807 = 0
+$808 = 0
+$809 = 0
+$810 = 0
+$811 = 0
+$812 = 0
+$813 = 0
+$814 = 0
+$815 = 0
+$816 = 0
+$817 = 0
+$818 = 0
+$819 = 0
+$820 = 0
+$821 = 0
+$822 = 0
+$823 = 0
+$824 = 0
+$825 = 0
+$826 = 0
+$827 = 0
+$828 = 0
+$829 = 0
+$830 = 0
+$790 = 100
+$792 = 0
+$791 = 0
+$794 = 0
+set_deatharrest_state 0
+set_unique_jumps_total 36
+script_name 'USJ'
+
+:USJ_298
+wait 0
+if
+    not Player.Defined($player_char)
+goto_if_false @USJ_325
+goto @USJ_298
+
+:USJ_325
+if
+    $355 == 1
+goto_if_false @USJ_350
+goto @USJ_298
+
+:USJ_350
+if
+    not is_player_in_any_car $player_char
+goto_if_false @USJ_373
+goto @USJ_298
+
+:USJ_373
+if
+    is_player_in_any_boat $player_char
+goto_if_false @USJ_396
+goto @USJ_298
+
+:USJ_396
+if
+    is_player_in_flying_vehicle $player_char
+goto_if_false @USJ_419
+goto @USJ_298
+
+:USJ_419
+store_car_player_is_in_no_save $789 = player $player_char
+get_car_speed $831 = car $789
+if
+    25.0 > $831
+goto_if_false @USJ_463
+goto @USJ_298
+
+:USJ_463
+if
+    not is_car_in_air_proper $789
+goto_if_false @USJ_486
+goto @USJ_298
+
+:USJ_486
+if
+    is_player_in_zone $player_char in_zone 'A_PORT' // Escobar International
+goto_if_false @USJ_1486
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -1487.781 -1044.546 18.707 radius 3.5 3.0 3.0
+goto_if_false @USJ_632
+$792 = 1
+$832 = -1521.964
+$833 = -1039.85
+$834 = 24.1338
+$835 = -1510.208
+$836 = -1042.849
+$837 = 32.151
+goto @USJ_5369
+
+:USJ_632
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -1352.695 -755.212 28.673 radius 2.0 4.0 4.0
+goto_if_false @USJ_754
+$792 = 2
+$832 = -1360.824
+$833 = -781.5606
+$834 = 37.2329
+$835 = -1353.033
+$836 = -806.455
+$837 = 39.2439
+goto @USJ_5369
+
+:USJ_754
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -1216.49 -911.833 19.0 radius 2.5 2.5 3.0
+goto_if_false @USJ_876
+$792 = 3
+$832 = -1200.244
+$833 = -894.1972
+$834 = 26.7296
+$835 = -1170.48
+$836 = -892.3815
+$837 = 34.0162
+goto @USJ_5369
+
+:USJ_876
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -1252.139 -1054.685 22.016 radius 4.0 4.0 3.0
+goto_if_false @USJ_998
+$792 = 4
+$832 = -1194.279
+$833 = -1027.862
+$834 = 22.979
+$835 = -1201.502
+$836 = -1013.937
+$837 = 23.4673
+goto @USJ_5369
+
+:USJ_998
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -1551.685 -1075.674 19.121 radius 3.5 2.5 2.5
+goto_if_false @USJ_1120
+$792 = 5
+$832 = -1520.165
+$833 = -1073.36
+$834 = 24.1604
+$835 = -1511.204
+$836 = -1065.214
+$837 = 32.3439
+goto @USJ_5369
+
+:USJ_1120
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -1595.712 -1272.881 19.068 radius 3.0 3.0 2.5
+goto_if_false @USJ_1242
+$792 = 6
+$832 = -1564.454
+$833 = -1271.588
+$834 = 21.5915
+$835 = -1548.072
+$836 = -1255.53
+$837 = 23.9858
+goto @USJ_5369
+
+:USJ_1242
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -1553.337 -1230.952 17.194 radius 3.0 3.0 2.5
+goto_if_false @USJ_1364
+$792 = 7
+$832 = -1590.58
+$833 = -1247.373
+$834 = 26.3087
+$835 = -1598.12
+$836 = -1252.426
+$837 = 23.7824
+goto @USJ_5369
+
+:USJ_1364
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -1340.022 -998.257 19.115 radius 3.0 3.0 3.0
+goto_if_false @USJ_1486
+$792 = 8
+$832 = -1355.275
+$833 = -997.9999
+$834 = 24.0731
+$835 = -1363.207
+$836 = -996.5805
+$837 = 32.2555
+goto @USJ_5369
+
+:USJ_1486
+if
+    is_player_in_zone $player_char in_zone 'PORNI' // Prawn Island
+goto_if_false @USJ_1632
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 24.721 897.801 25.103 radius 3.0 3.5 2.5
+goto_if_false @USJ_1632
+$792 = 9
+$832 = 0.1404
+$833 = 878.4036
+$834 = 20.2009
+$835 = -15.8172
+$836 = 907.157
+$837 = 28.9023
+goto @USJ_5369
+
+:USJ_1632
+if
+    is_player_in_zone $player_char in_zone 'DOCKS' // Viceport
+goto_if_false @USJ_1900
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -321.028 -1379.498 10.929 radius 4.0 4.0 3.0
+goto_if_false @USJ_1778
+$792 = 25
+$832 = -311.0497
+$833 = -1399.506
+$834 = 9.6779
+$835 = -320.9215
+$836 = -1430.599
+$837 = 16.8534
+goto @USJ_5369
+
+:USJ_1778
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -321.028 -1276.589 10.929 radius 4.0 4.0 3.0
+goto_if_false @USJ_1900
+$792 = 26
+$832 = -314.5936
+$833 = -1300.281
+$834 = 9.4204
+$835 = -320.6415
+$836 = -1310.957
+$837 = 17.6351
+goto @USJ_5369
+
+:USJ_1900
+if
+    is_player_in_zone $player_char in_zone 'DTOWN' // Downtown
+goto_if_false @USJ_2412
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -674.345 1162.422 29.916 radius 2.5 4.0 2.5
+goto_if_false @USJ_2046
+$792 = 11
+$832 = -690.7014
+$833 = 1199.213
+$834 = 25.0565
+$835 = -673.2637
+$836 = 1209.819
+$837 = 32.8857
+goto @USJ_5369
+
+:USJ_2046
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -529.84 830.062 98.717 radius 7.0 3.0 3.0
+goto_if_false @USJ_2168
+$792 = 12
+$832 = -543.2
+$833 = 843.4
+$834 = 99.2
+$835 = -529.3288
+$836 = 888.8258
+$837 = 77.5537
+goto @USJ_5369
+
+:USJ_2168
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -839.022 1153.526 31.94 radius 3.7 2.5 2.5
+goto_if_false @USJ_2290
+$792 = 13
+$832 = -853.7
+$833 = 1172.3
+$834 = 24.4
+$835 = -837.848
+$836 = 1200.585
+$837 = 25.7884
+goto @USJ_5369
+
+:USJ_2290
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -312.447 1109.196 47.741 radius 5.0 3.0 2.5
+goto_if_false @USJ_2412
+$792 = 14
+$832 = -292.5
+$833 = 1102.7
+$834 = 40.0
+$835 = -335.0812
+$836 = 1055.352
+$837 = 47.3995
+goto @USJ_5369
+
+:USJ_2412
+if
+    is_player_in_zone $player_char in_zone 'HAITI' // Little Haiti
+goto_if_false @USJ_2802
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -1011.583 -30.098 15.181 radius 2.5 2.5 2.5
+goto_if_false @USJ_2558
+$792 = 15
+$832 = -1004.154
+$833 = -62.9943
+$834 = 15.957
+$835 = -1001.711
+$836 = -83.5744
+$837 = 22.2569
+goto @USJ_5369
+
+:USJ_2558
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -942.702 -114.506 15.181 radius 2.5 2.5 2.5
+goto_if_false @USJ_2680
+$792 = 16
+$832 = -930.7841
+$833 = -125.4432
+$834 = 12.2188
+$835 = -881.2348
+$836 = -107.6016
+$837 = 20.23
+goto @USJ_5369
+
+:USJ_2680
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -900.789 260.804 15.915 radius 2.5 2.5 2.5
+goto_if_false @USJ_2802
+$792 = 17
+$832 = -906.6896
+$833 = 238.6932
+$834 = 16.5044
+$835 = -896.8717
+$836 = 235.2098
+$837 = 23.9347
+goto @USJ_5369
+
+:USJ_2802
+if
+    is_player_in_zone $player_char in_zone 'HAVANA' // Little Havana
+goto_if_false @USJ_2948
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -1041.895 -569.323 21.855 radius 5.0 2.5 2.5
+goto_if_false @USJ_2948
+$792 = 18
+$832 = -1055.616
+$833 = -588.8613
+$834 = 18.1929
+$835 = -1038.943
+$836 = -599.2438
+$837 = 26.4899
+goto @USJ_5369
+
+:USJ_2948
+if
+    is_player_in_zone $player_char in_zone 'BEACH1' // Ocean Beach
+goto_if_false @USJ_4070
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 208.993 -963.672 19.967 radius 2.5 2.5 2.5
+goto_if_false @USJ_3094
+$792 = 19
+$832 = 233.5752
+$833 = -960.8961
+$834 = 21.5283
+$835 = 242.0566
+$836 = -963.7044
+$837 = 30.6993
+goto @USJ_5369
+
+:USJ_3094
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 46.115 -964.415 25.883 radius 2.5 3.5 2.5
+goto_if_false @USJ_3216
+$792 = 20
+$832 = 63.3356
+$833 = -967.6796
+$834 = 26.3317
+$835 = 104.9159
+$836 = -964.5817
+$837 = 18.515
+goto @USJ_5369
+
+:USJ_3216
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 110.481 -1230.6 35.67 radius 4.0 4.0 2.5
+goto_if_false @USJ_3338
+$792 = 22
+$832 = 84.5247
+$833 = -1258.389
+$834 = 31.4335
+$835 = 106.3865
+$836 = -1279.522
+$837 = 40.51
+goto @USJ_5369
+
+:USJ_3338
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 7.435 -1245.895 17.752 radius 3.0 3.0 3.5
+goto_if_false @USJ_3460
+$792 = 23
+$832 = 4.1501
+$833 = -1274.46
+$834 = 19.7525
+$835 = 11.7328
+$836 = -1306.691
+$837 = 25.3238
+goto @USJ_5369
+
+:USJ_3460
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 9.103 -1326.505 20.361 radius 3.0 3.0 2.5
+goto_if_false @USJ_3582
+$792 = 24
+$832 = -6.4837
+$833 = -1355.176
+$834 = 20.045
+$835 = 11.7328
+$836 = -1371.335
+$837 = 19.3237
+goto @USJ_5369
+
+:USJ_3582
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -321.028 -1379.498 10.929 radius 4.0 4.0 3.0
+goto_if_false @USJ_3704
+$792 = 25
+$832 = -311.0497
+$833 = -1399.506
+$834 = 9.6779
+$835 = -320.9215
+$836 = -1430.599
+$837 = 16.8534
+goto @USJ_5369
+
+:USJ_3704
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -321.028 -1276.589 10.929 radius 4.0 4.0 3.0
+goto_if_false @USJ_3826
+$792 = 26
+$832 = -314.5936
+$833 = -1300.281
+$834 = 9.4204
+$835 = -320.6415
+$836 = -1310.957
+$837 = 17.6351
+goto @USJ_5369
+
+:USJ_3826
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 218.05 -1152.0 12.84 radius 2.5 2.0 2.5
+goto_if_false @USJ_3948
+$792 = 27
+$832 = 228.2427
+$833 = -1140.774
+$834 = 14.4116
+$835 = 225.9232
+$836 = -1101.189
+$837 = 20.9205
+goto @USJ_5369
+
+:USJ_3948
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 259.056 -945.833 12.84 radius 2.5 2.0 2.0
+goto_if_false @USJ_4070
+$792 = 28
+$832 = 259.0203
+$833 = -963.3474
+$834 = 10.0962
+$835 = 246.7973
+$836 = -1007.525
+$837 = 22.6569
+goto @USJ_5369
+
+:USJ_4070
+if
+    is_player_in_zone $player_char in_zone 'BEACH2' // Washington Beach
+goto_if_false @USJ_4826
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 284.4732 -494.1143 16.0 radius 3.0 3.0 3.0
+goto_if_false @USJ_4216
+$792 = 30
+$832 = 268.9545
+$833 = -469.6216
+$834 = 15.2438
+$835 = 252.5868
+$836 = -477.8011
+$837 = 20.6179
+goto @USJ_5369
+
+:USJ_4216
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 370.79 -709.863 19.895 radius 3.0 3.0 3.0
+goto_if_false @USJ_4338
+$792 = 31
+$832 = 361.3011
+$833 = -735.6794
+$834 = 23.4501
+$835 = 344.1249
+$836 = -748.2875
+$837 = 31.9164
+goto @USJ_5369
+
+:USJ_4338
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 461.589 -522.23 18.931 radius 3.0 3.0 3.0
+goto_if_false @USJ_4460
+$792 = 32
+$832 = 426.6392
+$833 = -524.0469
+$834 = 12.3656
+$835 = 403.8112
+$836 = -510.4724
+$837 = 18.9753
+goto @USJ_5369
+
+:USJ_4460
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 454.105 -504.736 18.931 radius 3.0 3.0 3.0
+goto_if_false @USJ_4582
+$792 = 33
+$832 = 456.6417
+$833 = -532.0921
+$834 = 19.3283
+$835 = 436.7198
+$836 = -555.8276
+$837 = 28.7096
+goto @USJ_5369
+
+:USJ_4582
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 460.91 -383.362 14.222 radius 3.0 3.0 3.0
+goto_if_false @USJ_4704
+$792 = 34
+$832 = 462.6722
+$833 = -399.8143
+$834 = 17.5715
+$835 = 457.8847
+$836 = -413.2519
+$837 = 26.4187
+goto @USJ_5369
+
+:USJ_4704
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 259.041 -480.608 14.688 radius 4.0 5.0 4.0
+goto_if_false @USJ_4826
+$792 = 35
+$832 = 282.5344
+$833 = -479.8412
+$834 = 10.4141
+$835 = 290.986
+$836 = -497.1007
+$837 = 19.0179
+goto @USJ_5369
+
+:USJ_4826
+if
+    is_player_in_zone $player_char in_zone 'BEACH3' // Vice Point
+goto_if_false @USJ_5216
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 317.2051 -223.2012 42.3731 radius 2.6 3.6 2.6
+goto_if_false @USJ_4972
+$792 = 10
+$832 = 301.9448
+$833 = -215.9068
+$834 = 34.4501
+$835 = 309.8567
+$836 = -170.8791
+$837 = 20.3312
+goto @USJ_5369
+
+:USJ_4972
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 444.5 -118.4 16.0 radius 3.0 3.0 3.0
+goto_if_false @USJ_5094
+$792 = 29
+$832 = 416.4033
+$833 = -125.6725
+$834 = 13.7649
+$835 = 394.259
+$836 = -116.6847
+$837 = 19.7462
+goto @USJ_5369
+
+:USJ_5094
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 435.8542 -334.3212 15.8977 radius 3.0 3.0 3.0
+goto_if_false @USJ_5216
+$792 = 21
+$832 = 420.6179
+$833 = -367.5033
+$834 = 14.1343
+$835 = 427.7329
+$836 = -381.8485
+$837 = 18.9116
+goto @USJ_5369
+
+:USJ_5216
+if
+    is_player_in_zone $player_char in_zone 'STARI' // Starfish Island
+goto_if_false @USJ_5362
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -346.818 -290.741 12.926 radius 3.0 3.0 3.0
+goto_if_false @USJ_5362
+$792 = 36
+$832 = -317.0066
+$833 = -298.789
+$834 = 15.3976
+$835 = -306.2269
+$836 = -290.804
+$837 = 22.1777
+goto @USJ_5369
+
+:USJ_5362
+goto @USJ_298
+
+:USJ_5369
+$793 = 0
+$794 = 0
+set_time_scale 0.3
+Camera.SetPosition($832, $833, $834, 0.0, 0.0, 0.0)
+Camera.OnVehicle($789, 15, 2)
+
+:USJ_5425
+if or
+    is_car_in_air_proper $789
+    10 > $793
+goto_if_false @USJ_5665
+$793 += 1
+wait 0
+if
+    Car.Wrecked($789)
+goto_if_false @USJ_5492
+$841 = 0.0
+goto @USJ_5665
+
+:USJ_5492
+if
+    is_car_in_water $789
+goto_if_false @USJ_5525
+$841 = 0.0
+goto @USJ_5665
+
+:USJ_5525
+if
+    not Player.Defined($player_char)
+goto_if_false @USJ_5558
+$841 = 0.0
+goto @USJ_5665
+
+:USJ_5558
+if
+    not is_player_in_any_car $player_char
+goto_if_false @USJ_5591
+$841 = 0.0
+goto @USJ_5665
+
+:USJ_5591
+if
+    $794 == 0
+goto_if_false @USJ_5658
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car $835 $836 $837 radius 10.0 10.0 10.0
+goto_if_false @USJ_5658
+$794 = 1
+
+:USJ_5658
+goto @USJ_5425
+
+:USJ_5665
+wait 300
+set_time_scale 1.0
+Camera.Restore_WithJumpCut
+if
+    $794 == 1
+goto_if_false @USJ_7497
+if and
+    $792 == 1
+    $795 == 0
+goto_if_false @USJ_5747
+$795 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_5747
+if and
+    $792 == 2
+    $796 == 0
+goto_if_false @USJ_5797
+$796 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_5797
+if and
+    $792 == 3
+    $797 == 0
+goto_if_false @USJ_5847
+$797 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_5847
+if and
+    $792 == 4
+    $798 == 0
+goto_if_false @USJ_5897
+$798 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_5897
+if and
+    $792 == 5
+    $799 == 0
+goto_if_false @USJ_5947
+$799 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_5947
+if and
+    $792 == 6
+    $800 == 0
+goto_if_false @USJ_5997
+$800 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_5997
+if and
+    $792 == 7
+    $801 == 0
+goto_if_false @USJ_6047
+$801 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6047
+if and
+    $792 == 8
+    $802 == 0
+goto_if_false @USJ_6097
+$802 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6097
+if and
+    $792 == 9
+    $803 == 0
+goto_if_false @USJ_6147
+$803 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6147
+if and
+    $792 == 10
+    $804 == 0
+goto_if_false @USJ_6197
+$804 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6197
+if and
+    $792 == 11
+    $805 == 0
+goto_if_false @USJ_6247
+$805 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6247
+if and
+    $792 == 12
+    $806 == 0
+goto_if_false @USJ_6297
+$806 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6297
+if and
+    $792 == 13
+    $807 == 0
+goto_if_false @USJ_6347
+$807 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6347
+if and
+    $792 == 14
+    $808 == 0
+goto_if_false @USJ_6397
+$808 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6397
+if and
+    $792 == 15
+    $809 == 0
+goto_if_false @USJ_6447
+$809 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6447
+if and
+    $792 == 16
+    $810 == 0
+goto_if_false @USJ_6497
+$810 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6497
+if and
+    $792 == 17
+    $811 == 0
+goto_if_false @USJ_6547
+$811 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6547
+if and
+    $792 == 18
+    $812 == 0
+goto_if_false @USJ_6597
+$812 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6597
+if and
+    $792 == 19
+    $813 == 0
+goto_if_false @USJ_6647
+$813 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6647
+if and
+    $792 == 20
+    $814 == 0
+goto_if_false @USJ_6697
+$814 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6697
+if and
+    $792 == 21
+    $815 == 0
+goto_if_false @USJ_6747
+$815 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6747
+if and
+    $792 == 22
+    $816 == 0
+goto_if_false @USJ_6797
+$816 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6797
+if and
+    $792 == 23
+    $817 == 0
+goto_if_false @USJ_6847
+$817 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6847
+if and
+    $792 == 24
+    $818 == 0
+goto_if_false @USJ_6897
+$818 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6897
+if and
+    $792 == 25
+    $819 == 0
+goto_if_false @USJ_6947
+$819 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6947
+if and
+    $792 == 26
+    $820 == 0
+goto_if_false @USJ_6997
+$820 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_6997
+if and
+    $792 == 27
+    $821 == 0
+goto_if_false @USJ_7047
+$821 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_7047
+if and
+    $792 == 28
+    $822 == 0
+goto_if_false @USJ_7097
+$822 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_7097
+if and
+    $792 == 29
+    $823 == 0
+goto_if_false @USJ_7147
+$823 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_7147
+if and
+    $792 == 30
+    $824 == 0
+goto_if_false @USJ_7197
+$824 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_7197
+if and
+    $792 == 31
+    $825 == 0
+goto_if_false @USJ_7247
+$825 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_7247
+if and
+    $792 == 32
+    $826 == 0
+goto_if_false @USJ_7297
+$826 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_7297
+if and
+    $792 == 33
+    $827 == 0
+goto_if_false @USJ_7347
+$827 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_7347
+if and
+    $792 == 34
+    $828 == 0
+goto_if_false @USJ_7397
+$828 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_7397
+if and
+    $792 == 35
+    $829 == 0
+goto_if_false @USJ_7447
+$829 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_7447
+if and
+    $792 == 36
+    $830 == 0
+goto_if_false @USJ_7497
+$830 = 1
+$791 += 1
+player_made_progress 1
+goto @USJ_7504
+
+:USJ_7497
+goto @USJ_298
+
+:USJ_7504
+if
+    36 > $791
+goto_if_false @USJ_7570
+print_big_q 'USJ' time 5000 style 5 // UNIQUE STUNT BONUS!
+print_with_number_big 'REWARD' number $790 time 6000 style 6 // REWARD $~1~
+Player.Money($player_char) += $790
+goto @USJ_7621
+
+:USJ_7570
+print_big_q 'USJ' time 5000 style 5 // UNIQUE STUNT BONUS!
+print_help 'USJ_ALL' // ALL UNIQUE STUNTS COMPLETED!
+print_with_number_big 'REWARD' number 10000 time 6000 style 6 // REWARD $~1~
+Player.Money($player_char) += 10000
+
+:USJ_7621
+$794 = 0
+add_one_off_sound 1 at 0.0 0.0 0.0
+register_unique_jump_found
+$790 += 100
+goto @USJ_298
+terminate_this_script
+
+//-------------Car generation script---------------
+// Fills parking lots with cars
+
+:CARGEN
+script_name 'CARGEN'
+set_deatharrest_state 0
+
+:CARGEN_14
+wait 500
+if
+    Player.Defined($player_char)
+goto_if_false @CARGEN_1829
+if
+    is_player_in_zone $player_char in_zone 'BEACH3' // Vice Point
+goto_if_false @CARGEN_1829
+if
+    is_player_in_area_3d $player_char 0 369.7 1207.3 24.5 372.2 1212.8 28.5
+goto_if_false @CARGEN_114
+$1264 = 4
+
+:CARGEN_114
+if
+    is_player_in_area_3d $player_char 0 301.9 1152.3 16.1 342.4 1259.4 22.0
+goto_if_false @CARGEN_404
+if
+    $1259 == 0
+goto_if_false @CARGEN_194
+CARGEN_2607()
+$1259 = 1
+
+:CARGEN_194
+if
+    $1260 == 0
+goto_if_false @CARGEN_226
+CARGEN_2719()
+$1260 = 1
+
+:CARGEN_226
+if
+    $1261 == 1
+goto_if_false @CARGEN_283
+clear_area_of_cars 342.4 1259.1 21.5 302.5 1153.3 26.0
+$1261 = 0
+
+:CARGEN_283
+if
+    $1262 == 1
+goto_if_false @CARGEN_340
+clear_area_of_cars 342.4 1153.3 23.8 367.2 1259.1 28.9
+$1262 = 0
+
+:CARGEN_340
+if
+    $1263 == 1
+goto_if_false @CARGEN_397
+clear_area_of_cars 302.1 1151.5 32.0 342.7 1259.4 26.5
+$1263 = 0
+
+:CARGEN_397
+$1264 = 1
+
+:CARGEN_404
+if
+    $1264 > 0
+goto_if_false @CARGEN_687
+if
+    is_player_in_area_3d $player_char 0 341.3 1258.9 19.1 367.2 1152.6 23.8
+goto_if_false @CARGEN_687
+if
+    $1259 == 0
+goto_if_false @CARGEN_502
+CARGEN_2607()
+$1259 = 1
+
+:CARGEN_502
+if
+    $1260 == 0
+goto_if_false @CARGEN_534
+CARGEN_2719()
+$1260 = 1
+
+:CARGEN_534
+if
+    $1261 == 0
+goto_if_false @CARGEN_566
+CARGEN_2853()
+$1261 = 1
+
+:CARGEN_566
+if
+    $1262 == 1
+goto_if_false @CARGEN_623
+clear_area_of_cars 342.4 1153.3 23.8 367.2 1259.1 28.9
+$1262 = 0
+
+:CARGEN_623
+if
+    $1263 == 1
+goto_if_false @CARGEN_680
+clear_area_of_cars 302.1 1151.5 32.0 342.7 1259.4 26.5
+$1263 = 0
+
+:CARGEN_680
+$1264 = 2
+
+:CARGEN_687
+if
+    $1264 > 1
+goto_if_false @CARGEN_970
+if
+    is_player_in_area_3d $player_char 0 342.4 1259.1 21.5 302.5 1153.3 26.0
+goto_if_false @CARGEN_970
+if
+    $1259 == 1
+goto_if_false @CARGEN_810
+clear_area_of_cars 301.9 1152.3 16.1 342.4 1259.4 22.0
+$1259 = 0
+
+:CARGEN_810
+if
+    $1260 == 0
+goto_if_false @CARGEN_842
+CARGEN_2719()
+$1260 = 1
+
+:CARGEN_842
+if
+    $1261 == 0
+goto_if_false @CARGEN_874
+CARGEN_2853()
+$1261 = 1
+
+:CARGEN_874
+if
+    $1262 == 0
+goto_if_false @CARGEN_906
+CARGEN_2987()
+$1262 = 1
+
+:CARGEN_906
+if
+    $1263 == 1
+goto_if_false @CARGEN_963
+clear_area_of_cars 302.1 1151.5 32.0 342.7 1259.4 26.5
+$1263 = 0
+
+:CARGEN_963
+$1264 = 3
+
+:CARGEN_970
+if
+    $1264 > 2
+goto_if_false @CARGEN_1253
+if
+    is_player_in_area_3d $player_char 0 342.4 1153.3 23.8 372.3 1259.1 28.9
+goto_if_false @CARGEN_1253
+if
+    $1259 == 1
+goto_if_false @CARGEN_1093
+clear_area_of_cars 301.9 1152.3 16.1 342.4 1259.4 22.0
+$1259 = 0
+
+:CARGEN_1093
+if
+    $1260 == 1
+goto_if_false @CARGEN_1150
+clear_area_of_cars 341.3 1258.9 19.1 367.2 1152.6 23.8
+$1260 = 0
+
+:CARGEN_1150
+if
+    $1261 == 0
+goto_if_false @CARGEN_1182
+CARGEN_2853()
+$1261 = 1
+
+:CARGEN_1182
+if
+    $1262 == 0
+goto_if_false @CARGEN_1214
+CARGEN_2987()
+$1262 = 1
+
+:CARGEN_1214
+if
+    $1263 == 0
+goto_if_false @CARGEN_1246
+CARGEN_3099()
+$1263 = 1
+
+:CARGEN_1246
+$1264 = 4
+
+:CARGEN_1253
+if
+    $1264 > 3
+goto_if_false @CARGEN_1561
+if
+    is_player_in_area_3d $player_char 0 302.1 1151.5 32.0 342.7 1259.4 26.5
+goto_if_false @CARGEN_1561
+if
+    $1259 == 1
+goto_if_false @CARGEN_1376
+clear_area_of_cars 301.9 1152.3 16.1 342.4 1259.4 22.0
+$1259 = 0
+
+:CARGEN_1376
+if
+    $1260 == 1
+goto_if_false @CARGEN_1433
+clear_area_of_cars 341.3 1258.9 19.1 367.2 1152.6 23.8
+$1260 = 0
+
+:CARGEN_1433
+if
+    $1261 == 1
+goto_if_false @CARGEN_1490
+clear_area_of_cars 342.4 1259.1 21.5 302.5 1153.3 26.0
+$1261 = 0
+
+:CARGEN_1490
+if
+    $1262 == 0
+goto_if_false @CARGEN_1522
+CARGEN_2987()
+$1262 = 1
+
+:CARGEN_1522
+if
+    $1263 == 0
+goto_if_false @CARGEN_1554
+CARGEN_3099()
+$1263 = 1
+
+:CARGEN_1554
+$1264 = 5
+
+:CARGEN_1561
+if
+    $1264 > 0
+goto_if_false @CARGEN_1829
+if
+    not is_player_in_area_3d $player_char 0 301.9 1152.3 16.1 372.3 1258.4 32.6
+goto_if_false @CARGEN_1829
+clear_area_of_cars 301.9 1152.3 16.1 342.4 1259.4 22.0
+clear_area_of_cars 341.3 1258.9 19.1 367.2 1152.6 23.8
+clear_area_of_cars 342.4 1259.1 21.5 302.5 1153.3 26.0
+clear_area_of_cars 342.4 1153.3 23.8 367.2 1259.1 28.9
+clear_area_of_cars 302.1 1151.5 32.0 342.7 1259.4 26.5
+$1259 = 0
+$1260 = 0
+$1261 = 0
+$1262 = 0
+$1263 = 0
+$1264 = 0
+
+:CARGEN_1829
+if
+    Player.Defined($player_char)
+goto_if_false @CARGEN_2598
+if
+    is_player_in_zone $player_char in_zone 'BEACH1' // Ocean Beach
+goto_if_false @CARGEN_2598
+if
+    is_player_in_area_3d $player_char 0 104.9 -1143.3 23.6 158.3 -1239.3 2.1
+goto_if_false @CARGEN_2045
+if
+    $1255 == 0
+goto_if_false @CARGEN_1949
+CARGEN_3211()
+$1255 = 1
+
+:CARGEN_1949
+if
+    $1256 == 0
+goto_if_false @CARGEN_1981
+CARGEN_3345()
+$1256 = 1
+
+:CARGEN_1981
+if
+    $1257 == 1
+goto_if_false @CARGEN_2038
+clear_area_of_cars 158.3 -1236.6 29.9 104.5 -1142.1 36.8
+$1257 = 0
+
+:CARGEN_2038
+$1258 = 1
+
+:CARGEN_2045
+if
+    $1258 > 0
+goto_if_false @CARGEN_2214
+if
+    is_player_in_area_3d $player_char 0 104.9 -1143.3 23.6 158.3 -1236.6 29.9
+goto_if_false @CARGEN_2214
+if
+    $1255 == 0
+goto_if_false @CARGEN_2143
+CARGEN_3211()
+$1255 = 1
+
+:CARGEN_2143
+if
+    $1256 == 0
+goto_if_false @CARGEN_2175
+CARGEN_3345()
+$1256 = 1
+
+:CARGEN_2175
+if
+    $1257 == 0
+goto_if_false @CARGEN_2207
+CARGEN_3479()
+$1257 = 1
+
+:CARGEN_2207
+$1258 = 2
+
+:CARGEN_2214
+if
+    $1258 > 1
+goto_if_false @CARGEN_2408
+if
+    is_player_in_area_3d $player_char 0 158.3 -1236.6 29.9 104.5 -1142.1 36.8
+goto_if_false @CARGEN_2408
+if
+    $1255 == 1
+goto_if_false @CARGEN_2337
+clear_area_of_cars 104.9 -1143.3 23.6 158.3 -1239.3 2.1
+$1255 = 0
+
+:CARGEN_2337
+if
+    $1256 == 0
+goto_if_false @CARGEN_2369
+CARGEN_3345()
+$1256 = 1
+
+:CARGEN_2369
+if
+    $1257 == 0
+goto_if_false @CARGEN_2401
+CARGEN_3479()
+$1257 = 1
+
+:CARGEN_2401
+$1258 = 3
+
+:CARGEN_2408
+if
+    $1258 > 0
+goto_if_false @CARGEN_2598
+if
+    not is_player_in_area_3d $player_char 0 158.3 -1239.3 2.1 104.5 -1142.1 36.8
+goto_if_false @CARGEN_2598
+clear_area_of_cars 104.9 -1143.3 23.6 158.3 -1239.3 2.1
+clear_area_of_cars 104.9 -1143.3 23.6 158.3 -1236.6 29.9
+clear_area_of_cars 158.3 -1236.6 29.9 104.5 -1142.1 36.8
+$1255 = 0
+$1256 = 0
+$1257 = 0
+$1258 = 0
+
+:CARGEN_2598
+goto @CARGEN_14
+terminate_this_script
+
+:CARGEN_2607
+create_random_car_for_car_park 310.2 1234.8 16.2 90.2
+create_random_car_for_car_park 336.4 1250.7 16.2 271.9
+create_random_car_for_car_park 307.6 1160.9 16.2 92.8
+create_random_car_for_car_park 336.4 1157.7 16.2 270.1
+create_random_car_for_car_park 307.4 1253.6 16.2 89.4
+return
+
+:CARGEN_2719
+create_random_car_for_car_park 347.5 1185.5 19.1 95.2
+create_random_car_for_car_park 361.4 1202.9 19.1 273.7
+create_random_car_for_car_park 361.3 1157.8 19.1 267.7
+create_random_car_for_car_park 347.6 1228.8 19.0 92.5
+create_random_car_for_car_park 361.4 1255.5 19.1 269.5
+create_random_car_for_car_park 362.4 1228.7 19.1 264.6
+return
+
+:CARGEN_2853
+create_random_car_for_car_park 308.4 1225.8 21.5 87.4
+create_random_car_for_car_park 335.8 1207.9 21.5 271.2
+create_random_car_for_car_park 335.8 1213.6 21.5 270.6
+create_random_car_for_car_park 308.4 1196.2 21.5 90.0
+create_random_car_for_car_park 307.2 1168.4 21.5 89.6
+create_random_car_for_car_park 336.2 1182.3 21.5 270.3
+return
+
+:CARGEN_2987
+create_random_car_for_car_park 348.3 1190.1 23.8 91.0
+create_random_car_for_car_park 348.0 1203.5 23.8 87.5
+create_random_car_for_car_park 348.2 1208.5 23.8 90.2
+create_random_car_for_car_park 347.1 1227.1 23.8 89.8
+create_random_car_for_car_park 348.2 1253.7 23.8 92.5
+return
+
+:CARGEN_3099
+create_random_car_for_car_park 336.8 1158.1 26.3 269.4
+create_random_car_for_car_park 335.0 1186.2 26.3 268.7
+create_random_car_for_car_park 336.3 1190.7 26.3 271.2
+create_random_car_for_car_park 337.0 1227.0 26.2 269.5
+create_random_car_for_car_park 337.1 1221.0 26.2 267.9
+return
+
+:CARGEN_3211
+create_random_car_for_car_park 109.8 -1151.2 16.5 1.6
+create_random_car_for_car_park 129.7 -1150.8 16.5 0.4
+create_random_car_for_car_park 143.6 -1153.0 16.5 358.9
+create_random_car_for_car_park 123.0 -1180.8 16.5 1.3
+create_random_car_for_car_park 128.0 -1180.8 16.5 1.3
+create_random_car_for_car_park 133.0 -1180.8 16.5 1.3
+return
+
+:CARGEN_3345
+create_random_car_for_car_park 150.5 -1192.9 23.2 265.1
+create_random_car_for_car_park 141.6 -1228.8 23.2 181.3
+create_random_car_for_car_park 127.1 -1228.7 23.2 178.6
+create_random_car_for_car_park 117.9 -1152.3 23.2 0.1
+create_random_car_for_car_park 141.8 -1151.1 23.2 0.0
+create_random_car_for_car_park 129.2 -1179.3 23.2 0.0
+return
+
+:CARGEN_3479
+create_random_car_for_car_park 133.0 -1199.6 30.0 182.6
+create_random_car_for_car_park 123.7 -1199.7 30.0 180.4
+create_random_car_for_car_park 133.0 -1167.9 30.0 182.6
+create_random_car_for_car_park 146.3 -1149.3 30.1 273.0
+create_random_car_for_car_park 143.0 -1230.0 30.1 181.5
+create_random_car_for_car_park 135.3 -1217.7 30.1 1.5
+return
+
+//-------------Audio script---------------
+// Controls stuff like fountain sounds and some random muffled music in the distance
+
+:AUDIO
+script_name 'AUDIO'
+set_deatharrest_state 0
+start_new_script @AUDIO1
+terminate_this_script
+
+:AUDIO1
+script_name 'AUDIO1'
+$1559 = 0
+$1560 = 0
+$1561 = 0
+$1565 = 0
+$1566 = 0
+$1567 = 0
+$1571 = 0
+$1572 = 0
+$1573 = 0
+$1579 = 0
+$1576 = 0
+$1577 = 0
+
+:AUDIO1_94
+wait 500
+get_time_of_day $9 = current_time_hours, $10
+if
+    Player.Defined($player_char)
+goto_if_false @AUDIO1_1790
+if
+    is_player_in_zone $player_char in_zone 'DTOWN' // Downtown
+goto_if_false @AUDIO1_403
+if
+    $275 == 0
+goto_if_false @AUDIO1_212
+if
+    $1559 == 0
+goto_if_false @AUDIO1_212
+add_continuous_sound $1556 = create_sound 36 at -596.018 640.916 12.0
+$1559 = 1
+
+:AUDIO1_212
+if
+    $275 == 1
+goto_if_false @AUDIO1_295
+if
+    $276 == 0
+goto_if_false @AUDIO1_295
+if
+    $1560 == 0
+goto_if_false @AUDIO1_295
+add_continuous_sound $1557 = create_sound 37 at -596.018 640.916 12.0
+$1560 = 1
+
+:AUDIO1_295
+if
+    $275 == 1
+goto_if_false @AUDIO1_396
+if
+    $276 == 1
+goto_if_false @AUDIO1_396
+if
+    $277 == 0
+goto_if_false @AUDIO1_396
+if
+    $1561 == 0
+goto_if_false @AUDIO1_396
+add_continuous_sound $1558 = create_sound 38 at -596.018 640.916 12.0
+$1561 = 1
+
+:AUDIO1_396
+goto @AUDIO1_493
+
+:AUDIO1_403
+if
+    $1559 == 1
+goto_if_false @AUDIO1_433
+remove_sound $1556
+$1559 = 0
+
+:AUDIO1_433
+if
+    $1560 == 1
+goto_if_false @AUDIO1_463
+remove_sound $1557
+$1560 = 0
+
+:AUDIO1_463
+if
+    $1561 == 1
+goto_if_false @AUDIO1_493
+remove_sound $1558
+$1561 = 0
+
+:AUDIO1_493
+if
+    is_player_in_zone $player_char in_zone 'BEACH3' // Vice Point
+goto_if_false @AUDIO1_893
+if or
+    $9 >= 23
+    7 > $9
+goto_if_false @AUDIO1_610
+if and
+    $1565 == 0
+    $1566 == 0
+    $1567 == 0
+goto_if_false @AUDIO1_603
+add_continuous_sound $1562 = create_sound 40 at 494.652 -83.347 10.032
+$1565 = 1
+
+:AUDIO1_603
+goto @AUDIO1_640
+
+:AUDIO1_610
+if
+    $1565 == 1
+goto_if_false @AUDIO1_640
+remove_sound $1562
+$1565 = 0
+
+:AUDIO1_640
+if and
+    $9 >= 7
+    15 > $9
+goto_if_false @AUDIO1_733
+if and
+    $1566 == 0
+    $1565 == 0
+    $1567 == 0
+goto_if_false @AUDIO1_726
+add_continuous_sound $1563 = create_sound 41 at 494.652 -83.347 10.032
+$1566 = 1
+
+:AUDIO1_726
+goto @AUDIO1_763
+
+:AUDIO1_733
+if
+    $1566 == 1
+goto_if_false @AUDIO1_763
+remove_sound $1563
+$1566 = 0
+
+:AUDIO1_763
+if and
+    $9 >= 15
+    23 > $9
+goto_if_false @AUDIO1_856
+if and
+    $1567 == 0
+    $1565 == 0
+    $1566 == 0
+goto_if_false @AUDIO1_849
+add_continuous_sound $1564 = create_sound 42 at 494.652 -83.347 10.032
+$1567 = 1
+
+:AUDIO1_849
+goto @AUDIO1_886
+
+:AUDIO1_856
+if
+    $1567 == 1
+goto_if_false @AUDIO1_886
+remove_sound $1564
+$1567 = 0
+
+:AUDIO1_886
+goto @AUDIO1_983
+
+:AUDIO1_893
+if
+    $1565 == 1
+goto_if_false @AUDIO1_923
+remove_sound $1562
+$1565 = 0
+
+:AUDIO1_923
+if
+    $1566 == 1
+goto_if_false @AUDIO1_953
+remove_sound $1563
+$1566 = 0
+
+:AUDIO1_953
+if
+    $1567 == 1
+goto_if_false @AUDIO1_983
+remove_sound $1564
+$1567 = 0
+
+:AUDIO1_983
+if
+    is_player_in_zone $player_char in_zone 'BEACH1' // Ocean Beach
+goto_if_false @AUDIO1_1532
+if or
+    $9 >= 23
+    7 > $9
+goto_if_false @AUDIO1_1100
+if and
+    $1571 == 0
+    $1572 == 0
+    $1573 == 0
+goto_if_false @AUDIO1_1093
+add_continuous_sound $1568 = create_sound 43 at 87.738 -1456.117 11.0
+$1571 = 1
+
+:AUDIO1_1093
+goto @AUDIO1_1130
+
+:AUDIO1_1100
+if
+    $1571 == 1
+goto_if_false @AUDIO1_1130
+remove_sound $1568
+$1571 = 0
+
+:AUDIO1_1130
+if and
+    $9 >= 7
+    15 > $9
+goto_if_false @AUDIO1_1223
+if and
+    $1572 == 0
+    $1571 == 0
+    $1573 == 0
+goto_if_false @AUDIO1_1216
+add_continuous_sound $1569 = create_sound 44 at 87.738 -1456.117 11.0
+$1572 = 1
+
+:AUDIO1_1216
+goto @AUDIO1_1253
+
+:AUDIO1_1223
+if
+    $1572 == 1
+goto_if_false @AUDIO1_1253
+remove_sound $1569
+$1572 = 0
+
+:AUDIO1_1253
+if and
+    $9 >= 15
+    23 > $9
+goto_if_false @AUDIO1_1346
+if and
+    $1573 == 0
+    $1571 == 0
+    $1572 == 0
+goto_if_false @AUDIO1_1339
+add_continuous_sound $1570 = create_sound 45 at 87.738 -1456.117 11.0
+$1573 = 1
+
+:AUDIO1_1339
+goto @AUDIO1_1376
+
+:AUDIO1_1346
+if
+    $1573 == 1
+goto_if_false @AUDIO1_1376
+remove_sound $1570
+$1573 = 0
+
+:AUDIO1_1376
+if
+    $9 == 10
+goto_if_false @AUDIO1_1448
+if
+    $1579 == 0
+goto_if_false @AUDIO1_1441
+add_continuous_sound $1578 = create_sound 46 at -76.074 -1528.485 13.397
+$1579 = 1
+
+:AUDIO1_1441
+goto @AUDIO1_1478
+
+:AUDIO1_1448
+if
+    $1579 == 1
+goto_if_false @AUDIO1_1478
+remove_sound $1578
+$1579 = 0
+
+:AUDIO1_1478
+if
+    $1576 == 0
+goto_if_false @AUDIO1_1525
+add_continuous_sound $1574 = create_sound 51 at -67.015 -1546.671 11.485
+$1576 = 1
+
+:AUDIO1_1525
+goto @AUDIO1_1682
+
+:AUDIO1_1532
+if
+    $1571 == 1
+goto_if_false @AUDIO1_1562
+remove_sound $1568
+$1571 = 0
+
+:AUDIO1_1562
+if
+    $1572 == 1
+goto_if_false @AUDIO1_1592
+remove_sound $1569
+$1572 = 0
+
+:AUDIO1_1592
+if
+    $1573 == 1
+goto_if_false @AUDIO1_1622
+remove_sound $1570
+$1573 = 0
+
+:AUDIO1_1622
+if
+    $1579 == 1
+goto_if_false @AUDIO1_1652
+remove_sound $1578
+$1579 = 0
+
+:AUDIO1_1652
+if
+    $1576 == 1
+goto_if_false @AUDIO1_1682
+remove_sound $1574
+$1576 = 0
+
+:AUDIO1_1682
+if
+    is_player_in_zone $player_char in_zone 'PORNI' // Prawn Island
+goto_if_false @AUDIO1_1760
+if
+    $1577 == 0
+goto_if_false @AUDIO1_1753
+add_continuous_sound $1575 = create_sound 51 at 9.637 1092.344 17.211
+$1577 = 1
+
+:AUDIO1_1753
+goto @AUDIO1_1790
+
+:AUDIO1_1760
+if
+    $1577 == 1
+goto_if_false @AUDIO1_1790
+remove_sound $1575
+$1577 = 0
+
+:AUDIO1_1790
+goto @AUDIO1_94
+
+//-------------Mission 0---------------
+// Initial
+
+:INITIAL
+script_name 'INITIAL'
+$default_wait_time = 250
+$save_pickup_1_exists = 0
+$info_pickups_collected = 0
+$info_1_picked_up = 0
+$info_2_picked_up = 0
+$info_3_picked_up = 0
+$info_4_picked_up = 0
+$info_5_picked_up = 0
+$info_6_picked_up = 0
+$info_7_picked_up = 0
+$info_8_picked_up = 0
+$info_9_picked_up = 0
+$info_10_picked_up = 0
+$info_11_picked_up = 0
+$info_12_picked_up = 0
+$info_13_picked_up = 0
+$info_14_picked_up = 0
+$info_15_picked_up = 0
+$info_16_picked_up = 0
+$info_17_picked_up = 0
+$info_18_picked_up = 0
+$info_19_picked_up = 0
+$info_20_picked_up = 0
+//todo: how many?
+$info_7_moved = 0
+
+add_short_range_sprite_blip_for_coord $icon_vercetti = create_icon_marker_without_sphere 29 at -246.0713 -324.6199 10.2586
+add_short_range_sprite_blip_for_coord $439 = create_icon_marker_without_sphere 27 at -3.8 -1265.8 12.0
+add_short_range_sprite_blip_for_coord $440 = create_icon_marker_without_sphere 27 at 319.0 441.3 12.0
+add_short_range_sprite_blip_for_coord $441 = create_icon_marker_without_sphere 27 at -903.0 -1261.1 12.0
+add_short_range_sprite_blip_for_coord $442 = create_icon_marker_without_sphere 27 at -876.2 -105.5 12.0
+
+set_zone_ped_info 'STREET4' 1 13 0 0 0 0 0 0 0 0 0 30
+set_zone_ped_info 'STREET4' 0 10 0 0 0 0 0 0 0 0 0 40
+set_zone_car_info 'STREET4' 1 13 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'STREET4' 0 10 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'STREET4' 1 300 0 350 200 0 0 100 50 0 500 500
+set_zone_civilian_car_info 'STREET4' 0 250 0 300 250 0 0 150 50 0 500 500
+set_zone_group 'STREET4' 1 7
+set_zone_group 'STREET4' 0 8
+set_zone_ped_info 'RICH2' 1 13 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'RICH2' 0 10 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'RICH2' 1 10 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'RICH2' 0 10 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'RICH2' 1 300 0 350 200 0 0 100 50 0 500 500
+set_zone_civilian_car_info 'RICH2' 0 250 0 300 250 0 0 150 50 0 500 500
+set_zone_group 'RICH2' 1 27
+set_zone_group 'RICH2' 0 28
+set_zone_ped_info 'CLUB2' 1 13 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'CLUB2' 0 10 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'CLUB2' 1 12 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'CLUB2' 0 10 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'CLUB2' 1 300 0 350 200 0 0 100 50 0 500 500
+set_zone_civilian_car_info 'CLUB2' 0 250 0 300 250 0 0 150 50 0 500 500
+set_zone_group 'CLUB2' 1 57
+set_zone_group 'CLUB2' 0 58
+set_zone_ped_info 'SHOP3' 1 13 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'SHOP3' 0 10 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'SHOP3' 1 12 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'SHOP3' 0 10 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'SHOP3' 1 300 0 350 200 0 0 100 50 0 500 500
+set_zone_civilian_car_info 'SHOP3' 0 250 0 300 250 0 0 150 50 0 500 500
+set_zone_group 'SHOP3' 1 35
+set_zone_group 'SHOP3' 0 36
+set_zone_ped_info 'STREET3' 1 13 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'STREET3' 0 10 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'STREET3' 1 12 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'STREET3' 0 10 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'STREET3' 1 300 0 350 200 0 0 100 50 0 500 500
+set_zone_civilian_car_info 'STREET3' 0 250 0 300 250 0 0 150 50 0 500 500
+set_zone_group 'STREET3' 1 5
+set_zone_group 'STREET3' 0 6
+set_zone_ped_info 'SHOP2' 1 13 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'SHOP2' 0 10 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'SHOP2' 1 12 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'SHOP2' 0 10 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'SHOP2' 1 300 0 350 200 0 0 100 50 0 500 500
+set_zone_civilian_car_info 'SHOP2' 0 250 0 300 250 0 0 150 50 0 500 500
+set_zone_group 'SHOP2' 1 33
+set_zone_group 'SHOP2' 0 34
+set_zone_ped_info 'OCEAND1' 1 15 0 0 0 0 0 0 0 0 0 30
+set_zone_ped_info 'OCEAND1' 0 35 0 0 0 0 0 0 0 0 0 20
+set_zone_car_info 'OCEAND1' 1 12 0 0 0 0 0 0 0 0 0 40
+set_zone_car_info 'OCEAND1' 0 15 0 0 0 0 0 0 0 0 0 30
+set_zone_civilian_car_info 'OCEAND1' 1 200 0 250 300 0 0 150 100 0 500 500
+set_zone_civilian_car_info 'OCEAND1' 0 200 0 250 350 0 0 150 50 0 500 500
+set_zone_group 'OCEAND1' 1 63
+set_zone_group 'OCEAND1' 0 64
+set_zone_ped_info 'OCEAND2' 1 15 0 0 0 0 0 0 0 0 0 30
+set_zone_ped_info 'OCEAND2' 0 35 0 0 0 0 0 0 0 0 0 20
+set_zone_car_info 'OCEAND2' 1 12 0 0 0 0 0 0 0 0 0 40
+set_zone_car_info 'OCEAND2' 0 15 0 0 0 0 0 0 0 0 0 30
+set_zone_civilian_car_info 'OCEAND2' 1 200 0 250 300 0 0 150 100 0 500 500
+set_zone_civilian_car_info 'OCEAND2' 0 200 0 250 350 0 0 150 50 0 500 500
+set_zone_group 'OCEAND2' 1 65
+set_zone_group 'OCEAND2' 0 66
+set_zone_ped_info 'BEACH1' 1 20 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'BEACH1' 0 5 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'BEACH1' 1 11 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'BEACH1' 0 11 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'BEACH1' 1 300 0 250 300 0 0 100 50 0 500 500
+set_zone_civilian_car_info 'BEACH1' 0 300 0 250 300 0 0 150 0 0 500 500
+set_zone_group 'BEACH1' 1 45 // Ocean Beach
+set_zone_group 'BEACH1' 0 46 // Ocean Beach
+set_zone_ped_info 'BEACH2' 1 20 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'BEACH2' 0 5 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'BEACH2' 1 11 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'BEACH2' 0 11 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'BEACH2' 1 260 0 240 300 0 0 100 100 0 500 500
+set_zone_civilian_car_info 'BEACH2' 0 200 0 300 350 0 0 100 50 0 500 500
+set_zone_group 'BEACH2' 1 47 // Washington Beach
+set_zone_group 'BEACH2' 0 48 // Washington Beach
+set_zone_ped_info 'BEACH3' 1 20 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'BEACH3' 0 5 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'BEACH3' 1 11 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'BEACH3' 0 11 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'BEACH3' 1 200 0 200 300 0 0 100 100 100 500 500
+set_zone_civilian_car_info 'BEACH3' 0 200 0 300 300 0 0 100 0 100 500 500
+set_zone_group 'BEACH3' 1 49 // Vice Point
+set_zone_group 'BEACH3' 0 50 // Vice Point
+set_zone_ped_info 'STREET2' 1 13 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'STREET2' 0 13 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'STREET2' 1 11 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'STREET2' 0 9 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'STREET2' 1 325 0 350 200 0 0 75 50 0 500 500
+set_zone_civilian_car_info 'STREET2' 0 250 0 300 250 0 0 150 50 0 500 500
+set_zone_group 'STREET2' 1 3
+set_zone_group 'STREET2' 0 4
+set_zone_ped_info 'CONSTRU' 1 10 0 0 0 0 0 0 0 0 0 20
+set_zone_ped_info 'CONSTRU' 0 8 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'CONSTRU' 1 9 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'CONSTRU' 0 7 0 0 0 0 0 0 0 0 0 10
+set_zone_civilian_car_info 'CONSTRU' 1 200 200 0 0 500 0 50 0 50 500 500
+set_zone_civilian_car_info 'CONSTRU' 0 200 200 0 0 500 0 50 0 50 500 500
+set_zone_group 'CONSTRU' 1 17
+set_zone_group 'CONSTRU' 0 18
+set_zone_ped_info 'CLUB1' 1 10 0 0 0 0 0 0 0 0 0 20
+set_zone_ped_info 'CLUB1' 0 12 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'CLUB1' 1 9 0 0 0 0 0 0 0 0 0 20
+set_zone_car_info 'CLUB1' 0 10 0 0 0 0 0 0 0 0 0 20
+set_zone_civilian_car_info 'CLUB1' 1 170 0 350 350 0 0 100 0 30 500 500
+set_zone_civilian_car_info 'CLUB1' 0 170 0 350 350 0 0 100 0 30 500 500
+set_zone_group 'CLUB1' 1 55
+set_zone_group 'CLUB1' 0 56
+set_zone_ped_info 'GOLF1' 1 3 0 0 0 0 0 0 0 1000 0 0
+set_zone_ped_info 'GOLF1' 0 0 0 0 0 0 0 0 0 1000 0 0
+set_zone_car_info 'GOLF1' 1 3 0 0 0 0 0 0 0 1000 0 0
+set_zone_car_info 'GOLF1' 0 0 0 0 0 0 0 0 0 1000 0 0
+set_zone_group 'GOLF1' 1 41
+set_zone_group 'GOLF1' 0 42
+set_zone_ped_info 'GOLF2' 1 2 0 0 0 0 0 0 0 1000 0 0
+set_zone_ped_info 'GOLF2' 0 0 0 0 0 0 0 0 0 1000 0 0
+set_zone_car_info 'GOLF2' 1 2 0 0 0 0 0 0 0 1000 0 0
+set_zone_car_info 'GOLF2' 0 0 0 0 0 0 0 0 0 1000 0 0
+set_zone_group 'GOLF2' 1 43
+set_zone_group 'GOLF2' 0 44
+set_zone_ped_info 'STREET1' 1 13 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'STREET1' 0 10 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'STREET1' 1 12 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'STREET1' 0 10 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'STREET1' 1 225 550 100 0 0 0 75 0 50 500 500
+set_zone_civilian_car_info 'STREET1' 0 250 500 100 0 0 0 100 0 50 500 500
+set_zone_group 'STREET1' 1 1
+set_zone_group 'STREET1' 0 2
+set_zone_ped_info 'RICH1' 1 13 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'RICH1' 0 10 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'RICH1' 1 12 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'RICH1' 0 10 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'RICH1' 1 100 0 400 400 0 0 100 0 0 500 500
+set_zone_civilian_car_info 'RICH1' 0 100 0 400 400 0 0 100 0 0 500 500
+set_zone_group 'RICH1' 1 25
+set_zone_group 'RICH1' 0 26
+set_zone_ped_info 'SHOP1' 1 200 0 0 0 0 20 0 0 0 0 30
+set_zone_ped_info 'SHOP1' 0 200 0 0 0 0 20 0 0 0 0 30
+set_zone_car_info 'SHOP1' 1 12 0 0 50 0 0 0 0 0 0 50
+set_zone_car_info 'SHOP1' 0 9 0 0 50 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'SHOP1' 1 250 250 200 0 100 0 200 0 0 500 500
+set_zone_civilian_car_info 'SHOP1' 0 250 250 200 0 100 0 200 0 0 500 500
+set_zone_group 'SHOP1' 1 31
+set_zone_group 'SHOP1' 0 32
+set_zone_ped_info 'TOUR1' 1 7 0 0 0 0 0 0 0 0 0 10
+set_zone_ped_info 'TOUR1' 0 5 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'TOUR1' 1 7 0 0 0 0 0 0 0 0 0 20
+set_zone_car_info 'TOUR1' 0 5 0 0 0 0 0 0 0 0 0 20
+set_zone_civilian_car_info 'TOUR1' 1 900 0 0 0 0 0 50 0 50 800 200
+set_zone_civilian_car_info 'TOUR1' 0 900 0 0 0 0 0 50 0 50 800 200
+set_zone_group 'TOUR1' 1 19
+set_zone_group 'TOUR1' 0 20
+set_zone_ped_info 'TOUR2' 1 7 0 0 0 0 0 0 0 0 0 10
+set_zone_ped_info 'TOUR2' 0 5 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'TOUR2' 1 7 0 0 0 0 0 0 0 0 0 20
+set_zone_car_info 'TOUR2' 0 5 0 0 0 0 0 0 0 0 0 20
+set_zone_civilian_car_info 'TOUR2' 1 900 0 0 0 0 0 50 0 50 800 200
+set_zone_civilian_car_info 'TOUR2' 0 900 0 0 0 0 0 50 0 50 800 200
+set_zone_group 'TOUR2' 1 21
+set_zone_group 'TOUR2' 0 22
+set_zone_ped_info 'AIRPORT' 1 13 0 0 0 0 50 0 0 0 0 40
+set_zone_ped_info 'AIRPORT' 0 10 0 0 0 0 50 0 0 0 0 30
+set_gang_car_model 4 car_to #BAGGAGE
+set_zone_car_info 'AIRPORT' 1 12 0 0 0 0 50 0 0 0 0 50
+set_zone_car_info 'AIRPORT' 0 12 0 0 0 0 50 0 0 0 0 50
+set_zone_civilian_car_info 'AIRPORT' 1 0 0 0 0 1000 0 0 0 0 900 100
+set_zone_civilian_car_info 'AIRPORT' 0 0 0 0 0 1000 0 0 0 0 900 100
+set_zone_group 'AIRPORT' 1 51
+set_zone_group 'AIRPORT' 0 52
+set_zone_ped_info 'TERMINL' 1 13 0 0 0 0 50 0 0 0 0 40
+set_zone_ped_info 'TERMINL' 0 8 0 0 0 0 50 0 0 0 0 30
+set_zone_car_info 'TERMINL' 1 12 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'TERMINL' 0 12 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'TERMINL' 1 200 0 300 300 0 0 200 0 0 500 500
+set_zone_civilian_car_info 'TERMINL' 0 200 0 300 300 0 0 200 0 0 500 500
+set_zone_group 'TERMINL' 1 53
+set_zone_group 'TERMINL' 0 54
+set_zone_ped_info 'DOCKS' 1 13 0 0 0 0 0 0 0 0 0 20
+set_zone_ped_info 'DOCKS' 0 10 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'DOCKS' 1 12 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'DOCKS' 0 10 0 0 0 0 0 0 0 0 0 10
+set_zone_civilian_car_info 'DOCKS' 1 0 100 0 0 700 200 0 0 0 500 500
+set_zone_civilian_car_info 'DOCKS' 0 0 100 0 0 700 200 0 0 0 500 500
+set_zone_group 'DOCKS' 1 15 // Viceport
+set_zone_group 'DOCKS' 0 16 // Viceport
+set_zone_ped_info 'STREET6' 1 13 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'STREET6' 0 5 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'STREET6' 1 12 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'STREET6' 0 5 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'STREET6' 1 200 0 300 300 0 0 200 0 0 500 500
+set_zone_civilian_car_info 'STREET6' 0 200 0 300 300 0 0 200 0 0 500 500
+set_zone_group 'STREET6' 1 23
+set_zone_group 'STREET6' 0 24
+set_zone_ped_info 'STREET5' 1 4 0 0 100 0 0 0 0 0 0 40
+set_zone_ped_info 'STREET5' 0 5 0 0 200 0 0 0 0 0 0 30
+set_zone_car_info 'STREET5' 1 6 0 0 100 0 0 0 0 0 0 50
+set_zone_car_info 'STREET5' 0 6 0 0 200 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'STREET5' 1 200 700 0 0 70 0 30 0 0 500 500
+set_zone_civilian_car_info 'STREET5' 0 200 700 0 0 70 0 30 0 0 500 500
+set_zone_group 'STREET5' 1 9
+set_zone_group 'STREET5' 0 10
+set_zone_ped_info 'SHOP4' 1 13 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'SHOP4' 0 10 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'SHOP4' 1 12 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'SHOP4' 0 10 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'SHOP4' 1 300 350 50 0 100 0 100 0 100 500 500
+set_zone_civilian_car_info 'SHOP4' 0 300 350 50 0 100 0 100 0 100 500 500
+set_zone_group 'SHOP4' 1 37
+set_zone_group 'SHOP4' 0 38
+set_zone_ped_info 'SHOP5' 1 12 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'SHOP5' 0 10 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'SHOP5' 1 12 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'SHOP5' 0 10 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'SHOP5' 1 300 350 50 0 100 0 100 0 100 500 500
+set_zone_civilian_car_info 'SHOP5' 0 300 350 50 0 100 0 100 0 100 500 500
+set_zone_group 'SHOP5' 1 39
+set_zone_group 'SHOP5' 0 40
+set_zone_ped_info 'BUSINES' 1 18 0 0 0 0 0 0 0 0 0 40
+set_zone_ped_info 'BUSINES' 0 10 0 0 0 0 0 0 0 0 0 30
+set_zone_car_info 'BUSINES' 1 16 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'BUSINES' 0 10 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'BUSINES' 1 50 0 350 350 0 0 100 0 150 500 500
+set_zone_civilian_car_info 'BUSINES' 0 50 0 250 250 0 0 300 0 150 500 500
+set_zone_group 'BUSINES' 1 11
+set_zone_group 'BUSINES' 0 12
+set_zone_ped_info 'TESTT' 1 0 0 0 0 0 0 0 0 0 0 0
+set_zone_ped_info 'TESTT' 0 0 0 0 0 0 0 0 0 0 0 0
+set_zone_car_info 'TESTT' 1 0 0 0 0 0 0 0 0 0 0 0
+set_zone_car_info 'TESTT' 0 0 0 0 0 0 0 0 0 0 0 0
+set_zone_group 'TESTT' 1 11
+set_zone_group 'TESTT' 0 12
+set_zone_ped_info 'BIKAREA' 1 13 0 0 0 0 0 0 0 0 0 20
+set_zone_ped_info 'BIKAREA' 0 10 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'BIKAREA' 1 12 0 0 0 0 0 100 0 0 0 10
+set_zone_car_info 'BIKAREA' 0 10 0 0 0 0 0 100 0 0 0 10
+set_zone_civilian_car_info 'BIKAREA' 1 350 300 0 0 100 0 100 0 150 500 500
+set_zone_civilian_car_info 'BIKAREA' 0 350 300 0 0 100 0 100 0 150 500 500
+set_zone_group 'BIKAREA' 1 13
+set_zone_group 'BIKAREA' 0 14
+set_zone_ped_info 'GANG2' 1 13 0 250 0 0 0 0 0 0 0 10
+set_zone_ped_info 'GANG2' 0 10 0 250 0 0 0 0 0 0 0 10
+set_zone_car_info 'GANG2' 1 12 0 250 0 0 0 0 0 0 0 10
+set_zone_car_info 'GANG2' 0 10 0 250 0 0 0 0 0 0 0 10
+set_zone_civilian_car_info 'GANG2' 1 200 600 0 0 100 0 50 0 50 500 500
+set_zone_civilian_car_info 'GANG2' 0 200 600 0 0 100 0 50 0 50 500 500
+set_zone_group 'GANG2' 1 59
+set_zone_group 'GANG2' 0 59
+set_zone_ped_info 'GHETTO1' 1 13 0 150 0 0 0 0 0 0 0 10
+set_zone_ped_info 'GHETTO1' 0 10 0 150 0 0 0 0 0 0 0 10
+set_zone_car_info 'GHETTO1' 1 12 0 150 0 0 0 0 0 0 0 10
+set_zone_car_info 'GHETTO1' 0 10 0 150 0 0 0 0 0 0 0 10
+set_zone_civilian_car_info 'GHETTO1' 1 200 600 0 0 100 0 50 0 50 500 500
+set_zone_civilian_car_info 'GHETTO1' 0 200 600 0 0 100 0 50 0 50 500 500
+set_zone_group 'GHETTO1' 1 59
+set_zone_group 'GHETTO1' 0 60
+set_zone_ped_info 'GHETTO2' 1 13 150 0 0 0 0 0 0 0 0 10
+set_zone_ped_info 'GHETTO2' 0 10 150 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'GHETTO2' 1 12 200 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'GHETTO2' 0 10 200 0 0 0 0 0 0 0 0 10
+set_zone_civilian_car_info 'GHETTO2' 1 200 600 0 0 100 0 50 0 50 500 500
+set_zone_civilian_car_info 'GHETTO2' 0 200 600 0 0 100 0 50 0 50 500 500
+set_zone_group 'GHETTO2' 1 61
+set_zone_group 'GHETTO2' 0 62
+set_zone_ped_info 'RICH3' 1 13 0 0 0 0 50 0 0 0 0 40
+set_zone_ped_info 'RICH3' 0 10 0 0 0 0 50 0 0 0 0 40
+set_zone_car_info 'RICH3' 1 9 0 0 0 0 0 0 0 0 0 50
+set_zone_car_info 'RICH3' 0 7 0 0 0 0 0 0 0 0 0 50
+set_zone_civilian_car_info 'RICH3' 1 50 0 400 400 50 0 50 0 50 500 500
+set_zone_civilian_car_info 'RICH3' 0 50 0 400 400 50 0 50 0 50 500 500
+set_zone_group 'RICH3' 1 53
+set_zone_group 'RICH3' 0 54
+set_zone_ped_info 'GANG1' 1 13 0 0 0 1000 0 0 0 0 0 0
+set_zone_ped_info 'GANG1' 0 13 0 0 0 1000 0 0 0 0 0 0
+set_zone_car_info 'GANG1' 1 8 0 0 0 0 0 0 0 0 0 0
+set_zone_car_info 'GANG1' 0 8 0 0 0 0 0 0 0 0 0 0
+set_zone_civilian_car_info 'GANG1' 1 50 0 400 400 50 0 50 0 50 500 500
+set_zone_civilian_car_info 'GANG1' 0 50 0 400 400 50 0 50 0 50 500 500
+set_zone_group 'GANG1' 1 59
+set_zone_group 'GANG1' 0 60
+set_zone_ped_info 'BAGGAG' 1 5 0 0 0 0 1000 0 0 0 0 0
+set_zone_ped_info 'BAGGAG' 0 5 0 0 0 0 1000 0 0 0 0 0
+set_zone_car_info 'BAGGAG' 1 3 0 0 0 0 1000 0 0 0 0 0
+set_zone_car_info 'BAGGAG' 0 3 0 0 0 0 1000 0 0 0 0 0
+set_zone_group 'TERMINL' 1 59
+set_zone_group 'TERMINL' 0 60
+set_zone_ped_info 'ICCREAM' 1 13 0 0 0 0 0 0 0 0 0 10
+set_zone_ped_info 'ICCREAM' 0 10 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'ICCREAM' 1 12 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'ICCREAM' 0 10 0 0 0 0 0 0 0 0 0 10
+set_zone_civilian_car_info 'ICCREAM' 1 200 600 0 0 100 0 50 0 50 500 500
+set_zone_civilian_car_info 'ICCREAM' 0 200 600 0 0 100 0 50 0 50 500 500
+set_zone_group 'ICCREAM' 1 61
+set_zone_group 'ICCREAM' 0 62
+set_zone_ped_info 'BOATYRD' 1 13 0 0 0 0 0 0 0 0 0 20
+set_zone_ped_info 'BOATYRD' 0 10 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'BOATYRD' 1 12 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'BOATYRD' 0 10 0 0 0 0 0 0 0 0 0 10
+set_zone_civilian_car_info 'BOATYRD' 1 0 100 0 0 700 200 0 0 0 500 500
+set_zone_civilian_car_info 'BOATYRD' 0 0 100 0 0 700 200 0 0 0 500 500
+set_zone_group 'BOATYRD' 1 15
+set_zone_group 'BOATYRD' 0 16
+set_zone_ped_info 'KAUFCAB' 1 13 0 0 0 0 0 0 0 0 0 10
+set_zone_ped_info 'KAUFCAB' 0 10 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'KAUFCAB' 1 12 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'KAUFCAB' 0 10 0 0 0 0 0 0 0 0 0 10
+set_zone_civilian_car_info 'KAUFCAB' 1 200 600 0 0 100 0 50 0 50 500 500
+set_zone_civilian_car_info 'KAUFCAB' 0 200 600 0 0 100 0 50 0 50 500 500
+set_zone_group 'KAUFCAB' 1 59 // Kaufman Cabs
+set_zone_group 'KAUFCAB' 0 59 // Kaufman Cabs
+set_zone_ped_info 'PRINTWK' 1 13 0 0 0 0 0 0 0 0 0 10
+set_zone_ped_info 'PRINTWK' 0 10 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'PRINTWK' 1 12 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'PRINTWK' 0 10 0 0 0 0 0 0 0 0 0 10
+set_zone_civilian_car_info 'PRINTWK' 1 200 600 0 0 100 0 50 0 50 500 500
+set_zone_civilian_car_info 'PRINTWK' 0 200 600 0 0 100 0 50 0 50 500 500
+set_zone_group 'PRINTWK' 1 59
+set_zone_group 'PRINTWK' 0 60
+set_zone_ped_info 'CARYRD' 1 13 0 0 0 0 0 0 0 0 0 20
+set_zone_ped_info 'CARYRD' 0 5 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'CARYRD' 1 12 0 0 0 0 0 0 0 0 0 20
+set_zone_car_info 'CARYRD' 0 5 0 0 0 0 0 0 0 0 0 20
+set_zone_civilian_car_info 'CARYRD' 1 200 0 300 300 0 0 200 0 0 500 500
+set_zone_civilian_car_info 'CARYRD' 0 200 0 300 300 0 0 200 0 0 500 500
+set_zone_group 'CARYRD' 1 23
+set_zone_group 'CARYRD' 0 24
+set_zone_ped_info 'PORNSTU' 1 4 0 0 0 0 0 0 0 0 0 20
+set_zone_ped_info 'PORNSTU' 0 5 0 0 0 0 0 0 0 0 0 10
+set_zone_car_info 'PORNSTU' 1 6 0 0 0 0 0 0 0 0 0 20
+set_zone_car_info 'PORNSTU' 0 6 0 0 0 0 0 0 0 0 0 20
+set_zone_civilian_car_info 'PORNSTU' 1 200 700 0 0 70 0 30 0 0 500 500
+set_zone_civilian_car_info 'PORNSTU' 0 200 700 0 0 70 0 30 0 0 500 500
+set_zone_group 'PORNSTU' 1 9
+set_zone_group 'PORNSTU' 0 10
+set_zone_ped_info 'ARMYBAS' 1 18 0 0 1000 0 0 0 0 0 0 0
+set_zone_ped_info 'ARMYBAS' 0 18 0 0 1000 0 0 0 0 0 0 0
+set_zone_car_info 'ARMYBAS' 1 6 0 0 0 0 0 0 0 0 0 20
+set_zone_car_info 'ARMYBAS' 0 6 0 0 0 0 0 0 0 0 0 20
+set_zone_group 'ARMYBAS' 1 51
+set_zone_group 'ARMYBAS' 0 52
+
+set_gang_car_model 0 car_to #CUBAN
+set_gang_car_model 1 car_to #VOODOO
+set_gang_car_model 2 car_to #GANGBUR
+set_gang_car_model 5 car_to #ANGEL
+set_gang_attack_player_with_cops 4 attack_player_with_cops 1
+set_gang_weapons 0 primary_weapon_to 17 secondary_weapon_to 0
+set_gang_weapons 1 primary_weapon_to 17 secondary_weapon_to 0
+set_gang_weapons 2 primary_weapon_to 17 secondary_weapon_to 0
+set_gang_weapons 3 primary_weapon_to 17 secondary_weapon_to 17
+set_gang_weapons 4 primary_weapon_to 17 secondary_weapon_to 17
+set_gang_weapons 5 primary_weapon_to 17 secondary_weapon_to 0
+set_gang_weapons 6 primary_weapon_to 17 secondary_weapon_to 17
+set_threat_for_ped_type 7 add_threat 256
+set_threat_for_ped_type 8 add_threat 128
+
+create_car_generator $1992 = init_car_generator #ADMIRAL 8 8 force_spawn 0 alarm 50 door_lock 0 min_delay 0 max_delay 10000 at -401.2715 -534.6655 11.7534 angle 149.2032
+switch_car_generator $1992 cars_to_generate_to 101
+create_car_generator $1991 = init_car_generator #VICECHEE -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -870.4673 -717.2427 10.1069 angle 94.1213
+switch_car_generator $1991 cars_to_generate_to 101
+create_car_generator $1990 = init_car_generator #LOVEFIST -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -865.2949 1158.359 9.8204 angle 2.347
+switch_car_generator $1990 cars_to_generate_to 0
+create_car_generator $1989 = init_car_generator #FLATBED -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1034.889 -1452.775 10.7 angle 248.8739
+switch_car_generator $1989 cars_to_generate_to 101
+create_car_generator $1844 = init_car_generator #DINGHY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 403.0317 -178.5811 5.7 angle 350.0462
+switch_car_generator $1844 cars_to_generate_to 0
+create_car_generator $1867 = init_car_generator #DINGHY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 231.0536 -130.1794 5.7 angle 357.5423
+switch_car_generator $1867 cars_to_generate_to 0
+create_car_generator $1993 = init_car_generator #MAVERICK -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -853.6609 1353.785 68.6104 angle 0.0
+switch_car_generator $1993 cars_to_generate_to 101
+create_car_generator $1842 = init_car_generator #PREDATOR -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -69.2982 72.6166 5.7 angle 104.6175
+switch_car_generator $1842 cars_to_generate_to 0
+create_car_generator $1843 = init_car_generator #TROPIC -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 237.4778 302.2366 5.7 angle 86.2011
+switch_car_generator $1843 cars_to_generate_to 0
+create_car_generator $1845 = init_car_generator #TRASH -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1268.25 83.833 10.4182 angle 179.549
+switch_car_generator $1845 cars_to_generate_to 101
+create_car_generator $1852 = init_car_generator #SECURICA -1 -1 force_spawn 0 alarm 0 door_lock 70 min_delay 0 max_delay 10000 at -870.2545 -353.9059 10.0475 angle 357.8359
+switch_car_generator $1852 cars_to_generate_to 101
+create_car_generator $1868 = init_car_generator #BUS -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1184.36 -1312.62 13.7274 angle 64.6821
+switch_car_generator $1868 cars_to_generate_to 101
+create_car_generator $1869 = init_car_generator #BARRACKS -1 -1 force_spawn 0 alarm 0 door_lock 10 min_delay 0 max_delay 10000 at -1709.024 -287.6807 13.8276 angle 0.0
+switch_car_generator $1869 cars_to_generate_to 101
+create_car_generator $1876 = init_car_generator #BARRACKS -1 -1 force_spawn 0 alarm 0 door_lock 30 min_delay 0 max_delay 10000 at -1742.649 -214.2183 13.8276 angle 102.0596
+switch_car_generator $1876 cars_to_generate_to 101
+create_car_generator $1953 = init_car_generator #PATRIOT 43 72 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1701.372 -234.7718 13.8276 angle 87.8929
+switch_car_generator $1953 cars_to_generate_to 101
+create_car_generator $1994 = init_car_generator #SENTINEL -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1033.211 -856.8564 12.0452 angle 210.278
+switch_car_generator $1994 cars_to_generate_to 101
+create_car_generator $1954 = init_car_generator #BLOODRB -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1131.4 1236.6 8.4 angle 241.0
+switch_car_generator $1954 cars_to_generate_to 0
+create_car_generator $1955 = init_car_generator #BLOODRA -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1115.4 1265.1 8.4 angle 238.0
+switch_car_generator $1955 cars_to_generate_to 0
+create_car_generator $1995 = init_car_generator #SPARROW -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at $498 $499 $500 angle 88.2256
+switch_car_generator $1995 cars_to_generate_to 0
+create_car_generator $1996 = init_car_generator #SPARROW -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at $501 $502 $503 angle 0.0
+switch_car_generator $1996 cars_to_generate_to 0
+create_car_generator $1997 = init_car_generator #SPARROW -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at $504 $505 $506 angle 0.0
+switch_car_generator $1997 cars_to_generate_to 0
+create_car_generator $1998 = init_car_generator #SPARROW -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at $507 $508 $509 angle 180.0
+switch_car_generator $1998 cars_to_generate_to 0
+create_car_generator $1832 = init_car_generator #OCEANIC 6 1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 242.6 -1274.6 10.0 angle 165.0
+switch_car_generator $1832 cars_to_generate_to 101
+create_car_generator $1853 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 11.5 -1382.0 9.6 angle 261.0
+switch_car_generator $1853 cars_to_generate_to 101
+create_car_generator $1856 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 19.8 -991.8 9.7 angle 0.0
+switch_car_generator $1856 cars_to_generate_to 101
+create_car_generator $1857 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -6.4 -991.3 9.7 angle 180.0
+switch_car_generator $1857 cars_to_generate_to 101
+create_car_generator $1858 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 12.8 -1015.1 9.7 angle 180.0
+switch_car_generator $1858 cars_to_generate_to 101
+create_car_generator $1907 = init_car_generator -1 -1 -1 force_spawn 0 alarm 20 door_lock 0 min_delay 0 max_delay 10000 at -35.7 -1013.6 9.7 angle 0.0
+switch_car_generator $1907 cars_to_generate_to 101
+create_car_generator $1908 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 81.3 -871.8 9.7 angle 57.0
+switch_car_generator $1908 cars_to_generate_to 101
+create_car_generator $1909 = init_car_generator #PCJ600 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -7.1 -1205.1 9.6 angle 181.0
+switch_car_generator $1909 cars_to_generate_to 101
+create_car_generator $1910 = init_car_generator #HERMES -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 37.9 -1320.4 9.6 angle 355.0
+switch_car_generator $1910 cars_to_generate_to 101
+create_car_generator $1837 = init_car_generator #STALLION -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 127.0 -1158.0 32.0 angle 180.0
+switch_car_generator $1837 cars_to_generate_to 101
+create_car_generator $1838 = init_car_generator #PCJ600 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 507.4 -308.8 12.8 angle 176.0
+switch_car_generator $1838 cars_to_generate_to 101
+create_car_generator $1839 = init_car_generator #BANSHEE -1 -1 force_spawn 0 alarm 70 door_lock 0 min_delay 0 max_delay 10000 at 19.8 -1246.9 10.1 angle 0.0
+switch_car_generator $1839 cars_to_generate_to 101
+create_car_generator $1859 = init_car_generator #TOPFUN -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 307.9 1254.6 27.5 angle 180.5
+switch_car_generator $1859 cars_to_generate_to 101
+create_car_generator $1861 = init_car_generator -1 -1 -1 force_spawn 0 alarm 30 door_lock 0 min_delay 0 max_delay 10000 at 277.4 -1175.3 11.0 angle 350.0
+switch_car_generator $1861 cars_to_generate_to 101
+create_car_generator $1862 = init_car_generator -1 -1 -1 force_spawn 0 alarm 30 door_lock 0 min_delay 0 max_delay 10000 at 278.8 -1074.0 11.0 angle 172.0
+switch_car_generator $1862 cars_to_generate_to 101
+create_car_generator $1903 = init_car_generator -1 -1 -1 force_spawn 0 alarm 60 door_lock 0 min_delay 0 max_delay 10000 at 365.3 -837.9 11.0 angle 335.0
+switch_car_generator $1903 cars_to_generate_to 101
+create_car_generator $1911 = init_car_generator -1 -1 -1 force_spawn 0 alarm 50 door_lock 0 min_delay 0 max_delay 10000 at 237.2 -1377.5 10.9 angle 170.0
+switch_car_generator $1911 cars_to_generate_to 101
+create_car_generator $1912 = init_car_generator #FAGGIO -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 127.4 -818.5 9.5 angle 250.6
+switch_car_generator $1912 cars_to_generate_to 0
+create_car_generator $1904 = init_car_generator #FAGGIO -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 382.2 -632.8 11.0 angle 9.9
+switch_car_generator $1904 cars_to_generate_to 101
+create_car_generator $1905 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 235.7 -893.3 11.0 angle 150.0
+switch_car_generator $1905 cars_to_generate_to 101
+create_car_generator $1906 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 150.6 -995.6 11.0 angle 353.0
+switch_car_generator $1906 cars_to_generate_to 101
+create_car_generator $1914 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 122.3 -1107.7 9.7 angle 175.0
+switch_car_generator $1914 cars_to_generate_to 101
+create_car_generator $1863 = init_car_generator #RIO -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -313.4 -1236.4 5.0 angle 180.0
+switch_car_generator $1863 cars_to_generate_to 101
+create_car_generator $1864 = init_car_generator #SPEEDER -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -328.4 -1317.7 5.0 angle 0.0
+switch_car_generator $1864 cars_to_generate_to 101
+create_car_generator $1865 = init_car_generator #REEFER -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -286.8 -1353.1 5.0 angle 90.0
+switch_car_generator $1865 cars_to_generate_to 101
+create_car_generator $1866 = init_car_generator #MARQUIS -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -314.0 -1318.3 5.0 angle 0.0
+switch_car_generator $1866 cars_to_generate_to 101
+create_car_generator $1884 = init_car_generator #FAGGIO -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 376.9 477.0 11.2 angle 282.0
+switch_car_generator $1884 cars_to_generate_to 101
+create_car_generator $1851 = init_car_generator #TOPFUN -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 718.465 701.3998 12.394 angle 320.7776
+switch_car_generator $1851 cars_to_generate_to 101
+create_car_generator $1855 = init_car_generator #PCJ600 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -256.6 -1275.4 7.4 angle 348.0
+switch_car_generator $1855 cars_to_generate_to 101
+create_car_generator $1949 = init_car_generator #CHEETAH -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -236.6 -1374.6 7.1 angle 280.3
+switch_car_generator $1949 cars_to_generate_to 101
+create_car_generator $1950 = init_car_generator -1 -1 -1 force_spawn 0 alarm 30 door_lock 0 min_delay 0 max_delay 10000 at -168.9 -1392.2 3.1 angle 280.0
+switch_car_generator $1950 cars_to_generate_to 101
+create_car_generator $1951 = init_car_generator -1 -1 -1 force_spawn 0 alarm 60 door_lock 0 min_delay 0 max_delay 10000 at -140.2 -1414.1 3.1 angle 108.7
+switch_car_generator $1951 cars_to_generate_to 101
+create_car_generator $1952 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -142.1 -1373.0 3.1 angle 287.3
+switch_car_generator $1952 cars_to_generate_to 101
+create_car_generator $1860 = init_car_generator #CADDY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 393.9 -1736.4 8.8 angle 249.6
+switch_car_generator $1860 cars_to_generate_to 101
+create_car_generator $1931 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 198.2 -504.9 10.9 angle 90.0
+switch_car_generator $1931 cars_to_generate_to 101
+create_car_generator $1932 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 128.8 -515.2 13.1 angle 270.0
+switch_car_generator $1932 cars_to_generate_to 101
+create_car_generator $1933 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 215.7 -418.6 9.7 angle 170.0
+switch_car_generator $1933 cars_to_generate_to 101
+create_car_generator $1934 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 222.7 -351.1 9.9 angle 73.0
+switch_car_generator $1934 cars_to_generate_to 101
+create_car_generator $1935 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 228.2 -222.2 10.9 angle 250.0
+switch_car_generator $1935 cars_to_generate_to 101
+create_car_generator $1936 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 456.5 2.8 10.0 angle 97.4
+switch_car_generator $1936 cars_to_generate_to 101
+create_car_generator $1937 = init_car_generator -1 -1 -1 force_spawn 0 alarm 20 door_lock 0 min_delay 0 max_delay 10000 at 478.5 -15.9 9.8 angle 99.7
+switch_car_generator $1937 cars_to_generate_to 101
+create_car_generator $1835 = init_car_generator #PIZZABOY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 413.8 97.7 10.5 angle 301.3
+switch_car_generator $1835 cars_to_generate_to 101
+create_car_generator $1913 = init_car_generator #RUMPO -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 483.9 -42.8 9.1 angle 0.0
+switch_car_generator $1913 cars_to_generate_to 101
+create_car_generator $1938 = init_car_generator #FREEWAY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 301.2 265.6 15.3 angle 278.4
+switch_car_generator $1938 cars_to_generate_to 101
+create_car_generator $1940 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 286.3 394.4 12.3 angle 265.2
+switch_car_generator $1940 cars_to_generate_to 101
+create_car_generator $1941 = init_car_generator -1 -1 -1 force_spawn 0 alarm 40 door_lock 0 min_delay 0 max_delay 10000 at 573.0 586.1 12.5 angle 74.0
+switch_car_generator $1941 cars_to_generate_to 101
+create_car_generator $1942 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 604.4 758.8 12.6 angle 90.0
+switch_car_generator $1942 cars_to_generate_to 101
+create_car_generator $1943 = init_car_generator #FREEWAY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 388.6 834.5 11.9 angle 273.0
+switch_car_generator $1943 cars_to_generate_to 101
+create_car_generator $1944 = init_car_generator -1 -1 -1 force_spawn 0 alarm 20 door_lock 0 min_delay 0 max_delay 10000 at 255.4 1297.5 16.5 angle 193.4
+switch_car_generator $1944 cars_to_generate_to 101
+create_car_generator $1945 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 552.5 1246.8 15.9 angle 88.0
+switch_car_generator $1945 cars_to_generate_to 101
+create_car_generator $1946 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 555.1 1032.6 17.9 angle 9.0
+switch_car_generator $1946 cars_to_generate_to 101
+create_car_generator $1947 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 563.4 1053.6 17.6 angle 98.0
+switch_car_generator $1947 cars_to_generate_to 101
+create_car_generator $1948 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 430.3 957.0 12.3 angle 294.0
+switch_car_generator $1948 cars_to_generate_to 101
+create_car_generator $1980 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 309.2 1204.4 16.2 angle 91.0
+switch_car_generator $1980 cars_to_generate_to 101
+create_car_generator $1870 = init_car_generator #PACKER -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -101.6 1011.5 11.5 angle 270.3
+switch_car_generator $1870 cars_to_generate_to 101
+create_car_generator $1872 = init_car_generator #PATRIOT -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -36.8 874.0 11.1 angle 194.2
+switch_car_generator $1872 cars_to_generate_to 101
+create_car_generator $1871 = init_car_generator #PCJ600 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -6.4 957.1 9.4 angle 355.1
+switch_car_generator $1871 cars_to_generate_to 101
+create_car_generator $1929 = init_car_generator #SKIMMER -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -141.1 1030.4 5.5 angle 180.0
+switch_car_generator $1929 cars_to_generate_to 0
+create_car_generator $1988 = init_car_generator #GANGBUR -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 16.4 1139.9 18.5 angle 265.0
+switch_car_generator $1988 cars_to_generate_to 101
+create_car_generator $1880 = init_car_generator #INFERNUS -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -363.0 -532.2 12.0 angle 355.5
+switch_car_generator $1880 cars_to_generate_to 101
+create_car_generator $1881 = init_car_generator #STRETCH -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -394.7 -533.7 12.0 angle 355.5
+switch_car_generator $1881 cars_to_generate_to 101
+create_car_generator $1987 = init_car_generator #MAVERICK -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -391.0 -573.0 40.0 angle 355.5
+switch_car_generator $1987 cars_to_generate_to 0
+create_car_generator $1920 = init_car_generator #CHEETAH -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -221.3 -422.7 11.2 angle 90.0
+switch_car_generator $1920 cars_to_generate_to 101
+create_car_generator $1922 = init_car_generator #STINGER -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -492.8 -429.4 10.6 angle 0.0
+switch_car_generator $1922 cars_to_generate_to 101
+create_car_generator $1923 = init_car_generator #BANSHEE -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -558.8 -450.7 10.4 angle 0.0
+switch_car_generator $1923 cars_to_generate_to 101
+create_car_generator $1924 = init_car_generator #ADMIRAL -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -678.8 -415.1 9.5 angle 0.0
+switch_car_generator $1924 cars_to_generate_to 101
+create_car_generator $1925 = init_car_generator #LANDSTAL -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -593.6 -318.3 10.4 angle 130.0
+switch_car_generator $1925 cars_to_generate_to 101
+create_car_generator $1926 = init_car_generator #INFERNUS -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -523.8 -295.8 9.7 angle 180.0
+switch_car_generator $1926 cars_to_generate_to 101
+create_car_generator $1927 = init_car_generator #PHEONIX -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -388.6 -287.7 9.6 angle 270.0
+switch_car_generator $1927 cars_to_generate_to 101
+create_car_generator $1928 = init_car_generator #COMET -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -259.2369 -304.8292 10.011 angle 161.1137
+switch_car_generator $1928 cars_to_generate_to 101
+create_car_generator $1834 = init_car_generator #PIZZABOY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -350.8 -534.9 11.4 angle 86.5
+switch_car_generator $1834 cars_to_generate_to 0
+create_car_generator $1873 = init_car_generator #LINERUN -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -751.5 -1359.4 10.6 angle 69.0
+switch_car_generator $1873 cars_to_generate_to 101
+create_car_generator $1874 = init_car_generator #PONY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -717.2 -1462.2 10.3 angle 0.0
+switch_car_generator $1874 cars_to_generate_to 101
+create_car_generator $1877 = init_car_generator #RUMPO -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -741.7 -1549.5 11.5 angle 336.0
+switch_car_generator $1877 cars_to_generate_to 101
+create_car_generator $1878 = init_car_generator #BOXVILLE -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -898.9971 -1462.046 10.94 angle 10.8204
+switch_car_generator $1878 cars_to_generate_to 101
+create_car_generator $1879 = init_car_generator #PACKER -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -946.3 -1379.5 11.5 angle 69.0
+switch_car_generator $1879 cars_to_generate_to 101
+create_car_generator $1890 = init_car_generator #BENSON -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -947.7 -1264.1 11.3 angle 164.0
+switch_car_generator $1890 cars_to_generate_to 101
+create_car_generator $1982 = init_car_generator #JETMAX -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -592.3 -1510.3 5.0 angle 250.0
+switch_car_generator $1982 cars_to_generate_to 0
+create_car_generator $1983 = init_car_generator #SQUALO -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -576.4 -1505.2 5.0 angle 250.0
+switch_car_generator $1983 cars_to_generate_to 0
+create_car_generator $1985 = init_car_generator #COASTG -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -755.9 -1077.5 5.0 angle 0.0
+switch_car_generator $1985 cars_to_generate_to 101
+create_car_generator $1915 = init_car_generator #BFINJECT -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 643.4 -208.1 9.5 angle 33.0
+switch_car_generator $1915 cars_to_generate_to 101
+create_car_generator $1830 = init_car_generator #KAUFMAN -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1003.1 207.4 11.0 angle 166.6
+switch_car_generator $1830 cars_to_generate_to 101
+create_car_generator $1833 = init_car_generator #PIZZABOY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1028.2 82.2 11.2 angle 171.9
+switch_car_generator $1833 cars_to_generate_to 101
+create_car_generator $1882 = init_car_generator #PATRIOT -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1107.6 292.9 11.5 angle 268.3
+switch_car_generator $1882 cars_to_generate_to 101
+create_car_generator $1883 = init_car_generator #VOODOO -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -964.94 133.54 8.23 angle 271.61
+switch_car_generator $1883 cars_to_generate_to 101
+create_car_generator $1841 = init_car_generator #MRWHOOP -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -867.6105 -572.2039 10.11294 angle 277.5232
+switch_car_generator $1841 cars_to_generate_to 0
+create_car_generator $1831 = init_car_generator #PIZZABOY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -904.2 808.9 10.5 angle 269.6
+switch_car_generator $1831 cars_to_generate_to 101
+create_car_generator $1846 = init_car_generator #LANDSTAL -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -426.0 1412.5 10.5 angle 80.0
+switch_car_generator $1846 cars_to_generate_to 101
+create_car_generator $1986 = init_car_generator #SANCHEZ -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -425.8 1407.0 9.8 angle 80.0
+switch_car_generator $1986 cars_to_generate_to 101
+create_car_generator $1875 = init_car_generator #FBICAR -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -872.843 692.633 10.997 angle 359.746
+switch_car_generator $1875 cars_to_generate_to 101
+create_car_generator $1885 = init_car_generator #ANGEL -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -592.301 655.117 10.06 angle 9.794
+switch_car_generator $1885 cars_to_generate_to 101
+create_car_generator $1981 = init_car_generator #ANGEL -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -589.212 655.117 10.06 angle 9.794
+switch_car_generator $1981 cars_to_generate_to 101
+create_car_generator $1930 = init_car_generator #PCJ600 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -596.17 676.928 11.271 angle 180.0
+switch_car_generator $1930 cars_to_generate_to 101
+create_car_generator $1956 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -756.7 976.3 10.4 angle 0.0
+switch_car_generator $1956 cars_to_generate_to 101
+create_car_generator $1957 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -803.3 964.1 10.4 angle 270.0
+switch_car_generator $1957 cars_to_generate_to 101
+create_car_generator $1958 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -752.6 1003.0 10.4 angle 0.0
+switch_car_generator $1958 cars_to_generate_to 101
+create_car_generator $1959 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -781.5 996.5 10.4 angle 90.0
+switch_car_generator $1959 cars_to_generate_to 101
+create_car_generator $1960 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -772.7 1031.8 10.4 angle 270.0
+switch_car_generator $1960 cars_to_generate_to 101
+create_car_generator $1961 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -781.7 1077.9 10.4 angle 90.0
+switch_car_generator $1961 cars_to_generate_to 101
+create_car_generator $1962 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -821.7 563.4 10.5 angle 0.0
+switch_car_generator $1962 cars_to_generate_to 101
+create_car_generator $1963 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -851.0 581.3 10.5 angle 180.0
+switch_car_generator $1963 cars_to_generate_to 101
+create_car_generator $1964 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -869.5 533.0 10.5 angle 180.0
+switch_car_generator $1964 cars_to_generate_to 101
+create_car_generator $1965 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -821.6 499.7 10.5 angle 90.0
+switch_car_generator $1965 cars_to_generate_to 101
+create_car_generator $1966 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1324.5 1137.0 9.3 angle 180.0
+switch_car_generator $1966 cars_to_generate_to 101
+create_car_generator $1967 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1353.8 1158.0 9.3 angle 0.0
+switch_car_generator $1967 cars_to_generate_to 101
+create_car_generator $1968 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1444.8 1162.7 9.3 angle 160.0
+switch_car_generator $1968 cars_to_generate_to 101
+create_car_generator $1969 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1543.8 1227.0 9.3 angle 30.0
+switch_car_generator $1969 cars_to_generate_to 101
+create_car_generator $1970 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1562.9 1282.4 9.3 angle 98.0
+switch_car_generator $1970 cars_to_generate_to 101
+create_car_generator $1971 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1587.7 1313.8 9.3 angle 87.0
+switch_car_generator $1971 cars_to_generate_to 101
+create_car_generator $1972 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1568.1 1351.0 9.3 angle 261.9
+switch_car_generator $1972 cars_to_generate_to 101
+create_car_generator $1973 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1562.7 1406.9 9.3 angle 150.1
+switch_car_generator $1973 cars_to_generate_to 101
+create_car_generator $1974 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1445.3 1499.0 9.3 angle 20.6
+switch_car_generator $1974 cars_to_generate_to 101
+create_car_generator $1975 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1349.1 1503.7 9.3 angle 180.0
+switch_car_generator $1975 cars_to_generate_to 101
+create_car_generator $1976 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1318.7 1524.1 9.3 angle 180.0
+switch_car_generator $1976 cars_to_generate_to 101
+create_car_generator $1921 = init_car_generator #VCNMAV -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -469.0 1123.5 64.7 angle 270.0
+switch_car_generator $1921 cars_to_generate_to 101
+create_car_generator $1849 = init_car_generator #INFERNUS -1 -1 force_spawn 1 alarm 80 door_lock 0 min_delay 0 max_delay 10000 at 386.0 1227.0 19.4 angle 90.0
+switch_car_generator $1849 cars_to_generate_to 101
+create_car_generator $1848 = init_car_generator #PACKER -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1377.7 -961.4 14.4 angle 177.9
+switch_car_generator $1848 cars_to_generate_to 101
+create_car_generator $1847 = init_car_generator #SENTXS -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1142.5 -939.3 14.6 angle 89.6
+switch_car_generator $1847 cars_to_generate_to 101
+create_car_generator $1850 = init_car_generator #TOPFUN -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1235.171 -1235.171 14.77 angle 337.839
+switch_car_generator $1850 cars_to_generate_to 101
+create_car_generator $1891 = init_car_generator #BAGGAGE -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1414.8 -1268.1 13.9 angle 40.0
+switch_car_generator $1891 cars_to_generate_to 101
+create_car_generator $1892 = init_car_generator #BAGGAGE -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1474.9 -961.7 13.9 angle 282.0
+switch_car_generator $1892 cars_to_generate_to 101
+create_car_generator $1893 = init_car_generator #BAGGAGE -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1808.5 -1090.8 13.9 angle 274.0
+switch_car_generator $1893 cars_to_generate_to 101
+create_car_generator $1894 = init_car_generator #BAGGAGE -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1533.3 -805.9 13.9 angle 178.0
+switch_car_generator $1894 cars_to_generate_to 101
+create_car_generator $1895 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1584.2 -656.4 14.0 angle 0.0
+switch_car_generator $1895 cars_to_generate_to 101
+create_car_generator $1896 = init_car_generator -1 -1 -1 force_spawn 0 alarm 20 door_lock 0 min_delay 0 max_delay 10000 at -1606.5 -633.8 14.0 angle 180.0
+switch_car_generator $1896 cars_to_generate_to 101
+create_car_generator $1897 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1628.0 -667.0 14.0 angle 180.0
+switch_car_generator $1897 cars_to_generate_to 101
+create_car_generator $1898 = init_car_generator -1 -1 -1 force_spawn 0 alarm 30 door_lock 0 min_delay 0 max_delay 10000 at -1637.5 -624.6 14.0 angle 0.0
+switch_car_generator $1898 cars_to_generate_to 101
+create_car_generator $1899 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1659.6 -646.4 14.0 angle 180.0
+switch_car_generator $1899 cars_to_generate_to 101
+create_car_generator $1900 = init_car_generator -1 -1 -1 force_spawn 0 alarm 30 door_lock 0 min_delay 0 max_delay 10000 at -1706.0 -655.9 14.0 angle 90.0
+switch_car_generator $1900 cars_to_generate_to 101
+create_car_generator $1901 = init_car_generator -1 -1 -1 force_spawn 0 alarm 50 door_lock 0 min_delay 0 max_delay 10000 at -1691.5 -614.8 14.0 angle 0.0
+switch_car_generator $1901 cars_to_generate_to 101
+create_car_generator $1902 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1573.3 -614.7 14.0 angle 0.0
+switch_car_generator $1902 cars_to_generate_to 101
+create_car_generator $1886 = init_car_generator #POLICE -1 -1 force_spawn 0 alarm 0 door_lock 30 min_delay 0 max_delay 10000 at 516.1 503.1 10.5 angle 0.0
+switch_car_generator $1886 cars_to_generate_to 101
+create_car_generator $1919 = init_car_generator #ENFORCER -1 -1 force_spawn 0 alarm 0 door_lock 40 min_delay 0 max_delay 10000 at 493.2045 503.683 10.4612 angle 179.9753
+switch_car_generator $1919 cars_to_generate_to 101
+create_car_generator $1887 = init_car_generator #POLICE -1 -1 force_spawn 0 alarm 0 door_lock 30 min_delay 0 max_delay 10000 at 355.7 -511.4 11.6 angle 320.0
+switch_car_generator $1887 cars_to_generate_to 101
+create_car_generator $1916 = init_car_generator #POLICE -1 -1 force_spawn 0 alarm 0 door_lock 30 min_delay 0 max_delay 10000 at 372.3 -525.7 11.6 angle 140.0
+switch_car_generator $1916 cars_to_generate_to 101
+create_car_generator $1888 = init_car_generator #POLICE -1 -1 force_spawn 0 alarm 0 door_lock 30 min_delay 0 max_delay 10000 at -855.4 -665.4 10.6 angle 0.0
+switch_car_generator $1888 cars_to_generate_to 101
+create_car_generator $1918 = init_car_generator #POLICE -1 -1 force_spawn 0 alarm 0 door_lock 30 min_delay 0 max_delay 10000 at -844.8 -675.6 10.6 angle 90.0
+switch_car_generator $1918 cars_to_generate_to 101
+create_car_generator $1854 = init_car_generator #POLICE -1 -1 force_spawn 0 alarm 0 door_lock 10 min_delay 0 max_delay 10000 at -665.2 777.6 11.0 angle 180.0
+switch_car_generator $1854 cars_to_generate_to 101
+create_car_generator $1836 = init_car_generator #AMBULAN -1 -1 force_spawn 0 alarm 0 door_lock 10 min_delay 0 max_delay 10000 at 472.5 701.2 10.5 angle 90.0
+switch_car_generator $1836 cars_to_generate_to 101
+create_car_generator $1840 = init_car_generator #AMBULAN -1 -1 force_spawn 0 alarm 0 door_lock 10 min_delay 0 max_delay 10000 at -111.9 -949.9 10.2 angle 280.0
+switch_car_generator $1840 cars_to_generate_to 101
+create_car_generator $1889 = init_car_generator #AMBULAN -1 -1 force_spawn 0 alarm 0 door_lock 10 min_delay 0 max_delay 10000 at -776.1 1135.1 11.5 angle 0.0
+switch_car_generator $1889 cars_to_generate_to 101
+create_car_generator $1917 = init_car_generator #FIRETRUK -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -694.9 917.3 10.8 angle 270.0
+switch_car_generator $1917 cars_to_generate_to 101
+create_car_generator $1984 = init_car_generator #COMET -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 114.6977 252.3439 20.6832 angle 105.6803
+switch_car_generator $1984 cars_to_generate_to 101
+create_car_generator $83 = init_car_generator #INFERNUS 1 1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -363.0 -532.2 12.0 angle 0.0
+switch_car_generator $83 cars_to_generate_to 0
+create_car_generator $1939 = init_car_generator #ZEBRA -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1003.1 207.4 11.0 angle 166.6
+switch_car_generator $1939 cars_to_generate_to 0
+create_car_generator $84 = init_car_generator #POLMAV -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -614.0 804.0 30.0 angle 0.0
+switch_car_generator $84 cars_to_generate_to 101
+
+Pickup.Create($2035, #CHNSAW, 2, 30.0, -1330.9, 13.0)
+Pickup.Create($1999, #BAT, 2, 206.7, -1254.4, 12.0)
+create_pickup_with_ammo $2000 = create_weapon_pickup #COLT45 15 ammo 34 at -228.4 -1318.2 9.1
+create_pickup_with_ammo $2001 = create_weapon_pickup #COLT45 15 ammo 34 at 340.5 -249.5 12.5
+create_pickup_with_ammo $2002 = create_weapon_pickup #CHROMEGUN 15 ammo 16 at 42.3 -959.2 21.8
+create_pickup_with_ammo $2003 = create_weapon_pickup #CHROMEGUN 15 ammo 16 at 568.9 -449.3 11.1
+create_pickup_with_ammo $2004 = create_weapon_pickup #TEC9 15 ammo 100 at 287.9 50.7 10.8
+create_pickup_with_ammo $2005 = create_weapon_pickup #GRENADE 15 ammo 4 at 362.2 -500.5 12.3
+Pickup.Create($2006, #CLEAVER, 15, 402.6, 102.5, 11.4)
+create_pickup_with_ammo $2007 = create_weapon_pickup #RUGER 15 ammo 60 at 418.9 589.9 18.3
+Pickup.Create($2008, #KATANA, 15, 476.9, 1014.9, 19.2)
+Pickup.Create($2009, #NITESTICK, 15, 402.4, -488.3, 12.4)
+Pickup.Create($2011, #BRASSKNUCKLE, 15, 224.0, -1207.5, 11.0)
+Pickup.Create($2012, #KNIFECUR, 15, 118.7, -1546.1, 10.8)
+Pickup.Create($2013, #MACHETE, 15, 56.6, -459.3, 11.4)
+create_pickup_with_ammo $2014 = create_weapon_pickup #UZI 15 ammo 60 at 5.4 -1277.0 10.4
+create_pickup_with_ammo $2036 = create_weapon_pickup #UZI 15 ammo 60 at 157.0 -895.3 12.3
+create_pickup_with_ammo $2010 = create_weapon_pickup #BOMB 15 ammo 4 at 556.6 207.4 14.5
+create_pickup_with_ammo $2015 = create_weapon_pickup #M4 15 ammo 60 at -32.8 1019.2 13.0
+create_pickup_with_ammo $2016 = create_weapon_pickup #UZI 15 ammo 60 at 17.3 1145.7 23.5
+Pickup.Create($2017, #GOLFCLUB, 2, 95.0, 279.2, 21.8)
+create_pickup_with_ammo $2018 = create_weapon_pickup #FLAME 15 ammo 300 at -546.0 -418.9 9.8
+create_pickup_with_ammo $2019 = create_weapon_pickup #SNIPER 15 ammo 20 at -476.4 -571.2 12.9
+Pickup.Create($2020, #KATANA, 15, -554.11, -547.7, 10.7)
+create_pickup_with_ammo $2021 = create_weapon_pickup #MOLOTOV 15 ammo 4 at -755.7 1347.5 11.8
+create_pickup_with_ammo $2022 = create_weapon_pickup #UZI 15 ammo 60 at -545.8 694.6 11.0
+create_pickup_with_ammo $2023 = create_weapon_pickup #M4 15 ammo 60 at -980.4 118.7 9.3
+create_pickup_with_ammo $2024 = create_weapon_pickup #M4 15 ammo 60 at -1221.0 -641.6 11.7
+create_pickup_with_ammo $2025 = create_weapon_pickup #SNIPER 15 ammo 20 at -742.1 -949.9 9.9
+create_pickup_with_ammo $2026 = create_weapon_pickup #ROCKETLA 15 ammo 4 at -995.1 -1178.1 13.6
+create_pickup_with_ammo $2027 = create_weapon_pickup #INGRAMSL 15 ammo 60 at -713.3 -1466.0 11.2
+create_pickup_with_ammo $2028 = create_weapon_pickup #FLAME 15 ammo 300 at -1015.1 -1392.9 11.5
+create_pickup_with_ammo $2029 = create_weapon_pickup #SHOTGSPA 15 ammo 14 at -1359.0 -742.2 14.9
+create_pickup_with_ammo $2030 = create_weapon_pickup #M60 15 ammo 100 at -1744.9 -288.9 29.7
+create_pickup_with_ammo $2031 = create_weapon_pickup #GRENADE 15 ammo 4 at -939.8 -464.9 10.9
+create_pickup_with_ammo $2032 = create_weapon_pickup #PYTHON 15 ammo 12 at -1182.7 -61.1 11.4
+create_pickup_with_ammo $2033 = create_weapon_pickup #BUDDYSHOT 15 ammo 10 at -1305.2 177.1 11.4
+create_pickup_with_ammo $2034 = create_weapon_pickup #LASER 15 ammo 14 at -1114.3 -602.0 26.0
+Pickup.Create($2037, #HEALTH, 1, -113.2, -975.7, 10.4)
+Pickup.Create($2038, #HEALTH, 15, -225.1, -1158.1, 9.1)
+Pickup.Create($2039, #HEALTH, 15, 456.2, -471.4, 16.6)
+Pickup.Create($2040, #HEALTH, 15, 377.4, 467.7, 11.6)
+Pickup.Create($2041, #HEALTH, 1, 469.6, 697.4, 11.7)
+Pickup.Create($2042, #HEALTH, 15, 385.3, 1210.9, 19.4)
+Pickup.Create($2043, #HEALTH, 1, 384.3, 756.6, 11.7)
+Pickup.Create($2044, #HEALTH, 15, 10.7, 1099.0, 16.6)
+Pickup.Create($2045, #HEALTH, 15, 85.3, 402.7, 19.8)
+Pickup.Create($2046, #HEALTH, 15, -711.7, -501.7, 11.3)
+Pickup.Create($2047, #HEALTH, 15, -404.0, -588.0, 11.6)
+Pickup.Create($2061, #HEALTH, 2, -406.2503, -566.4947, 19.5804)
+Pickup.Create($2048, #HEALTH, 15, -478.1, 1438.5, 16.1)
+Pickup.Create($2049, #HEALTH, 15, -675.0, 1263.3, 25.1)
+Pickup.Create($2050, #HEALTH, 15, -821.8, 1144.8, 26.1)
+Pickup.Create($2051, #HEALTH, 15, -1139.4, 55.4, 11.2)
+Pickup.Create($2052, #HEALTH, 15, -1290.9, 91.9, 26.9)
+Pickup.Create($2053, #HEALTH, 1, -885.4, -483.4, 13.1)
+Pickup.Create($2054, #HEALTH, 15, -925.1, -638.3, 16.0)
+Pickup.Create($2055, #HEALTH, 15, -692.4, -1283.8, 11.1)
+Pickup.Create($2056, #HEALTH, 15, -655.1, -1506.3, 8.1)
+Pickup.Create($2057, #HEALTH, 15, -1399.4, -865.9, 20.9)
+Pickup.Create($2058, #HEALTH, 1, -822.6, 1137.3, 12.4)
+Pickup.Create($2059, #HEALTH, 1, -851.4, -78.8, 11.5)
+Pickup.Create($2060, #HEALTH, 1, -834.2, 740.6, 11.3)
+Pickup.Create($2062, #BODYARMOUR, 15, 4.9, -1239.2, 19.2)
+Pickup.Create($2063, #BODYARMOUR, 15, 205.7, -885.7, 12.2)
+Pickup.Create($2064, #BODYARMOUR, 15, 148.8, -349.9, 8.7)
+Pickup.Create($2065, #BODYARMOUR, 15, 520.2, -171.2, 13.9)
+Pickup.Create($2066, #BODYARMOUR, 15, 430.8, 162.1, 11.8)
+Pickup.Create($2067, #BODYARMOUR, 15, 416.1, 517.7, 11.2)
+Pickup.Create($2068, #BODYARMOUR, 15, 350.2, 884.8, 25.5)
+Pickup.Create($2069, #BODYARMOUR, 15, 535.3, 1214.1, 18.9)
+Pickup.Create($2070, #BODYARMOUR, 15, 42.8, 951.1, 11.0)
+Pickup.Create($2071, #BODYARMOUR, 15, -70.8, 510.6, 11.6)
+Pickup.Create($2072, #BODYARMOUR, 15, -1695.6, -289.4, 29.7)
+Pickup.Create($2073, #BODYARMOUR, 15, -567.6, 1370.36, 16.4)
+Pickup.Create($2074, #BODYARMOUR, 15, -921.9, 722.9, 11.0)
+Pickup.Create($2076, #BODYARMOUR, 15, -1058.9, -240.6, 18.2)
+Pickup.Create($2077, #BODYARMOUR, 15, -625.5, 622.2, 11.7)
+Pickup.Create($2078, #BODYARMOUR, 15, -733.5, -1294.7, 12.4)
+Pickup.Create($2079, #BODYARMOUR, 15, -1177.0, -915.3, 14.9)
+Pickup.Create($2075, #BODYARMOUR, 15, -1171.0, -457.4, 10.7)
+
+add_set_piece 1 if_player_with_wanted_level_in_rectangle 225.0 -1244.0 227.4 -1248.5 spawn_policeA_at 249.0 -1255.0 headed_towards 246.0 -1250.6 spawn_policeB_at 208.4 -1238.4 headed_towards 209.6 -1243.5
+add_set_piece 6 if_player_with_wanted_level_in_rectangle 235.3 -1299.6 261.1 -1270.7 spawn_policeA_at 212.2 -1309.6 headed_towards 228.0 -1311.3 spawn_policeB_at 221.2 -1309.6 headed_towards 228.0 -1311.3
+add_set_piece 6 if_player_with_wanted_level_in_rectangle 220.0 -1144.0 232.0 -1136.0 spawn_policeA_at 190.5 -1101.5 headed_towards 185.5 -1122.7 spawn_policeB_at 278.8 -1112.0 headed_towards 269.0 -1140.5
+add_set_piece 6 if_player_with_wanted_level_in_rectangle -112.5 -1275.0 -120.5 -1267.0 spawn_policeA_at -37.7 -1244.15 headed_towards -36.7 -1270.0 spawn_policeB_at -189.5 -1295.4 headed_towards -190.0 -1279.3
+add_set_piece 3 if_player_with_wanted_level_in_rectangle 324.0 -735.5 332.0 -727.5 spawn_policeA_at 361.6 -715.0 headed_towards 338.6 -705.5 spawn_policeB_at -189.5 -1295.4 headed_towards -190.0 -1279.3
+add_set_piece 3 if_player_with_wanted_level_in_rectangle 385.6 -602.2 377.6 -594.2 spawn_policeA_at 374.6 -559.0 headed_towards 394.6 -571.5 spawn_policeB_at -189.5 -1295.4 headed_towards -190.0 -1279.3
+add_set_piece 3 if_player_with_wanted_level_in_rectangle 146.6 -450.2 154.6 -440.2 spawn_policeA_at 183.9 -480.0 headed_towards 184.6 -447.5 spawn_policeB_at -189.5 -1295.4 headed_towards -190.0 -1279.3
+add_set_piece 3 if_player_with_wanted_level_in_rectangle 250.6 -457.2 240.6 -449.2 spawn_policeA_at 346.8 -466.4 headed_towards 311.5 -461.5 spawn_policeB_at -189.5 -1295.4 headed_towards -190.0 -1279.3
+add_set_piece 7 if_player_with_wanted_level_in_rectangle 171.0 -549.2 179.0 -557.2 spawn_policeA_at 161.8 -693.4 headed_towards 168.5 -650.5 spawn_policeB_at 169.5 -693.4 headed_towards 173.0 -660.0
+add_set_piece 2 if_player_with_wanted_level_in_rectangle 305.6 -183.2 315.6 -191.2 spawn_policeA_at 269.2 -197.8 headed_towards 276.6 -180.5 spawn_policeB_at -189.5 -1295.4 headed_towards -190.0 -1279.3
+add_set_piece 6 if_player_with_wanted_level_in_rectangle 316.5 -65.0 322.5 -58.0 spawn_policeA_at 296.5 6.9 headed_towards 315.7 -11.0 spawn_policeB_at 369.5 12.2 headed_towards 342.0 -9.7
+add_set_piece 7 if_player_with_wanted_level_in_rectangle 364.0 236.2 372.0 244.2 spawn_policeA_at 336.1 271.4 headed_towards 337.8 249.5 spawn_policeB_at 401.5 213.4 headed_towards 401.0 234.0
+add_set_piece 6 if_player_with_wanted_level_in_rectangle 364.5 169.0 372.5 177.0 spawn_policeA_at 406.7 151.15 headed_towards 398.7 170.0 spawn_policeB_at 326.5 182.4 headed_towards 346.0 164.3
+add_set_piece 6 if_player_with_wanted_level_in_rectangle -87.0 -937.0 -99.0 -947.0 spawn_policeA_at -136.0 -912.15 headed_towards -115.0 -901.6 spawn_policeB_at -56.0 -875.0 headed_towards -95.5 -893.3
+add_set_piece 7 if_player_with_wanted_level_in_rectangle 536.0 696.2 546.0 706.2 spawn_policeA_at 516.0 753.6 headed_towards 541.5 753.5 spawn_policeB_at 506.2 654.4 headed_towards 534.0 657.0
+add_set_piece 2 if_player_with_wanted_level_in_rectangle 314.0 906.0 322.0 914.0 spawn_policeA_at 348.3 864.0 headed_towards 316.0 870.8 spawn_policeB_at -189.5 -1295.4 headed_towards -190.0 -1279.3
+add_set_piece 7 if_player_with_wanted_level_in_rectangle 356.0 748.0 364.0 756.0 spawn_policeA_at 335.0 667.6 headed_towards 356.2 685.2 spawn_policeB_at 388.5 846.2 headed_towards 366.0 828.0
+add_set_piece 6 if_player_with_wanted_level_in_rectangle -34.0 1041.0 -26.0 1049.0 spawn_policeA_at 23.3 1075.0 headed_towards 28.0 1030.8 spawn_policeB_at 35.5 993.4 headed_towards 39.0 1023.3
+add_set_piece 2 if_player_with_wanted_level_in_rectangle 16.0 930.0 24.0 938.0 spawn_policeA_at 28.3 874.0 headed_towards 10.0 881.8 spawn_policeB_at -189.5 -1295.4 headed_towards -190.0 -1279.3
+add_set_piece 6 if_player_with_wanted_level_in_rectangle -368.0 -480.0 -378.0 -490.0 spawn_policeA_at -253.5 -439.0 headed_towards -252.5 -470.5 spawn_policeB_at -451.2 -452.4 headed_towards -442.0 -480.0
+add_set_piece 6 if_player_with_wanted_level_in_rectangle -533.0 -480.0 -543.0 -490.0 spawn_policeA_at -647.0 -449.0 headed_towards -637.5 -481.5 spawn_policeB_at -451.2 -452.4 headed_towards -457.0 -480.0
+add_set_piece 6 if_player_with_wanted_level_in_rectangle -255.0 -435.0 -245.0 -443.0 spawn_policeA_at -210.8 -470.0 headed_towards -241.5 -472.0 spawn_policeB_at -298.2 -485.0 headed_towards -257.0 -477.5
+add_set_piece 6 if_player_with_wanted_level_in_rectangle -645.0 -446.0 -637.0 -454.0 spawn_policeA_at -610.8 -482.0 headed_towards -635.5 -472.0 spawn_policeB_at -684.2 -492.0 headed_towards -651.0 -480.5
+add_set_piece 3 if_player_with_wanted_level_in_rectangle -790.0 -1490.2 -798.0 -1498.2 spawn_policeA_at -815.8 -1450.5 headed_towards -822.0 -1469.0 spawn_policeB_at -189.5 -1295.4 headed_towards -190.0 -1279.3
+add_set_piece 6 if_player_with_wanted_level_in_rectangle -809.0 -1436.7 -800.0 -1428.0 spawn_policeA_at -853.3 -1466.0 headed_towards -824.5 -1474.8 spawn_policeB_at -808.5 -1382.4 headed_towards -788.0 -1392.3
+add_set_piece 7 if_player_with_wanted_level_in_rectangle -870.0 -1335.7 -862.0 -1327.0 spawn_policeA_at -902.3 -1343.0 headed_towards -882.5 -1348.8 spawn_policeB_at -880.5 -1297.4 headed_towards -860.0 -1307.3
+add_set_piece 3 if_player_with_wanted_level_in_rectangle -924.0 -1248.0 -916.0 -1240.0 spawn_policeA_at -909.8 -1270.5 headed_towards -920.0 -1265.0 spawn_policeB_at -189.5 -1295.4 headed_towards -190.0 -1279.3
+add_set_piece 3 if_player_with_wanted_level_in_rectangle -1224.0 -788.0 -1216.0 -780.0 spawn_policeA_at -1260.8 -737.5 headed_towards -1258.0 -780.0 spawn_policeB_at -189.5 -1295.4 headed_towards -190.0 -1279.3
+add_set_piece 3 if_player_with_wanted_level_in_rectangle -884.0 -1070.0 -876.0 -1078.0 spawn_policeA_at -925.0 -1044.5 headed_towards -901.0 -1074.0 spawn_policeB_at -189.5 -1295.4 headed_towards -190.0 -1279.3
+add_set_piece 6 if_player_with_wanted_level_in_rectangle -1130.0 -711.7 -1138.0 -719.7 spawn_policeA_at -1111.3 -683.0 headed_towards -1134.5 -686.4 spawn_policeB_at -1166.0 -691.4 headed_towards -1144.7 -690.3
+add_set_piece 6 if_player_with_wanted_level_in_rectangle -986.0 -713.0 -978.0 -721.0 spawn_policeA_at -1011.8 -577.4 headed_towards -989.7 -575.4 spawn_policeB_at -945.5 -660.0 headed_towards -969.4 -661.6
+add_set_piece 6 if_player_with_wanted_level_in_rectangle -1012.0 -392.0 -1004.0 -384.0 spawn_policeA_at -1044.3 -337.8 headed_towards -1023.7 -336.4 spawn_policeB_at -975.0 -444.0 headed_towards -1000.4 -445.6
+add_set_piece 6 if_player_with_wanted_level_in_rectangle -1112.0 -372.0 -1104.0 -364.0 spawn_policeA_at -1078.3 -337.0 headed_towards -1101.5 -339.4 spawn_policeB_at -1138.0 -348.4 headed_towards -1117.3 -346.3
+
+switch_ped_roads_off -254.0 -340.0 10.0 -264.0 -322.0 11.0
+
+terminate_this_script
+
+//-------------Mission 1---------------
+// Intro
+
+:INTRO
+script_name 'INTRO'
+$onmission = 1
+wait 0
+do_fade 0 (in) 0
+set_weather 0
+switch_widescreen 1
+Player.CanMove($player_char, False)
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+Camera.SetAtPos(-1607.8014, -1195.0654, 15.0263)
+Camera.SetPosition(-1607.8014, -1195.0654, 16.0263, 0.0, 0.0, 0.0)
+Camera.PointAt(-1608.731, -1201.7645, 16.2263, 2) //14.868
+Model.Load(#TAXI)
+Model.Load(#CABBIE)
+Model.Load(#KAUFMAN)
+Model.Load(#WMOCA)
+Model.Load(#HMOCA)
+load_special_character 1 'PLAYER'
+while true
+    if and
+        Model.Available(#TAXI)
+        Model.Available(#CABBIE)
+        Model.Available(#KAUFMAN)
+        Model.Available(#WMOCA)
+        Model.Available(#HMOCA)
+        has_special_character_loaded 1
+    then
+        break
+    end
+    wait 0
+end
+do_fade 1 (out) 200
+Car.Create(0@, #TAXI, -1634.0433, -1549.4225, 34.8682) //14.8682
+create_char_inside_car 1@ = create_actor 4 #WMOCA in_car 0@
+create_char_as_passenger 2@ = create_actor_pedtype 10 model #SPECIAL01 in_car 0@ passenger_seat 0
+Car.Angle(0@) = 359.6142
+set_car_driving_style 0@ traffic_behavior_to 3
+Car.ImmuneToNonPlayer(0@, True)
+set_car_straight_line_distance 0@ abandon_path_radius 255
+Car.DriveTo(0@, -1632.5491, -1206.3263, 14.868)
+set_car_forward_speed 0@ speed_instantly 200.0
+TIMERA = 0
+$scene_step = 0
+
+:INTRO_LOOP
+wait 0
+if or
+    is_button_pressed 0 pressed_button 8
+    is_button_pressed 0 pressed_button 9
+    is_button_pressed 0 pressed_button 10
+    is_button_pressed 0 pressed_button 11
+    is_button_pressed 0 pressed_button 14
+    is_button_pressed 0 pressed_button 15
+    is_button_pressed 0 pressed_button 16
+    is_button_pressed 0 pressed_button 17
+then
+    goto @INTRO_SKIP
+end
+
+if
+    $skip_intro == 1
+then
+    goto @INTRO_END
+end
+
+if and
+    $scene_step == 0
+    TIMERA >= 3000
+then
+    $scene_step++
+    Camera.OnVehicle(0@, 15, 1)
+end
+
+if and
+    $scene_step == 1
+    TIMERA >= 5000
+then
+    $scene_step++
+    set_char_obj_leave_car 2@ leave_car 0@
+end
+
+if and
+    $scene_step == 2
+    TIMERA >= 5500
+then
+    $scene_step++
+    Camera.SetPosition(-1625.7916, -1205.0001, 14.868, 0.0, 0.0, 0.0)
+    Camera.OnVehicle(0@, 15, 2)
+end
+
+if and
+    $scene_step == 3
+    TIMERA >= 6300
+then
+    $scene_step++
+    Actor.Angle(2@) = 279.4725
+    set_char_wait_state 2@ anim 13 wait_state_time 1000
+end
+
+if and
+    $scene_step == 4
+    TIMERA >= 7500
+then
+    $scene_step++
+    set_char_wait_state 2@ anim 0 wait_state_time 0
+    set_char_obj_sprint_to_coord 2@ sprint_to -1627.7749 -1195.8544
+end
+
+if and
+    $scene_step == 5
+    TIMERA >= 8100
+then
+    $scene_step++
+    set_interpolation_parameters 0.0 1000
+    Camera.SetAtPos(-1411.1111, -819.9204, 14.702)
+    Camera.SetPosition(-1411.1111, -819.9204, 14.702, 0.0, 0.0, 0.0)
+    Camera.PointAt(-1407.7283, -831.9881, 14.8715, 1)
+end
+
+if and
+    $scene_step == 6
+    TIMERA >= 8200
+then
+    $scene_step++
+    Actor.PutAt(2@, -1407.7283, -831.9881, 14.8715)
+    Car.Destroy(0@)
+    Actor.DestroyInstantly(1@)
+    Car.Create(0@, #TAXI, -1416.1602, -825.3985, 14.7018)
+    Car.Angle(0@) = 335.5598
+    create_char_inside_car 1@ = create_actor 4 #HMOCA in_car 0@
+    Car.Create(3@, #CABBIE, -1418.2828, -830.516, 14.7021)
+    Car.Angle(3@) = 93.6876
+    create_char_inside_car 10@ = create_actor 4 #WMOCA in_car 3@
+    Car.Create(4@, #TAXI, -1414.7581, -819.8999, 14.7019)
+    Car.Angle(4@) = 307.383
+    create_char_inside_car 11@ = create_actor 4 #HMOCA in_car 4@
+    Car.Create(5@, #KAUFMAN, -1418.3062, -821.1479, 14.7015)
+    Car.Angle(5@) = 338.7166
+    create_char_inside_car 12@ = create_actor 4 #WMOCA in_car 5@
+    Car.Create(6@, #TAXI, -1417.5204, -817.381, 14.702)
+    Car.Angle(6@) = 138.2047
+    create_char_inside_car 13@ = create_actor 4 #WMOCA in_car 6@
+    Car.Create(7@, #KAUFMAN, -1423.2598, -821.9271, 14.8717)
+    Car.Angle(7@) = 275.7593
+    create_char_inside_car 14@ = create_actor 4 #HMOCA in_car 7@
+    Car.Create(8@, #TAXI, -1417.7793, -825.3713, 14.7019)
+    Car.Angle(8@) = 355.0334
+    create_char_inside_car 15@ = create_actor 4 #WMOCA in_car 8@
+end
+
+if and
+    $scene_step == 7
+    TIMERA >= 9200
+then
+    $scene_step++
+    set_interpolation_parameters 0.0 5000
+    // big pan to the airport
+    Camera.SetPosition(-1434.0675, -805.5269, 24.8715, 0.0, 0.0, 0.0)
+    Camera.PointAt(-1407.7283, -831.9881, 14.8715, 1)
+end
+
+if and
+    $scene_step == 8
+    TIMERA >= 9700
+then
+    $scene_step++
+    set_char_obj_sprint_to_coord 2@ sprint_to -1413.7323 -826.7162
+
+    Car.SetToPsychoDriver(0@)
+    Car.SetMaxSpeed(0@, 100.0)
+    Car.DriveTo(0@, -1413.7323, -826.7162, 14.0)
+    Car.SetToPsychoDriver(3@)
+    Car.SetMaxSpeed(3@, 100.0)
+    Car.DriveTo(3@, -1413.7323, -826.7162, 14.0)
+    Car.SetToPsychoDriver(4@)
+    Car.SetMaxSpeed(4@, 100.0)
+    Car.DriveTo(4@, -1413.7323, -826.7162, 14.0)
+    Car.SetToPsychoDriver(5@)
+    Car.SetMaxSpeed(5@, 100.0)
+    Car.DriveTo(5@, -1413.7323, -826.7162, 14.0)
+    Car.SetToPsychoDriver(6@)
+    Car.SetMaxSpeed(6@, 100.0)
+    Car.DriveTo(6@, -1413.7323, -826.7162, 14.0)
+    Car.SetToPsychoDriver(7@)
+    Car.SetMaxSpeed(7@, 100.0)
+    Car.DriveTo(7@, -1413.7323, -826.7162, 14.0)
+    Car.SetToPsychoDriver(8@)
+    Car.SetMaxSpeed(8@, 100.0)
+    Car.DriveTo(8@, -1413.7323, -826.7162, 14.0)
+end
+
+if and
+    $scene_step == 9
+    TIMERA >= 10500
+then
+    $scene_step++
+    set_char_wait_state 2@ anim 2 wait_state_time 10000
+
+    Car.Create(9@, #CABBIE, -1411.1259, -822.6219, 34.7018)
+    Car.Angle(9@) = 255.3691
+end
+
+if and
+    $scene_step == 10
+    TIMERA >= 11700
+then
+    $scene_step++
+end
+
+if and
+    $scene_step == 11
+    TIMERA >= 12500
+then
+    $scene_step++
+    set_char_wait_state 2@ anim 16 wait_state_time 1000
+end
+
+if and
+    $scene_step == 12
+    TIMERA >= 14000
+then
+    fade 0 1000
+    wait 1000
+    fade 1 1000
+    goto @INTRO_END
+end
+
+goto @INTRO_LOOP
+
+:INTRO_SKIP
+fade 0 200
+wait 200
+fade 1 200
+generate_random_float_in_range $rnd = random_float 0.0 1.0
+if
+    0.25 > $rnd
+then
+    print_now 'INTSKIP' time 5000 1
+    Player.WantedLevel($player_char) = 1
+end
+
+:INTRO_END
+Car.Destroy(0@)
+Car.Destroy(3@)
+Car.Destroy(4@)
+Car.Destroy(5@)
+Car.Destroy(6@)
+Car.Destroy(7@)
+Car.Destroy(8@)
+Car.Destroy(9@)
+Actor.DestroyInstantly(1@)
+Actor.DestroyInstantly(2@)
+Actor.DestroyInstantly(10@)
+Actor.DestroyInstantly(11@)
+Actor.DestroyInstantly(12@)
+Actor.DestroyInstantly(13@)
+Actor.DestroyInstantly(14@)
+Actor.DestroyInstantly(15@)
+
+Car.Create(0@, #CABBIE, -265.7904, -381.3123, 10.5482)
+Car.Angle(0@) = 44.8726
+create_char_inside_car 1@ = create_actor 4 #HMOCA in_car 0@
+Car.SetToPsychoDriver(0@)
+Car.SetMaxSpeed(0@, 100.0)
+set_car_forward_speed 0@ speed_instantly 10.0
+Car.RemoveReferences(0@)
+Actor.RemoveReferences(1@)
+
+Model.Destroy(#TAXI)
+Model.Destroy(#CABBIE)
+Model.Destroy(#KAUFMAN)
+Model.Destroy(#WMOCA)
+Model.Destroy(#HMOCA)
+unload_special_character 1
+Camera.SetBehindPlayer
+Camera.Restore_WithJumpCut
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+Player.CanMove($player_char, True)
+set_time_of_day 5 30
+release_weather
+switch_widescreen 0
+$onmission = 0
+mission_has_finished
+terminate_this_script
+return

@@ -1,0 +1,1 @@
+./gtavc-gxt-to-txt-converter.ps1 "american.txt" "D:/Program Files (x86)/GTA Vice City/TEXT/american.gxt"
