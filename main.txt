@@ -1,6 +1,7 @@
-DEFINE MISSIONS 2
+DEFINE MISSIONS 3
 DEFINE MISSION 0 AT @INITIAL           // Initial
 DEFINE MISSION 1 AT @INTRO             // Intro
+DEFINE MISSION 2 AT @GOLF              // A Little Game of Golf
 
 //-------------MAIN---------------
 thread 'MAIN'
@@ -89,6 +90,7 @@ wait 0
 start_mission INTRO
 start_new_script @PSAVE1
 start_new_script @INFOPICS
+start_new_script @GOLF_MISSION
 launch_mission @HJ
 launch_mission @USJ
 launch_mission @CARGEN
@@ -331,6 +333,7 @@ set_interpolation_parameters 0.0 3000
 get_time_of_day 4@ 5@
 set_time_of_day 2 0 // 2 AM
 set_weather 4
+clear_area 0 at $golf_x $golf_y $golf_z range 1.0
 Camera.SetPosition(-173.0802, 445.9708, 19.1287, 0.0, 0.0, 0.0) // -173.0802, 445.9708, 12.2287
 Camera.PointAt(-173.7567, 444.1601, 18.915, 1) // -173.9067, 444.1601, 11.915
 wait 3000
@@ -428,6 +431,31 @@ goto @INFOPICS_LOOP
 print_with_2_numbers_big 'INFOCNT' numbers $info_pickups_collected $info_pickups_total time 5000 style 6
 add_one_off_sound 1 at 0.0 0.0 0.0
 return
+
+//-------------Golf mission loop script---------------
+//
+
+:GOLF_MISSION
+script_name 'GOLFMIS'
+
+:GOLF_MISSION_LOOP
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @GOLF_MISSION_LOOP_END
+if and
+    $onmission == 0
+    is_player_in_zone $player_char in_zone 'GOLFC' // Leaf Links
+goto_if_false @GOLF_MISSION_LOOP_END
+if and
+    is_player_in_model $player_char driving_vehicle_type #CADDY
+    locate_player_any_means_3d $player_char 0 $golf_x $golf_y $golf_z radius 2.0 2.0 2.0
+goto_if_false @GOLF_MISSION_LOOP_END
+print_big 'GOLFMIS' 15000 ms 2
+start_mission GOLF
+
+:GOLF_MISSION_LOOP_END
+goto @GOLF_MISSION_LOOP
 
 //-------------Insane stunts script---------------
 //
@@ -2721,12 +2749,18 @@ $info_19_picked_up = 0
 $info_20_picked_up = 0
 //todo: how many?
 $info_7_moved = 0
+$golf_x = -173.0759
+$golf_y = 418.5642
+$golf_z = 8.4777
+$passed_golf = 0
+$golf_record_seconds = 99999
 
 add_short_range_sprite_blip_for_coord $icon_vercetti = create_icon_marker_without_sphere 29 at -246.0713 -324.6199 10.2586
 add_short_range_sprite_blip_for_coord $439 = create_icon_marker_without_sphere 27 at -3.8 -1265.8 12.0
 add_short_range_sprite_blip_for_coord $440 = create_icon_marker_without_sphere 27 at 319.0 441.3 12.0
 add_short_range_sprite_blip_for_coord $441 = create_icon_marker_without_sphere 27 at -903.0 -1261.1 12.0
 add_short_range_sprite_blip_for_coord $442 = create_icon_marker_without_sphere 27 at -876.2 -105.5 12.0
+add_sprite_blip_for_contact_point $icon_golf = create_icon_marker_and_sphere 6 at $golf_x $golf_y $golf_z
 
 set_zone_ped_info 'STREET4' 1 13 0 0 0 0 0 0 0 0 0 30
 set_zone_ped_info 'STREET4' 0 10 0 0 0 0 0 0 0 0 0 40
@@ -3197,7 +3231,7 @@ create_car_generator $1951 = init_car_generator -1 -1 -1 force_spawn 0 alarm 60 
 switch_car_generator $1951 cars_to_generate_to 101
 create_car_generator $1952 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -142.1 -1373.0 3.1 angle 287.3
 switch_car_generator $1952 cars_to_generate_to 101
-create_car_generator $1860 = init_car_generator #CADDY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 393.9 -1736.4 8.8 angle 249.6
+create_car_generator $1860 = init_car_generator #CADDY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at $golf_x $golf_y $golf_z angle 276.0024
 switch_car_generator $1860 cars_to_generate_to 101
 create_car_generator $1931 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 198.2 -504.9 10.9 angle 90.0
 switch_car_generator $1931 cars_to_generate_to 101
@@ -3834,3 +3868,432 @@ $onmission = 0
 mission_has_finished
 terminate_this_script
 return
+
+//-------------Mission 2---------------
+// A Little Game of Golf
+
+:GOLF
+gosub @GOLF_START
+if
+    has_deatharrest_been_executed
+then
+    GOLF_FAIL()
+end
+GOLF_CLEANUP()
+terminate_this_script
+
+:GOLF_START
+script_name 'GOLF'
+$onmission = 1
+if
+    $passed_golf == 0
+then
+    register_mission_given
+end
+load_mission_text 'GOLF'
+wait 0
+print_now 'GOLF1' time 5000 1
+$race_step = 0
+$race_point_1_x = -139.2477
+$race_point_1_y = 440.2561
+$race_point_1_z = 9.1775
+$race_point_2_x = -107.5819
+$race_point_2_y = 447.7809
+$race_point_2_z = 8.7037
+$race_point_3_x = -95.6005
+$race_point_3_y = 484.2267
+$race_point_3_z = 12.2305 // 11.2305
+$race_point_4_x = -113.9988
+$race_point_4_y = 547.6333
+$race_point_4_z = 14.7735
+$race_point_5_x = -91.3525
+$race_point_5_y = 542.8997
+$race_point_5_z = 13.0422
+$race_point_6_x = 35.0571
+$race_point_6_y = 466.8623
+$race_point_6_z = 13.6778
+$race_point_7_x = 114.8614
+$race_point_7_y = 447.3965
+$race_point_7_z = 14.3335
+$race_point_8_x = 151.6372
+$race_point_8_y = 459.8285
+$race_point_8_z = 14.024
+$race_point_9_x = 192.2695
+$race_point_9_y = 359.0401
+$race_point_9_z = 15.5292
+$race_point_10_x = 164.4681
+$race_point_10_y = 233.4129
+$race_point_10_z = 11.7397
+$race_point_11_x = 100.5554
+$race_point_11_y = 103.4684
+$race_point_11_z = 19.7473
+$race_point_12_x = 40.673
+$race_point_12_y = 21.6945
+$race_point_12_z = 22.6103
+$race_point_13_x = -70.1871
+$race_point_13_y = -82.7057
+$race_point_13_z = 12.2612
+$race_point_14_x = 29.2908
+$race_point_14_y = -87.0549
+$race_point_14_z = 13.577
+$race_point_15_x = 53.3256
+$race_point_15_y = -130.2419
+$race_point_15_z = 10.7211
+$race_point_16_x = 104.6831
+$race_point_16_y = -61.2327
+$race_point_16_z = 13.6429
+$race_point_17_x = 140.5146
+$race_point_17_y = 1.0624
+$race_point_17_z = 10.1946
+$race_point_18_x = 172.5797
+$race_point_18_y = 70.6556
+$race_point_18_z = 14.9815
+$race_point_19_x = 102.2146
+$race_point_19_y = 115.7782
+$race_point_19_z = 18.3226
+$race_point_20_x = -6.8879
+$race_point_20_y = 127.2517
+$race_point_20_z = 27.612
+$race_point_21_x = -5.9777
+$race_point_21_y = 194.4387
+$race_point_21_z = 26.752
+$race_point_22_x = 23.4038
+$race_point_22_y = 220.7085
+$race_point_22_z = 25.622
+$race_point_23_x = 38.0899
+$race_point_23_y = 235.1594
+$race_point_23_z = 24.2837
+$race_point_24_x = 37.6481
+$race_point_24_y = 276.0324
+$race_point_24_z = 21.4866
+$race_point_25_x = 88.3494
+$race_point_25_y = 395.7704
+$race_point_25_z = 19.5261
+$race_point_26_x = 167.6341
+$race_point_26_y = 481.1865
+$race_point_26_z = 15.1178
+$race_point_27_x = 196.1657
+$race_point_27_y = 531.4446
+$race_point_27_z = 16.4181
+$race_point_28_x = 181.1747
+$race_point_28_y = 587.4648
+$race_point_28_z = 13.5882
+$race_point_29_x = 134.3991
+$race_point_29_y = 622.8892
+$race_point_29_z = 12.7351
+$race_point_30_x = 84.084
+$race_point_30_y = 580.8598
+$race_point_30_z = 17.3853 // 14.3853
+$mission_hint_1_shown = 0
+set_var_float_to_var_float $race_point_current_x = $race_point_1_x
+set_var_float_to_var_float $race_point_current_y = $race_point_1_y
+set_var_float_to_var_float $race_point_current_z = $race_point_1_z
+set_var_float_to_var_float $race_point_next_x = $race_point_2_x
+set_var_float_to_var_float $race_point_next_y = $race_point_2_y
+set_var_float_to_var_float $race_point_next_z = $race_point_2_z
+store_car_player_is_in $race_car = player $player_char
+add_blip_for_coord $race_marker_1 = create_checkpoint_at $race_point_1_x $race_point_1_y $race_point_1_z
+add_blip_for_coord $race_marker_2 = create_checkpoint_at $race_point_2_x $race_point_2_y $race_point_2_z
+dim_blip $race_marker_2 brightness_to 1
+TIMERA = 0
+Object.Create($jump_ramp_1, #WATERJUMP1, 86.8847, 584.9246, 13.3714)
+Object.Angle($jump_ramp_1) = 141.9693
+Object.CollisionDetection($jump_ramp_1, True)
+
+:GOLF_1
+wait 0
+if
+    is_player_in_car $player_char in_car $race_car
+goto_if_false @GOLF_BAILED
+if
+    not Car.Wrecked($race_car)
+goto_if_false @GOLF_WRECKED
+if and
+    locate_player_any_means_2d $player_char 0 50.1701 -137.8058 radius 7.0 7.0 // z: 11.6784
+    $mission_hint_1_shown == 0
+then
+    print_now 'GOLF_TR' time 2000 1
+    $mission_hint_1_shown = 1
+end
+
+if
+    $race_step == 29
+then
+    draw_corona 1.0 type 5 lensflares 0 with_color 200 0 0 at $race_point_current_x $race_point_current_y $race_point_current_z
+else
+    draw_corona 1.0 type 5 lensflares 0 with_color 0 200 200 at $race_point_current_x $race_point_current_y $race_point_current_z
+end
+
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car $race_point_current_x $race_point_current_y $race_point_current_z radius 2.5 2.5 3.5
+goto_if_false @GOLF_1
+
+set_var_float_to_var_float $race_point_current_x = $race_point_next_x
+set_var_float_to_var_float $race_point_current_y = $race_point_next_y
+set_var_float_to_var_float $race_point_current_z = $race_point_next_z
+Marker.Disable($race_marker_1)
+set_var_int_to_var_int $race_marker_1 = $race_marker_2
+dim_blip $race_marker_1 brightness_to 2
+add_one_off_sound 1 at $race_point_current_x $race_point_current_y $race_point_current_z
+
+if
+    28 > $race_step
+goto_if_false @GOLF_NEXTSTEP
+if
+    $race_step == 0
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_3_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_3_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_3_z
+end
+if
+    $race_step == 1
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_4_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_4_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_4_z
+end
+if
+    $race_step == 2
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_5_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_5_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_5_z
+end
+if
+    $race_step == 3
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_6_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_6_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_6_z
+end
+if
+    $race_step == 4
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_7_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_7_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_7_z
+end
+if
+    $race_step == 5
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_8_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_8_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_8_z
+end
+if
+    $race_step == 6
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_9_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_9_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_9_z
+end
+if
+    $race_step == 7
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_10_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_10_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_10_z
+end
+if
+    $race_step == 8
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_11_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_11_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_11_z
+end
+if
+    $race_step == 9
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_12_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_12_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_12_z
+end
+if
+    $race_step == 10
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_13_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_13_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_13_z
+end
+if
+    $race_step == 11
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_14_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_14_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_14_z
+end
+if
+    $race_step == 12
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_15_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_15_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_15_z
+end
+if
+    $race_step == 13
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_16_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_16_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_16_z
+end
+if
+    $race_step == 14
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_17_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_17_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_17_z
+end
+if
+    $race_step == 15
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_18_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_18_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_18_z
+end
+if
+    $race_step == 16
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_19_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_19_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_19_z
+end
+if
+    $race_step == 17
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_20_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_20_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_20_z
+end
+if
+    $race_step == 18
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_21_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_21_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_21_z
+end
+if
+    $race_step == 19
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_22_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_22_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_22_z
+end
+if
+    $race_step == 20
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_23_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_23_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_23_z
+end
+if
+    $race_step == 21
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_24_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_24_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_24_z
+end
+if
+    $race_step == 22
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_25_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_25_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_25_z
+end
+if
+    $race_step == 23
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_26_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_26_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_26_z
+end
+if
+    $race_step == 24
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_27_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_27_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_27_z
+end
+if
+    $race_step == 25
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_28_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_28_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_28_z
+end
+if
+    $race_step == 26
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_29_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_29_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_29_z
+end
+if
+    $race_step == 27
+then
+    set_var_float_to_var_float $race_point_next_x = $race_point_30_x
+    set_var_float_to_var_float $race_point_next_y = $race_point_30_y
+    set_var_float_to_var_float $race_point_next_z = $race_point_30_z
+end
+
+add_blip_for_coord $race_marker_2 = create_checkpoint_at $race_point_next_x $race_point_next_y $race_point_next_z
+dim_blip $race_marker_2 brightness_to 1
+
+:GOLF_NEXTSTEP
+if
+    29 > $race_step
+goto_if_false @GOLF_PASS
+$race_step++
+jump @GOLF_1
+
+:GOLF_BAILED
+print_now 'GOLF_F' time 5000 2
+GOLF_FAIL()
+return
+
+:GOLF_WRECKED
+print_now 'GOLF_W' time 5000 2
+GOLF_FAIL()
+return
+
+:GOLF_FAIL
+print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
+return
+
+:GOLF_PASS
+play_mission_passed_tune 1
+print_with_number_big 'M_PASS' number 100 time 5000 style 1 // MISSION PASSED! $~1~
+Player.Money($player_char) += 100
+if
+    $passed_golf == 0
+then
+    register_mission_passed 'GOLF'
+    player_made_progress 1
+    $passed_golf = 1
+    Marker.Disable($icon_golf)
+    add_short_range_sprite_blip_for_coord $icon_golf = create_icon_marker_without_sphere 6 at $golf_x $golf_y $golf_z
+end
+set_var_int_to_var_int 15@ = TIMERA
+15@ /= 1000
+if
+    is_int_var_greater_than_int_var $golf_record_seconds > 15@
+then
+    register_fastest_time 16 to 15@
+    set_var_int_to_var_int $golf_record_seconds = 15@
+    14@ = 0
+    while 15@ > 59
+        15@ -= 60
+        14@++
+    end
+    print_with_2_numbers_now 'NEW_REC' 14@ 15@ time 5000 1 // ~g~New Record Set!! ~w~~1~ minutes ~g~and ~w~~1~ seconds.
+end
+return
+
+:GOLF_CLEANUP
+$onmission = 0
+Marker.Disable($race_marker_1)
+Marker.Disable($race_marker_2)
+Car.RemoveReferences($race_car)
+Object.Destroy($jump_ramp_1)
+mission_has_finished
+terminate_this_script
