@@ -280,7 +280,7 @@ print_help 'INFO2B'
 if
     $player_knows_about_info_pickups == 1
 then
-    wait 5000
+    wait 1000
     INFOPICS_PRINT_COUNT()
 end
 goto @INFOPICS_LOOP
@@ -300,7 +300,7 @@ print_help 'INFO3'
 if
     $player_knows_about_info_pickups == 1
 then
-    wait 5000
+    wait 1000
     INFOPICS_PRINT_COUNT()
 end
 goto @INFOPICS_LOOP
@@ -319,6 +319,7 @@ player_made_progress 1
 print_help 'INFO4'
 wait 5000
 print_help 'INFO4B'
+wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
 
@@ -334,7 +335,7 @@ $info_5_picked_up = 1
 $info_pickups_collected++
 player_made_progress 1
 print_help 'INFO5'
-wait 5000
+wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
 
@@ -413,7 +414,7 @@ $info_7_picked_up = 1
 $info_pickups_collected++
 player_made_progress 1
 print_help 'INFO7W'
-wait 5000
+wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
 
