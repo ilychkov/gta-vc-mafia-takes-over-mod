@@ -3760,14 +3760,7 @@ $scene_step = 0
 :INTRO_LOOP
 wait 0
 if or
-    is_button_pressed 0 pressed_button 8
-    is_button_pressed 0 pressed_button 9
-    is_button_pressed 0 pressed_button 10
-    is_button_pressed 0 pressed_button 11
-    is_button_pressed 0 pressed_button 14
-    is_button_pressed 0 pressed_button 15
-    is_button_pressed 0 pressed_button 16
-    is_button_pressed 0 pressed_button 17
+    {$I incl.anykey.txt}
 then
     goto @INTRO_SKIP
 end
@@ -4448,8 +4441,135 @@ $onmission = 1
 register_mission_given
 load_mission_text 'POLICE1'
 wait 0
-//mission code
-wait 10000
+Player.CanMove($player_char, False)
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_fading_colour 0 0 0
+switch_widescreen 1
+Model.Load(#BOBCAT)
+Model.Load(#POLICE)
+Model.Load(#COP)
+
+:POLICE_1_LOAD
+wait 0
+if and
+    Model.Available(#BOBCAT)
+    Model.Available(#POLICE)
+    Model.Available(#COP)
+goto_if_false @POLICE_1_LOAD
+Car.Create($objective_car, #BOBCAT, 333.704, -501.9003, 9.7059)
+Car.Angle($objective_car) = 138.7416
+Marker.TieToCar($objective_car_marker, $objective_car, 0, 1)
+Car.Create(0@, #POLICE, 359.5053, -514.6687, 11.961)
+Car.Angle(0@) = 322.4988
+create_char_inside_car 1@ = create_actor 4 #COP in_car 0@
+Car.SetToNormalDriver(0@)
+Car.ImmuneToNonPlayer(0@, True)
+set_car_temp_action 0@ action 2 time 2000
+Camera.SetPosition(364.6485, -526.3016, 13.954, 0.0, 0.0, 0.0)
+Camera.PointAt(354.3607, -523.9194, 10.0632, 2)
+set_player_coordinates $player_char at 348.0225 -524.783 8.9363
+set_player_heading $player_char z_angle_to 237.081
+wait 2000
+set_interpolation_parameters 0.0 1500
+Camera.SetPosition(345.452, -527.0284, 9.0841, 0.0, 0.0, 0.0)
+Camera.PointAt(350.2682, -525.0466, 9.9611, 1)
+set_char_obj_leave_car 1@ leave_car 0@
+TIMERB = 0
+while Actor.Driving(1@)
+    if
+        TIMERB > 5000
+    then
+        Car.StorePos(0@, 13@, 14@, 15@)
+        15@ += 1.0
+        warp_char_from_car_to_coord 1@ at 13@ 14@ 15@
+        break
+    end
+    wait 0
+end
+turn_char_to_face_char $player_actor look_at_actor 1@
+turn_char_to_face_char 1@ look_at_actor $player_actor
+wait 500
+set_char_wait_state 1@ anim 19 wait_state_time 10000
+print_now 'INTRO1' time 3000 2
+TIMERA = 0
+$scene_step = 0
+
+:POLICE_1_INTRO_LOOP
+wait 0
+if or
+    {$I incl.anykey.txt}
+then
+    goto @POLICE_1_INTRO_END
+end
+
+if and
+    $scene_step == 0
+    TIMERA >= 3000
+then
+    $scene_step++
+    print_now 'INTRO2' time 3000 2
+end
+
+if and
+    $scene_step == 1
+    TIMERA >= 6000
+then
+    $scene_step++
+    print_now 'INTRO3' time 3000 2
+    set_interpolation_parameters 0.0 4000
+    Camera.SetPosition(330.9225, -525.593, 10.8841, 0.0, 0.0, 0.0)
+    Camera.OnVehicle($objective_car, 15, 1)
+end
+
+if and
+    $scene_step == 2
+    TIMERA >= 9000
+then
+    $scene_step++
+    print_now 'INTRO4' time 4000 2
+end
+if and
+    $scene_step == 3
+    TIMERA >= 13000
+then
+    goto @POLICE_1_INTRO_END
+end
+goto @POLICE_1_INTRO_LOOP
+
+:POLICE_1_INTRO_END
+set_char_wait_state $player_actor anim 0 wait_state_time 100
+Car.Destroy(0@)
+Actor.DestroyInstantly(1@)
+Player.CanMove($player_char, True)
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+switch_widescreen 0
+Camera.Restore_WithJumpCut
+Camera.SetBehindPlayer
+
+:POLICE_1_WAITING_CAR
+wait 0
+if
+    not Car.Wrecked($objective_car)
+goto_if_false @POLICE_1_WRECKED
+if
+    locate_player_any_means_2d $player_char 0 333.704 -501.9003 radius 35.0 35.0
+goto_if_false @POLICE_1_ABANDONED
+if
+    is_player_in_car $player_char in_car $objective_car
+goto_if_false @POLICE_1_WAITING_CAR
+goto @POLICE_1_PASS
+return
+
+:POLICE_1_WRECKED
+print_now 'CARF' time 5000 2
+POLICE_1_FAIL()
+return
+
+:POLICE_1_ABANDONED
+print_now 'GONEAWY' time 5000 2
+POLICE_1_FAIL()
 return
 
 :POLICE_1_FAIL
@@ -4468,6 +4588,7 @@ return
 
 :POLICE_1_CLEANUP
 $onmission = 0
-//clean up
+Car.RemoveReferences($objective_car)
+Marker.Disable($objective_car_marker)
 mission_has_finished
 terminate_this_script
