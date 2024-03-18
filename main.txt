@@ -3543,7 +3543,7 @@ create_car_generator $1889 = init_car_generator #AMBULAN -1 -1 force_spawn 0 ala
 switch_car_generator $1889 cars_to_generate_to 101
 create_car_generator $1917 = init_car_generator #FIRETRUK -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -694.9 917.3 10.8 angle 270.0
 switch_car_generator $1917 cars_to_generate_to 101
-create_car_generator $1984 = init_car_generator #COMET -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 114.6977 252.3439 20.6832 angle 105.6803
+create_car_generator $1984 = init_car_generator #SANCHEZ -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 114.6977 252.3439 20.6832 angle 105.6803
 switch_car_generator $1984 cars_to_generate_to 101
 create_car_generator $83 = init_car_generator #INFERNUS 1 1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -363.0 -532.2 12.0 angle 0.0
 switch_car_generator $83 cars_to_generate_to 0
