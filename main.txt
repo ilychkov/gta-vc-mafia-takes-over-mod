@@ -1,7 +1,8 @@
-DEFINE MISSIONS 3
+DEFINE MISSIONS 4
 DEFINE MISSION 0 AT @INITIAL           // Initial
 DEFINE MISSION 1 AT @INTRO             // Intro
 DEFINE MISSION 2 AT @GOLF              // A Little Game of Golf
+DEFINE MISSION 3 AT @POLICE_1          // Special Delivery
 
 //-------------MAIN---------------
 thread 'MAIN'
@@ -110,6 +111,7 @@ start_mission INTRO
 start_new_script @PSAVE1
 start_new_script @INFOPICS
 start_new_script @GOLF_MISSION
+start_new_script @POLICE_1_MISSION
 launch_mission @HJ
 launch_mission @USJ
 launch_mission @CARGEN
@@ -549,6 +551,35 @@ start_mission GOLF
 
 :GOLF_MISSION_LOOP_END
 goto @GOLF_MISSION_LOOP
+
+//-------------Police mission 1 loop script---------------
+//
+
+:POLICE_1_MISSION
+script_name 'POLICE1'
+
+:POLICE_1_MISSION_LOOP
+wait $default_wait_time
+if
+    $passed_police_1 == 1
+then
+    terminate_this_script
+end
+if
+    Player.Defined($player_char)
+goto_if_false @POLICE_1_MISSION_LOOP_END
+if and
+    $onmission == 0
+    is_player_in_zone $player_char in_zone 'BEACH2' // Washington Beach
+goto_if_false @POLICE_1_MISSION_LOOP_END
+if
+    locate_player_on_foot_3d $player_char 0 $police_x $police_y $police_z radius 1.2 1.2 2.0
+goto_if_false @POLICE_1_MISSION_LOOP_END
+print_big 'POLICE1' 15000 ms 2
+start_mission POLICE_1
+
+:POLICE_1_MISSION_LOOP_END
+goto @POLICE_1_MISSION_LOOP
 
 //-------------Insane stunts script---------------
 //
@@ -2848,13 +2879,19 @@ $golf_y = 418.5642
 $golf_z = 8.4777
 $passed_golf = 0
 $golf_record_seconds = 99999
+$police_x = 349.17
+$police_y = -530.1183
+$police_z = 9.8841
+const icon_golf = 13
+const icon_police = 10
 
 add_short_range_sprite_blip_for_coord $icon_vercetti = create_icon_marker_without_sphere 29 at -246.0713 -324.6199 10.2586
 add_short_range_sprite_blip_for_coord $439 = create_icon_marker_without_sphere 27 at -3.8 -1265.8 12.0
 add_short_range_sprite_blip_for_coord $440 = create_icon_marker_without_sphere 27 at 319.0 441.3 12.0
 add_short_range_sprite_blip_for_coord $441 = create_icon_marker_without_sphere 27 at -903.0 -1261.1 12.0
 add_short_range_sprite_blip_for_coord $442 = create_icon_marker_without_sphere 27 at -876.2 -105.5 12.0
-add_sprite_blip_for_contact_point $icon_golf = create_icon_marker_and_sphere 6 at $golf_x $golf_y $golf_z
+add_sprite_blip_for_contact_point $icon_golf = create_icon_marker_and_sphere icon_golf at $golf_x $golf_y $golf_z
+add_sprite_blip_for_contact_point $icon_police = create_icon_marker_and_sphere icon_police at $police_x $police_y $police_z
 
 set_zone_ped_info 'STREET4' 1 13 0 0 0 0 0 0 0 0 0 30
 set_zone_ped_info 'STREET4' 0 10 0 0 0 0 0 0 0 0 0 40
@@ -4365,7 +4402,7 @@ then
     player_made_progress 1
     $passed_golf = 1
     Marker.Disable($icon_golf)
-    add_short_range_sprite_blip_for_coord $icon_golf = create_icon_marker_without_sphere 6 at $golf_x $golf_y $golf_z
+    add_short_range_sprite_blip_for_coord $icon_golf = create_icon_marker_without_sphere icon_golf at $golf_x $golf_y $golf_z
 end
 set_var_int_to_var_int 15@ = TIMERA
 15@ /= 1000
@@ -4389,5 +4426,48 @@ Marker.Disable($race_marker_1)
 Marker.Disable($race_marker_2)
 Car.RemoveReferences($race_car)
 Object.Destroy($jump_ramp_1)
+mission_has_finished
+terminate_this_script
+
+//-------------Mission 3---------------
+// Special Delivery
+
+:POLICE_1
+gosub @POLICE_1_START
+if
+    has_deatharrest_been_executed
+then
+    POLICE_1_FAIL()
+end
+POLICE_1_CLEANUP()
+terminate_this_script
+
+:POLICE_1_START
+script_name 'POLICE1'
+$onmission = 1
+register_mission_given
+load_mission_text 'POLICE1'
+wait 0
+//mission code
+wait 10000
+return
+
+:POLICE_1_FAIL
+print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
+return
+
+:POLICE_1_PASS
+play_mission_passed_tune 1
+print_with_number_big 'M_PASS' number 100 time 5000 style 1 // MISSION PASSED! $~1~
+Player.Money($player_char) += 100
+register_mission_passed 'POLICE1'
+player_made_progress 1
+$passed_police_1 = 1
+Marker.Disable($icon_police)
+return
+
+:POLICE_1_CLEANUP
+$onmission = 0
+//clean up
 mission_has_finished
 terminate_this_script

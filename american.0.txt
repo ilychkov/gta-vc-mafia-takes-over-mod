@@ -16,10 +16,13 @@ INFO7W  = Alright, alright. You win.
 GOLFMIS = 'A Little Game of Golf'
 NEW_REC = ~g~New Record Set!!!!! ~w~~1~ minutes ~g~and ~w~~1~ seconds.
 STFT_17 = Fastest time on 'A Little Game of Golf'
+POLICE1 = Special Delivery
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!
 GOLF_F  = You bailed!
 GOLF_W  = There goes the golf car
 GOLF_TR = Haha, trolled
+
+[POLICE1]
 
