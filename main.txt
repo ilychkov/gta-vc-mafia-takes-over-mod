@@ -3722,6 +3722,8 @@ switch_widescreen 1
 Player.CanMove($player_char, False)
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+set_car_density_multiplier 0.0
+set_ped_density_multiplier 0.0
 Camera.SetAtPos(-1607.8014, -1195.0654, 15.0263)
 Camera.SetPosition(-1607.8014, -1195.0654, 16.0263, 0.0, 0.0, 0.0)
 Camera.PointAt(-1608.731, -1201.7645, 16.2263, 2) //14.868
@@ -3731,19 +3733,19 @@ Model.Load(#KAUFMAN)
 Model.Load(#WMOCA)
 Model.Load(#HMOCA)
 load_special_character 1 'PLAYER'
-while true
-    if and
-        Model.Available(#TAXI)
-        Model.Available(#CABBIE)
-        Model.Available(#KAUFMAN)
-        Model.Available(#WMOCA)
-        Model.Available(#HMOCA)
-        has_special_character_loaded 1
-    then
-        break
-    end
-    wait 0
-end
+load_mission_audio 'TAX2_7' as 1
+
+:INTRO_LOAD
+wait 0
+if and
+    Model.Available(#TAXI)
+    Model.Available(#CABBIE)
+    Model.Available(#KAUFMAN)
+    Model.Available(#WMOCA)
+    Model.Available(#HMOCA)
+    has_special_character_loaded 1
+    has_mission_audio_loaded 1
+goto_if_false @INTRO_LOAD
 do_fade 1 (out) 200
 Car.Create(0@, #TAXI, -1634.0433, -1549.4225, 34.8682) //14.8682
 create_char_inside_car 1@ = create_actor 4 #WMOCA in_car 0@
@@ -3756,6 +3758,8 @@ Car.DriveTo(0@, -1632.5491, -1206.3263, 14.868)
 set_car_forward_speed 0@ speed_instantly 200.0
 TIMERA = 0
 $scene_step = 0
+14@ = 0
+15@ = 0
 
 :INTRO_LOOP
 wait 0
@@ -3819,6 +3823,54 @@ if and
     TIMERA >= 8100
 then
     $scene_step++
+    Actor.Create(3@, 4, #SPECIAL01, -1407.7283, -831.9881, 13.8715)
+    Actor.Angle(3@) = 47.075
+    set_char_obj_run_to_coord 3@ run_to -1413.7323 -826.7162
+    set_char_use_pednode_seek 3@ use_pednode_seek 0
+
+    Car.Create($mission_car_1, #TAXI, -1411.8204, -792.3445, 14.7013)
+    Car.Angle($mission_car_1) = 180.8461
+    Car.Create($mission_car_2, #CABBIE, -1453.9362, -826.8669, 14.64)
+    Car.Angle($mission_car_2) = 239.1266
+    Car.Create($mission_car_3, #TAXI, -1429.6967, -804.1542, 14.8714)
+    Car.Angle($mission_car_3) = 195.5963
+    Car.Create($mission_car_4, #KAUFMAN, -1453.5037, -810.3246, 14.8714)
+    Car.Angle($mission_car_4) = 34.5414
+    Car.Create($mission_car_5, #TAXI, -1451.349, -780.7466, 14.6999)
+    Car.Angle($mission_car_5) = 90.5653
+    Car.Create($mission_car_6, #KAUFMAN, -1409.8754, -785.378, 14.6998)
+    Car.Angle($mission_car_6) = 156.0526
+    Car.Create($mission_car_7, #TAXI, -1418.5424, -806.1469, 14.8714)
+    Car.Angle($mission_car_7) = 349.6711
+    create_char_inside_car $mission_actor_1 = create_actor 4 #HMOCA in_car $mission_car_1
+    create_char_inside_car $mission_actor_2 = create_actor 4 #WMOCA in_car $mission_car_2
+    create_char_inside_car $mission_actor_3 = create_actor 4 #HMOCA in_car $mission_car_3
+    create_char_inside_car $mission_actor_4 = create_actor 4 #WMOCA in_car $mission_car_4
+    create_char_inside_car $mission_actor_5 = create_actor 4 #WMOCA in_car $mission_car_5
+    create_char_inside_car $mission_actor_6 = create_actor 4 #HMOCA in_car $mission_car_6
+    create_char_inside_car $mission_actor_7 = create_actor 4 #WMOCA in_car $mission_car_7
+    Car.SetToNormalDriver($mission_car_1)
+    Car.SetToNormalDriver($mission_car_2)
+    Car.SetToNormalDriver($mission_car_3)
+    Car.SetToNormalDriver($mission_car_4)
+    Car.SetToNormalDriver($mission_car_5)
+    Car.SetToNormalDriver($mission_car_6)
+    Car.SetToNormalDriver($mission_car_7)
+    set_car_driving_style $mission_car_1 traffic_behavior_to 2
+    set_car_driving_style $mission_car_2 traffic_behavior_to 2
+    set_car_driving_style $mission_car_1 traffic_behavior_to 2
+    set_car_driving_style $mission_car_1 traffic_behavior_to 2
+    set_car_driving_style $mission_car_1 traffic_behavior_to 2
+    set_car_driving_style $mission_car_1 traffic_behavior_to 2
+    set_car_driving_style $mission_car_1 traffic_behavior_to 2
+    Car.SetMaxSpeed($mission_car_1, 100.0)
+    Car.SetMaxSpeed($mission_car_2, 100.0)
+    Car.SetMaxSpeed($mission_car_3, 100.0)
+    Car.SetMaxSpeed($mission_car_4, 100.0)
+    Car.SetMaxSpeed($mission_car_5, 100.0)
+    Car.SetMaxSpeed($mission_car_6, 100.0)
+    Car.SetMaxSpeed($mission_car_7, 100.0)
+
     set_interpolation_parameters 0.0 1000
     Camera.SetAtPos(-1411.1111, -819.9204, 14.702)
     Camera.SetPosition(-1411.1111, -819.9204, 14.702, 0.0, 0.0, 0.0)
@@ -3827,104 +3879,74 @@ end
 
 if and
     $scene_step == 6
-    TIMERA >= 8200
-then
-    $scene_step++
-    Actor.PutAt(2@, -1407.7283, -831.9881, 14.8715)
-    Car.Destroy(0@)
-    Actor.DestroyInstantly(1@)
-    Car.Create(0@, #TAXI, -1416.1602, -825.3985, 14.7018)
-    Car.Angle(0@) = 335.5598
-    create_char_inside_car 1@ = create_actor 4 #HMOCA in_car 0@
-    Car.Create(3@, #CABBIE, -1418.2828, -830.516, 14.7021)
-    Car.Angle(3@) = 93.6876
-    create_char_inside_car 10@ = create_actor 4 #WMOCA in_car 3@
-    Car.Create(4@, #TAXI, -1414.7581, -819.8999, 14.7019)
-    Car.Angle(4@) = 307.383
-    create_char_inside_car 11@ = create_actor 4 #HMOCA in_car 4@
-    Car.Create(5@, #KAUFMAN, -1418.3062, -821.1479, 14.7015)
-    Car.Angle(5@) = 338.7166
-    create_char_inside_car 12@ = create_actor 4 #WMOCA in_car 5@
-    Car.Create(6@, #TAXI, -1417.5204, -817.381, 14.702)
-    Car.Angle(6@) = 138.2047
-    create_char_inside_car 13@ = create_actor 4 #WMOCA in_car 6@
-    Car.Create(7@, #KAUFMAN, -1423.2598, -821.9271, 14.8717)
-    Car.Angle(7@) = 275.7593
-    create_char_inside_car 14@ = create_actor 4 #HMOCA in_car 7@
-    Car.Create(8@, #TAXI, -1417.7793, -825.3713, 14.7019)
-    Car.Angle(8@) = 355.0334
-    create_char_inside_car 15@ = create_actor 4 #WMOCA in_car 8@
-end
-
-if and
-    $scene_step == 7
-    TIMERA >= 9200
+    TIMERA >= 9100
 then
     $scene_step++
     set_interpolation_parameters 0.0 5000
     // big pan to the airport
     Camera.SetPosition(-1434.0675, -805.5269, 24.8715, 0.0, 0.0, 0.0)
     Camera.PointAt(-1407.7283, -831.9881, 14.8715, 1)
+    Car.DriveTo($mission_car_1, -1413.7323, -826.7162, 14.0)
+    Car.DriveTo($mission_car_2, -1413.7323, -826.7162, 14.0)
+    Car.DriveTo($mission_car_3, -1413.7323, -826.7162, 14.0)
+    Car.DriveTo($mission_car_4, -1413.7323, -826.7162, 14.0)
+    Car.DriveTo($mission_car_5, -1413.7323, -826.7162, 14.0)
+    Car.DriveTo($mission_car_6, -1413.7323, -826.7162, 14.0)
+    Car.DriveTo($mission_car_7, -1413.7323, -826.7162, 14.0)
 end
 
-if and
-    $scene_step == 8
-    TIMERA >= 9700
+if
+    $scene_step == 7
 then
-    $scene_step++
-    set_char_obj_sprint_to_coord 2@ sprint_to -1413.7323 -826.7162
+    if
+        locate_stopped_char_on_foot_2d 3@ stopped 0 -1413.7323 -826.7162 radius 2.0 2.0
+    then
+        $scene_step++
+        set_char_obj_sprint_to_coord 3@ sprint_to -1405.4761 -829.575 14.8713
+        set_char_use_pednode_seek 3@ use_pednode_seek 0
+    end
+end
 
-    Car.SetToPsychoDriver(0@)
-    Car.SetMaxSpeed(0@, 100.0)
-    Car.DriveTo(0@, -1413.7323, -826.7162, 14.0)
-    Car.SetToPsychoDriver(3@)
-    Car.SetMaxSpeed(3@, 100.0)
-    Car.DriveTo(3@, -1413.7323, -826.7162, 14.0)
-    Car.SetToPsychoDriver(4@)
-    Car.SetMaxSpeed(4@, 100.0)
-    Car.DriveTo(4@, -1413.7323, -826.7162, 14.0)
-    Car.SetToPsychoDriver(5@)
-    Car.SetMaxSpeed(5@, 100.0)
-    Car.DriveTo(5@, -1413.7323, -826.7162, 14.0)
-    Car.SetToPsychoDriver(6@)
-    Car.SetMaxSpeed(6@, 100.0)
-    Car.DriveTo(6@, -1413.7323, -826.7162, 14.0)
-    Car.SetToPsychoDriver(7@)
-    Car.SetMaxSpeed(7@, 100.0)
-    Car.DriveTo(7@, -1413.7323, -826.7162, 14.0)
-    Car.SetToPsychoDriver(8@)
-    Car.SetMaxSpeed(8@, 100.0)
-    Car.DriveTo(8@, -1413.7323, -826.7162, 14.0)
+if
+    $scene_step == 8
+then
+    if
+        locate_stopped_char_on_foot_2d 3@ stopped 0 -1405.4761 -829.575 radius 2.0 2.0
+    then
+        $scene_step++
+        TIMERB = 0
+        set_char_wait_state 3@ anim 10 wait_state_time 1500
+    end
 end
 
 if and
     $scene_step == 9
+    TIMERB >= 1500
+then
+    $scene_step++
+    Actor.Angle(3@) = 81.8553
+    set_char_wait_state 3@ anim 16 wait_state_time 10000
+end
+
+if and
     TIMERA >= 10500
+    14@ == 0
 then
-    $scene_step++
-    set_char_wait_state 2@ anim 2 wait_state_time 10000
-
-    Car.Create(9@, #CABBIE, -1411.1259, -822.6219, 34.7018)
-    Car.Angle(9@) = 255.3691
+    Car.Create($mission_car_8, #CABBIE, -1411.1259, -822.6219, 34.7018)
+    Car.Angle($mission_car_8) = 255.3691
+    create_char_inside_car $mission_actor_8 = create_actor 4 #HMOCA in_car $mission_car_8
+    14@ = 1
 end
 
 if and
-    $scene_step == 10
-    TIMERA >= 11700
-then
-    $scene_step++
-end
-
-if and
-    $scene_step == 11
     TIMERA >= 12500
+    15@ == 0
 then
-    $scene_step++
-    set_char_wait_state 2@ anim 16 wait_state_time 1000
+    play_mission_audio 1
+    15@ = 1
 end
 
-if and
-    $scene_step == 12
+if
     TIMERA >= 14000
 then
     fade 0 1000
@@ -3949,26 +3971,31 @@ end
 
 :INTRO_END
 Car.Destroy(0@)
-Car.Destroy(3@)
-Car.Destroy(4@)
-Car.Destroy(5@)
-Car.Destroy(6@)
-Car.Destroy(7@)
-Car.Destroy(8@)
-Car.Destroy(9@)
+Car.Destroy($mission_car_1)
+Car.Destroy($mission_car_2)
+Car.Destroy($mission_car_3)
+Car.Destroy($mission_car_4)
+Car.Destroy($mission_car_5)
+Car.Destroy($mission_car_6)
+Car.Destroy($mission_car_7)
+Car.Destroy($mission_car_8)
 Actor.DestroyInstantly(1@)
 Actor.DestroyInstantly(2@)
-Actor.DestroyInstantly(10@)
-Actor.DestroyInstantly(11@)
-Actor.DestroyInstantly(12@)
-Actor.DestroyInstantly(13@)
-Actor.DestroyInstantly(14@)
-Actor.DestroyInstantly(15@)
+Actor.DestroyInstantly(3@)
+Actor.DestroyInstantly($mission_actor_1)
+Actor.DestroyInstantly($mission_actor_2)
+Actor.DestroyInstantly($mission_actor_3)
+Actor.DestroyInstantly($mission_actor_4)
+Actor.DestroyInstantly($mission_actor_5)
+Actor.DestroyInstantly($mission_actor_6)
+Actor.DestroyInstantly($mission_actor_7)
+Actor.DestroyInstantly($mission_actor_8)
 
 Car.Create(0@, #CABBIE, -265.7904, -381.3123, 10.5482)
 Car.Angle(0@) = 44.8726
 create_char_inside_car 1@ = create_actor 4 #HMOCA in_car 0@
 Car.SetToPsychoDriver(0@)
+set_car_driving_style 0@ traffic_behavior_to 2
 Car.SetMaxSpeed(0@, 100.0)
 set_car_forward_speed 0@ speed_instantly 10.0
 Car.RemoveReferences(0@)
@@ -3980,10 +4007,13 @@ Model.Destroy(#KAUFMAN)
 Model.Destroy(#WMOCA)
 Model.Destroy(#HMOCA)
 unload_special_character 1
+clear_mission_audio 1
 Camera.SetBehindPlayer
 Camera.Restore_WithJumpCut
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_car_density_multiplier 1.0
+set_ped_density_multiplier 1.0
 Player.CanMove($player_char, True)
 set_time_of_day 5 30
 release_weather
