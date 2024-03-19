@@ -125,6 +125,7 @@ start_new_script @PSAVE1
 start_new_script @INFOPICS
 start_new_script @CLOTHES
 start_new_script @HAILACAB
+start_new_script @NPCS
 start_new_script @GOLF_MISSION
 start_new_script @POLICE_1_MISSION
 launch_mission @HJ
@@ -910,6 +911,169 @@ Car.SetToPsychoDriver($cab)
 Car.SetMaxSpeed($cab, 100.0)
 goto @HAILACAB_LOOKFOR
 
+//-------------NPCs on the map---------------
+//
+
+:NPCS
+script_name 'NPCS'
+set_deatharrest_state 0
+$npcs_diaz_state = 0
+$npcs_workers_state = 0
+$npcs_carjackers_state = 0
+
+:NPCS_UNDEF
+if
+    not Player.Defined($player_char)
+goto_if_false @NPCS_1
+wait 0
+goto @NPCS_UNDEF
+
+:NPCS_1
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @NPCS_FIN
+if
+    is_player_in_zone $player_char in_zone 'STARI' // Starfish Island
+goto_if_false @NPCS_1B
+if
+    locate_player_any_means_2d $player_char 0 -378.5385 -546.1594 radius 100.0 100.0
+goto_if_false @NPCS_1B
+if
+    $npcs_diaz_state == 0
+then
+    NPCS_DIAZ_INIT()
+end
+NPCS_DIAZ_TICK()
+goto @NPCS_2
+
+:NPCS_1B
+if
+    $npcs_diaz_state == 1
+then
+    NPCS_DIAZ_DESTROY()
+end
+
+:NPCS_2
+goto @NPCS_1
+
+:NPCS_FIN
+if
+    $npcs_diaz_state == 1
+then
+    NPCS_DIAZ_DESTROY()
+end
+goto @NPCS_UNDEF
+
+:NPCS_DIAZ_INIT
+Model.Load(#GOLFCLUB)
+Model.Load(#PIZZABOX)
+load_special_character 1 'IGDIAZ'
+load_mission_audio 'CUB4_16' as 1
+while True
+    if and
+        Model.Available(#GOLFCLUB)
+        Model.Available(#PIZZABOX)
+        has_special_character_loaded 1
+        has_mission_audio_loaded 1
+    then
+        break
+    end
+    wait 0
+end
+Actor.Create($npc_diaz, 4, #SPECIAL01, -378.5385, -546.1594, 34.5) // -378.4412 -554.1082 39.7731
+Actor.Angle($npc_diaz) = 0.6989
+set_char_suffers_critical_hits $npc_diaz dismemberment_possible 0
+give_weapon_to_char $npc_diaz weapon 3 ammo 3000
+clear_char_threat_search $npc_diaz
+set_mission_audio_position 1 location -378.5385 -546.1594 34.5
+0@ = 3000
+TIMERB = 0
+$npc_diaz_interacted = 0
+$npcs_diaz_state = 1
+return
+
+:NPCS_DIAZ_DESTROY
+Actor.DestroyInstantly($npc_diaz)
+if
+    does_object_exist $golf_ball_1
+then
+    Object.Destroy($golf_ball_1)
+end
+if
+    does_object_exist $golf_ball_2
+then
+    Object.Destroy($golf_ball_2)
+end
+if
+    does_object_exist $golf_ball_3
+then
+    Object.Destroy($golf_ball_3)
+end
+if
+    does_object_exist $golf_ball_4
+then
+    Object.Destroy($golf_ball_4)
+end
+if
+    does_object_exist $golf_ball_5
+then
+    Object.Destroy($golf_ball_5)
+end
+Model.Destroy(#GOLFCLUB)
+Model.Destroy(#PIZZABOX)
+unload_special_character 1
+clear_mission_audio 1
+$npc_diaz_interacted = 0
+$npcs_diaz_state = 0
+return
+
+:NPCS_DIAZ_TICK
+if
+    $npc_diaz_interacted == 0
+then
+    if
+        locate_char_any_means_char_3d $player_actor near_actor $npc_diaz radius 5.0 5.0 5.0 sphere 0
+    then
+        play_mission_audio 1
+        $npc_diaz_interacted = 1
+    end
+else
+    if
+        not locate_char_any_means_char_2d $player_actor near_actor $npc_diaz radius 10.0 10.0 0
+    then
+        $npc_diaz_interacted = 0
+    end
+end
+if and
+    TIMERB > 0@
+    is_char_on_foot $npc_diaz
+    not Actor.Dead($npc_diaz)
+then
+    TIMERB = 0
+    generate_random_int_in_range 0@ = random_int_in_ranges 500 3000
+    set_char_wait_state $npc_diaz anim 33 wait_state_time -1
+    wait 500
+    if
+        does_object_exist $golf_ball_5
+    then
+        Object.RemoveReferences($golf_ball_5)
+    end
+    set_var_int_to_var_int $golf_ball_5 = $golf_ball_4
+    set_var_int_to_var_int $golf_ball_4 = $golf_ball_3
+    set_var_int_to_var_int $golf_ball_3 = $golf_ball_2
+    set_var_int_to_var_int $golf_ball_2 = $golf_ball_1
+    Actor.StoreDeadActorPos($npc_diaz, 13@, 14@, 15@)
+    14@ += 1.0
+    Object.Init($golf_ball_1, #PIZZABOX, 13@, 14@, 15@)
+    Object.CollisionDetection($golf_ball_1, True)
+    Object.ToggleInMovingList($golf_ball_1, True)
+    generate_random_float_in_range 13@ = random_float -2.0 2.0
+    generate_random_float_in_range 14@ = random_float 10.0 20.0
+    generate_random_float_in_range 15@ = random_float 0.0 15.0
+    add_to_object_velocity $golf_ball_1 scatter 13@ 14@ 15@ // 0.0 10.0 5.0
+end
+return
 
 //-------------Golf mission loop script---------------
 //
