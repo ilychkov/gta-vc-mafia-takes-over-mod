@@ -25,6 +25,7 @@ Camera.SetAtPos(start_x, start_y, start_z)
 Player.Create($player_char, #NULL, start_x, start_y, start_z)
 Actor.EmulateFromPlayer($player_actor, $player_char)
 set_player_heading $player_char z_angle_to 94.052
+Player.Money($player_char) += 37
 set_weather 0
 
 start_mission INITIAL
@@ -123,6 +124,7 @@ start_mission INTRO
 start_new_script @PSAVE1
 start_new_script @INFOPICS
 start_new_script @CLOTHES
+start_new_script @HAILACAB
 start_new_script @GOLF_MISSION
 start_new_script @POLICE_1_MISSION
 launch_mission @HJ
@@ -551,8 +553,6 @@ set_deatharrest_state 0
 
 :CLOTHES_LOOP
 wait $default_wait_time
-
-:CLOTHES_0
 if
     Pickup.Picked_up($clothes_pickup_0)
 goto_if_false @CLOTHES_1
@@ -752,6 +752,163 @@ script_name 'CLOTH5'
 wait 5000
 print_help 'CLOTH5'
 terminate_this_script
+
+
+//-------------Hail a taxi---------------
+//
+
+:HAILACAB
+script_name 'TAXIHL'
+set_deatharrest_state 0
+const taxi_cost = -10
+const taxi_cost_minus_one = 9
+
+:HAILACAB_LOOKFOR
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @HAILACAB_LOOKFOR
+if
+    $onmission == 0
+goto_if_false @HAILACAB_LOOKFOR
+if and
+    is_player_on_foot $player_char
+    Player.Money($player_char) > taxi_cost_minus_one
+    not Player.WantedLevel($player_char) > 0
+goto_if_false @HAILACAB_LOOKFOR
+get_player_coordinates $player_char position_to 0@ 1@ 2@
+set_var_float_to_var_float 2@ = 0@
+2@ += 10.0
+set_var_float_to_var_float 3@ = 1@
+3@ += 10.0
+set_var_float_to_var_float 4@ = 2@
+4@ -= 20.0
+set_var_float_to_var_float 5@ = 3@
+5@ -= 20.0
+get_random_car_of_type_in_area_no_save $cab = get_random_car_with_actors #TAXI in_area 2@ 3@ 4@ 5@
+if
+    $cab == -1
+then
+    get_random_car_of_type_in_area_no_save $cab = get_random_car_with_actors #CABBIE in_area 2@ 3@ 4@ 5@
+end
+if
+    $cab == -1
+then
+    get_random_car_of_type_in_area_no_save $cab = get_random_car_with_actors #KAUFMAN in_area 2@ 3@ 4@ 5@
+end
+if
+    not $cab == -1
+goto_if_false @HAILACAB_LOOKFOR
+get_driver_of_car 15@ = car $cab //todo: no save?
+if
+    not 15@ == -1
+goto_if_false @HAILACAB_LOOKFOR
+Car.ToggleTaxiLight($cab, True)
+
+:HAILACAB_FOUND
+wait 0
+if
+    Player.Defined($player_char)
+goto_if_false @HAILACAB_LOOKFOR
+if
+    not Car.Wrecked($cab)
+goto_if_false @HAILACAB_LOOKFOR
+get_driver_of_car 15@ = car $cab
+if and
+    $onmission == 0
+    locate_player_on_foot_car_2d $player_char near_car $cab radius 20.0 20.0 0
+    not 15@ == -1
+goto_if_false @HAILACAB_UNFOUND
+if
+    is_button_pressed 0 pressed_button 4
+goto_if_false @HAILACAB_FOUND
+
+:HAILACAB_BOARD
+Car.SetToNormalDriver($cab)
+Car.SetMaxSpeed($cab, 0.0)
+set_char_wait_state $player_actor anim 16 wait_state_time 800
+set_char_obj_enter_car_as_passenger $player_actor go_to_car $cab
+
+:HAILACAB_BOARDING
+wait 0
+if
+    Player.Defined($player_char)
+goto_if_false @HAILACAB_LOOKFOR
+if
+    not Car.Wrecked($cab)
+goto_if_false @HAILACAB_LOOKFOR
+if
+    $onmission == 0
+goto_if_false @HAILACAB_UNBOARD
+if
+    not is_char_sitting_in_car $player_actor sitting_in_car $cab
+goto_if_false @HAILACAB_BOARDED
+get_driver_of_car 15@ = car $cab
+if and
+    locate_player_on_foot_car_2d $player_char near_car $cab radius 20.0 20.0 0
+    not 15@ == -1
+goto_if_false @HAILACAB_UNBOARD
+if
+    not is_button_pressed 0 pressed_button 4
+goto_if_false @HAILACAB_BOARD
+goto @HAILACAB_BOARDING
+
+:HAILACAB_BOARDED
+Car.ToggleTaxiLight($cab, False)
+Car.SetToPsychoDriver($cab)
+Car.SetMaxSpeed($cab, 100.0)
+set_car_driving_style $cab traffic_behavior_to 3
+set_fading_colour 0 0 0
+fade 0 2000
+wait 2000
+if
+    Player.Defined($player_char)
+goto_if_false @HAILACAB_LOOKFOR
+if
+    not Car.Wrecked($cab)
+goto_if_false @HAILACAB_LOOKFOR
+if
+    is_char_sitting_in_car $player_actor sitting_in_car $cab
+goto_if_false @HAILACAB_LOOKFOR
+clear_area 0 at -258.372 -403.3983 10.1736 range 5.0
+Car.PutAt($cab, -258.372, -403.3983, 10.1736)
+Car.Angle($cab) = 29.894
+set_car_forward_speed $cab speed_instantly 20.0
+Car.SetToNormalDriver($cab)
+fade 1 1000
+while not is_car_stopped $cab
+    if
+        Player.Defined($player_char)
+    goto_if_false @HAILACAB_LOOKFOR
+    if
+        not Car.Wrecked($cab)
+    goto_if_false @HAILACAB_LOOKFOR
+    if
+        is_char_sitting_in_car $player_actor sitting_in_car $cab
+    goto_if_false @HAILACAB_LOOKFOR
+    wait 0
+end
+set_char_obj_leave_any_car $player_actor
+Player.Money($player_char) += taxi_cost
+wait 1000
+if
+    Player.Defined($player_char)
+goto_if_false @HAILACAB_LOOKFOR
+if
+    not Car.Wrecked($cab)
+goto_if_false @HAILACAB_LOOKFOR
+Car.SetToPsychoDriver($cab)
+Car.SetMaxSpeed($cab, 100.0)
+
+:HAILACAB_UNFOUND
+Car.ToggleTaxiLight($cab, False)
+goto @HAILACAB_LOOKFOR
+
+:HAILACAB_UNBOARD
+Car.ToggleTaxiLight($cab, False)
+Car.SetToPsychoDriver($cab)
+Car.SetMaxSpeed($cab, 100.0)
+goto @HAILACAB_LOOKFOR
 
 
 //-------------Golf mission loop script---------------
