@@ -372,6 +372,7 @@ set_interpolation_parameters 0.0 3000
 get_time_of_day 4@ 5@
 set_time_of_day 2 0 // 2 AM
 set_weather 4
+switch_car_generator $1860 cars_to_generate_to 0
 clear_area 0 at $golf_x $golf_y $golf_z range 1.0
 Camera.SetPosition(-173.0802, 445.9708, 19.1287, 0.0, 0.0, 0.0) // -173.0802, 445.9708, 12.2287
 Camera.PointAt(-173.7567, 444.1601, 18.915, 1) // -173.9067, 444.1601, 11.915
@@ -413,6 +414,7 @@ Camera.Restore_WithJumpCut
 Camera.SetBehindPlayer
 set_time_of_day 4@ 5@
 release_weather
+switch_car_generator $1860 cars_to_generate_to 101
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
@@ -767,14 +769,20 @@ if and
     $onmission == 0
     is_player_in_zone $player_char in_zone 'GOLFC' // Leaf Links
 goto_if_false @GOLF_MISSION_LOOP_END
-if and
-    is_player_in_model $player_char driving_vehicle_type #CADDY
-    locate_player_any_means_3d $player_char 0 $golf_x $golf_y $golf_z radius 2.0 2.0 2.0
+if
+    locate_stopped_player_any_means_3d $player_char 0 $golf_x $golf_y $golf_z radius 2.0 2.0 2.0
 goto_if_false @GOLF_MISSION_LOOP_END
+if
+    is_player_in_model $player_char driving_vehicle_type #CADDY
+goto_if_false @GOLF_MISSION_LOOP_WRONG
 print_big 'GOLFMIS' 15000 ms 2
 start_mission GOLF
 
 :GOLF_MISSION_LOOP_END
+goto @GOLF_MISSION_LOOP
+
+:GOLF_MISSION_LOOP_WRONG
+print_now 'GOLFNO' time 5000 1
 goto @GOLF_MISSION_LOOP
 
 //-------------Police mission 1 loop script---------------
@@ -3571,7 +3579,7 @@ create_car_generator $1951 = init_car_generator -1 -1 -1 force_spawn 0 alarm 60 
 switch_car_generator $1951 cars_to_generate_to 101
 create_car_generator $1952 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -142.1 -1373.0 3.1 angle 287.3
 switch_car_generator $1952 cars_to_generate_to 101
-create_car_generator $1860 = init_car_generator #CADDY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at $golf_x $golf_y $golf_z angle 276.0024
+create_car_generator $1860 = init_car_generator #CADDY -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at $golf_x $golf_y $golf_z angle 276.0024
 switch_car_generator $1860 cars_to_generate_to 101
 create_car_generator $1931 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 198.2 -504.9 10.9 angle 90.0
 switch_car_generator $1931 cars_to_generate_to 101
@@ -4372,9 +4380,10 @@ add_blip_for_coord $race_marker_1 = create_checkpoint_at $race_point_1_x $race_p
 add_blip_for_coord $race_marker_2 = create_checkpoint_at $race_point_2_x $race_point_2_y $race_point_2_z
 dim_blip $race_marker_2 brightness_to 1
 TIMERA = 0
-Object.Create($jump_ramp_1, #WATERJUMP1, 86.8847, 584.9246, 13.3714)
-Object.Angle($jump_ramp_1) = 141.9693
-Object.CollisionDetection($jump_ramp_1, True)
+Object.Create($mission_obj_1, #WATERJUMP1, 86.8847, 584.9246, 13.3714)
+Object.Angle($mission_obj_1) = 141.9693
+Object.CollisionDetection($mission_obj_1, True)
+Object.Create($mission_obj_2, #TRAFFICCONE, 46.4361, -145.4485, 11.4195)
 
 :GOLF_1
 wait 0
@@ -4673,7 +4682,10 @@ $onmission = 0
 Marker.Disable($race_marker_1)
 Marker.Disable($race_marker_2)
 Car.RemoveReferences($race_car)
-Object.Destroy($jump_ramp_1)
+Object.Destroy($mission_obj_1)
+Object.Destroy($mission_obj_2)
+Model.Destroy(#WATERJUMP1)
+Model.Destroy(#TRAFFICCONE)
 mission_has_finished
 terminate_this_script
 
@@ -4796,6 +4808,8 @@ goto @POLICE_1_INTRO_LOOP
 set_char_wait_state $player_actor anim 0 wait_state_time 100
 Car.Destroy(0@)
 Actor.DestroyInstantly(1@)
+Model.Destroy(#POLICE)
+Model.Destroy(#COP)
 Player.CanMove($player_char, True)
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
@@ -4845,5 +4859,6 @@ return
 $onmission = 0
 Car.RemoveReferences($objective_car)
 Marker.Disable($objective_car_marker)
+Model.Destroy(#BOBCAT)
 mission_has_finished
 terminate_this_script
