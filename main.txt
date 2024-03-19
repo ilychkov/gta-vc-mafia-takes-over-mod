@@ -77,6 +77,18 @@ Pickup.Create($info_pickup_6, #INFO, 3, $info_pickup_6_x, $info_pickup_6_y, $inf
 Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_x, $info_pickup_7_y, $info_pickup_7_z)
 $info_pickups_active = 1 // for disabling the pickups while on a mission
 
+create_clothes_pickup $clothes_pickup_0 = create_clothes_pickup 1 at -253.23 -315.51 10.13
+create_clothes_pickup $clothes_pickup_1 = create_clothes_pickup 9 at -244.0 -309.1 10.0
+//create_clothes_pickup $clothes_pickup_2 = create_clothes_pickup 8 at -242.3 -310.6 10.0
+//create_clothes_pickup $clothes_pickup_3 = create_clothes_pickup 4 at -240.0 -311.3 10.0
+//create_clothes_pickup $clothes_pickup_4 = create_clothes_pickup 2 at -237.7 -310.6 10.0
+//create_clothes_pickup $clothes_pickup_5 = create_clothes_pickup 6 at -236.0 -309.1 10.0
+$clothes_pickup_1_available = 1
+$clothes_pickup_2_available = 0
+$clothes_pickup_3_available = 0
+$clothes_pickup_4_available = 0
+$clothes_pickup_5_available = 0
+
 set_garage $681 = create_garage_type 5 door -914.129 -1263.54 10.706 to -906.3 -1266.9 14.421 depth -907.137 -1246.626
 set_garage $683 = create_garage_type 5 door -886.157 -115.158 9.992 to -876.7 -119.83 15.58 depth -882.699 -108.312
 set_garage $684 = create_garage_type 5 door 323.9 427.4 10.0 to 313.9 430.53 15.7 depth 326.3 434.5
@@ -92,7 +104,7 @@ wait 0
 if
     NOT Actor.Dead($player_actor)
 then
-    undress_char $player_actor skin_to 'PLAYER'
+    undress_char $player_actor skin_to 'PLAYER9'
     load_all_models_now
     dress_char $player_actor
 end
@@ -110,6 +122,7 @@ wait 0
 start_mission INTRO
 start_new_script @PSAVE1
 start_new_script @INFOPICS
+start_new_script @CLOTHES
 start_new_script @GOLF_MISSION
 start_new_script @POLICE_1_MISSION
 launch_mission @HJ
@@ -159,7 +172,7 @@ Pickup.Destroy($save_pickup_1)
 Pickup.Create($save_pickup_1, #PICKUPSAVE, 3, -246.0713, -324.6199, 10.2586)
 do_fade 1 1000
 clear_area 1 at -248.4922 -327.0389 10.1529 range 1.0
-set_player_coordinates $player_char at -248.4922 -327.0389 10.1529
+set_player_coordinates $player_char at -248.4922 -327.0389 9.1529
 set_player_heading $player_char z_angle_to 132.3809
 
 :PSAVE1_267
@@ -526,6 +539,218 @@ $player_knows_about_info_pickups = 1
 print_with_2_numbers_big 'INFOCNT' numbers $info_pickups_collected $info_pickups_total time 5000 style 6
 add_one_off_sound 1 at 0.0 0.0 0.0
 return
+
+//-------------Clothes pickups script---------------
+//
+
+:CLOTHES
+script_name 'CLOTHES'
+set_deatharrest_state 0
+
+:CLOTHES_LOOP
+wait $default_wait_time
+
+:CLOTHES_0
+if
+    Pickup.Picked_up($clothes_pickup_0)
+goto_if_false @CLOTHES_1
+CLOTHES_673()
+if
+    Player.Defined($player_char)
+then
+    undress_char $player_actor skin_to 'PLAYER'
+    add_money_spent_on_clothes 50
+end
+CLOTHES_795()
+
+:CLOTHES_1
+if
+    $clothes_pickup_1_available == 1
+goto_if_false @CLOTHES_2
+if
+    Pickup.Picked_up($clothes_pickup_1)
+goto_if_false @CLOTHES_2
+CLOTHES_673()
+if
+    Player.Defined($player_char)
+then
+    undress_char $player_actor skin_to 'PLAYER9'
+    add_money_spent_on_clothes 50
+end
+CLOTHES_795()
+
+:CLOTHES_2
+if
+    $clothes_pickup_2_available == 1
+goto_if_false @CLOTHES_3
+if
+    Pickup.Picked_up($clothes_pickup_2)
+goto_if_false @CLOTHES_3
+CLOTHES_673()
+if
+    Player.Defined($player_char)
+then
+    undress_char $player_actor skin_to 'PLAYER8'
+    add_money_spent_on_clothes 50
+end
+CLOTHES_795()
+
+:CLOTHES_3
+if
+    $clothes_pickup_3_available == 1
+goto_if_false @CLOTHES_4
+if
+    Pickup.Picked_up($clothes_pickup_3)
+goto_if_false @CLOTHES_4
+CLOTHES_673()
+if
+    Player.Defined($player_char)
+then
+    undress_char $player_actor skin_to 'PLAYER4'
+    add_money_spent_on_clothes 50
+end
+CLOTHES_795()
+
+:CLOTHES_4
+if
+    $clothes_pickup_4_available == 1
+goto_if_false @CLOTHES_5
+if
+    Pickup.Picked_up($clothes_pickup_4)
+goto_if_false @CLOTHES_5
+CLOTHES_673()
+if
+    Player.Defined($player_char)
+then
+    undress_char $player_actor skin_to 'PLAYER2'
+    add_money_spent_on_clothes 50
+end
+CLOTHES_795()
+
+:CLOTHES_5
+if
+    $clothes_pickup_5_available == 1
+goto_if_false @CLOTHES_6
+if
+    Pickup.Picked_up($clothes_pickup_5)
+goto_if_false @CLOTHES_6
+CLOTHES_673()
+if
+    Player.Defined($player_char)
+then
+    undress_char $player_actor skin_to 'PLAYER6'
+    add_money_spent_on_clothes 50
+end
+CLOTHES_795()
+
+:CLOTHES_6
+goto @CLOTHES_LOOP
+
+:CLOTHES_673
+$1180 = 1
+if
+    Player.Defined($player_char)
+goto_if_false @CLOTHES_742
+set_fading_colour 0 0 1
+do_fade 0 500
+
+:CLOTHES_711
+if
+    get_fading_status
+goto_if_false @CLOTHES_735
+wait 0
+goto @CLOTHES_711
+
+:CLOTHES_735
+goto @CLOTHES_749
+
+:CLOTHES_742
+$1180 = 0
+
+:CLOTHES_749
+if
+    Player.Defined($player_char)
+goto_if_false @CLOTHES_786
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+Player.CanMove($player_char, False)
+goto @CLOTHES_793
+
+:CLOTHES_786
+$1180 = 0
+
+:CLOTHES_793
+return
+
+:CLOTHES_795
+if
+    Player.Defined($player_char)
+goto_if_false @CLOTHES_944
+load_all_models_now
+if
+    Player.Defined($player_char)
+goto_if_false @CLOTHES_834
+dress_char $player_actor
+
+:CLOTHES_834
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+if
+    not Player.WantedLevel($player_char) > 2
+goto_if_false @CLOTHES_864
+Player.ClearWantedLevel($player_char)
+
+:CLOTHES_864
+Player.CanMove($player_char, True)
+$1180 = 0
+do_fade 1 500
+if
+    $1351 == 0
+goto_if_false @CLOTHES_927
+print_help 'CLT_HL2' // When a Clothes Pickup is collected, a one star or two star wanted level will be cleared.
+$1351 = 1
+goto @CLOTHES_937
+
+:CLOTHES_927
+print_help 'CLOHELP' // Clean Clothes!!
+
+:CLOTHES_937
+goto @CLOTHES_951
+
+:CLOTHES_944
+$1180 = 0
+
+:CLOTHES_951
+return
+
+:CLOTH1
+script_name 'CLOTH1'
+wait 5000
+print_help 'CLOTH1'
+terminate_this_script
+
+:CLOTH2
+script_name 'CLOTH2'
+wait 5000
+print_help 'CLOTH2'
+terminate_this_script
+
+:CLOTH3
+script_name 'CLOTH3'
+wait 5000
+print_help 'CLOTH3'
+terminate_this_script
+
+:CLOTH4
+script_name 'CLOTH4'
+wait 5000
+print_help 'CLOTH4'
+terminate_this_script
+
+:CLOTH5
+script_name 'CLOTH5'
+wait 5000
+print_help 'CLOTH5'
+terminate_this_script
+
 
 //-------------Golf mission loop script---------------
 //
@@ -3284,18 +3509,6 @@ create_car_generator $1953 = init_car_generator #PATRIOT 43 72 force_spawn 0 ala
 switch_car_generator $1953 cars_to_generate_to 101
 create_car_generator $1994 = init_car_generator #SENTINEL -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1033.211 -856.8564 12.0452 angle 210.278
 switch_car_generator $1994 cars_to_generate_to 101
-create_car_generator $1954 = init_car_generator #BLOODRB -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1131.4 1236.6 8.4 angle 241.0
-switch_car_generator $1954 cars_to_generate_to 0
-create_car_generator $1955 = init_car_generator #BLOODRA -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1115.4 1265.1 8.4 angle 238.0
-switch_car_generator $1955 cars_to_generate_to 0
-create_car_generator $1995 = init_car_generator #SPARROW -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at $498 $499 $500 angle 88.2256
-switch_car_generator $1995 cars_to_generate_to 0
-create_car_generator $1996 = init_car_generator #SPARROW -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at $501 $502 $503 angle 0.0
-switch_car_generator $1996 cars_to_generate_to 0
-create_car_generator $1997 = init_car_generator #SPARROW -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at $504 $505 $506 angle 0.0
-switch_car_generator $1997 cars_to_generate_to 0
-create_car_generator $1998 = init_car_generator #SPARROW -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at $507 $508 $509 angle 180.0
-switch_car_generator $1998 cars_to_generate_to 0
 create_car_generator $1832 = init_car_generator #OCEANIC 6 1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 242.6 -1274.6 10.0 angle 165.0
 switch_car_generator $1832 cars_to_generate_to 101
 create_car_generator $1853 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 11.5 -1382.0 9.6 angle 261.0
@@ -3320,8 +3533,6 @@ create_car_generator $1838 = init_car_generator #PCJ600 -1 -1 force_spawn 0 alar
 switch_car_generator $1838 cars_to_generate_to 101
 create_car_generator $1839 = init_car_generator #BANSHEE -1 -1 force_spawn 0 alarm 70 door_lock 0 min_delay 0 max_delay 10000 at 19.8 -1246.9 10.1 angle 0.0
 switch_car_generator $1839 cars_to_generate_to 101
-create_car_generator $1859 = init_car_generator #TOPFUN -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 307.9 1254.6 27.5 angle 180.5
-switch_car_generator $1859 cars_to_generate_to 101
 create_car_generator $1861 = init_car_generator -1 -1 -1 force_spawn 0 alarm 30 door_lock 0 min_delay 0 max_delay 10000 at 277.4 -1175.3 11.0 angle 350.0
 switch_car_generator $1861 cars_to_generate_to 101
 create_car_generator $1862 = init_car_generator -1 -1 -1 force_spawn 0 alarm 30 door_lock 0 min_delay 0 max_delay 10000 at 278.8 -1074.0 11.0 angle 172.0
@@ -3350,8 +3561,6 @@ create_car_generator $1866 = init_car_generator #MARQUIS -1 -1 force_spawn 0 ala
 switch_car_generator $1866 cars_to_generate_to 101
 create_car_generator $1884 = init_car_generator #FAGGIO -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 376.9 477.0 11.2 angle 282.0
 switch_car_generator $1884 cars_to_generate_to 101
-create_car_generator $1851 = init_car_generator #TOPFUN -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 718.465 701.3998 12.394 angle 320.7776
-switch_car_generator $1851 cars_to_generate_to 101
 create_car_generator $1855 = init_car_generator #PCJ600 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -256.6 -1275.4 7.4 angle 348.0
 switch_car_generator $1855 cars_to_generate_to 101
 create_car_generator $1949 = init_car_generator #CHEETAH -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -236.6 -1374.6 7.1 angle 280.3
@@ -3532,8 +3741,6 @@ create_car_generator $1848 = init_car_generator #PACKER -1 -1 force_spawn 0 alar
 switch_car_generator $1848 cars_to_generate_to 101
 create_car_generator $1847 = init_car_generator #SENTXS -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1142.5 -939.3 14.6 angle 89.6
 switch_car_generator $1847 cars_to_generate_to 101
-create_car_generator $1850 = init_car_generator #TOPFUN -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1235.171 -1235.171 14.77 angle 337.839
-switch_car_generator $1850 cars_to_generate_to 101
 create_car_generator $1891 = init_car_generator #BAGGAGE -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1414.8 -1268.1 13.9 angle 40.0
 switch_car_generator $1891 cars_to_generate_to 101
 create_car_generator $1892 = init_car_generator #BAGGAGE -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1474.9 -961.7 13.9 angle 282.0
@@ -3588,8 +3795,17 @@ create_car_generator $1939 = init_car_generator #ZEBRA -1 -1 force_spawn 0 alarm
 switch_car_generator $1939 cars_to_generate_to 0
 create_car_generator $84 = init_car_generator #POLMAV -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -614.0 804.0 30.0 angle 0.0
 switch_car_generator $84 cars_to_generate_to 101
+//create_car_generator $tommy_car_spawn_1 = init_car_generator #CADDY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -281.5 -304.8 9.9 angle 231.0
+//create_car_generator $tommy_car_spawn_2 = init_car_generator #CADDY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -282.5 -308.9 9.9 angle 235.0
+//create_car_generator $tommy_car_spawn_3 = init_car_generator #CADDY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -283.5 -313.0 9.9 angle 239.0
+create_car_generator $tommy_car_spawn_1 = init_car_generator #HOTRINA 0 1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -281.4688 -306.8873 9.947 angle 216.2658
+switch_car_generator $tommy_car_spawn_1 cars_to_generate_to 0
+create_car_generator $tommy_car_spawn_2 = init_car_generator #SENTXS 78 0 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -284.5216 -312.9301 10.0347 angle 260.2344
+switch_car_generator $tommy_car_spawn_2 cars_to_generate_to 0
+create_car_generator $tommy_car_spawn_3 = init_car_generator #PATRIOT -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -247.3018 -299.1029 9.8397 angle 85.5567
+switch_car_generator $tommy_car_spawn_3 cars_to_generate_to 0
 
-Pickup.Create($2035, #CHNSAW, 2, 30.0, -1330.9, 13.0)
+Pickup.Create($2035, #BAT, 2, 30.0, -1330.9, 13.0)
 Pickup.Create($1999, #BAT, 2, 206.7, -1254.4, 12.0)
 create_pickup_with_ammo $2000 = create_weapon_pickup #COLT45 15 ammo 34 at -228.4 -1318.2 9.1
 create_pickup_with_ammo $2001 = create_weapon_pickup #COLT45 15 ammo 34 at 340.5 -249.5 12.5
@@ -3597,13 +3813,13 @@ create_pickup_with_ammo $2002 = create_weapon_pickup #CHROMEGUN 15 ammo 16 at 42
 create_pickup_with_ammo $2003 = create_weapon_pickup #CHROMEGUN 15 ammo 16 at 568.9 -449.3 11.1
 create_pickup_with_ammo $2004 = create_weapon_pickup #TEC9 15 ammo 100 at 287.9 50.7 10.8
 create_pickup_with_ammo $2005 = create_weapon_pickup #GRENADE 15 ammo 4 at 362.2 -500.5 12.3
-Pickup.Create($2006, #CLEAVER, 15, 402.6, 102.5, 11.4)
+Pickup.Create($2006, #BAT, 15, 402.6, 102.5, 11.4)
 create_pickup_with_ammo $2007 = create_weapon_pickup #RUGER 15 ammo 60 at 418.9 589.9 18.3
-Pickup.Create($2008, #KATANA, 15, 476.9, 1014.9, 19.2)
+Pickup.Create($2008, #BAT, 15, 476.9, 1014.9, 19.2)
 Pickup.Create($2009, #NITESTICK, 15, 402.4, -488.3, 12.4)
-Pickup.Create($2011, #BRASSKNUCKLE, 15, 224.0, -1207.5, 11.0)
-Pickup.Create($2012, #KNIFECUR, 15, 118.7, -1546.1, 10.8)
-Pickup.Create($2013, #MACHETE, 15, 56.6, -459.3, 11.4)
+Pickup.Create($2011, #BAT, 15, 224.0, -1207.5, 11.0)
+Pickup.Create($2012, #BAT, 15, 118.7, -1546.1, 10.8)
+Pickup.Create($2013, #BAT, 15, 56.6, -459.3, 11.4)
 create_pickup_with_ammo $2014 = create_weapon_pickup #UZI 15 ammo 60 at 5.4 -1277.0 10.4
 create_pickup_with_ammo $2036 = create_weapon_pickup #UZI 15 ammo 60 at 157.0 -895.3 12.3
 create_pickup_with_ammo $2010 = create_weapon_pickup #BOMB 15 ammo 4 at 556.6 207.4 14.5
@@ -3612,7 +3828,7 @@ create_pickup_with_ammo $2016 = create_weapon_pickup #UZI 15 ammo 60 at 17.3 114
 Pickup.Create($2017, #GOLFCLUB, 2, 95.0, 279.2, 21.8)
 create_pickup_with_ammo $2018 = create_weapon_pickup #FLAME 15 ammo 300 at -546.0 -418.9 9.8
 create_pickup_with_ammo $2019 = create_weapon_pickup #SNIPER 15 ammo 20 at -476.4 -571.2 12.9
-Pickup.Create($2020, #KATANA, 15, -554.11, -547.7, 10.7)
+Pickup.Create($2020, #BAT, 15, -554.11, -547.7, 10.7)
 create_pickup_with_ammo $2021 = create_weapon_pickup #MOLOTOV 15 ammo 4 at -755.7 1347.5 11.8
 create_pickup_with_ammo $2022 = create_weapon_pickup #UZI 15 ammo 60 at -545.8 694.6 11.0
 create_pickup_with_ammo $2023 = create_weapon_pickup #M4 15 ammo 60 at -980.4 118.7 9.3
@@ -3627,6 +3843,12 @@ create_pickup_with_ammo $2031 = create_weapon_pickup #GRENADE 15 ammo 4 at -939.
 create_pickup_with_ammo $2032 = create_weapon_pickup #PYTHON 15 ammo 12 at -1182.7 -61.1 11.4
 create_pickup_with_ammo $2033 = create_weapon_pickup #BUDDYSHOT 15 ammo 10 at -1305.2 177.1 11.4
 create_pickup_with_ammo $2034 = create_weapon_pickup #LASER 15 ammo 14 at -1114.3 -602.0 26.0
+
+Pickup.Create($weapon_pickup_1, #NITESTICK, 15, -251.84, -314.045, 10.115)
+create_pickup_with_ammo $weapon_pickup_2 = create_weapon_pickup #GRENADE 15 ammo 15 at -250.45 -312.58 10.1
+create_pickup_with_ammo $weapon_pickup_3 = create_weapon_pickup #COLT45 15 ammo 170 at -249.06 -311.115 10.085
+create_pickup_with_ammo $weapon_pickup_4 = create_weapon_pickup #UZI 15 ammo 300 at -247.67 -309.65 10.07
+
 Pickup.Create($2037, #HEALTH, 1, -113.2, -975.7, 10.4)
 Pickup.Create($2038, #HEALTH, 15, -225.1, -1158.1, 9.1)
 Pickup.Create($2039, #HEALTH, 15, 456.2, -471.4, 16.6)
@@ -3732,7 +3954,7 @@ Model.Load(#CABBIE)
 Model.Load(#KAUFMAN)
 Model.Load(#WMOCA)
 Model.Load(#HMOCA)
-load_special_character 1 'PLAYER'
+load_special_character 1 'PLAYER9'
 load_mission_audio 'TAX2_7' as 1
 
 :INTRO_LOAD
@@ -4426,6 +4648,9 @@ then
     $passed_golf = 1
     Marker.Disable($icon_golf)
     add_short_range_sprite_blip_for_coord $icon_golf = create_icon_marker_without_sphere icon_golf at $golf_x $golf_y $golf_z
+    create_clothes_pickup $clothes_pickup_3 = create_clothes_pickup 4 at -240.0 -311.3 10.0
+    $clothes_pickup_3_available = 0
+    start_new_script @CLOTH3
 end
 set_var_int_to_var_int 15@ = TIMERA
 15@ /= 1000
