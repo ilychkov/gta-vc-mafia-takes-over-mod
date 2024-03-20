@@ -18,11 +18,16 @@ set_max_wanted_level 2
 set_collectable1_total 0
 set_deatharrest_state 0
 set_time_of_day 2 0
-const start_x = -256.4567, start_y = -375.562, start_z = 11.4109
+
+$start_x = -256.4567
+$start_y = -375.562
+$start_z = 10.4109
 $skip_intro = 0
-request_collision start_x start_y
-Camera.SetAtPos(start_x, start_y, start_z)
-Player.Create($player_char, #NULL, start_x, start_y, start_z)
+{$I incl.debug.txt}
+
+request_collision $start_x $start_y
+Camera.SetAtPos($start_x, $start_y, $start_z)
+Player.Create($player_char, #NULL, $start_x, $start_y, $start_z)
 Actor.EmulateFromPlayer($player_actor, $player_char)
 set_player_heading $player_char z_angle_to 94.052
 Player.Money($player_char) += 37
@@ -124,7 +129,15 @@ end
 wait 0
 wait 0
 
-start_mission INTRO
+if
+    $skip_intro == 0
+then
+    start_mission INTRO
+else
+    fade 1 0
+    Player.CanMove($player_char, True)
+end
+
 start_new_script @PSAVE1
 start_new_script @INFOPICS
 start_new_script @CLOTHES
@@ -133,6 +146,7 @@ start_new_script @NPCS
 start_new_script @INTERACTIONS
 start_new_script @GOLF_MISSION
 start_new_script @POLICE_1_MISSION
+
 launch_mission @HJ
 launch_mission @USJ
 launch_mission @INTERIO
@@ -5181,12 +5195,6 @@ then
     goto @INTRO_SKIP
 end
 
-if
-    $skip_intro == 1
-then
-    goto @INTRO_END
-end
-
 if and
     $scene_step == 0
     TIMERA >= 3000
@@ -5373,13 +5381,8 @@ goto @INTRO_LOOP
 fade 0 200
 wait 200
 fade 1 200
-generate_random_float_in_range $rnd = random_float 0.0 1.0
-if
-    0.25 > $rnd
-then
-    print_now 'INTSKIP' time 5000 1
-    Player.WantedLevel($player_char) = 1
-end
+print_now 'INTSKIP' time 5000 1
+Player.WantedLevel($player_char) = 1
 
 :INTRO_END
 Car.Destroy(0@)
