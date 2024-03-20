@@ -5906,20 +5906,21 @@ if and
     Model.Available(#POLICE)
     Model.Available(#COP)
 goto_if_false @POLICE_1_LOAD
+clear_area 0 at 333.704 -501.9003 9.7059 range 5.0
 Car.Create($objective_car, #BOBCAT, 333.704, -501.9003, 9.7059)
 Car.Angle($objective_car) = 138.7416
-Marker.TieToCar($objective_car_marker, $objective_car, 0, 1)
+clear_area 0 at 359.5053 -514.6687 11.961 range 5.0
 Car.Create(0@, #POLICE, 359.5053, -514.6687, 11.961)
 Car.Angle(0@) = 322.4988
 create_char_inside_car 1@ = create_actor 4 #COP in_car 0@
 Car.SetToNormalDriver(0@)
 Car.ImmuneToNonPlayer(0@, True)
-set_car_temp_action 0@ action 2 time 2000
+set_car_temp_action 0@ action 2 time 1700
 Camera.SetPosition(364.6485, -526.3016, 13.954, 0.0, 0.0, 0.0)
 Camera.PointAt(354.3607, -523.9194, 10.0632, 2)
 set_player_coordinates $player_char at 348.0225 -524.783 8.9363
 set_player_heading $player_char z_angle_to 237.081
-wait 2000
+wait 1700
 set_interpolation_parameters 0.0 1500
 Camera.SetPosition(345.452, -527.0284, 9.0841, 0.0, 0.0, 0.0)
 Camera.PointAt(350.2682, -525.0466, 9.9611, 1)
@@ -5987,7 +5988,9 @@ end
 goto @POLICE_1_INTRO_LOOP
 
 :POLICE_1_INTRO_END
-set_char_wait_state $player_actor anim 0 wait_state_time 100
+fade 0 1000
+wait 1000
+clear_prints
 Car.Destroy(0@)
 Actor.DestroyInstantly(1@)
 Model.Destroy(#POLICE)
@@ -5998,6 +6001,10 @@ set_police_ignore_player $player_char ignored_by_cops_state_to 0
 switch_widescreen 0
 Camera.Restore_WithJumpCut
 Camera.SetBehindPlayer
+Marker.CreateAboveCar($objective_car_marker, $objective_car)
+fade 1 1000
+wait 1000
+print_now 'GETIN' time 5000 2
 
 :POLICE_1_WAITING_CAR
 wait 0
@@ -6005,11 +6012,31 @@ if
     not Car.Wrecked($objective_car)
 goto_if_false @POLICE_1_WRECKED
 if
-    locate_player_any_means_2d $player_char 0 333.704 -501.9003 radius 35.0 35.0
+    locate_player_any_means_car_2d $player_char near_car $objective_car radius 35.0 35.0 0
 goto_if_false @POLICE_1_ABANDONED
 if
     is_player_in_car $player_char in_car $objective_car
 goto_if_false @POLICE_1_WAITING_CAR
+Marker.Disable($objective_car_marker)
+add_blip_for_coord $objective_point_marker = create_checkpoint_at -842.6732 -632.8707 10.9397
+print_now 'TRAVEL' time 5000 2
+
+:POLICE_1_TRAVEL
+wait 0
+if
+    not Car.Wrecked($objective_car)
+goto_if_false @POLICE_1_WRECKED
+if
+    not is_player_in_car $player_char in_car $objective_car
+then
+    print_now 'GETBACK' time 5000 2
+    Marker.Disable($objective_point_marker)
+    Marker.CreateAboveCar($objective_car_marker, $objective_car)
+    goto @POLICE_1_WAITING_CAR
+end
+if
+    locate_stopped_player_in_car_3d $player_char stopped 1 -842.6732 -632.8707 10.9397 radius 4.0 4.0 3.0
+goto_if_false @POLICE_1_TRAVEL
 goto @POLICE_1_PASS
 return
 
@@ -6041,6 +6068,7 @@ return
 $onmission = 0
 Car.RemoveReferences($objective_car)
 Marker.Disable($objective_car_marker)
+Marker.Disable($objective_point_marker)
 Model.Destroy(#BOBCAT)
 mission_has_finished
 terminate_this_script

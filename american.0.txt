@@ -36,8 +36,11 @@ GOLF_TR = Haha, trolled
 INTRO1  = Ah, Mr. Vercetti! Well, sir, you caused us a lot of trouble back in the day.
 INTRO2  = I've heard you were looking for a job. So, can you do me a small favor?
 INTRO3  = There's a parked car to the west of the station.
-INTRO4  = Go to ~y~Deli shop~w~ and get the boys some donuts. Be quick! We're hungry.
+INTRO4  = Go to ~y~the deli in Little Havana~w~ and get the boys some donuts. Be quick! We're hungry.
+GETIN   = Get into the car.
 GONEAWY = Where did you go???
 CARF    = The car is destroyed!
+TRAVEL  = Get to the restaurant.
+GETBACK = Get back into the car!
 GANG1   = There he is!
 
