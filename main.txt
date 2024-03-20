@@ -69,6 +69,9 @@ $info_pickup_7_moved_x = 372.1004
 $info_pickup_7_moved_y = -511.3845
 $info_pickup_7_moved_z = 12.3246
 $info_pickup_7_movedtwice_z = 15.3246
+$info_pickup_8_x = 491.7512
+$info_pickup_8_y = -78.3159
+$info_pickup_8_z = 11.4838
 Pickup.Create($info_pickup_1, #INFO, 3, $info_pickup_1_x, $info_pickup_1_y, $info_pickup_1_z)
 Pickup.Create($info_pickup_2, #INFO, 3, $info_pickup_2_x, $info_pickup_2_y, $info_pickup_2_z)
 Pickup.Create($info_pickup_3, #INFO, 3, $info_pickup_3_x, $info_pickup_3_y, $info_pickup_3_z)
@@ -76,6 +79,7 @@ Pickup.Create($info_pickup_4, #INFO, 3, $info_pickup_4_x, $info_pickup_4_y, $inf
 Pickup.Create($info_pickup_5, #INFO, 3, $info_pickup_5_x, $info_pickup_5_y, $info_pickup_5_z)
 Pickup.Create($info_pickup_6, #INFO, 3, $info_pickup_6_x, $info_pickup_6_y, $info_pickup_6_z)
 Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_x, $info_pickup_7_y, $info_pickup_7_z)
+Pickup.Create($info_pickup_8, #INFO, 3, $info_pickup_8_x, $info_pickup_8_y, $info_pickup_8_z)
 $info_pickups_active = 1 // for disabling the pickups while on a mission
 
 create_clothes_pickup $clothes_pickup_0 = create_clothes_pickup 1 at -253.23 -315.51 10.13
@@ -312,6 +316,7 @@ if
 then
     INFOPICS_PRINT_COUNT()
 end
+clear_prints
 wait 1000
 print_help 'INFO2C'
 flash_hud_object 8
@@ -499,6 +504,22 @@ then
 end
 
 :INFOPICS_8
+if
+    $info_8_picked_up == 0
+goto_if_false @INFOPICS_9
+if
+    Pickup.Picked_up($info_pickup_8)
+goto_if_false @INFOPICS_9
+Pickup.Destroy($info_pickup_8)
+$info_8_picked_up = 1
+$info_pickups_collected++
+player_made_progress 1
+print_help 'INFO8'
+wait 1000
+INFOPICS_PRINT_COUNT()
+goto @INFOPICS_LOOP
+
+:INFOPICS_9
 goto @INFOPICS_LOOP
 
 :INFOPICS_ONMISSION
@@ -512,6 +533,7 @@ Pickup.Destroy($info_pickup_4)
 Pickup.Destroy($info_pickup_5)
 Pickup.Destroy($info_pickup_6)
 Pickup.Destroy($info_pickup_7)
+Pickup.Destroy($info_pickup_8)
 $info_pickups_active = 0
 goto @INFOPICS_LOOP
 
@@ -550,6 +572,11 @@ if
     $info_7_picked_up == 0
 then
     Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_x, $info_pickup_7_y, $info_pickup_7_z)
+end
+if
+    $info_8_picked_up == 0
+then
+    Pickup.Create($info_pickup_8, #INFO, 3, $info_pickup_8_x, $info_pickup_8_y, $info_pickup_8_z)
 end
 $info_pickups_active = 1
 $info_7_moved = 0

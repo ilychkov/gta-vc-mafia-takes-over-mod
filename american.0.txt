@@ -2,7 +2,7 @@
 INTSKIP  = What, you skipped the intro?? Get punished with a ~b~wanted star~w~!
 INFOCNT = Found ~1~ out of ~1~ info pickups
 INFO2   = This house was given to Tommy by his rich uncle, so he could get back on his feet.
-INFO2B  = You can ~g~save your game~w~ here and ~g~store cars~w~ in the garage.
+INFO2B  = You can ~y~save your game~w~ here and ~y~store cars~w~ in the garage.
 INFO2C  = Look for missions on the map.
 INFO3   = Welp. This one wasn't very well hidden. But can you ~g~find more~w~?
 INFO4   = You sure love picking these up, huh? There's ~y~quite a few~w~ of them around the city. Can you ~g~Find 'Em All~w~?
@@ -14,6 +14,7 @@ INFO7A  = You can't catch me!
 INFO7B  = Oh no you don't!
 INFO7C  = How about this?!
 INFO7W  = Alright, alright. You win.
+INFO8   = The Club Malibu is closed. Sorry for inconvenience.
 CLOTH1  = Mr Vercetti outfit delivered to the Safehouse.
 CLOTH2  = Casual outfit delivered to the Safehouse.
 CLOTH3  = Country Club outfit delivered to the Safehouse.
