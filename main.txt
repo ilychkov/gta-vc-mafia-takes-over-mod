@@ -130,6 +130,7 @@ start_new_script @GOLF_MISSION
 start_new_script @POLICE_1_MISSION
 launch_mission @HJ
 launch_mission @USJ
+launch_mission @INTERIO
 launch_mission @CARGEN
 launch_mission @AUDIO
 
@@ -2624,6 +2625,600 @@ $790 += 100
 goto @USJ_298
 terminate_this_script
 
+//-------------Interiors---------------
+// Interiors script
+
+:INTERIO
+$984 = 0
+$995 = 0
+$997 = 0
+$1000 = 0
+$993 = 0
+$994 = 0
+$996 = 0
+$1002 = 0
+$1003 = 0
+$1088 = 0
+$988 = 0
+$987 = 0
+$989 = 0
+$991 = 0
+$986 = 0
+$985 = 0
+$990 = 0
+$1001 = 0
+$1006 = 0
+$1005 = 0
+$1009 = 0
+$1008 = 0
+$1011 = 0
+$1012 = 0
+$1014 = 0
+$1033 = 0
+$1028 = 0
+$1072 = 0
+$999 = 0
+$1034 = 0
+$1039 = 0
+$1040 = 0
+$1086 = 0
+$1087 = 0
+$1089 = 0
+$1101 = 9.0
+$1102 = 0.0
+$1103 = 0.0
+$1090 = 0
+$1092 = 0
+$1093 = 0
+$1094 = 0
+$1096 = 0
+$1095 = 0
+$1098 = 0
+$1084 = 0
+script_name 'INTERIO'
+set_deatharrest_state 0
+start_new_script @MISC
+terminate_this_script
+
+:MISC
+$992 = 0
+script_name 'MISC'
+
+:MISC_112
+wait 0
+$1095 += 1
+if
+    Player.Defined($player_char)
+goto_if_false @MISC_2674
+$1094 = 0
+if
+    $1095 == 2
+goto_if_false @MISC_2667
+if or
+    is_player_in_zone $player_char in_zone 'BEACH1' // Ocean Beach
+    $1084 == 1
+goto_if_false @MISC_2667
+if
+    $1088 == 0
+goto_if_false @MISC_2427
+if
+    Player.InRemoteMode($player_char)
+goto_if_false @MISC_2157
+$1004 = Player.RC_car($player_char)
+if
+    not Car.Wrecked($1004)
+goto_if_false @MISC_2150
+if
+    locate_car_3d $1004 0 229.5 -1277.7 11.5 radius 1.5 1.5 3.0
+goto_if_false @MISC_2150
+blow_up_rc_buggy
+
+:MISC_2150
+goto @MISC_2427
+
+:MISC_2157
+if
+    is_player_in_area_3d $player_char 0 222.0 -1274.0 11.0 229.0 -1280.7 14.0
+goto_if_false @MISC_2427
+if and
+    is_player_in_any_car $player_char
+    not is_player_on_any_bike $player_char
+goto_if_false @MISC_2233
+goto @MISC_112
+
+:MISC_2233
+print_big 'HOTEL' 3000 ms 2 // Ocean View
+MISC_15897()
+if
+    Player.Defined($player_char)
+goto_if_false @MISC_2320
+if
+    is_player_on_any_bike $player_char
+goto_if_false @MISC_2320
+store_car_player_is_in_no_save $1004 = player $player_char
+warp_player_from_car_to_coord $player_char at 225.0 -1277.3 11.5
+Car.Destroy($1004)
+
+:MISC_2320
+if
+    $992 == 0
+goto_if_false @MISC_2413
+$1088 = 1
+set_area_visible 1
+switch_rubbish 0
+Camera.SetAtPos(225.0, -1277.3, 12.0)
+set_player_coordinates $player_char at 225.0 -1277.3 11.5
+set_player_heading $player_char z_angle_to 80.0
+set_extra_colours 3 fade 0
+goto @MISC_2420
+
+:MISC_2413
+goto @MISC_112
+
+:MISC_2420
+MISC_16148()
+
+:MISC_2427
+if
+    $1088 == 1
+goto_if_false @MISC_2667
+if
+    is_player_in_area_3d $player_char 0 235.0 -1274.0 11.0 227.5 -1280.7 16.0
+goto_if_false @MISC_2667
+if and
+    is_player_in_any_car $player_char
+    not is_player_on_any_bike $player_char
+goto_if_false @MISC_2521
+goto @MISC_112
+
+:MISC_2521
+print_big 'BEACH1' 3000 ms 2 // Ocean Beach
+MISC_15897()
+if
+    $992 == 0
+goto_if_false @MISC_2653
+MISC_16342()
+$1088 = 0
+clear_area 0 at 233.5 -1278.45 11.0 range 1.0
+Camera.SetAtPos(233.5, -1278.45, 11.0)
+set_player_coordinates $player_char at 233.5 -1278.45 11.0
+set_player_heading $player_char z_angle_to 270.0
+goto @MISC_2660
+
+:MISC_2653
+goto @MISC_112
+
+:MISC_2660
+MISC_16148()
+
+:MISC_2667
+goto @MISC_3389
+
+:MISC_2674
+MISC_16363()
+
+:MISC_3389
+if
+    Player.Defined($player_char)
+goto_if_false @MISC_4676
+$1094 = 0
+if or
+    is_player_in_zone $player_char in_zone 'BEACH2' // Washington Beach
+    $1084 == 1
+goto_if_false @MISC_4669
+if
+    $1095 == 1
+goto_if_false @MISC_4669
+if or
+    $onmission == 0
+    $997 == 1
+    $1000 == 1
+goto_if_false @MISC_3564
+if
+    $1009 == 0
+goto_if_false @MISC_3557
+Object.Destroy($1010)
+Object.Init($1010, #COP_DR_OPEN, 396.458, -473.047, 12.6)
+Object.RemoveFromMissionCleanupList($1010)
+$1009 = 1
+$1008 = 0
+
+:MISC_3557
+goto @MISC_3628
+
+:MISC_3564
+if
+    $1008 == 0
+goto_if_false @MISC_3628
+Object.Destroy($1010)
+Object.Init($1010, #COP_DR_CLOSED, 396.545, -472.883, 12.6)
+Object.RemoveFromMissionCleanupList($1010)
+$1008 = 1
+$1009 = 0
+
+:MISC_3628
+if
+    Player.Defined($player_char)
+goto_if_false @MISC_4669
+if or
+    $onmission == 0
+    $997 == 1
+    $1000 == 1
+goto_if_false @MISC_4242
+if
+    $987 == 0
+goto_if_false @MISC_4242
+if
+    Player.InRemoteMode($player_char)
+goto_if_false @MISC_3791
+$1004 = Player.RC_car($player_char)
+if
+    not Car.Wrecked($1004)
+goto_if_false @MISC_3784
+if
+    locate_car_3d $1004 0 397.0 -472.0 12.0 radius 1.5 1.5 3.0
+goto_if_false @MISC_3784
+blow_up_rc_buggy
+
+:MISC_3784
+goto @MISC_4242
+
+:MISC_3791
+if
+    is_player_in_angled_area_3d $player_char in_cube 399.0 -474.5 11.0 394.3 -470.8 14.5 radius 2.5 sphere 0
+goto_if_false @MISC_4242
+if and
+    is_player_in_any_car $player_char
+    not is_player_on_any_bike $player_char
+goto_if_false @MISC_3872
+goto @MISC_112
+
+:MISC_3872
+print_big 'POL_HQ' 3000 ms 2 // VCPD HQ
+MISC_15897()
+if
+    Player.Defined($player_char)
+goto_if_false @MISC_3959
+if
+    is_player_on_any_bike $player_char
+goto_if_false @MISC_3959
+store_car_player_is_in_no_save $1004 = player $player_char
+warp_player_from_car_to_coord $player_char at 393.8 -475.8 11.4
+Car.Destroy($1004)
+
+:MISC_3959
+if
+    $992 == 0
+goto_if_false @MISC_4228
+set_area_visible 12
+$987 = 1
+if
+    $997 == 0
+goto_if_false @MISC_4164
+set_zone_ped_info 'STREET2' 1 14 0 0 0 0 0 0 0 0 0 1000
+set_zone_ped_info 'STREET2' 0 16 0 0 0 0 0 0 0 0 0 1000
+switch_ped_roads_on 354.9 -483.1 21.0 406.0 -490.0 0.0
+switch_ped_roads_on 376.66 -453.85 -10.0 328.91 -504.02 30.0
+clear_area 1 at 400.0 -486.5 10.0 range 5.0
+
+:MISC_4164
+switch_rubbish 0
+Camera.SetAtPos(393.8, -475.8, 11.4)
+set_player_coordinates $player_char at 393.8 -475.8 11.4
+set_player_heading $player_char z_angle_to 137.0
+set_extra_colours 5 fade 0
+goto @MISC_4235
+
+:MISC_4228
+goto @MISC_112
+
+:MISC_4235
+MISC_16148()
+
+:MISC_4242
+if
+    $987 == 1
+goto_if_false @MISC_4669
+if
+    is_player_in_angled_area_3d $player_char in_cube 399.3 -472.9 11.0 394.8 -469.3 14.5 radius 1.5 sphere 0
+goto_if_false @MISC_4669
+if and
+    is_player_in_any_car $player_char
+    not is_player_on_any_bike $player_char
+goto_if_false @MISC_4341
+goto @MISC_112
+
+:MISC_4341
+print_big 'BEACH2' 3000 ms 2 // Washington Beach
+MISC_15897()
+if
+    $992 == 0
+goto_if_false @MISC_4655
+MISC_16342()
+switch_ped_roads_off 354.9 -483.1 21.0 406.0 -490.0 10.0
+clear_area 0 at 399.38 -468.6 10.7 range 1.0
+$987 = 0
+if
+    $997 == 0
+goto_if_false @MISC_4601
+set_zone_ped_info 'STREET2' 1 14 0 0 0 0 0 0 0 0 0 20
+set_zone_ped_info 'STREET2' 0 16 0 0 0 0 0 0 0 0 0 10
+switch_ped_roads_off 354.9 -483.1 21.0 406.0 -490.0 0.0
+switch_ped_roads_off 376.66 -453.85 -10.0 328.91 -504.02 30.0
+
+:MISC_4601
+Camera.SetAtPos(399.38, -468.6, 10.7)
+set_player_coordinates $player_char at 399.38 -468.6 10.7
+set_player_heading $player_char z_angle_to 330.0
+goto @MISC_4662
+
+:MISC_4655
+goto @MISC_112
+
+:MISC_4662
+MISC_16148()
+
+:MISC_4669
+goto @MISC_6298
+
+:MISC_4676
+MISC_16363()
+
+:MISC_6298
+if
+    Player.Defined($player_char)
+goto_if_false @MISC_7022
+$1094 = 0
+if or
+    is_player_in_zone $player_char in_zone 'HAVANA' // Little Havana
+    $1084 == 1
+goto_if_false @MISC_7015
+if
+    $1095 == 2
+goto_if_false @MISC_7015
+if
+    Player.InRemoteMode($player_char)
+goto_if_false @MISC_6467
+$1004 = Player.RC_car($player_char)
+if
+    not Car.Wrecked($1004)
+goto_if_false @MISC_6460
+if
+    locate_car_3d $1004 0 -1170.0 -609.0 11.0 radius 1.5 1.5 3.0
+goto_if_false @MISC_6460
+blow_up_rc_buggy
+
+:MISC_6460
+goto @MISC_6773
+
+:MISC_6467
+if
+    $989 == 0
+goto_if_false @MISC_6773
+if
+    locate_player_any_means_3d $player_char 0 -1170.0 -609.0 11.0 radius 1.5 1.5 3.0
+goto_if_false @MISC_6773
+if and
+    is_player_in_any_car $player_char
+    not is_player_on_any_bike $player_char
+goto_if_false @MISC_6561
+goto @MISC_112
+
+:MISC_6561
+print_big 'UMBERTO' 3000 ms 2 // Cafe Robina
+MISC_15897()
+if
+    Player.Defined($player_char)
+goto_if_false @MISC_6648
+if
+    is_player_on_any_bike $player_char
+goto_if_false @MISC_6648
+store_car_player_is_in_no_save $1004 = player $player_char
+warp_player_from_car_to_coord $player_char at -1170.0 -611.0 11.0
+Car.Destroy($1004)
+
+:MISC_6648
+if
+    $992 == 0
+goto_if_false @MISC_6759
+$989 = 1
+set_area_visible 7
+Camera.SetAtPos(-1170.0, -611.0, 11.0)
+clear_area 0 at -1170.0 -611.0 11.0 range 1.0
+switch_rubbish 0
+set_player_coordinates $player_char at -1170.0 -611.5 11.0
+set_player_heading $player_char z_angle_to 180.0
+goto @MISC_6766
+
+:MISC_6759
+goto @MISC_112
+
+:MISC_6766
+MISC_16148()
+
+:MISC_6773
+if
+    $989 == 1
+goto_if_false @MISC_7015
+if
+    locate_player_any_means_3d $player_char 0 -1170.0 -606.5 11.0 radius 1.5 1.5 3.0
+goto_if_false @MISC_7015
+if and
+    is_player_in_any_car $player_char
+    not is_player_on_any_bike $player_char
+goto_if_false @MISC_6867
+goto @MISC_112
+
+:MISC_6867
+print_big 'HAVANA' 3000 ms 2 // Little Havana
+MISC_15897()
+if
+    $992 == 0
+goto_if_false @MISC_7001
+$989 = 0
+MISC_16342()
+clear_area 0 at -1170.0 -605.0 11.0 range 1.0
+Camera.SetAtPos(-1170.0, -605.0, 11.0)
+set_player_coordinates $player_char at -1170.0 -605.0 11.0
+set_player_heading $player_char z_angle_to 0.0
+set_camera_in_front_of_player
+goto @MISC_7008
+
+:MISC_7001
+goto @MISC_112
+
+:MISC_7008
+MISC_16148()
+
+:MISC_7015
+goto @MISC_15851
+
+:MISC_7022
+MISC_16363()
+
+:MISC_15851
+if
+    $1095 > 1
+goto_if_false @MISC_15890
+$1095 = 0
+
+:MISC_15890
+goto @MISC_112
+
+:MISC_15897
+if
+    Player.Defined($player_char)
+goto_if_false @MISC_16146
+Player.CanMove($player_char, False)
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+set_fading_colour 0 0 1
+if and
+    $995 == 0
+    $993 == 0
+    $994 == 0
+goto_if_false @MISC_15981
+do_fade 0 500
+goto @MISC_16028
+
+:MISC_15981
+if
+    $986 == 1
+goto_if_false @MISC_16021
+set_fading_colour 0 0 0
+do_fade 0 1500
+goto @MISC_16028
+
+:MISC_16021
+do_fade 0 500
+
+:MISC_16028
+if
+    get_fading_status
+goto_if_false @MISC_16139
+wait 0
+if
+    not Player.Defined($player_char)
+goto_if_false @MISC_16075
+$992 = 1
+goto @MISC_16082
+
+:MISC_16075
+$992 = 0
+
+:MISC_16082
+
+:MISC_16132
+goto @MISC_16028
+
+:MISC_16139
+set_car_density_multiplier 0.0
+
+:MISC_16146
+return
+
+:MISC_16148
+set_fading_colour 0 0 1
+if and
+    $995 == 0
+    $993 == 0
+    $994 == 0
+goto_if_false @MISC_16202
+do_fade 1 500
+goto @MISC_16249
+
+:MISC_16202
+if
+    $986 == 1
+goto_if_false @MISC_16242
+set_fading_colour 0 0 0
+do_fade 1 1500
+goto @MISC_16249
+
+:MISC_16242
+do_fade 1 500
+
+:MISC_16249
+if
+    get_fading_status
+goto_if_false @MISC_16310
+wait 0
+if
+    not Player.Defined($player_char)
+goto_if_false @MISC_16296
+$992 = 1
+goto @MISC_16303
+
+:MISC_16296
+$992 = 0
+
+:MISC_16303
+goto @MISC_16249
+
+:MISC_16310
+if
+    Player.Defined($player_char)
+goto_if_false @MISC_16340
+Player.CanMove($player_char, True)
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+
+:MISC_16340
+return
+
+:MISC_16342
+clear_extra_colours 0
+set_car_density_multiplier 1.0
+switch_rubbish 1
+set_area_visible 0
+return
+
+:MISC_16363
+if
+    $1094 == 0
+goto_if_false @MISC_16694
+switch_rubbish 1
+clear_extra_colours 0
+switch_ped_roads_off -956.0 -355.0 5.0 -898.0 -328.0 25.0
+switch_ped_roads_off -414.0 -597.0 12.0 -332.0 -555.0 30.0
+switch_ped_roads_off 474.0 1250.0 17.0 356.0 1003.0 32.0
+switch_ped_roads_off 354.9 -483.1 21.0 406.0 -490.0 0.0
+switch_ped_roads_off 468.0 -77.0 0.0 490.0 -54.0 30.0
+set_zone_ped_info 'STREET2' 1 14 0 0 0 0 0 0 0 0 0 20
+set_zone_ped_info 'STREET2' 0 16 0 0 0 0 0 0 0 0 0 10
+$989 = 0
+$986 = 0
+$1002 = 0
+$1003 = 0
+$1088 = 0
+$987 = 0
+$988 = 0
+$990 = 0
+$991 = 0
+set_car_density_multiplier 1.0
+$1094 = 1
+
+:MISC_16694
+return
+
 //-------------Car generation script---------------
 // Fills parking lots with cars
 
@@ -3807,6 +4402,39 @@ set_zone_car_info 'ARMYBAS' 0 6 0 0 0 0 0 0 0 0 0 20
 set_zone_group 'ARMYBAS' 1 51
 set_zone_group 'ARMYBAS' 0 52
 
+switch_ped_roads_off -956.0 -355.0 5.0 -898.0 -328.0 25.0
+switch_ped_roads_off 411.0 -600.0 -10.0 451.0 -553.0 30.0
+switch_ped_roads_off 450.0 -509.0 -10.0 472.0 -489.0 30.0
+switch_ped_roads_off 355.0 -773.0 -10.0 324.0 -808.0 30.0
+switch_ped_roads_off 371.0 -503.0 -10.0 403.0 -490.0 30.0
+switch_ped_roads_off 357.0 -506.0 -10.0 384.0 -475.0 30.0
+switch_ped_roads_off 363.0 -476.0 -10.0 378.0 -468.0 30.0
+switch_ped_roads_off 383.0 -488.0 -10.0 398.3 -470.5 30.0
+switch_ped_roads_off 376.66 -453.85 -10.0 328.91 -504.02 30.0
+switch_ped_roads_off -395.0 -579.0 19.0 -338.0 -560.0 30.0
+switch_ped_roads_off -671.71 1236.53 20.0 -667.16 1231.51 25.0
+switch_ped_roads_off -733.84 1255.72 8.0 -728.34 1259.73 20.0
+switch_ped_roads_off 474.0 1250.0 17.0 356.0 1003.0 32.0
+switch_ped_roads_off 236.0 -1281.5 0.0 232.3 -1267.6 32.0
+switch_ped_roads_off -395.6 -658.6 0.0 -363.2 -636.7 32.0
+switch_ped_roads_off -237.8 -1387.1 0.0 -228.7 -1331.8 32.0
+switch_ped_roads_off -692.193 -1522.901 0.0 -575.311 -1453.378 30.0
+switch_ped_roads_off -896.098 -593.101 0.0 -855.09 -548.64 30.0
+switch_ped_roads_off -1031.494 -902.312 0.0 -949.479 -821.592 30.0
+switch_ped_roads_off -1176.038 -266.898 0.0 -1012.796 -158.26 30.0
+switch_ped_roads_off -112.495 920.349 0.0 9.705 1025.694 30.0
+switch_ped_roads_off -1012.06 181.561 0.0 -982.06 216.561 30.0
+switch_ped_roads_off -396.4 -583.6 15.0 -360.5 -555.6 33.0
+switch_ped_roads_off 468.0 -77.0 0.0 490.0 -54.0 30.0
+switch_ped_roads_off 354.9 -483.1 21.0 406.0 -490.0 0.0
+switch_roads_off -583.92 1371.84 8.0 -383.4 1531.17 25.0
+switch_roads_off 86.0 250.0 15.0 -100.0 281.0 30.0
+switch_roads_off 411.0 -600.0 -10.0 451.0 -553.0 30.0
+switch_roads_off 450.0 -509.0 -10.0 472.0 -489.0 30.0
+switch_roads_off 355.0 -773.0 -10.0 324.0 -808.0 30.0
+switch_roads_off 259.0 -941.0 -10.0 284.0 -925.0 30.0
+switch_roads_off -1102.0 76.0 -10.0 -1126.0 58.9 30.0
+
 set_gang_car_model 0 car_to #CUBAN
 set_gang_car_model 1 car_to #VOODOO
 set_gang_car_model 2 car_to #GANGBUR
@@ -3822,6 +4450,66 @@ set_gang_weapons 6 primary_weapon_to 17 secondary_weapon_to 17
 set_threat_for_ped_type 7 add_threat 256
 set_threat_for_ped_type 8 add_threat 128
 
+Object.Init($1013, #OD_CLBDR_CLOSE, 490.34, -77.017, 11.598)
+Object.RemoveFromMissionCleanupList($1013)
+Object.Init($1010, #COP_DR_CLOSED, 396.545, -472.883, 12.6)
+Object.RemoveFromMissionCleanupList($1010)
+Object.Init($1779, #COMGATE1OPEN, -712.524, -489.428, 12.549)
+Object.RemoveFromMissionCleanupList($1779)
+Object.Init($1780, #COMGATE2OPEN, -183.824, -473.223, 12.615)
+Object.RemoveFromMissionCleanupList($1780)
+Object.Init($1787, #MANSION_NEW_DOORS, -391.19, -575.906, 24.071)
+Object.RemoveFromMissionCleanupList($1787)
+Object.Init($1788, #MAN_DOORCLOSED, -378.542, -554.006, 20.067)
+Object.RemoveFromMissionCleanupList($1788)
+Object.Init($1785, #HAITAXIDR, -1010.466, 199.125, 11.95)
+Object.RemoveFromMissionCleanupList($1785)
+Object.Init($1786, #B_HSE_DOORS, -640.012, -1485.941, 15.457)
+Object.RemoveFromMissionCleanupList($1786)
+Object.Init($1007, #STRIPCLBDRCLSD, 97.203, -1469.731, 10.578)
+Object.RemoveFromMissionCleanupList($1007)
+Object.Init($1791, #ELECTRICGATE, -1114.1, 67.0, 10.1)
+Object.Angle($1791) = 90.0
+Object.RemoveFromMissionCleanupList($1791)
+Object.Init($1778, #ELECTRICGATE, 298.0, -313.6, 11.0)
+Object.RemoveFromMissionCleanupList($1778)
+Object.Init($1792, #ELECTRICGATE, -989.9, -1252.2, 10.4)
+Object.Angle($1792) = 249.0
+Object.RemoveFromMissionCleanupList($1792)
+Object.Init($1793, #DK_CAMJONESDOOR, -837.134, -901.672, 12.03)
+Object.RemoveFromMissionCleanupList($1793)
+Object.Angle($1793) = 0.0
+Object.Init($1801, #DTS_GS_LIFTDOORL, -559.476, 783.107, 23.279)
+Object.RemoveFromMissionCleanupList($1801)
+Object.Init($1802, #DTS_GS_LIFTDOORR, -559.476, 781.34, 23.279)
+Object.RemoveFromMissionCleanupList($1802)
+Object.Init($1811, #CI_JETYGATESCLOSED, -116.738, 1027.729, 11.34)
+Object.RemoveFromMissionCleanupList($1811)
+Object.Init($1812, #NHAITPLATDR, -981.114, 265.419, 8.939)
+Object.RemoveFromMissionCleanupList($1812)
+Object.Init($1813, #NHAITPLATDRR, -981.114, 267.607, 8.937)
+Object.RemoveFromMissionCleanupList($1813)
+Object.Init($1814, #SPAD_DR_CLOSED1, 465.375, 30.336, 33.181)
+Object.RemoveFromMissionCleanupList($1814)
+Object.Init($1815, #SPAD_DR_CLOSED2, 465.375, 30.336, 33.181)
+Object.RemoveFromMissionCleanupList($1815)
+Object.Init($1816, #SPAD_DR_CLOSED3, 464.663, 30.336, 23.881)
+Object.RemoveFromMissionCleanupList($1816)
+Object.Init($1817, #PH_BUILD_DR_CLOSED, 569.925, 52.0, 14.616)
+Object.RemoveFromMissionCleanupList($1817)
+rotate_object $1817 from_angle 270.0 to_angle 270.0 flag 0
+Object.Init($1818, #ELECTRICGATE, -973.664, -519.65, 10.092)
+Object.Angle($1818) = 98.5
+Object.RemoveFromMissionCleanupList($1818)
+Object.Init($1819, #ICEDOOR, -866.689, -572.095, 12.173)
+Object.RemoveFromMissionCleanupList($1819)
+Object.Init($1820, #DTS_BBDOOR, -598.017, 651.207, 12.025)
+Object.RemoveFromMissionCleanupList($1820)
+Object.Init($1821, #GOLF_GATESCLOSED, 107.671, 227.729, 20.634)
+Object.RemoveFromMissionCleanupList($1821)
+Object.Init($1822, #PRINTDOOOR, -1063.773, -278.932, 13.024)
+Object.RemoveFromMissionCleanupList($1822)
+
 create_car_generator $1992 = init_car_generator #ADMIRAL 8 8 force_spawn 0 alarm 50 door_lock 0 min_delay 0 max_delay 10000 at -401.2715 -534.6655 11.7534 angle 149.2032
 switch_car_generator $1992 cars_to_generate_to 101
 create_car_generator $1991 = init_car_generator #VICECHEE -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -870.4673 -717.2427 10.1069 angle 94.1213
@@ -3831,15 +4519,15 @@ switch_car_generator $1990 cars_to_generate_to 0
 create_car_generator $1989 = init_car_generator #FLATBED -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1034.889 -1452.775 10.7 angle 248.8739
 switch_car_generator $1989 cars_to_generate_to 101
 create_car_generator $1844 = init_car_generator #DINGHY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 403.0317 -178.5811 5.7 angle 350.0462
-switch_car_generator $1844 cars_to_generate_to 0
+switch_car_generator $1844 cars_to_generate_to 101
 create_car_generator $1867 = init_car_generator #DINGHY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 231.0536 -130.1794 5.7 angle 357.5423
-switch_car_generator $1867 cars_to_generate_to 0
+switch_car_generator $1867 cars_to_generate_to 101
 create_car_generator $1993 = init_car_generator #MAVERICK -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -853.6609 1353.785 68.6104 angle 0.0
 switch_car_generator $1993 cars_to_generate_to 101
 create_car_generator $1842 = init_car_generator #PREDATOR -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -69.2982 72.6166 5.7 angle 104.6175
-switch_car_generator $1842 cars_to_generate_to 0
+switch_car_generator $1842 cars_to_generate_to 101
 create_car_generator $1843 = init_car_generator #TROPIC -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 237.4778 302.2366 5.7 angle 86.2011
-switch_car_generator $1843 cars_to_generate_to 0
+switch_car_generator $1843 cars_to_generate_to 101
 create_car_generator $1845 = init_car_generator #TRASH -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1268.25 83.833 10.4182 angle 179.549
 switch_car_generator $1845 cars_to_generate_to 101
 create_car_generator $1852 = init_car_generator #SECURICA -1 -1 force_spawn 0 alarm 0 door_lock 70 min_delay 0 max_delay 10000 at -870.2545 -353.9059 10.0475 angle 357.8359
