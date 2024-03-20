@@ -25,6 +25,10 @@ GOLFNO  = You need a ~g~golf cart~w~ to start this mission.
 NEW_REC = ~g~New Record Set!!!!! ~w~~1~ minutes ~g~and ~w~~1~ seconds.
 STFT_17 = Fastest time on 'A Little Game of Golf'
 POLICE1 = Special Delivery
+NPCCOP1 = Sorry, sir, no entry. We are investigating a murder.
+NPCCOP2 = Okay, now you're gonna get it!
+NPCCOP3 = Oh no... you were not supposed to see how glitchy this is.
+NPCWORK = They seem busy.
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!

@@ -16,6 +16,7 @@ set_total_number_of_missions 88 //todo
 set_progress_total 154 //todo
 set_max_wanted_level 2
 set_collectable1_total 0
+set_total_number_of_kill_frenzies 0
 set_deatharrest_state 0
 set_time_of_day 2 0
 
@@ -108,6 +109,12 @@ set_garage $garage1 = create_garage_type 16 door -265.1602 -308.2498 9.2968 to -
 set_rotating_garage_door $garage1
 no_special_camera_for_this_garage $garage1
 set_maximum_number_of_cars_in_garage $garage1 max_cars_to 4
+
+Object.Init($714, #YT_MAIN_BODY, -375.499, -1322.31, 9.81124)
+Object.Init($715, #YT_MAIN_BODY2, -375.499, -1322.31, 9.81124)
+Object.Init($717, #YT_DOORS14, -375.499, -1322.31, 9.81124)
+Object.Init($718, #YT_TMP_BOAT, -375.499, -1322.31, 9.81124)
+Object.Init($719, #LODMAIN_BODY, -375.499, -1322.31, 9.81124)
 
 declare_mission_flag $onmission
 wait 0
@@ -487,7 +494,7 @@ then
     Pickup.Destroy($info_pickup_7)
     Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_moved_x, $info_pickup_7_moved_y, $info_pickup_7_moved_z)
     $info_7_moved = 1
-    print_now 'INFO7A' time 5000 1
+    print_now 'INFO7A' time 3000 1
 end
 goto @INFOPICS_8
 
@@ -501,7 +508,7 @@ then
     Pickup.Destroy($info_pickup_7)
     Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_x, $info_pickup_7_y, $info_pickup_7_z)
     $info_7_moved = 2
-    print_now 'INFO7B' time 5000 1
+    print_now 'INFO7B' time 3000 1
 end
 goto @INFOPICS_8
 
@@ -515,7 +522,7 @@ then
     Pickup.Destroy($info_pickup_7)
     Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_x, $info_pickup_7_y, $info_pickup_7_movedtwice_z)
     $info_7_moved = 3
-    print_now 'INFO7C' time 5000 1
+    print_now 'INFO7C' time 3000 1
 end
 
 :INFOPICS_8
@@ -1013,6 +1020,28 @@ then
 end
 
 :NPCS_2
+if
+    is_player_in_zone $player_char in_zone 'DOCKS' // Viceport
+goto_if_false @NPCS_2B
+if
+    locate_player_any_means_2d $player_char 0 -729.67 -1169.09 radius 150.0 150.0
+goto_if_false @NPCS_2B
+if
+    $npcs_workers_state == 0
+then
+    NPCS_WORKERS_INIT()
+end
+NPCS_WORKERS_TICK()
+goto @NPCS_3
+
+:NPCS_2B
+if
+    $npcs_workers_state == 1
+then
+    NPCS_WORKERS_DESTROY()
+end
+
+:NPCS_3
 goto @NPCS_1
 
 :NPCS_FIN
@@ -1020,6 +1049,11 @@ if
     $npcs_diaz_state == 1
 then
     NPCS_DIAZ_DESTROY()
+end
+if
+    $npcs_workers_state == 1
+then
+    NPCS_WORKERS_DESTROY()
 end
 goto @NPCS_UNDEF
 
@@ -1050,31 +1084,11 @@ return
 
 :NPCS_DIAZ_DESTROY
 Actor.DestroyInstantly($npc_diaz)
-if
-    does_object_exist $golf_ball_1
-then
-    Object.Destroy($golf_ball_1)
-end
-if
-    does_object_exist $golf_ball_2
-then
-    Object.Destroy($golf_ball_2)
-end
-if
-    does_object_exist $golf_ball_3
-then
-    Object.Destroy($golf_ball_3)
-end
-if
-    does_object_exist $golf_ball_4
-then
-    Object.Destroy($golf_ball_4)
-end
-if
-    does_object_exist $golf_ball_5
-then
-    Object.Destroy($golf_ball_5)
-end
+Object.Destroy($golf_ball_1)
+Object.Destroy($golf_ball_2)
+Object.Destroy($golf_ball_3)
+Object.Destroy($golf_ball_4)
+Object.Destroy($golf_ball_5)
 Model.Destroy(#GOLFCLUB)
 Model.Destroy(#PIZZABOX)
 unload_special_character 1
@@ -1090,6 +1104,7 @@ then
     if
         locate_char_any_means_char_3d $player_actor near_actor $npc_diaz radius 5.0 5.0 5.0 sphere 0
     then
+        clear_mission_audio 1
         load_mission_audio 'CUB4_16' as 1
         while not has_mission_audio_loaded 1
             wait 0
@@ -1114,11 +1129,7 @@ then
     generate_random_int_in_range 0@ = random_int_in_ranges 750 3000
     set_char_wait_state $npc_diaz anim 33 wait_state_time -1
     wait 500
-    if
-        does_object_exist $golf_ball_5
-    then
-        Object.RemoveReferences($golf_ball_5)
-    end
+    Object.RemoveReferences($golf_ball_5)
     set_var_int_to_var_int $golf_ball_5 = $golf_ball_4
     set_var_int_to_var_int $golf_ball_4 = $golf_ball_3
     set_var_int_to_var_int $golf_ball_3 = $golf_ball_2
@@ -1133,6 +1144,234 @@ then
     add_to_object_velocity $golf_ball_1 scatter 13@ 14@ 15@ // 0.0 10.0 5.0
 end
 return
+
+:NPCS_WORKERS_INIT
+Model.Load(#BENSON)
+Model.Load(#WMYCW)
+Model.Load(#BMODK)
+Model.Load(#GUNBOX)
+Model.Load(#WOODENBOX)
+while True
+    if and
+        Model.Available(#BENSON)
+        Model.Available(#WMYCW)
+        Model.Available(#BMODK)
+        Model.Available(#GUNBOX)
+        Model.Available(#WOODENBOX)
+    then
+        break
+    end
+    wait 0
+end
+Car.Create($npc_workers_car, #BENSON, -729.67, -1169.09, 9.63)
+Car.Angle($npc_workers_car) = 111.15
+lock_car_doors $npc_workers_car door_status_to 3
+pop_car_boot $npc_workers_car
+Actor.Create($npc_worker_1, 4, #WMYCW, -725.56, -1167.7, 9.73)
+Actor.Angle($npc_worker_1) = 24.68
+set_char_suffers_critical_hits $npc_worker_1 dismemberment_possible 0
+clear_char_threat_search $npc_worker_1
+Actor.Create($npc_worker_2, 4, #BMODK, -724.73, -1167.36, 9.73) // -724.18, -1167.13
+Actor.Angle($npc_worker_2) = 22.48
+set_char_suffers_critical_hits $npc_worker_2 dismemberment_possible 0
+clear_char_threat_search $npc_worker_2
+$npc_workers_interacted = 0
+$npcs_workers_state = 1
+start_new_script @NPC_WORKERS_SCRIPT
+return
+
+:NPCS_WORKERS_DESTROY
+Car.Destroy($npc_workers_car)
+Actor.DestroyInstantly($npc_worker_1)
+Actor.DestroyInstantly($npc_worker_2)
+Model.Destroy(#BENSON)
+Model.Destroy(#WMYCW)
+Model.Destroy(#BMODK)
+Model.Destroy(#GUNBOX)
+Model.Destroy(#WOODENBOX)
+$npcs_workers_state = 0
+return
+
+:NPCS_WORKERS_TICK
+if
+    $npc_workers_interacted == 0
+then
+    if
+        locate_char_any_means_char_3d $player_actor near_actor $npc_worker_1 radius 5.0 5.0 5.0 sphere 0
+    then
+        print_now 'NPCWORK' time 3000 1
+        $npc_workers_interacted = 1
+    end
+else
+    if
+        not locate_char_any_means_char_2d $player_actor near_actor $npc_worker_1 radius 10.0 10.0 0
+    then
+        $npc_workers_interacted = 0
+    end
+end
+return
+
+:NPC_WORKERS_SCRIPT
+script_name 'NPCWORK'
+set_deatharrest_state 0
+wait 1000
+
+:NPC_WORKERS_SCRIPT_LOOP
+if
+    Player.Defined($player_char)
+goto_if_false @NPC_WORKERS_SCRIPT_END
+if and
+    $npcs_workers_state == 1
+    not Car.Wrecked($npc_workers_car)
+    not Actor.Dead($npc_worker_1)
+    not Actor.Dead($npc_worker_2)
+goto_if_false @NPC_WORKERS_SCRIPT_END
+const npc_worker_1_start_angle = 80.0 // 55.0
+const npc_worker_1_end_angle = -22.0
+10@ = npc_worker_1_start_angle
+10@ -= npc_worker_1_end_angle
+10@ /= 2.0
+const npc_worker_2_start_angle = 47.0
+const npc_worker_2_end_angle = -69.0
+11@ = npc_worker_2_start_angle
+11@ -= npc_worker_2_end_angle
+11@ /= 2.0
+const npc_box_rotation_speed = 8.0
+Actor.Angle($npc_worker_1) = npc_worker_1_start_angle
+set_char_wait_state $npc_worker_1 anim 25 wait_state_time 3000
+wait 500
+
+if
+    Player.Defined($player_char)
+goto_if_false @NPC_WORKERS_SCRIPT_END
+if and
+    $npcs_workers_state == 1
+    not Car.Wrecked($npc_workers_car)
+    not Actor.Dead($npc_worker_1)
+    not Actor.Dead($npc_worker_2)
+goto_if_false @NPC_WORKERS_SCRIPT_END
+get_offset_from_char_in_world_coords 0@ 1@ 2@ from_actor $npc_worker_1 offset 0.0 0.9 0.0
+15@ = #GUNBOX
+generate_random_float_in_range 14@ = random_float 0.0 1.0
+if
+    14@ < 0.5
+then
+    15@ = #WOODENBOX
+end
+Object.Init($npc_workers_box, 15@, 0@, 1@, 2@)
+Object.RemoveFromMissionCleanupList($npc_workers_box)
+wait 500
+
+if
+    Player.Defined($player_char)
+goto_if_false @NPC_WORKERS_SCRIPT_END
+set_char_wait_state $npc_worker_2 anim 25 wait_state_time 3000
+wait 200
+
+Actor.Angle($npc_worker_2) = npc_worker_2_start_angle
+3@ = npc_worker_1_start_angle
+while 3@ > npc_worker_1_end_angle
+    wait 30
+    if
+        Player.Defined($player_char)
+    goto_if_false @NPC_WORKERS_SCRIPT_END
+    if and
+        $npcs_workers_state == 1
+        not Car.Wrecked($npc_workers_car)
+        not Actor.Dead($npc_worker_1)
+        not Actor.Dead($npc_worker_2)
+    goto_if_false @NPC_WORKERS_SCRIPT_END
+    // smooth motion start
+    14@ = npc_worker_1_start_angle
+    sub_float_lvar_from_float_lvar 14@ -= 3@
+    set_lvar_float_to_lvar_float 15@ = 3@
+    15@ -= npc_worker_1_end_angle
+    if
+        is_float_lvar_greater_than_float_lvar 14@ > 15@
+    then
+        set_lvar_float_to_lvar_float 14@ = 15@
+    end
+    if
+        14@ <= 1.5
+    then
+        14@ = 1.5
+    else
+        div_float_lvar_by_float_lvar 14@ /= 10@
+    end
+    // smooth motion end
+    14@ *= npc_box_rotation_speed
+    sub_float_lvar_from_float_lvar 3@ -= 14@
+    set_lvar_float_to_lvar_float 4@ = 3@
+    if
+        4@ < 0.0
+    then
+        4@ += 360.0
+    end    
+    Actor.Angle($npc_worker_1) = 4@
+    get_offset_from_char_in_world_coords 0@ 1@ 2@ from_actor $npc_worker_1 offset 0.0 0.9 0.0
+    set_object_coordinates $npc_workers_box at 0@ 1@ 2@
+end
+
+// reset animation start
+Actor.DestroyInstantly($npc_worker_1)
+Actor.Create($npc_worker_1, 4, #WMYCW, -725.56, -1167.7, 9.73)
+Actor.Angle($npc_worker_1) = npc_worker_1_end_angle
+set_char_suffers_critical_hits $npc_worker_1 dismemberment_possible 0
+clear_char_threat_search $npc_worker_1
+// reset animation end
+3@ = npc_worker_2_start_angle
+TIMERA = 0
+while 3@ > npc_worker_2_end_angle
+    wait 30
+    if
+        Player.Defined($player_char)
+    goto_if_false @NPC_WORKERS_SCRIPT_END
+    if and
+        $npcs_workers_state == 1
+        not Car.Wrecked($npc_workers_car)
+        not Actor.Dead($npc_worker_1)
+        not Actor.Dead($npc_worker_2)
+    goto_if_false @NPC_WORKERS_SCRIPT_END
+    3@ -= npc_box_rotation_speed
+    set_lvar_float_to_lvar_float 4@ = 3@
+    if
+        4@ < 0.0
+    then
+        4@ += 360.0
+    end    
+    Actor.Angle($npc_worker_2) = 4@
+    get_offset_from_char_in_world_coords 0@ 1@ 2@ from_actor $npc_worker_2 offset 0.0 0.9 0.0
+    set_object_coordinates $npc_workers_box at 0@ 1@ 2@
+end
+
+Object.ToggleInMovingList($npc_workers_box, True)
+add_to_object_velocity $npc_workers_box scatter 5.0 -1.0 0.0
+Object.RemoveReferences($npc_workers_box)
+wait 500
+
+if
+    Player.Defined($player_char)
+goto_if_false @NPC_WORKERS_SCRIPT_END
+if and
+    $npcs_workers_state == 1
+    not Car.Wrecked($npc_workers_car)
+    not Actor.Dead($npc_worker_1)
+    not Actor.Dead($npc_worker_2)
+goto_if_false @NPC_WORKERS_SCRIPT_END
+// reset animation start
+Actor.DestroyInstantly($npc_worker_2)
+Actor.Create($npc_worker_2, 4, #BMODK, -724.73, -1167.36, 9.73) // -724.18, -1167.13
+Actor.Angle($npc_worker_2) = npc_worker_2_end_angle
+set_char_suffers_critical_hits $npc_worker_2 dismemberment_possible 0
+clear_char_threat_search $npc_worker_2
+// reset animation end
+generate_random_int_in_range 15@ = random_int_in_ranges 0 1000
+wait 15@
+goto @NPC_WORKERS_SCRIPT_LOOP
+
+:NPC_WORKERS_SCRIPT_END
+Object.RemoveReferences($npc_workers_box)
+terminate_this_script 
 
 //-------------Random interactions---------------
 //
