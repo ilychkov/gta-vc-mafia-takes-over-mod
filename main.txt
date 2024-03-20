@@ -130,6 +130,7 @@ start_new_script @INFOPICS
 start_new_script @CLOTHES
 start_new_script @HAILACAB
 start_new_script @NPCS
+start_new_script @INTERACTIONS
 start_new_script @GOLF_MISSION
 start_new_script @POLICE_1_MISSION
 launch_mission @HJ
@@ -1023,7 +1024,7 @@ while True
     wait 0
 end
 Actor.Create($npc_diaz, 4, #SPECIAL01, -378.5385, -546.1594, 34.5) // -378.4412 -554.1082 39.7731
-Actor.Angle($npc_diaz) = 0.6989
+Actor.Angle($npc_diaz) = 270.6989
 set_char_suffers_critical_hits $npc_diaz dismemberment_possible 0
 give_weapon_to_char $npc_diaz weapon 3 ammo 3000
 clear_char_threat_search $npc_diaz
@@ -1116,6 +1117,125 @@ then
     generate_random_float_in_range 14@ = random_float 10.0 20.0
     generate_random_float_in_range 15@ = random_float 0.0 15.0
     add_to_object_velocity $golf_ball_1 scatter 13@ 14@ 15@ // 0.0 10.0 5.0
+end
+return
+
+//-------------Random interactions---------------
+//
+
+:INTERACTIONS
+script_name 'INTERAC'
+set_deatharrest_state 0
+$interactions_golf_barrels_state = 0
+
+:INTERACTIONS_UNDEF
+if
+    not Player.Defined($player_char)
+goto_if_false @INTERACTIONS_1
+wait 0
+goto @INTERACTIONS_UNDEF
+
+:INTERACTIONS_1
+wait 0
+if
+    Player.Defined($player_char)
+goto_if_false @INTERACTIONS_FIN
+if or
+    is_player_in_zone $player_char in_zone 'GOLFC' // Leaf Links
+    is_player_in_zone $player_char in_zone 'BEACH3' // Vice Point
+goto_if_false @INTERACTIONS_1B
+if or
+    locate_player_any_means_2d $player_char 0 164.7667 252.5675 radius 100.0 100.0
+    locate_player_any_means_2d $player_char 0 52.3614 200.3506 radius 100.0 100.0
+goto_if_false @INTERACTIONS_1B
+if
+    $interactions_golf_barrels_state == 0
+then
+    INTERACTIONS_GOLF_BARRELS_INIT()
+end
+if
+    $interactions_golf_barrels_state == 1
+then
+    INTERACTIONS_GOLF_BARRELS_TICK()
+end
+goto @INTERACTIONS_2
+
+:INTERACTIONS_1B
+if
+    $interactions_golf_barrels_state > 0
+then
+    INTERACTIONS_GOLF_BARRELS_DESTROY()
+end
+
+:INTERACTIONS_2
+goto @INTERACTIONS_1
+
+:INTERACTIONS_FIN
+if
+    $interactions_golf_barrels_state > 0
+then
+    INTERACTIONS_GOLF_BARRELS_DESTROY()
+end
+goto @INTERACTIONS_UNDEF
+
+:INTERACTIONS_GOLF_BARRELS_INIT
+Model.Load(#BARREL4)
+while not Model.Available(#BARREL4)
+    wait 0
+end
+Object.Create($golf_barrel_1, #BARREL4, 164.77, 252.57, 18.33)
+Object.Create($golf_barrel_2, #BARREL4, 163.77, 251.2, 18.29)
+Object.Create($golf_barrel_3, #BARREL4, 165.84, 251.49, 18.28)
+Object.Create($golf_barrel_4, #BARREL4, 52.36, 200.35, 18.23)
+Object.Create($golf_barrel_5, #BARREL4, 54.71, 200.99, 18.17)
+Object.Create($golf_barrel_6, #BARREL4, 54.61, 200.94, 19.27)
+Object.RemoveFromMissionCleanupList($golf_barrel_1)
+Object.RemoveFromMissionCleanupList($golf_barrel_2)
+Object.RemoveFromMissionCleanupList($golf_barrel_3)
+Object.RemoveFromMissionCleanupList($golf_barrel_4)
+Object.RemoveFromMissionCleanupList($golf_barrel_5)
+Object.RemoveFromMissionCleanupList($golf_barrel_6)
+$interactions_golf_barrels_state = 1
+return
+
+:INTERACTIONS_GOLF_BARRELS_DESTROY
+Object.Destroy($golf_barrel_1)
+Object.Destroy($golf_barrel_2)
+Object.Destroy($golf_barrel_3)
+Object.Destroy($golf_barrel_4)
+Object.Destroy($golf_barrel_5)
+Object.Destroy($golf_barrel_6)
+Model.Destroy(#BARREL4)
+if
+    $interactions_golf_barrels_state > 1
+then
+    Object.Destroy($1821)
+    Object.Init($1821, #GOLF_GATESCLOSED, 107.671, 227.729, 20.634)
+    Object.RemoveFromMissionCleanupList($1821)
+end
+$interactions_golf_barrels_state = 0
+return
+
+:INTERACTIONS_GOLF_BARRELS_TICK
+if or
+    has_object_been_damaged $golf_barrel_1
+    has_object_been_damaged $golf_barrel_2
+    has_object_been_damaged $golf_barrel_3
+    has_object_been_damaged $golf_barrel_4
+    has_object_been_damaged $golf_barrel_5
+    has_object_been_damaged $golf_barrel_6
+    locate_player_any_means_3d $player_char 0 95.8965 264.4538 21.7719 radius 20.0 20.0 20.0
+then
+    Object.RemoveReferences($golf_barrel_1)
+    Object.RemoveReferences($golf_barrel_2)
+    Object.RemoveReferences($golf_barrel_3)
+    Object.RemoveReferences($golf_barrel_4)
+    Object.RemoveReferences($golf_barrel_5)
+    Object.RemoveReferences($golf_barrel_6)
+    Object.Destroy($1821)
+    Object.Init($1821, #GOLF_GATESOPEN, 107.81, 228.072, 20.989)
+    Object.RemoveFromMissionCleanupList($1821)
+    $interactions_golf_barrels_state = 2
 end
 return
 
