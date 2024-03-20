@@ -4509,6 +4509,16 @@ Object.Init($1821, #GOLF_GATESCLOSED, 107.671, 227.729, 20.634)
 Object.RemoveFromMissionCleanupList($1821)
 Object.Init($1822, #PRINTDOOOR, -1063.773, -278.932, 13.024)
 Object.RemoveFromMissionCleanupList($1822)
+Object.Init($Arena_door_1, #DTN_STADDOORA, -1109.615, 1330.097, 20.372)
+Object.RemoveFromMissionCleanupList($Arena_door_1)
+Object.Init($Arena_door_2, #DTN_STADDOORB, -1109.615, 1331.932, 20.372)
+Object.RemoveFromMissionCleanupList($Arena_door_2)
+Object.Init($dtn_sr_door_1, #DTN_STADDOORA, -668.85, 1212.0, 11.3)
+Object.Angle($dtn_sr_door_1) = 270.0
+Object.RemoveFromMissionCleanupList($dtn_sr_door_1)
+Object.Init($dtn_sr_door_2, #DTN_STADDOORB, -667.01, 1212.0, 11.2)
+Object.Angle($dtn_sr_door_2) = 270.0
+Object.RemoveFromMissionCleanupList($dtn_sr_door_2)
 
 create_car_generator $1992 = init_car_generator #ADMIRAL 8 8 force_spawn 0 alarm 50 door_lock 0 min_delay 0 max_delay 10000 at -401.2715 -534.6655 11.7534 angle 149.2032
 switch_car_generator $1992 cars_to_generate_to 101
