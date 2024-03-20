@@ -292,15 +292,30 @@ Pickup.Destroy($info_pickup_2)
 $info_2_picked_up = 1
 $info_pickups_collected++
 player_made_progress 1
-print_help 'INFO2'
+Player.CanMove($player_char, False)
+switch_widescreen 1
+Camera.SetPosition(-263.79, -331.11, 16.08, 0.0, 0.0, 0.0)
+Camera.PointAt(-256.03, -327.92, 14.63, 2)
+print_now 'INFO2' time 5000 1
 wait 5000
-print_help 'INFO2B'
+set_interpolation_parameters 0.0 3000
+Camera.PointAt(-266.65, -314.12, 11.3, 1)
+print_now 'INFO2B' time 4000 1
+wait 4000
+Player.CanMove($player_char, True)
+switch_widescreen 0
+Camera.Restore_WithJumpCut
+Camera.SetBehindPlayer
 if
     $player_knows_about_info_pickups == 1
 then
-    wait 1000
     INFOPICS_PRINT_COUNT()
 end
+wait 1000
+print_help 'INFO2C'
+flash_hud_object 8
+wait 3000
+flash_hud_object -1
 goto @INFOPICS_LOOP
 
 :INFOPICS_3
@@ -969,13 +984,11 @@ goto @NPCS_UNDEF
 Model.Load(#GOLFCLUB)
 Model.Load(#PIZZABOX)
 load_special_character 1 'IGDIAZ'
-load_mission_audio 'CUB4_16' as 1
 while True
     if and
         Model.Available(#GOLFCLUB)
         Model.Available(#PIZZABOX)
         has_special_character_loaded 1
-        has_mission_audio_loaded 1
     then
         break
     end
@@ -986,7 +999,6 @@ Actor.Angle($npc_diaz) = 0.6989
 set_char_suffers_critical_hits $npc_diaz dismemberment_possible 0
 give_weapon_to_char $npc_diaz weapon 3 ammo 3000
 clear_char_threat_search $npc_diaz
-set_mission_audio_position 1 location -378.5385 -546.1594 34.5
 0@ = 3000
 TIMERB = 0
 $npc_diaz_interacted = 0
@@ -1035,6 +1047,11 @@ then
     if
         locate_char_any_means_char_3d $player_actor near_actor $npc_diaz radius 5.0 5.0 5.0 sphere 0
     then
+        load_mission_audio 'CUB4_16' as 1
+        while not has_mission_audio_loaded 1
+            wait 0
+        end
+        set_mission_audio_position 1 location -378.5385 -546.1594 34.5
         play_mission_audio 1
         $npc_diaz_interacted = 1
     end
@@ -1051,7 +1068,7 @@ if and
     not Actor.Dead($npc_diaz)
 then
     TIMERB = 0
-    generate_random_int_in_range 0@ = random_int_in_ranges 500 3000
+    generate_random_int_in_range 0@ = random_int_in_ranges 750 3000
     set_char_wait_state $npc_diaz anim 33 wait_state_time -1
     wait 500
     if
@@ -1063,8 +1080,7 @@ then
     set_var_int_to_var_int $golf_ball_4 = $golf_ball_3
     set_var_int_to_var_int $golf_ball_3 = $golf_ball_2
     set_var_int_to_var_int $golf_ball_2 = $golf_ball_1
-    Actor.StoreDeadActorPos($npc_diaz, 13@, 14@, 15@)
-    14@ += 1.0
+    get_offset_from_char_in_world_coords 13@ 14@ 15@ from_actor $npc_diaz offset 0.0 0.9 -0.3
     Object.Init($golf_ball_1, #PIZZABOX, 13@, 14@, 15@)
     Object.CollisionDetection($golf_ball_1, True)
     Object.ToggleInMovingList($golf_ball_1, True)
