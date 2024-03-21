@@ -151,6 +151,7 @@ start_new_script @CLOTHES
 start_new_script @HAILACAB
 start_new_script @NPCS
 start_new_script @INTERACTIONS
+start_new_script @DROPMONEY
 start_new_script @GOLF_MARKER
 start_new_script @POLICE_1_MARKER
 
@@ -1442,6 +1443,12 @@ Object.Create($golf_barrel_3, #BARREL4, 165.84, 251.49, 18.28)
 Object.Create($golf_barrel_4, #BARREL4, 52.36, 200.35, 18.23)
 Object.Create($golf_barrel_5, #BARREL4, 54.71, 200.99, 18.17)
 Object.Create($golf_barrel_6, #BARREL4, 54.61, 200.94, 19.27)
+make_object_targetable $golf_barrel_1
+make_object_targetable $golf_barrel_2
+make_object_targetable $golf_barrel_3
+make_object_targetable $golf_barrel_4
+make_object_targetable $golf_barrel_5
+make_object_targetable $golf_barrel_6
 Object.RemoveFromMissionCleanupList($golf_barrel_1)
 Object.RemoveFromMissionCleanupList($golf_barrel_2)
 Object.RemoveFromMissionCleanupList($golf_barrel_3)
@@ -1490,6 +1497,107 @@ then
     Object.RemoveFromMissionCleanupList($1821)
     $interactions_golf_barrels_state = 2
 end
+return
+
+//-------------Player drops money when wasted---------------
+//
+
+:DROPMONEY
+script_name 'DROPMON'
+set_deatharrest_state 0
+$dropped_money_pickups_exist = 1
+
+:DROPMONEY_LOOP
+wait $default_wait_time
+if
+    not Player.Defined($player_char)
+then
+    if
+        $dropped_money_pickups_exist == 1
+    then
+        DROPMONEY_DESTROYPICKUPS()
+    end
+    goto @DROPMONEY_LOOP
+end
+if
+    not is_player_health_greater $player_char health > 0
+goto_if_false @DROPMONEY_LOOP
+if
+    $dropped_money_pickups_exist == 1
+then
+    DROPMONEY_DESTROYPICKUPS()
+end
+Actor.StoreDeadActorPos($player_actor, 0@, 1@, 2@)
+Actor.StoreDeadActorPos($player_actor, 3@, 4@, 5@)
+Actor.StoreDeadActorPos($player_actor, 6@, 7@, 8@)
+Actor.StoreDeadActorPos($player_actor, 9@, 10@, 11@)
+Actor.StoreDeadActorPos($player_actor, 12@, 13@, 14@)
+create_money_pickup $player_dropped_cash_1 = create_cash_pickup 20 at 0@ 1@ 2@
+create_money_pickup $player_dropped_cash_2 = create_cash_pickup 20 at 3@ 4@ 5@
+create_money_pickup $player_dropped_cash_3 = create_cash_pickup 20 at 6@ 7@ 8@
+create_money_pickup $player_dropped_cash_4 = create_cash_pickup 20 at 9@ 10@ 11@
+create_money_pickup $player_dropped_cash_5 = create_cash_pickup 20 at 12@ 13@ 14@
+
+:DROPMONEY_WAIT
+wait 0
+if
+    not Player.Defined($player_char)
+goto_if_false @DROPMONEY_WAIT
+
+:DROPMONEY_WAIT_2
+wait 0
+if
+    Player.Defined($player_char)
+goto_if_false @DROPMONEY_WAIT_2
+if
+    Pickup.Picked_up($player_dropped_cash_1)
+then
+    Pickup.Destroy($player_dropped_cash_1)
+else
+    Pickup.Destroy($player_dropped_cash_1)
+    create_money_pickup $player_dropped_cash_1 = create_cash_pickup 20 at 0@ 1@ 2@
+end
+if
+    Pickup.Picked_up($player_dropped_cash_2)
+then
+    Pickup.Destroy($player_dropped_cash_2)
+else
+    Pickup.Destroy($player_dropped_cash_2)
+    create_money_pickup $player_dropped_cash_2 = create_cash_pickup 20 at 3@ 4@ 5@
+end
+if
+    Pickup.Picked_up($player_dropped_cash_3)
+then
+    Pickup.Destroy($player_dropped_cash_3)
+else
+    Pickup.Destroy($player_dropped_cash_3)
+    create_money_pickup $player_dropped_cash_3 = create_cash_pickup 20 at 6@ 7@ 8@
+end
+if
+    Pickup.Picked_up($player_dropped_cash_4)
+then
+    Pickup.Destroy($player_dropped_cash_4)
+else
+    Pickup.Destroy($player_dropped_cash_4)
+    create_money_pickup $player_dropped_cash_4 = create_cash_pickup 20 at 9@ 10@ 11@
+end
+if
+    Pickup.Picked_up($player_dropped_cash_5)
+then
+    Pickup.Destroy($player_dropped_cash_5)
+else
+    Pickup.Destroy($player_dropped_cash_5)
+    create_money_pickup $player_dropped_cash_5 = create_cash_pickup 20 at 12@ 13@ 14@
+end
+goto @DROPMONEY_LOOP
+
+:DROPMONEY_DESTROYPICKUPS
+Pickup.Destroy($player_dropped_cash_1)
+Pickup.Destroy($player_dropped_cash_2)
+Pickup.Destroy($player_dropped_cash_3)
+Pickup.Destroy($player_dropped_cash_4)
+Pickup.Destroy($player_dropped_cash_5)
+$dropped_money_pickups_exist = 0
 return
 
 //-------------Golf mission marker script---------------
