@@ -146,6 +146,7 @@ else
 end
 
 start_new_script @PSAVE1
+start_new_script @PSAVE2
 start_new_script @INFOPICS
 start_new_script @CLOTHES
 start_new_script @HAILACAB
@@ -165,7 +166,7 @@ launch_mission @AUDIO
 wait 2500 ms
 jump @InfLoop
 
-//-------------Save pickups script---------------
+//-------------Save pickups---------------
 //
 
 :PSAVE1
@@ -221,6 +222,60 @@ $save_pickup_1_exists = 0
 
 :PSAVE1_311
 goto @PSAVE1_10
+
+:PSAVE2
+script_name 'PSAVE2'
+
+:PSAVE2_10
+wait 250
+if
+    Player.Defined($player_char)
+goto_if_false @PSAVE2_311
+if
+    is_player_in_zone $player_char in_zone 'BEACH1' // Ocean Beach
+goto_if_false @PSAVE2_311
+if
+    Player.Controllable($player_char)
+goto_if_false @PSAVE2_311
+if
+    $onmission == 0
+goto_if_false @PSAVE2_281
+if
+    $save_pickup_2_exists == 0
+goto_if_false @PSAVE2_138
+Pickup.Create($save_pickup_2, #PICKUPSAVE, 3, 219.3, -1273.5, 11.5)
+$save_pickup_2_exists = 1
+
+:PSAVE2_138
+if
+    Pickup.Picked_up($save_pickup_2)
+goto_if_false @PSAVE2_274
+HELP_4118()
+if
+    Player.Defined($player_char)
+goto_if_false @PSAVE2_267
+Pickup.Destroy($save_pickup_2)
+Pickup.Create($save_pickup_2, #PICKUPSAVE, 3, 219.3, -1273.5, 11.5)
+do_fade 1 1000
+clear_area 1 at 223.1 -1276.7 11.0 range 1.0
+set_player_coordinates $player_char at 223.1 -1276.7 11.0
+set_player_heading $player_char z_angle_to 258.0
+
+:PSAVE2_267
+HELP_4210()
+
+:PSAVE2_274
+goto @PSAVE2_311
+
+:PSAVE2_281
+if
+    $save_pickup_2_exists == 1
+goto_if_false @PSAVE2_311
+Pickup.Destroy($save_pickup_2)
+$save_pickup_2_exists = 0
+
+:PSAVE2_311
+goto @PSAVE2_10
 
 :HELP_4118
 $onmission = 1
@@ -4522,6 +4577,7 @@ goto @AUDIO1_94
 script_name 'INITIAL'
 $default_wait_time = 250
 $save_pickup_1_exists = 0
+$save_pickup_2_exists = 0
 $info_pickups_collected = 0
 $info_pickups_total = 15
 $info_1_picked_up = 0
