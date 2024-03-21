@@ -151,8 +151,8 @@ start_new_script @CLOTHES
 start_new_script @HAILACAB
 start_new_script @NPCS
 start_new_script @INTERACTIONS
-start_new_script @GOLF_MISSION
-start_new_script @POLICE_1_MISSION
+start_new_script @GOLF_MARKER
+start_new_script @POLICE_1_MARKER
 
 launch_mission @HJ
 launch_mission @USJ
@@ -1492,44 +1492,44 @@ then
 end
 return
 
-//-------------Golf mission loop script---------------
+//-------------Golf mission marker script---------------
 //
 
-:GOLF_MISSION
-script_name 'GOLFMIS'
+:GOLF_MARKER
+script_name 'GOLFM'
 
-:GOLF_MISSION_LOOP
+:GOLF_MARKER_LOOP
 wait $default_wait_time
 if
     Player.Defined($player_char)
-goto_if_false @GOLF_MISSION_LOOP_END
+goto_if_false @GOLF_MARKER_LOOP_END
 if and
     $onmission == 0
     is_player_in_zone $player_char in_zone 'GOLFC' // Leaf Links
-goto_if_false @GOLF_MISSION_LOOP_END
+goto_if_false @GOLF_MARKER_LOOP_END
 if
     locate_stopped_player_any_means_3d $player_char 0 $golf_x $golf_y $golf_z radius 2.0 2.0 2.0
-goto_if_false @GOLF_MISSION_LOOP_END
+goto_if_false @GOLF_MARKER_LOOP_END
 if
     is_player_in_model $player_char driving_vehicle_type #CADDY
-goto_if_false @GOLF_MISSION_LOOP_WRONG
+goto_if_false @GOLF_MARKER_LOOP_WRONG
 print_big 'GOLFMIS' 15000 ms 2
 start_mission GOLF
 
-:GOLF_MISSION_LOOP_END
-goto @GOLF_MISSION_LOOP
+:GOLF_MARKER_LOOP_END
+goto @GOLF_MARKER_LOOP
 
-:GOLF_MISSION_LOOP_WRONG
+:GOLF_MARKER_LOOP_WRONG
 print_now 'GOLFNO' time 5000 1
-goto @GOLF_MISSION_LOOP
+goto @GOLF_MARKER_LOOP
 
-//-------------Police mission 1 loop script---------------
+//-------------Police mission 1 marker script---------------
 //
 
-:POLICE_1_MISSION
-script_name 'POLICE1'
+:POLICE_1_MARKER
+script_name 'POL1M'
 
-:POLICE_1_MISSION_LOOP
+:POLICE_1_MARKER_LOOP
 wait $default_wait_time
 if
     $passed_police_1 == 1
@@ -1538,19 +1538,19 @@ then
 end
 if
     Player.Defined($player_char)
-goto_if_false @POLICE_1_MISSION_LOOP_END
+goto_if_false @POLICE_1_MARKER_LOOP_END
 if and
     $onmission == 0
     is_player_in_zone $player_char in_zone 'BEACH2' // Washington Beach
-goto_if_false @POLICE_1_MISSION_LOOP_END
+goto_if_false @POLICE_1_MARKER_LOOP_END
 if
     locate_player_on_foot_3d $player_char 0 $police_x $police_y $police_z radius 1.2 1.2 2.0
-goto_if_false @POLICE_1_MISSION_LOOP_END
+goto_if_false @POLICE_1_MARKER_LOOP_END
 print_big 'POLICE1' 15000 ms 2
 start_mission POLICE_1
 
-:POLICE_1_MISSION_LOOP_END
-goto @POLICE_1_MISSION_LOOP
+:POLICE_1_MARKER_LOOP_END
+goto @POLICE_1_MARKER_LOOP
 
 //-------------Insane stunts script---------------
 //
@@ -5399,6 +5399,7 @@ Model.Load(#WMOCA)
 Model.Load(#HMOCA)
 load_special_character 1 'PLAYER9'
 load_mission_audio 'TAX2_7' as 1
+load_all_models_now
 
 :INTRO_LOAD
 wait 0
@@ -5681,6 +5682,7 @@ return
 // A Little Game of Golf
 
 :GOLF
+script_name 'GOLF'
 gosub @GOLF_START
 if
     has_deatharrest_been_executed
@@ -5691,7 +5693,6 @@ GOLF_CLEANUP()
 terminate_this_script
 
 :GOLF_START
-script_name 'GOLF'
 $onmission = 1
 if
     $passed_golf == 0
@@ -6076,7 +6077,7 @@ Player.Money($player_char) += 100
 if
     $passed_golf == 0
 then
-    register_mission_passed 'GOLFMIS'
+    register_mission_passed 'GLFMISS'
     player_made_progress 1
     $passed_golf = 1
     Marker.Disable($icon_golf)
@@ -6117,6 +6118,7 @@ terminate_this_script
 // Special Delivery
 
 :POLICE_1
+script_name 'POLICE1'
 gosub @POLICE_1_START
 if
     has_deatharrest_been_executed
@@ -6127,7 +6129,6 @@ POLICE_1_CLEANUP()
 terminate_this_script
 
 :POLICE_1_START
-script_name 'POLICE1'
 $onmission = 1
 register_mission_given
 load_mission_text 'POLICE1'
@@ -6300,7 +6301,7 @@ return
 play_mission_passed_tune 1
 print_with_number_big 'M_PASS' number 100 time 5000 style 1 // MISSION PASSED! $~1~
 Player.Money($player_char) += 100
-register_mission_passed 'POLICE1'
+register_mission_passed 'POLIC1S'
 player_made_progress 1
 $passed_police_1 = 1
 Marker.Disable($icon_police)
