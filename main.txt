@@ -117,6 +117,7 @@ Object.Init($718, #YT_TMP_BOAT, -375.499, -1322.31, 9.81124)
 Object.Init($719, #LODMAIN_BODY, -375.499, -1322.31, 9.81124)
 
 declare_mission_flag $onmission
+$game_saving = 0
 wait 0
 if
     NOT Actor.Dead($player_actor)
@@ -196,6 +197,12 @@ $save_pickup_1_exists = 1
 if
     Pickup.Picked_up($save_pickup_1)
 goto_if_false @PSAVE1_274
+HELP_ME()
+Camera.SetPosition(-260.73, -322.83, 10.29, 0.0, 0.0, 0.0)
+Camera.PointAt(-249.48, -327.64, 10.18, 2)
+set_char_obj_run_to_coord $player_actor run_to -244.79 -323.32
+wait 1500
+set_char_obj_no_obj $player_actor
 HELP_4118()
 if
     Player.Defined($player_char)
@@ -250,6 +257,13 @@ $save_pickup_2_exists = 1
 if
     Pickup.Picked_up($save_pickup_2)
 goto_if_false @PSAVE2_274
+HELP_ME()
+Camera.SetPosition(225.4271, -1282.7252, 12.0732, 0.0, 0.0, 0.0)
+Camera.PointAt(207.54, -1288.39, 13.3, 2)
+Actor.PutAt($player_actor, 211.11, -1289.15, 11.09)
+set_char_obj_run_to_coord $player_actor run_to 204.15 -1287.58
+wait 1500
+set_char_obj_no_obj $player_actor
 HELP_4118()
 if
     Player.Defined($player_char)
@@ -277,9 +291,13 @@ $save_pickup_2_exists = 0
 :PSAVE2_311
 goto @PSAVE2_10
 
-:HELP_4118
+:HELP_ME
+$game_saving = 1
 $onmission = 1
 Player.CanMove($player_char, False)
+return
+
+:HELP_4118
 activate_save_menu
 wait 0
 
@@ -291,6 +309,7 @@ wait 0
 goto @HELP_4138
 
 :HELP_4162
+$game_saving = 0
 set_fading_colour 0 0 0
 do_fade 0 1000
 if
@@ -1044,8 +1063,9 @@ $npcs_carjackers_state = 0
 
 :NPCS_1
 wait $default_wait_time
-if
+if and
     Player.Defined($player_char)
+    $game_saving == 0
 goto_if_false @NPCS_FIN
 if
     is_player_in_zone $player_char in_zone 'STARI' // Starfish Island
@@ -1073,8 +1093,9 @@ then
 end
 
 :NPCS_2
-if
+if and
     Player.Defined($player_char)
+    $game_saving == 0
 goto_if_false @NPCS_FIN
 if
     is_player_in_zone $player_char in_zone 'DOCKS' // Viceport
@@ -1102,8 +1123,9 @@ then
 end
 
 :NPCS_3
-if
+if and
     Player.Defined($player_char)
+    $game_saving == 0
 goto_if_false @NPCS_FIN
 goto @NPCS_1
 
@@ -1133,8 +1155,9 @@ while True
         break
     end
     wait 0
-    if
+    if or
         not Player.Defined($player_char)
+        not $game_saving == 0
     then
         return
     end
@@ -1205,6 +1228,7 @@ wait 100
 if and
     Player.Defined($player_char)
     $npcs_diaz_state == 1
+    $game_saving == 0
 goto_if_false @NPC_DIAZ_SCRIPT_END
 if
     not Actor.Dead($npc_diaz)
@@ -1232,6 +1256,7 @@ then
         if and
             Player.Defined($player_char)
             $npcs_diaz_state == 1
+            $game_saving == 0
         goto_if_false @NPC_DIAZ_SCRIPT_END
     end
     Object.Init($golf_ball_1, #PIZZABOX, 0@, 1@, 2@)
@@ -1272,8 +1297,9 @@ Model.Load(#TRAFFICCONE)
 
 :NPCS_WORKERS_INIT_LOAD
 wait 0
-if
+if or
     not Player.Defined($player_char)
+    not $game_saving == 0
 then
     return
 end
@@ -1358,6 +1384,7 @@ wait 0
 if and
     Player.Defined($player_char)
     $npcs_workers_state == 1
+    $game_saving == 0
 goto_if_false @NPC_WORKERS_SCRIPT_END
 if and
     not Car.Wrecked($npc_workers_car)
@@ -1413,6 +1440,7 @@ then
         if and
             Player.Defined($player_char)
             $npcs_workers_state == 1
+            $game_saving == 0
         goto_if_false @NPC_WORKERS_SCRIPT_END
     end
     Object.Init($npc_workers_box, 14@, 0@, 1@, 2@)
@@ -1465,6 +1493,7 @@ then
         if and
             Player.Defined($player_char)
             $npcs_workers_state == 1
+            $game_saving == 0
         goto_if_false @NPC_WORKERS_SCRIPT_END
     end
     Actor.DestroyInstantly($npc_worker_1)
@@ -1510,6 +1539,7 @@ then
         if and
             Player.Defined($player_char)
             $npcs_workers_state == 1
+            $game_saving == 0
         goto_if_false @NPC_WORKERS_SCRIPT_END
     end
     Actor.DestroyInstantly($npc_worker_2)
@@ -1577,16 +1607,18 @@ set_deatharrest_state 0
 $interactions_golf_barrels_state = 0
 
 :INTERACTIONS_UNDEF
-if
+if or
     not Player.Defined($player_char)
+    not $game_saving == 0
 goto_if_false @INTERACTIONS_1
 wait 0
 goto @INTERACTIONS_UNDEF
 
 :INTERACTIONS_1
 wait 0
-if
+if and
     Player.Defined($player_char)
+    $game_saving == 0
 goto_if_false @INTERACTIONS_FIN
 if or
     is_player_in_zone $player_char in_zone 'GOLFC' // Leaf Links
@@ -1631,6 +1663,12 @@ goto @INTERACTIONS_UNDEF
 Model.Load(#BARREL4)
 while not Model.Available(#BARREL4)
     wait 0
+    if or
+        not Player.Defined($player_char)
+        not $game_saving == 0
+    then
+        return
+    end
 end
 Object.Create($golf_barrel_1, #BARREL4, 164.77, 252.57, 18.33)
 Object.Create($golf_barrel_2, #BARREL4, 163.77, 251.2, 18.29)
