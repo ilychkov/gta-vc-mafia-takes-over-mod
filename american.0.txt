@@ -1,6 +1,7 @@
 [MAIN]
 ITBEG   = [US]In the beginning...
-INTSKIP  = What, you skipped the intro?? Get punished with a ~b~wanted star~w~!
+INTSKIP = You get a ~b~wanted star~w~ as a ~r~punishment~w~ for skipping the beautiful intro
+INTSKI2 = jk you're good
 INFOCNT = Found ~1~ out of ~1~ info pickups
 INFO2   = This house was given to Tommy by his rich uncle, so he could get back on his feet.
 INFO2B  = You can ~y~save your game~w~ here and ~y~store cars~w~ in the garage.

@@ -167,6 +167,23 @@ launch_mission @AUDIO
 wait 2500 ms
 jump @InfLoop
 
+//-------------Fooling around---------------
+//
+
+:INTRO_SKIPPED
+script_name 'INTSKIP'
+print_now 'INTSKIP' time 4000 1
+Player.WantedLevel($player_char) = 1
+wait 4000
+if
+    Player.Defined($player_char)
+goto_if_false @INTRO_SKIPPED_END
+print_now 'INTSKI2' time 1000 1
+Player.WantedLevel($player_char) = 0
+
+:INTRO_SKIPPED_END
+terminate_this_script
+
 //-------------Save pickups---------------
 //
 
@@ -5963,8 +5980,7 @@ goto @INTRO_LOOP
 fade 0 200
 wait 200
 fade 1 200
-print_now 'INTSKIP' time 3000 1
-Player.WantedLevel($player_char) = 1
+start_new_script @INTRO_SKIPPED
 
 :INTRO_END
 Car.Destroy(0@)
