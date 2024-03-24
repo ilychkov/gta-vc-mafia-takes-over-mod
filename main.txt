@@ -144,6 +144,8 @@ then
 else
     fade 1 0
     Player.CanMove($player_char, True)
+    $allow_police_chases = 1
+    set_time_of_day start_time_hours start_time_minutes
 end
 
 start_new_script @PSAVE1
@@ -154,6 +156,7 @@ start_new_script @HAILACAB
 start_new_script @NPCS
 start_new_script @INTERACTIONS
 start_new_script @DROPMONEY
+start_new_script @POLICE_CHASES
 start_new_script @GOLF_MARKER
 start_new_script @POLICE_1_MARKER
 
@@ -508,6 +511,7 @@ set_fading_colour 0 0 0
 switch_widescreen 1
 set_interpolation_parameters 0.0 3000
 get_time_of_day 4@ 5@
+$allow_police_chases = 0
 set_time_of_day 2 0 // 2 AM
 set_weather 4
 switch_car_generator $1860 cars_to_generate_to 0
@@ -552,6 +556,7 @@ Camera.Restore_WithJumpCut
 Camera.SetBehindPlayer
 set_time_of_day 4@ 5@
 release_weather
+$allow_police_chases = 1
 switch_car_generator $1860 cars_to_generate_to 101
 wait 1000
 INFOPICS_PRINT_COUNT()
@@ -1849,6 +1854,987 @@ Pickup.Destroy($player_dropped_cash_4)
 Pickup.Destroy($player_dropped_cash_5)
 $dropped_money_pickups_exist = 0
 return
+
+//-------------Police chases on streets---------------
+//
+
+:POLICE_CHASES
+script_name 'PCHASES'
+set_deatharrest_state 0
+start_new_script @POLICE_CHASES_A
+start_new_script @POLICE_CHASES_B
+start_new_script @POLICE_CHASES_C
+start_new_script @POLICE_CHASES_D
+start_new_script @POLICE_CHASES_E
+terminate_this_script
+const pc_gang_1_model = 4@ // transient
+const pc_gang_2_model = 5@ // transient
+// pc_cop_1..pc_gang_2 may get rewritten before the actors are created
+const pc_cop_1 = 6@
+const pc_cop_2 = 7@
+const pc_cop_3 = 8@
+const pc_gang_1 = 9@
+const pc_gang_2 = 10@
+const pc_police_car_1 = 11@
+const pc_police_car_2 = 12@
+const pc_gang_car = 13@
+const pc_gang_car_model = 14@
+const pc_step = 15@
+const police_chase_spawn_distance = 150.0
+const police_chase_min_spawn_distance = 100.0
+const police_chase_despawn_distance = 200.0
+const police_chases_police_car_start_health = 1500
+const police_chases_gang_car_start_health = 1500
+const police_chases_police_car_max_speed = 30.0
+const police_chases_gang_car_max_speed = 25.0
+const police_chases_two_police_cars_chance = 0.5
+const police_chases_on_foot_fight_chance = 0.5
+const police_chases_weapon_accuracy_in_car = 50
+const police_chases_weapon_accuracy_on_foot = 50
+
+:POLICE_CHASES_A
+script_name 'PCHASEA'
+set_deatharrest_state 0
+pc_gang_car_model = #ADMIRAL
+pc_step = 0
+goto @POLICE_CHASES_WAIT
+
+:POLICE_CHASES_B
+script_name 'PCHASEB'
+set_deatharrest_state 0
+pc_gang_car_model = #GANGBUR
+pc_step = 0
+goto @POLICE_CHASES_WAIT
+
+:POLICE_CHASES_C
+script_name 'PCHASEC'
+set_deatharrest_state 0
+pc_gang_car_model = #CUBAN
+pc_step = 0
+goto @POLICE_CHASES_WAIT
+
+:POLICE_CHASES_D
+script_name 'PCHASED'
+set_deatharrest_state 0
+pc_gang_car_model = #CUBAN
+pc_step = 0
+goto @POLICE_CHASES_WAIT
+
+:POLICE_CHASES_E
+script_name 'PCHASEE'
+set_deatharrest_state 0
+pc_gang_car_model = #ADMIRAL
+pc_step = 1000 // only spawn in the night hours
+goto @POLICE_CHASES_WAIT
+
+:POLICE_CHASES_SET_GANG_MODELS
+if
+    pc_gang_car_model == #ADMIRAL
+then
+    pc_gang_1_model = #CLA
+    pc_gang_2_model = #CLB
+end
+if
+    pc_gang_car_model == #GANGBUR
+then
+    pc_gang_1_model = #CLA
+    pc_gang_2_model = #CLB
+end
+if
+    pc_gang_car_model == #CUBAN
+then
+    pc_gang_1_model = #CBA
+    pc_gang_2_model = #CBB
+end
+if
+    pc_gang_car_model == #VOODOO
+then
+    pc_gang_1_model = #HNA
+    pc_gang_2_model = #HNB
+end
+return
+
+:POLICE_CHASES_WAIT
+wait $default_wait_time
+if and
+    Player.Defined($player_char)
+    $allow_police_chases == 1
+    $game_saving == 0
+goto_if_false @POLICE_CHASES_WAIT
+get_time_of_day 0@ = hours, 1@ = minutes
+if
+    pc_step == 1000
+then
+    if
+        2 >= 0@
+    goto_if_false @POLICE_CHASES_WAIT
+else
+    if or
+        0@ >= 21
+        4 >= 0@
+    goto_if_false @POLICE_CHASES_WAIT
+end
+
+generate_random_int_in_range 0@ = random_int_in_ranges 1000 60000
+TIMERA = 0
+while 0@ > TIMERA
+    wait $default_wait_time
+    if and
+        Player.Defined($player_char)
+        $allow_police_chases == 1
+        $game_saving == 0
+    goto_if_false @POLICE_CHASES_WAIT
+end
+
+TIMERA = 0
+while 10000 > TIMERA
+    get_player_coordinates $player_char position_to 4@ 5@ 6@
+    generate_random_float_in_range 3@ = random_float 0.0 360.0
+    sin 0@ = sine 3@
+    0@ *= police_chase_spawn_distance
+    add_float_var_to_float_var 0@ += 4@
+    cos 1@ = cosine 3@
+    1@ *= police_chase_spawn_distance
+    add_float_var_to_float_var 1@ += 5@
+    get_closest_car_node_with_heading 0@ 1@ 2@ store_nearby_vector_to 0@ 1@ 2@ 3@
+    get_distance_between_coords_2d 6@ = distance_between_point 4@ 5@ and_point 0@ 1@
+    if
+        6@ > police_chase_min_spawn_distance
+    then
+        if or
+            -300.0 > 0@
+            0@ > 300.0
+            -250.0 > 1@
+            1@ > 650.0
+        then
+            break // don't spawn in Leaf Links
+        end
+    end
+    wait $default_wait_time
+    if and
+        Player.Defined($player_char)
+        $allow_police_chases == 1
+        $game_saving == 0
+    goto_if_false @POLICE_CHASES_WAIT
+end
+
+// there's no opcode to check if a point is in an info zone
+4@ = 0 // 1 = Little Havana; 2 = Little Haiti
+if and
+    -1208.21 < 0@
+    0@ < -748.206
+    -898.738 < 1@
+    1@ < -241.467
+then
+    4@ = 1
+end
+if and
+    -1208.21 < 0@
+    0@ < -578.289
+    -241.467 < 1@
+    1@ < 412.66
+then
+    4@ = 2
+end
+if
+    4@ > 0
+then
+    if or
+        pc_gang_car_model == #CUBAN
+        pc_gang_car_model == #VOODOO
+    goto_if_false @POLICE_CHASES_WAIT
+    if
+        4@ == 2
+    then
+        pc_gang_car_model = #VOODOO
+    else
+        pc_gang_car_model = #CUBAN
+    end
+else
+    if and
+        not pc_gang_car_model == #CUBAN
+        not pc_gang_car_model == #VOODOO
+    goto_if_false @POLICE_CHASES_WAIT
+end
+
+POLICE_CHASES_SET_GANG_MODELS()
+Model.Load(#POLICE)
+Model.Load(#COP)
+Model.Load(#UZI)
+Model.Load(#MP5LNG)
+Model.Load(pc_gang_car_model)
+Model.Load(pc_gang_1_model)
+Model.Load(pc_gang_2_model)
+
+:POLICE_CHASES_LOAD
+if or
+    not Model.Available(#POLICE)
+    not Model.Available(#COP)
+    not Model.Available(#UZI)
+    not Model.Available(#MP5LNG)
+    not Model.Available(pc_gang_car_model)
+    not Model.Available(pc_gang_1_model)
+    not Model.Available(pc_gang_2_model)
+goto_if_false @POLICE_CHASES_LOADED
+wait 0
+if and
+    Player.Defined($player_char)
+    $allow_police_chases == 1
+    $game_saving == 0
+goto_if_false @POLICE_CHASES_WAIT
+goto @POLICE_CHASES_LOAD
+
+:POLICE_CHASES_LOADED
+Car.Create(pc_police_car_1, #POLICE, 0@, 1@, 2@)
+Car.Angle(pc_police_car_1) = 3@
+get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car pc_police_car_1 offset 0.0 7.0 0.0
+Car.Create(pc_gang_car, pc_gang_car_model, 0@, 1@, 2@)
+Car.Angle(pc_gang_car) = 3@
+pc_police_car_2 = 0
+pc_cop_3 = 0
+generate_random_float_in_range 0@ = random_float 0.0 1.0
+if
+    police_chases_two_police_cars_chance > 0@
+then
+    get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car pc_police_car_1 offset 0.0 -7.0 0.0
+    Car.Create(pc_police_car_2, #POLICE, 0@, 1@, 2@)
+    Car.Angle(pc_police_car_2) = 3@
+end
+
+Car.Health(pc_police_car_1) = police_chases_police_car_start_health
+Car.Health(pc_gang_car) = police_chases_gang_car_start_health
+//set_can_burst_car_tyres pc_police_car_1 tires_vulnerable 0
+//set_can_burst_car_tyres pc_gang_car tires_vulnerable 0
+add_upsidedown_car_check pc_police_car_1
+add_upsidedown_car_check pc_gang_car
+add_stuck_car_check pc_police_car_1 distance 0.5 time 3000
+add_stuck_car_check pc_gang_car distance 0.5 time 3000
+create_char_inside_car pc_cop_1 = create_actor 4 #COP in_car pc_police_car_1
+create_char_inside_car pc_gang_1 = create_actor 4 pc_gang_1_model in_car pc_gang_car
+clear_char_threat_search pc_cop_1
+clear_char_threat_search pc_gang_1
+set_char_personality pc_cop_1 ped_stats_to 16
+set_char_personality pc_gang_1 ped_stats_to 16
+set_char_suffers_critical_hits pc_cop_1 dismemberment_possible 0
+set_char_suffers_critical_hits pc_gang_1 dismemberment_possible 0
+set_char_running pc_cop_1 running 1
+set_char_running pc_gang_1 running 1
+Actor.Health(pc_cop_1) = 200
+Actor.Health(pc_gang_1) = 200
+Car.SetMaxSpeed(pc_police_car_1, police_chases_police_car_max_speed)
+Car.SetMaxSpeed(pc_gang_car, police_chases_gang_car_max_speed)
+set_car_driving_style pc_police_car_1 traffic_behavior_to 2
+set_car_driving_style pc_gang_car traffic_behavior_to 2
+switch_car_siren pc_police_car_1 siren = 1
+set_car_ram_car pc_police_car_1 ram pc_gang_car
+Car.SetToPsychoDriver(pc_gang_car)
+if
+    not Car.Wrecked(pc_police_car_2)
+then
+    Car.Health(pc_police_car_2) = police_chases_police_car_start_health
+    //set_can_burst_car_tyres pc_police_car_2 tires_vulnerable 0
+    add_upsidedown_car_check pc_police_car_2
+    add_stuck_car_check pc_police_car_2 distance 0.5 time 3000
+    create_char_inside_car pc_cop_3 = create_actor 4 #COP in_car pc_police_car_2
+    clear_char_threat_search pc_cop_3
+    set_char_personality pc_cop_3 ped_stats_to 16
+    set_char_suffers_critical_hits pc_cop_3 dismemberment_possible 0
+    set_char_running pc_cop_3 running 1
+    Actor.Health(pc_cop_3) = 200
+    Car.SetMaxSpeed(pc_police_car_2, police_chases_police_car_max_speed)
+    set_car_driving_style pc_police_car_2 traffic_behavior_to 2
+    switch_car_siren pc_police_car_2 siren = 1
+    set_car_ram_car pc_police_car_2 ram pc_gang_car
+end
+
+Actor.Create(pc_cop_2, 4, #COP, 0.0, 0.0, 0.0)
+Actor.Create(pc_gang_2, 4, pc_gang_2_model, 0.0, 0.0, 0.0)
+clear_char_threat_search pc_cop_2
+clear_char_threat_search pc_gang_2
+set_char_personality pc_cop_2 ped_stats_to 16
+set_char_personality pc_gang_2 ped_stats_to 16
+set_char_suffers_critical_hits pc_cop_2 dismemberment_possible 0
+set_char_suffers_critical_hits pc_gang_2 dismemberment_possible 0
+attach_char_to_car pc_cop_2 into_turret_on_car pc_police_car_1 at_car_offset 0.5 0.0 0.8 position 0 angle 180.0 with_weapon 25
+attach_char_to_car pc_gang_2 into_turret_on_car pc_gang_car at_car_offset 0.5 0.0 0.8 position 2 angle 180.0 with_weapon 23
+set_char_accuracy pc_cop_2 weapon_accuracy_to police_chases_weapon_accuracy_in_car
+set_char_accuracy pc_gang_2 weapon_accuracy_to police_chases_weapon_accuracy_in_car
+Actor.Health(pc_cop_2) = 200
+Actor.Health(pc_gang_2) = 200
+set_char_obj_destroy_car pc_cop_2 destroy_car pc_gang_car
+set_char_obj_destroy_car pc_gang_2 destroy_car pc_police_car_1
+
+Model.Destroy(#POLICE)
+Model.Destroy(#COP)
+Model.Destroy(pc_gang_car_model)
+Model.Destroy(pc_gang_1_model)
+Model.Destroy(pc_gang_2_model)
+Model.Destroy(#UZI)
+Model.Destroy(#MP5LNG)
+
+1@ = 0 // on foot fight enabled
+generate_random_float_in_range 0@ = random_float 0.0 1.0
+if
+    police_chases_on_foot_fight_chance > 0@
+then
+    1@ = 1 // will get overwritten for pc_step > 0
+end
+
+:POLICE_CHASES_LOOP
+wait $default_wait_time
+if and
+    Player.Defined($player_char)
+    $allow_police_chases == 1
+goto_if_false @POLICE_CHASES_DESTROY
+if
+    $game_saving == 0
+goto_if_false @POLICE_CHASES_ABANDON
+
+if or
+    locate_player_any_means_car_2d $player_char near_car pc_police_car_1 radius police_chase_despawn_distance police_chase_despawn_distance 0
+    locate_player_any_means_car_2d $player_char near_car pc_gang_car radius police_chase_despawn_distance police_chase_despawn_distance 0
+goto_if_false @POLICE_CHASES_ABANDON
+if
+    not is_player_in_car $player_char in_car pc_gang_car
+goto_if_false @POLICE_CHASES_TAKEOVER
+3@ = 0
+if
+    not Actor.Dead(pc_cop_1)
+then
+    if
+        locate_player_any_means_char_2d $player_char 0 pc_cop_1 radius police_chase_despawn_distance police_chase_despawn_distance
+    then
+        3@ = 1
+    end
+end
+if and
+    3@ == 0
+    not Actor.Dead(pc_cop_2)
+then
+    if
+        locate_player_any_means_char_2d $player_char 0 pc_cop_2 radius police_chase_despawn_distance police_chase_despawn_distance
+    then
+        3@ = 1
+    end
+end
+if and
+    3@ == 0
+    not Actor.Dead(pc_gang_1)
+then
+    if
+        locate_player_any_means_char_2d $player_char 0 pc_gang_1 radius police_chase_despawn_distance police_chase_despawn_distance
+    then
+        3@ = 1
+    end
+end
+if and
+    3@ == 0
+    not Actor.Dead(pc_gang_2)
+then
+    if
+        locate_player_any_means_char_2d $player_char 0 pc_gang_2 radius police_chase_despawn_distance police_chase_despawn_distance
+    then
+        3@ = 1
+    end
+end
+if
+    3@ == 1
+goto_if_false @POLICE_CHASES_ABANDON
+
+if or
+    pc_step == 0
+    pc_step == 1000
+goto_if_false @POLICE_CHASES_LOOP_FLEE_POLICE
+if and
+    not Car.Wrecked(pc_police_car_1)
+    not Car.Wrecked(pc_gang_car)
+    not Actor.Dead(pc_cop_1)
+    not Actor.Dead(pc_cop_2)
+    not Actor.Dead(pc_gang_1)
+    not Actor.Dead(pc_gang_2)
+goto_if_false @POLICE_CHASES_ABANDON
+if and
+    not Car.Wrecked(pc_police_car_2)
+    not Actor.Dead(pc_cop_3)
+then
+    if or
+        not is_car_health_greater pc_police_car_2 health > 249
+        is_car_upsidedown pc_police_car_2
+    then
+        set_char_obj_flee_car pc_cop_3 leave_car pc_police_car_2
+    end
+    if and
+        is_car_stuck pc_police_car_2
+        not Actor.Dead(pc_gang_1)
+    then
+        set_char_obj_kill_char_on_foot pc_cop_3 kill_actor pc_gang_1
+    end
+end
+if
+    Car.Wrecked(pc_police_car_2)
+then
+    set_char_obj_destroy_car pc_gang_2 destroy_car pc_police_car_1
+else
+    if and
+        not locate_char_any_means_car_2d pc_gang_2 near_car pc_police_car_1 radius 15.0 15.0 sphere 0
+        locate_char_any_means_car_2d pc_gang_2 near_car pc_police_car_2 radius 15.0 15.0 sphere 0
+    then
+        set_char_obj_destroy_car pc_gang_2 destroy_car pc_police_car_2
+    else
+        set_char_obj_destroy_car pc_gang_2 destroy_car pc_police_car_1
+    end
+end
+if
+    1@ == 1
+then
+    if or
+        not is_car_health_greater pc_police_car_1 health > 400
+        not is_car_health_greater pc_gang_car health > 400
+        is_car_upsidedown pc_police_car_1
+        is_car_upsidedown pc_gang_car
+        is_car_stuck pc_police_car_1
+        is_car_stuck pc_gang_car
+    then
+        goto @POLICE_CHASES_ONFOOT
+    end
+else
+    if or
+        not is_car_health_greater pc_police_car_1 health > 249
+        is_car_upsidedown pc_police_car_1
+    then
+        goto @POLICE_CHASES_FLEE_POLICE
+    end
+    if or
+        not is_car_health_greater pc_gang_car health > 249
+        is_car_upsidedown pc_gang_car
+    then
+        goto @POLICE_CHASES_FLEE_GANG
+    end
+end
+goto @POLICE_CHASES_LOOP
+
+:POLICE_CHASES_FLEE_POLICE
+Actor.DestroyWithFade(pc_gang_2)
+if
+    not Car.Wrecked(pc_gang_car)
+then
+    Car.Health(pc_gang_car) = 1000
+end
+if
+    not Car.Wrecked(pc_police_car_2)
+then
+    Car.Health(pc_police_car_2) = 1000
+    Car.SetToPsychoDriver(pc_police_car_2)
+    switch_car_siren pc_police_car_2 siren = 0
+end
+set_char_obj_flee_car pc_cop_1 leave_car pc_police_car_1
+Model.Load(#COP)
+while not Model.Available(#COP)
+    wait 0
+    if and
+        Player.Defined($player_char)
+        $allow_police_chases == 1
+    goto_if_false @POLICE_CHASES_DESTROY
+    if
+        $game_saving == 0
+    goto_if_false @POLICE_CHASES_ABANDON
+end
+POLICE_CHASES_RECREATE_ACTORS_COP()
+if
+    not Actor.Dead(pc_cop_2)
+then
+    set_char_obj_flee_on_foot_till_safe pc_cop_2
+end
+TIMERA = 0
+pc_step += 1
+
+:POLICE_CHASES_LOOP_FLEE_POLICE
+if or
+    pc_step == 1
+    pc_step == 1001
+goto_if_false @POLICE_CHASES_LOOP_FLEE_GANG
+if
+    10000 > TIMERA
+goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
+//do not combine below 2 ifs, because crashes
+if
+    not Actor.Dead(pc_cop_1)
+goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
+if
+    Actor.Driving(pc_cop_1)
+goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
+goto @POLICE_CHASES_LOOP
+
+:POLICE_CHASES_FLEE_GANG
+Actor.DestroyWithFade(pc_cop_2)
+if
+    not Car.Wrecked(pc_police_car_1)
+then
+    Car.Health(pc_police_car_1) = 1000
+    Car.SetToPsychoDriver(pc_police_car_1)
+    switch_car_siren pc_police_car_1 siren = 0
+end
+if
+    not Car.Wrecked(pc_police_car_2)
+then
+    Car.Health(pc_police_car_2) = 1000
+    Car.SetToPsychoDriver(pc_police_car_2)
+    switch_car_siren pc_police_car_2 siren = 0
+end
+set_char_obj_flee_car pc_gang_1 leave_car pc_gang_car
+Model.Load(pc_gang_2_model)
+while not Model.Available(pc_gang_2_model)
+    wait 0
+    if and
+        Player.Defined($player_char)
+        $allow_police_chases == 1
+    goto_if_false @POLICE_CHASES_DESTROY
+    if
+        $game_saving == 0
+    goto_if_false @POLICE_CHASES_ABANDON
+end
+POLICE_CHASES_RECREATE_ACTORS_GANG()
+if
+    not Actor.Dead(pc_gang_2)
+then
+    set_char_obj_flee_on_foot_till_safe pc_gang_2
+end
+TIMERA = 0
+pc_step += 2
+
+:POLICE_CHASES_LOOP_FLEE_GANG
+if or
+    pc_step == 2
+    pc_step == 1002
+goto_if_false @POLICE_CHASES_LOOP_ON_FOOT
+if
+    10000 > TIMERA
+goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
+//do not combine below 2 ifs, because crashes
+if
+    not Actor.Dead(pc_gang_1)
+goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
+if
+    Actor.Driving(pc_gang_1)
+goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
+goto @POLICE_CHASES_LOOP
+
+:POLICE_CHASES_ONFOOT
+Model.Load(#COP)
+Model.Load(#COLT45)
+Model.Load(#TEC9)
+Model.Load(#UZI)
+Model.Load(#MP5LNG)
+Model.Load(pc_gang_2_model)
+
+:POLICE_CHASES_ONFOOT_LOAD
+if or
+    not Model.Available(#COP)
+    not Model.Available(#COLT45)
+    not Model.Available(#TEC9)
+    not Model.Available(#UZI)
+    not Model.Available(#MP5LNG)
+    not Model.Available(pc_gang_2_model)
+goto_if_false @POLICE_CHASES_ONFOOT_LOADED
+wait 0
+if and
+    Player.Defined($player_char)
+    $allow_police_chases == 1
+goto_if_false @POLICE_CHASES_DESTROY
+if
+    $game_saving == 0
+goto_if_false @POLICE_CHASES_ABANDON
+goto @POLICE_CHASES_ONFOOT_LOAD
+
+:POLICE_CHASES_ONFOOT_LOADED
+remove_stuck_car_check pc_police_car_1
+remove_stuck_car_check pc_gang_car
+remove_upsidedown_car_check pc_police_car_1
+remove_upsidedown_car_check pc_gang_car
+remove_stuck_car_check pc_police_car_2
+remove_upsidedown_car_check pc_police_car_2
+POLICE_CHASES_RECREATE_ACTORS()
+give_weapon_to_char pc_cop_1 weapon 17 ammo 9999
+give_weapon_to_char pc_gang_1 weapon 22 ammo 9999
+set_char_accuracy pc_cop_1 weapon_accuracy_to police_chases_weapon_accuracy_on_foot
+set_char_accuracy pc_gang_1 weapon_accuracy_to police_chases_weapon_accuracy_on_foot
+if
+    not Actor.Dead(pc_cop_2)
+then
+    give_weapon_to_char pc_cop_2 weapon 25 ammo 9999
+    set_char_accuracy pc_cop_2 weapon_accuracy_to police_chases_weapon_accuracy_on_foot
+    set_char_obj_kill_char_on_foot pc_cop_2 kill_actor pc_gang_1
+    set_char_obj_kill_char_on_foot pc_gang_1 kill_actor pc_cop_2
+end
+if
+    not Actor.Dead(pc_gang_2)
+then
+    give_weapon_to_char pc_gang_2 weapon 23 ammo 9999
+    set_char_accuracy pc_gang_2 weapon_accuracy_to police_chases_weapon_accuracy_on_foot
+    set_char_obj_kill_char_on_foot pc_gang_2 kill_actor pc_cop_1
+    set_char_obj_kill_char_on_foot pc_cop_1 kill_actor pc_gang_2
+end
+if
+    not Actor.Dead(pc_cop_3)
+then
+    give_weapon_to_char pc_cop_3 weapon 17 ammo 9999
+    set_char_accuracy pc_cop_3 weapon_accuracy_to police_chases_weapon_accuracy_on_foot
+    Actor.Health(pc_cop_3) = 200
+    set_char_obj_kill_char_on_foot pc_cop_3 kill_actor pc_gang_1
+end
+
+Model.Destroy(#COP)
+Model.Destroy(pc_gang_2_model)
+Model.Destroy(#COLT45)
+Model.Destroy(#TEC9)
+Model.Destroy(#UZI)
+Model.Destroy(#MP5LNG)
+pc_step += 3
+
+:POLICE_CHASES_LOOP_ON_FOOT
+if or
+    pc_step == 3
+    pc_step == 1003
+goto_if_false @POLICE_CHASES_LOOP_VICTORY
+if or
+    not Actor.Dead(pc_cop_1)
+    not Actor.Dead(pc_cop_2)
+    not Actor.Dead(pc_cop_3)
+goto_if_false @POLICE_CHASES_VICTORY
+if or
+    not Actor.Dead(pc_gang_1)
+    not Actor.Dead(pc_gang_2)
+goto_if_false @POLICE_CHASES_VICTORY
+if
+    Actor.Dead(pc_cop_1)
+then
+    if
+        not Actor.Dead(pc_gang_2)
+    then
+        if
+            not Actor.Dead(pc_cop_2)
+        then
+            set_char_obj_kill_char_on_foot pc_gang_2 kill_actor pc_cop_2
+        else
+            set_char_obj_kill_char_on_foot pc_gang_2 kill_actor pc_cop_3
+        end
+    end
+end
+if
+    Actor.Dead(pc_cop_2)
+then
+    if
+        not Actor.Dead(pc_gang_1)
+    then
+        if
+            not Actor.Dead(pc_cop_1)
+        then
+            set_char_obj_kill_char_on_foot pc_gang_1 kill_actor pc_cop_1
+        else
+            set_char_obj_kill_char_on_foot pc_gang_1 kill_actor pc_cop_3
+        end
+    end
+end
+if
+    Actor.Dead(pc_gang_1)
+then
+    if
+        not Actor.Dead(pc_cop_2)
+    then
+        set_char_obj_kill_char_on_foot pc_cop_2 kill_actor pc_gang_2
+    end
+    if
+        0@ == 1
+    then
+        set_char_obj_kill_char_on_foot pc_cop_3 kill_actor pc_gang_2
+    end
+end
+if
+    Actor.Dead(pc_gang_2)
+then
+    if
+        not Actor.Dead(pc_cop_1)
+    then
+        set_char_obj_kill_char_on_foot pc_cop_1 kill_actor pc_gang_1
+    end
+end
+goto @POLICE_CHASES_LOOP
+
+:POLICE_CHASES_VICTORY
+0@ = 0 // police car 1 boarding
+1@ = 0 // police car 2 boarding
+2@ = 0 // gang car boarding
+if
+    not Car.Wrecked(pc_police_car_1)
+then
+    if
+        not Actor.Dead(pc_cop_1)
+    then
+        set_char_obj_enter_car_as_driver pc_cop_1 go_to_and_drive_car pc_police_car_1
+        0@ = 1
+    end
+    if
+        not Actor.Dead(pc_cop_2)
+    then
+        set_char_obj_enter_car_as_driver pc_cop_2 go_to_and_drive_car pc_police_car_1
+        0@ = 1
+    end
+end
+if and
+    not Car.Wrecked(pc_police_car_2)
+    not Actor.Dead(pc_cop_3)
+then
+    set_char_obj_enter_car_as_driver pc_cop_3 go_to_and_drive_car pc_police_car_2
+    1@ = 1
+end
+if
+    not Car.Wrecked(pc_gang_car)
+then
+    if
+        not Actor.Dead(pc_gang_1)
+    then
+        set_char_obj_enter_car_as_driver pc_gang_1 go_to_and_drive_car pc_gang_car
+        2@ = 1
+    end
+    if
+        not Actor.Dead(pc_gang_2)
+    then
+        set_char_obj_enter_car_as_driver pc_gang_2 go_to_and_drive_car pc_gang_car
+        2@ = 1
+    end
+end
+pc_step += 4
+
+:POLICE_CHASES_LOOP_VICTORY
+if or
+    pc_step == 4
+    pc_step == 1004
+goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
+if
+    0@ == 1
+then
+    if
+        Car.Wrecked(pc_police_car_1)
+    then
+        0@ = 0
+    end
+    if and
+        Actor.Dead(pc_cop_1)
+        Actor.Dead(pc_cop_2)
+    then
+        0@ = 0
+    end
+end
+if
+    0@ == 1
+then
+    get_driver_of_car 3@ = car pc_police_car_1
+    if
+        not 3@ == -1
+    then
+        Car.SetToPsychoDriver(pc_police_car_1)
+        Car.SetMaxSpeed(pc_police_car_1, police_chases_police_car_max_speed)
+        switch_car_siren pc_police_car_1 siren = 0
+        0@ = 0
+    end
+end
+if
+    1@ == 1
+then
+    if or
+        Car.Wrecked(pc_police_car_2)
+        Actor.Dead(pc_cop_3)
+    then
+        1@ = 0
+    end
+end
+if
+    1@ == 1
+then
+    get_driver_of_car 3@ = car pc_police_car_2
+    if
+        not 3@ == -1
+    then
+        Car.SetToPsychoDriver(pc_police_car_2)
+        Car.SetMaxSpeed(pc_police_car_2, police_chases_police_car_max_speed)
+        switch_car_siren pc_police_car_2 siren = 0
+        1@ = 0
+    end
+end
+if
+    2@ == 1
+then
+    if
+        Car.Wrecked(pc_gang_car)
+    then
+        2@ = 0
+    end
+    if and
+        Actor.Dead(pc_gang_1)
+        Actor.Dead(pc_gang_2)
+    then
+        2@ = 0
+    end
+end
+if
+    2@ == 1
+then
+    get_driver_of_car 3@ = car pc_gang_car
+    if
+        not 3@ == -1
+    then
+        Car.SetToPsychoDriver(pc_gang_car)
+        Car.SetMaxSpeed(pc_gang_car, police_chases_gang_car_max_speed)
+        2@ = 0
+    end
+end
+if or
+    0@ == 1
+    1@ == 1
+    2@ == 1
+goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
+goto @POLICE_CHASES_LOOP
+
+:POLICE_CHASES_RECREATE_ACTORS
+// to avoid game crashes because of collision issues
+POLICE_CHASES_RECREATE_ACTORS_COP()
+POLICE_CHASES_RECREATE_ACTORS_GANG()
+return
+
+:POLICE_CHASES_RECREATE_ACTORS_COP
+if and
+    not Car.Wrecked(pc_police_car_1)
+    not Actor.Dead(pc_cop_2)
+then
+    Actor.StorePos(pc_cop_2, 0@, 1@, 2@)
+    3@ = Actor.Angle(pc_cop_2)
+    Actor.DestroyInstantly(pc_cop_2)
+    Actor.Create(pc_cop_2, 4, #COP, 0@, 1@, 2@)
+    Actor.Angle(pc_cop_2) = 3@
+    clear_char_threat_search pc_cop_2
+    set_char_personality pc_cop_2 ped_stats_to 16
+    set_char_suffers_critical_hits pc_cop_2 dismemberment_possible 0
+    set_char_running pc_cop_2 running 1
+    Actor.Health(pc_cop_2) = 200
+else
+    Actor.DestroyWithFade(pc_cop_2)
+end
+
+:POLICE_CHASES_RECREATE_ACTORS_GANG
+if and
+    not Car.Wrecked(pc_gang_car)
+    not Actor.Dead(pc_gang_2)
+then
+    Actor.StorePos(pc_gang_2, 0@, 1@, 2@)
+    3@ = Actor.Angle(pc_gang_2)
+    Actor.DestroyInstantly(pc_gang_2)
+    Actor.Create(pc_gang_2, 4, pc_gang_2_model, 0@, 1@, 2@)
+    Actor.Angle(pc_gang_2) = 3@
+    clear_char_threat_search pc_gang_2
+    set_char_personality pc_gang_2 ped_stats_to 16
+    set_char_suffers_critical_hits pc_gang_2 dismemberment_possible 0
+    set_char_running pc_gang_2 running 1
+    Actor.Health(pc_gang_2) = 200
+else
+    Actor.DestroyWithFade(pc_gang_2)
+end
+return
+
+:POLICE_CHASES_TAKEOVER
+print_with_number_big 'STOLEN' number $police_chases_bonus time 6000 style 6
+add_one_off_sound 1 at 0.0 0.0 0.0
+Player.Money($player_char) += $police_chases_bonus
+Player.SetMinWantedLevel($player_char, 2)
+if or
+    pc_step == 0
+    pc_step == 1000
+goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
+Model.Load(#COP)
+Model.Load(pc_gang_2_model)
+
+:POLICE_CHASES_TAKEOVER_LOAD
+if or
+    not Model.Available(#COP)
+    not Model.Available(pc_gang_2_model)
+goto_if_false @POLICE_CHASES_TAKEOVER_LOADED
+wait 0
+if and
+    Player.Defined($player_char)
+    $allow_police_chases == 1
+goto_if_false @POLICE_CHASES_DESTROY
+if
+    $game_saving == 0
+goto_if_false @POLICE_CHASES_ABANDON
+goto @POLICE_CHASES_TAKEOVER_LOAD
+
+:POLICE_CHASES_TAKEOVER_LOADED
+POLICE_CHASES_RECREATE_ACTORS()
+goto @POLICE_CHASES_ABANDON_ON_FOOT
+
+:POLICE_CHASES_ABANDON
+if or
+    pc_step == 0
+    pc_step == 1000
+goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
+// to avoid game crashes because of collision issues
+Actor.DestroyWithFade(pc_cop_2)
+Actor.DestroyWithFade(pc_gang_2)
+goto @POLICE_CHASES_ABANDON_COMMON
+
+:POLICE_CHASES_ABANDON_ON_FOOT
+Actor.RemoveReferences(pc_cop_2)
+Actor.RemoveReferences(pc_gang_2)
+
+:POLICE_CHASES_ABANDON_COMMON
+Actor.RemoveReferences(pc_cop_1)
+Actor.RemoveReferences(pc_cop_3)
+Actor.RemoveReferences(pc_gang_1)
+remove_stuck_car_check pc_police_car_1
+remove_stuck_car_check pc_police_car_2
+remove_stuck_car_check pc_gang_car
+remove_upsidedown_car_check pc_police_car_1
+remove_upsidedown_car_check pc_police_car_2
+remove_upsidedown_car_check pc_gang_car
+if
+    not Car.Wrecked(pc_police_car_1)
+then
+    switch_car_siren pc_police_car_1 siren = 0
+end
+if
+    not Car.Wrecked(pc_police_car_2)
+then
+    switch_car_siren pc_police_car_2 siren = 0
+end
+Car.RemoveReferences(pc_police_car_1)
+Car.RemoveReferences(pc_police_car_2)
+Car.RemoveReferences(pc_gang_car)
+goto @POLICE_CHASES_RESET
+
+:POLICE_CHASES_DESTROY
+Actor.DestroyWithFade(pc_cop_1)
+Actor.DestroyWithFade(pc_cop_2)
+Actor.DestroyWithFade(pc_cop_3)
+Actor.DestroyWithFade(pc_gang_1)
+Actor.DestroyWithFade(pc_gang_2)
+remove_stuck_car_check pc_police_car_1
+remove_stuck_car_check pc_police_car_2
+remove_stuck_car_check pc_gang_car
+remove_upsidedown_car_check pc_police_car_1
+remove_upsidedown_car_check pc_police_car_2
+remove_upsidedown_car_check pc_gang_car
+Car.RemoveReferences(pc_police_car_1)
+Car.RemoveReferences(pc_police_car_2)
+Car.RemoveReferences(pc_gang_car)
+
+:POLICE_CHASES_RESET
+if
+    pc_step >= 1000
+then
+    pc_step = 1000
+else
+    pc_step = 0
+end
+goto @POLICE_CHASES_WAIT
 
 //-------------Golf mission marker script---------------
 //
@@ -4808,6 +5794,8 @@ $police_y = -530.1183
 $police_z = 9.8841
 const icon_golf = 13
 const icon_police = 10
+$allow_police_chases = 0
+$police_chases_bonus = 1000
 
 add_short_range_sprite_blip_for_coord $icon_vercetti = create_icon_marker_without_sphere 29 at -246.0713 -324.6199 10.2586
 add_short_range_sprite_blip_for_coord $439 = create_icon_marker_without_sphere 27 at -3.8 -1265.8 12.0
@@ -6028,11 +7016,12 @@ set_police_ignore_player $player_char ignored_by_cops_state_to 0
 set_car_density_multiplier 1.0
 set_ped_density_multiplier 1.0
 Player.CanMove($player_char, True)
-set_time_of_day 5 30
+set_time_of_day start_time_hours start_time_minutes
 release_weather
 switch_widescreen 0
 $onmission = 0
 mission_has_finished
+$allow_police_chases = 1
 terminate_this_script
 return
 
