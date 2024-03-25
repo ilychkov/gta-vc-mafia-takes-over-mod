@@ -7137,10 +7137,6 @@ Model.Load(#ap_smahangar2_01)
 Model.Load(#air_brway_030)
 Model.Load(#ap_runsign10_03)
 Model.Load(#ap_roadsect3b)
-Model.Load(#ap_terminA_01)
-Model.Load(#ap_termwindows1b)
-Model.Load(#ap_security2)
-Model.Load(#ap_termsign1_dy)
 load_special_character 1 'PLAYER9'
 load_mission_audio 'TAX2_7' as 1
 load_all_models_now
@@ -7209,6 +7205,7 @@ then
     $scene_step++
     Actor.Angle(2@) = 279.4725
     set_char_wait_state 2@ anim 13 wait_state_time 1000
+    Camera.SetAtPos(-1411.1111, -819.9204, 14.702)
 end
 
 if and
@@ -7274,7 +7271,6 @@ then
     Car.SetMaxSpeed($mission_car_7, 100.0)
 
     set_interpolation_parameters 0.0 1000
-    Camera.SetAtPos(-1411.1111, -819.9204, 14.702)
     Camera.SetPosition(-1411.1111, -819.9204, 14.702, 0.0, 0.0, 0.0)
     Camera.PointAt(-1407.7283, -831.9881, 14.8715, 1)
 end
@@ -7410,10 +7406,6 @@ Model.Destroy(#ap_smahangar2_01)
 Model.Destroy(#air_brway_030)
 Model.Destroy(#ap_runsign10_03)
 Model.Destroy(#ap_roadsect3b)
-Model.Destroy(#ap_terminA_01)
-Model.Destroy(#ap_termwindows1b)
-Model.Destroy(#ap_security2)
-Model.Destroy(#ap_termsign1_dy)
 unload_special_character 1
 clear_mission_audio 1
 Camera.SetBehindPlayer
@@ -7426,6 +7418,7 @@ Player.CanMove($player_char, True)
 set_time_of_day start_time_hours start_time_minutes
 release_weather
 switch_widescreen 0
+load_splash_screen 'SPLASH2'
 $onmission = 0
 mission_has_finished
 $allow_police_chases = 1
