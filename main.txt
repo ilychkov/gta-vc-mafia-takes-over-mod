@@ -16,7 +16,6 @@ set_total_number_of_missions 88 //todo
 set_progress_total 154 //todo
 set_max_wanted_level 2
 set_collectable1_total 0
-set_total_number_of_kill_frenzies 0
 set_deatharrest_state 0
 set_time_of_day 2 0
 
@@ -63,22 +62,46 @@ $info_pickup_3_z = 10.6545
 $info_pickup_4_x = -224.1143
 $info_pickup_4_y = -300.3002
 $info_pickup_4_z = 10.0786
-$info_pickup_5_x = -168.7415
-$info_pickup_5_y = -382.0846
-$info_pickup_5_z = 17.5628
+$info_pickup_5_x = -809.0284
+$info_pickup_5_y = -491.5729
+$info_pickup_5_z = 21.4127
 $info_pickup_6_x = -178.7684
 $info_pickup_6_y = 443.1034
 $info_pickup_6_z = 12.2292
-$info_pickup_7_x = 364.5654
-$info_pickup_7_y = -505.397
-$info_pickup_7_z = 12.3246
-$info_pickup_7_moved_x = 372.1004
-$info_pickup_7_moved_y = -511.3845
-$info_pickup_7_moved_z = 12.3246
-$info_pickup_7_movedtwice_z = 15.3246
+$info_pickup_7_x = -870.5936
+$info_pickup_7_y = -345.2759
+$info_pickup_7_z = 11.1002
+$info_pickup_7_moved_x = -870.3364
+$info_pickup_7_moved_y = -336.6479
+$info_pickup_7_moved_z = 11.1003
+$info_pickup_7_movedtwice_z = 14.1002
 $info_pickup_8_x = 491.7512
 $info_pickup_8_y = -78.3159
 $info_pickup_8_z = 11.4838
+$info_pickup_9_x = 357.8355
+$info_pickup_9_y = -529.8362
+$info_pickup_9_z = 10.0589
+$info_pickup_10_x = -843.4166
+$info_pickup_10_y = -661.9083
+$info_pickup_10_z = 12.7095
+$info_pickup_11_x = -278.1653
+$info_pickup_11_y = -494.6417
+$info_pickup_11_z = 11.2043
+$info_pickup_12_x = -601.9079
+$info_pickup_12_y = 671.4133
+$info_pickup_12_z = 11.0838
+$info_pickup_13_x = 285.428
+$info_pickup_13_y = -494.5817
+$info_pickup_13_z = 14.2098
+$info_pickup_14_x = 229.5185
+$info_pickup_14_y = -1281.4628
+$info_pickup_14_z = 12.0712
+$info_pickup_15_x = -738.4838
+$info_pickup_15_y = -1153.7216
+$info_pickup_15_z = 10.7252
+$info_pickup_16_x = -1734.3063
+$info_pickup_16_y = -302.1328
+$info_pickup_16_z = 14.8683
 Pickup.Create($info_pickup_1, #INFO, 3, $info_pickup_1_x, $info_pickup_1_y, $info_pickup_1_z)
 Pickup.Create($info_pickup_2, #INFO, 3, $info_pickup_2_x, $info_pickup_2_y, $info_pickup_2_z)
 Pickup.Create($info_pickup_3, #INFO, 3, $info_pickup_3_x, $info_pickup_3_y, $info_pickup_3_z)
@@ -87,6 +110,14 @@ Pickup.Create($info_pickup_5, #INFO, 3, $info_pickup_5_x, $info_pickup_5_y, $inf
 Pickup.Create($info_pickup_6, #INFO, 3, $info_pickup_6_x, $info_pickup_6_y, $info_pickup_6_z)
 Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_x, $info_pickup_7_y, $info_pickup_7_z)
 Pickup.Create($info_pickup_8, #INFO, 3, $info_pickup_8_x, $info_pickup_8_y, $info_pickup_8_z)
+Pickup.Create($info_pickup_9, #INFO, 3, $info_pickup_9_x, $info_pickup_9_y, $info_pickup_9_z)
+Pickup.Create($info_pickup_10, #INFO, 3, $info_pickup_10_x, $info_pickup_10_y, $info_pickup_10_z)
+Pickup.Create($info_pickup_11, #INFO, 3, $info_pickup_11_x, $info_pickup_11_y, $info_pickup_11_z)
+Pickup.Create($info_pickup_12, #INFO, 3, $info_pickup_12_x, $info_pickup_12_y, $info_pickup_12_z)
+Pickup.Create($info_pickup_13, #INFO, 3, $info_pickup_13_x, $info_pickup_13_y, $info_pickup_13_z)
+Pickup.Create($info_pickup_14, #INFO, 3, $info_pickup_14_x, $info_pickup_14_y, $info_pickup_14_z)
+Pickup.Create($info_pickup_15, #INFO, 3, $info_pickup_15_x, $info_pickup_15_y, $info_pickup_15_z)
+Pickup.Create($info_pickup_16, #INFO, 3, $info_pickup_16_x, $info_pickup_16_y, $info_pickup_16_z)
 $info_pickups_active = 1 // for disabling the pickups while on a mission
 
 create_clothes_pickup $clothes_pickup_0 = create_clothes_pickup 1 at -253.23 -315.51 10.13
@@ -388,8 +419,7 @@ if
 goto_if_false @INFOPICS_2
 Pickup.Destroy($info_pickup_1)
 $info_1_picked_up = 1
-$info_pickups_collected++
-player_made_progress 1
+INFOPICS_FOUND()
 Player.CanMove($player_char, False)
 switch_widescreen 1
 set_interpolation_parameters 0.0 3000
@@ -403,6 +433,7 @@ Camera.SetBehindPlayer
 if
     $player_knows_about_info_pickups == 1
 then
+    wait 1000
     INFOPICS_PRINT_COUNT()
 end
 goto @INFOPICS_LOOP
@@ -416,8 +447,7 @@ if
 goto_if_false @INFOPICS_3
 Pickup.Destroy($info_pickup_2)
 $info_2_picked_up = 1
-$info_pickups_collected++
-player_made_progress 1
+INFOPICS_FOUND()
 Player.CanMove($player_char, False)
 switch_widescreen 1
 Camera.SetPosition(-263.79, -331.11, 16.08, 0.0, 0.0, 0.0)
@@ -432,13 +462,13 @@ Player.CanMove($player_char, True)
 switch_widescreen 0
 Camera.Restore_WithJumpCut
 Camera.SetBehindPlayer
+clear_prints
+wait 1000
 if
     $player_knows_about_info_pickups == 1
 then
     INFOPICS_PRINT_COUNT()
 end
-clear_prints
-wait 1000
 print_help 'INFO2C'
 flash_hud_object 8
 wait 3000
@@ -454,8 +484,7 @@ if
 goto_if_false @INFOPICS_4
 Pickup.Destroy($info_pickup_3)
 $info_3_picked_up = 1
-$info_pickups_collected++
-player_made_progress 1
+INFOPICS_FOUND()
 print_help 'INFO3'
 if
     $player_knows_about_info_pickups == 1
@@ -474,8 +503,7 @@ if
 goto_if_false @INFOPICS_5
 Pickup.Destroy($info_pickup_4)
 $info_4_picked_up = 1
-$info_pickups_collected++
-player_made_progress 1
+INFOPICS_FOUND()
 print_help 'INFO4'
 wait 5000
 print_help 'INFO4B'
@@ -492,8 +520,7 @@ if
 goto_if_false @INFOPICS_6
 Pickup.Destroy($info_pickup_5)
 $info_5_picked_up = 1
-$info_pickups_collected++
-player_made_progress 1
+INFOPICS_FOUND()
 print_help 'INFO5'
 wait 1000
 INFOPICS_PRINT_COUNT()
@@ -508,8 +535,7 @@ if
 goto_if_false @INFOPICS_7
 Pickup.Destroy($info_pickup_6)
 $info_6_picked_up = 1
-$info_pickups_collected++
-player_made_progress 1
+INFOPICS_FOUND()
 Player.CanMove($player_char, False)
 set_fading_colour 0 0 0
 switch_widescreen 1
@@ -575,8 +601,7 @@ if
 goto_if_false @INFOPICS_7_TRICKERY
 Pickup.Destroy($info_pickup_7)
 $info_7_picked_up = 1
-$info_pickups_collected++
-player_made_progress 1
+INFOPICS_FOUND()
 print_help 'INFO7W'
 wait 1000
 INFOPICS_PRINT_COUNT()
@@ -584,7 +609,7 @@ goto @INFOPICS_LOOP
 
 :INFOPICS_7_TRICKERY
 if
-    is_player_in_zone $player_char in_zone 'BEACH2' // Washington Beach
+    is_player_in_zone $player_char in_zone 'HAVANA' // Little Havana
 goto_if_false @INFOPICS_8
 if
     $info_7_moved == 0
@@ -635,14 +660,135 @@ if
 goto_if_false @INFOPICS_9
 Pickup.Destroy($info_pickup_8)
 $info_8_picked_up = 1
-$info_pickups_collected++
-player_made_progress 1
+INFOPICS_FOUND()
 print_help 'INFO8'
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
 
 :INFOPICS_9
+if
+    $info_9_picked_up == 0
+goto_if_false @INFOPICS_10
+if
+    Pickup.Picked_up($info_pickup_9)
+goto_if_false @INFOPICS_10
+Pickup.Destroy($info_pickup_9)
+$info_9_picked_up = 1
+INFOPICS_FOUND()
+print_help 'INFO9'
+wait 1000
+INFOPICS_PRINT_COUNT()
+goto @INFOPICS_LOOP
+
+:INFOPICS_10
+if
+    $info_10_picked_up == 0
+goto_if_false @INFOPICS_11
+if
+    Pickup.Picked_up($info_pickup_10)
+goto_if_false @INFOPICS_11
+Pickup.Destroy($info_pickup_10)
+$info_10_picked_up = 1
+INFOPICS_FOUND()
+print_help 'INFO10'
+wait 1000
+INFOPICS_PRINT_COUNT()
+goto @INFOPICS_LOOP
+
+:INFOPICS_11
+if
+    $info_11_picked_up == 0
+goto_if_false @INFOPICS_12
+if
+    Pickup.Picked_up($info_pickup_11)
+goto_if_false @INFOPICS_12
+Pickup.Destroy($info_pickup_11)
+$info_11_picked_up = 1
+INFOPICS_FOUND()
+print_help 'INFO11'
+wait 5000
+print_help 'INFO11B'
+wait 1000
+INFOPICS_PRINT_COUNT()
+goto @INFOPICS_LOOP
+
+:INFOPICS_12
+if
+    $info_12_picked_up == 0
+goto_if_false @INFOPICS_13
+if
+    Pickup.Picked_up($info_pickup_12)
+goto_if_false @INFOPICS_13
+Pickup.Destroy($info_pickup_12)
+$info_12_picked_up = 1
+INFOPICS_FOUND()
+print_help 'INFO12'
+wait 1000
+INFOPICS_PRINT_COUNT()
+goto @INFOPICS_LOOP
+
+:INFOPICS_13
+if
+    $info_13_picked_up == 0
+goto_if_false @INFOPICS_14
+if
+    Pickup.Picked_up($info_pickup_13)
+goto_if_false @INFOPICS_14
+Pickup.Destroy($info_pickup_13)
+$info_13_picked_up = 1
+INFOPICS_FOUND()
+print_help 'INFO13'
+wait 1000
+INFOPICS_PRINT_COUNT()
+goto @INFOPICS_LOOP
+
+:INFOPICS_14
+if
+    $info_14_picked_up == 0
+goto_if_false @INFOPICS_15
+if
+    Pickup.Picked_up($info_pickup_14)
+goto_if_false @INFOPICS_15
+Pickup.Destroy($info_pickup_14)
+$info_14_picked_up = 1
+INFOPICS_FOUND()
+print_help 'INFO14'
+wait 1000
+INFOPICS_PRINT_COUNT()
+goto @INFOPICS_LOOP
+
+:INFOPICS_15
+if
+    $info_15_picked_up == 0
+goto_if_false @INFOPICS_16
+if
+    Pickup.Picked_up($info_pickup_15)
+goto_if_false @INFOPICS_16
+Pickup.Destroy($info_pickup_15)
+$info_15_picked_up = 1
+INFOPICS_FOUND()
+print_help 'INFO15'
+wait 1000
+INFOPICS_PRINT_COUNT()
+goto @INFOPICS_LOOP
+
+:INFOPICS_16
+if
+    $info_16_picked_up == 0
+goto_if_false @INFOPICS_17
+if
+    Pickup.Picked_up($info_pickup_16)
+goto_if_false @INFOPICS_17
+Pickup.Destroy($info_pickup_16)
+$info_16_picked_up = 1
+INFOPICS_FOUND()
+print_help 'INFO16'
+wait 1000
+INFOPICS_PRINT_COUNT()
+goto @INFOPICS_LOOP
+
+:INFOPICS_17
 goto @INFOPICS_LOOP
 
 :INFOPICS_ONMISSION
@@ -657,6 +803,14 @@ Pickup.Destroy($info_pickup_5)
 Pickup.Destroy($info_pickup_6)
 Pickup.Destroy($info_pickup_7)
 Pickup.Destroy($info_pickup_8)
+Pickup.Destroy($info_pickup_9)
+Pickup.Destroy($info_pickup_10)
+Pickup.Destroy($info_pickup_11)
+Pickup.Destroy($info_pickup_12)
+Pickup.Destroy($info_pickup_13)
+Pickup.Destroy($info_pickup_14)
+Pickup.Destroy($info_pickup_15)
+Pickup.Destroy($info_pickup_16)
 $info_pickups_active = 0
 goto @INFOPICS_LOOP
 
@@ -701,15 +855,120 @@ if
 then
     Pickup.Create($info_pickup_8, #INFO, 3, $info_pickup_8_x, $info_pickup_8_y, $info_pickup_8_z)
 end
+if
+    $info_9_picked_up == 0
+then
+    Pickup.Create($info_pickup_9, #INFO, 3, $info_pickup_9_x, $info_pickup_9_y, $info_pickup_9_z)
+end
+if
+    $info_10_picked_up == 0
+then
+    Pickup.Create($info_pickup_10, #INFO, 3, $info_pickup_10_x, $info_pickup_10_y, $info_pickup_10_z)
+end
+if
+    $info_11_picked_up == 0
+then
+    Pickup.Create($info_pickup_11, #INFO, 3, $info_pickup_11_x, $info_pickup_11_y, $info_pickup_11_z)
+end
+if
+    $info_12_picked_up == 0
+then
+    Pickup.Create($info_pickup_12, #INFO, 3, $info_pickup_12_x, $info_pickup_12_y, $info_pickup_12_z)
+end
+if
+    $info_13_picked_up == 0
+then
+    Pickup.Create($info_pickup_13, #INFO, 3, $info_pickup_13_x, $info_pickup_13_y, $info_pickup_13_z)
+end
+if
+    $info_14_picked_up == 0
+then
+    Pickup.Create($info_pickup_14, #INFO, 3, $info_pickup_14_x, $info_pickup_14_y, $info_pickup_14_z)
+end
+if
+    $info_15_picked_up == 0
+then
+    Pickup.Create($info_pickup_15, #INFO, 3, $info_pickup_15_x, $info_pickup_15_y, $info_pickup_15_z)
+end
+if
+    $info_16_picked_up == 0
+then
+    Pickup.Create($info_pickup_16, #INFO, 3, $info_pickup_16_x, $info_pickup_16_y, $info_pickup_16_z)
+end
 $info_pickups_active = 1
 $info_7_moved = 0
 goto @INFOPICS_LOOP
 
+:INFOPICS_FOUND
+$info_pickups_collected++
+player_made_progress 1
+start_kill_frenzy 'PAGE_00' 15 1 0 -2 -1 -1 -1 0
+return
+
 :INFOPICS_PRINT_COUNT
 $player_knows_about_info_pickups = 1
-print_with_2_numbers_big 'INFOCNT' numbers $info_pickups_collected $info_pickups_total time 5000 style 6
-add_one_off_sound 1 at 0.0 0.0 0.0
+if
+    is_int_var_equal_to_int_var $info_pickups_collected == $info_pickups_total
+then
+    print_big 'INFOEVR' 10000 ms 5
+    play_mission_passed_tune 1
+    start_new_script @INFOPICS_ALL
+else
+    print_with_2_numbers_big 'INFOCNT' numbers $info_pickups_collected $info_pickups_total time 5000 style 6
+    add_one_off_sound 1 at 0.0 0.0 0.0
+end
 return
+
+:INFOPICS_ALL
+script_name 'INFOALL'
+set_deatharrest_state 0
+switch_car_generator $tommy_car_spawn_1 cars_to_generate_to 101
+switch_car_generator $tommy_car_spawn_2 cars_to_generate_to 101
+switch_car_generator $tommy_car_spawn_3 cars_to_generate_to 101
+start_new_script @SUPER_CARS_START
+TIMERA = 0
+
+:INFOPICS_ALL_WAIT
+wait $default_wait_time
+if and
+    Player.Defined($player_char)
+    TIMERA > 10000
+goto_if_false @INFOPICS_ALL_WAIT
+print_help 'INFOALL'
+terminate_this_script
+
+:SUPER_CARS_START
+script_name 'SUPACAR'
+set_deatharrest_state 0
+
+:SUPER_CARS
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @SUPER_CARS
+if
+    is_player_in_area_in_car_2d $player_char 0 -290.0 -320.0 -240.0 -290.0
+goto_if_false @SUPER_CARS
+if or
+    is_player_in_model $player_char driving_vehicle_type #HOTRING
+    is_player_in_model $player_char driving_vehicle_type #SENTXS
+    is_player_in_model $player_char driving_vehicle_type #PATRIOT
+goto_if_false @SUPER_CARS
+print_help 'SUPACAR'
+store_car_player_is_in_no_save $player_car = player $player_char
+set_car_traction $player_car improve_handling 2.0
+Car.SetImmunities($player_car, 1, 1, 1, 0, 0)
+set_can_burst_car_tyres $player_car tires_vulnerable 0
+
+:SUPER_CARS_LEAVE
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @SUPER_CARS
+if
+    is_player_in_area_in_car_2d $player_char 0 -300.0 -330.0 -230.0 -280.0
+goto_if_false @SUPER_CARS
+goto @SUPER_CARS_LEAVE
 
 //-------------Clothes pickups script---------------
 //
@@ -5881,7 +6140,8 @@ $default_wait_time = 250
 $save_pickup_1_exists = 0
 $save_pickup_2_exists = 0
 $info_pickups_collected = 0
-$info_pickups_total = 15
+$info_pickups_total = 16
+set_total_number_of_kill_frenzies $info_pickups_total
 $info_1_picked_up = 0
 $info_2_picked_up = 0
 $info_3_picked_up = 0
@@ -6709,7 +6969,7 @@ switch_car_generator $84 cars_to_generate_to 101
 //create_car_generator $tommy_car_spawn_1 = init_car_generator #CADDY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -281.5 -304.8 9.9 angle 231.0
 //create_car_generator $tommy_car_spawn_2 = init_car_generator #CADDY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -282.5 -308.9 9.9 angle 235.0
 //create_car_generator $tommy_car_spawn_3 = init_car_generator #CADDY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -283.5 -313.0 9.9 angle 239.0
-create_car_generator $tommy_car_spawn_1 = init_car_generator #HOTRINA 0 1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -281.4688 -306.8873 9.947 angle 216.2658
+create_car_generator $tommy_car_spawn_1 = init_car_generator #HOTRING 0 1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -281.4688 -306.8873 9.947 angle 216.2658
 switch_car_generator $tommy_car_spawn_1 cars_to_generate_to 0
 create_car_generator $tommy_car_spawn_2 = init_car_generator #SENTXS 78 0 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -284.5216 -312.9301 10.0347 angle 260.2344
 switch_car_generator $tommy_car_spawn_2 cars_to_generate_to 0
