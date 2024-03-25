@@ -33,6 +33,7 @@ NPCCOP1 = Sorry, sir, no entry. We are investigating a murder.
 NPCCOP2 = Okay, now you're gonna get it!
 NPCCOP3 = Oh no... you were not supposed to see how glitchy this is.
 NPCWORK = They seem busy.
+NPCPORT = Dev note: I wanted to put something cool here, but couldn't think of anything, so have dancing Lance for now.
 STOLEN  = Stolen $~1~!
 
 [GOLF]

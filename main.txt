@@ -105,6 +105,9 @@ set_garage $681 = create_garage_type 5 door -914.129 -1263.54 10.706 to -906.3 -
 set_garage $683 = create_garage_type 5 door -886.157 -115.158 9.992 to -876.7 -119.83 15.58 depth -882.699 -108.312
 set_garage $684 = create_garage_type 5 door 323.9 427.4 10.0 to 313.9 430.53 15.7 depth 326.3 434.5
 set_garage $685 = create_garage_type 5 door -7.55 -1253.77 9.322 to 2.64 -1253.7 14.4 depth -7.55 -1261.2
+set_garage $689 = create_garage_type 23 door -823.448 -1488.083 10.852 to -842.0 -1481.0 16.165 depth -834.686 -1515.899
+no_special_camera_for_this_garage $689
+set_rotating_garage_door $689
 
 set_garage $garage1 = create_garage_type 16 door -265.1602 -308.2498 9.2968 to -276.1516 -293.8089 16.4036 depth -279.4287 -303.3422
 set_rotating_garage_door $garage1
@@ -1082,6 +1085,7 @@ script_name 'NPCS'
 set_deatharrest_state 0
 $npcs_diaz_state = 0
 $npcs_workers_state = 0
+$npcs_viceport_garage_state = 0
 $npcs_carjackers_state = 0
 
 :NPCS_1
@@ -1150,6 +1154,41 @@ if and
     Player.Defined($player_char)
     $game_saving == 0
 goto_if_false @NPCS_FIN
+if
+    is_player_in_zone $player_char in_zone 'DOCKS' // Viceport
+goto_if_false @NPCS_3C
+if
+    $interactions_viceport_garage_triggered == 1
+goto_if_false @NPCS_3B
+if
+    $npcs_viceport_garage_state == 0
+then
+    NPCS_VICEPORT_GARAGE_INIT()
+end
+
+:NPCS_3B
+if
+    is_player_in_area_2d $player_char 0 -873.0 -1527.0 -801.0 -1440.0
+goto_if_false @NPCS_3C
+if
+    $npcs_viceport_garage_state == 1
+then
+    NPCS_VICEPORT_GARAGE_TICK()
+end
+goto @NPCS_4
+
+:NPCS_3C
+if
+    $npcs_viceport_garage_state == 1
+then
+    NPCS_VICEPORT_GARAGE_DESTROY()
+end
+
+:NPCS_4
+if and
+    Player.Defined($player_char)
+    $game_saving == 0
+goto_if_false @NPCS_FIN
 goto @NPCS_1
 
 :NPCS_FIN
@@ -1162,6 +1201,11 @@ if
     $npcs_workers_state == 1
 then
     NPCS_WORKERS_DESTROY()
+end
+if
+    $npcs_viceport_garage_state == 1
+then
+    NPCS_VICEPORT_GARAGE_DESTROY()
 end
 goto @NPCS_1
 
@@ -1509,22 +1553,7 @@ end
 if
     15@ == 4
 then
-    // reset animation start
-    Model.Load(#WMYCW)
-    while not Model.Available(#WMYCW)
-        wait 0
-        if and
-            Player.Defined($player_char)
-            $npcs_workers_state == 1
-            $game_saving == 0
-        goto_if_false @NPC_WORKERS_SCRIPT_END
-    end
-    Actor.DestroyInstantly($npc_worker_1)
-    Actor.Create($npc_worker_1, 4, #WMYCW, -725.56, -1167.7, 9.73)
-    Actor.Angle($npc_worker_1) = npc_worker_1_end_angle
-    set_char_suffers_critical_hits $npc_worker_1 dismemberment_possible 0
-    clear_char_threat_search $npc_worker_1
-    // reset animation end
+    clear_all_char_anims $npc_worker_1
     15@++
 end
 if
@@ -1555,22 +1584,7 @@ if and
     15@ == 6
     TIMERA >= 600
 then
-    // reset animation start
-    Model.Load(#BMODK)
-    while not Model.Available(#BMODK)
-        wait 0
-        if and
-            Player.Defined($player_char)
-            $npcs_workers_state == 1
-            $game_saving == 0
-        goto_if_false @NPC_WORKERS_SCRIPT_END
-    end
-    Actor.DestroyInstantly($npc_worker_2)
-    Actor.Create($npc_worker_2, 4, #BMODK, -724.73, -1167.36, 9.73)
-    Actor.Angle($npc_worker_2) = npc_worker_2_end_angle
-    set_char_suffers_critical_hits $npc_worker_2 dismemberment_possible 0
-    clear_char_threat_search $npc_worker_2
-    // reset animation end
+    clear_all_char_anims $npc_worker_2
     generate_random_int_in_range 0@ = random_int_in_ranges 0 200
     15@++
     TIMERA = 0
@@ -1609,17 +1623,98 @@ goto @NPC_WORKERS_SCRIPT_LOOP
 if
     not Actor.Dead($npc_worker_1)
 then
+    clear_all_char_anims $npc_worker_1
     set_char_obj_flee_on_foot_till_safe $npc_worker_1
 end
 if
     not Actor.Dead($npc_worker_2)
 then
+    clear_all_char_anims $npc_worker_2
     set_char_obj_flee_on_foot_till_safe $npc_worker_2
 end
 
 :NPC_WORKERS_SCRIPT_END
 Object.RemoveReferences($npc_workers_box)
 terminate_this_script
+
+:NPCS_VICEPORT_GARAGE_INIT
+load_special_character 1 'IGBUDDY'
+request_animation 'STRIP'
+clear_mission_audio 1
+clear_mission_audio 2
+load_mission_audio 'COK4_9A' as 1
+load_mission_audio 'MOB_17E' as 2
+
+:NPCS_VICEPORT_GARAGE_INIT_LOAD
+wait 0
+if or
+    not Player.Defined($player_char)
+    not $game_saving == 0
+then
+    return
+end
+if and
+    has_special_character_loaded 1
+    has_animation_loaded 'STRIP'
+    has_mission_audio_loaded 1
+    has_mission_audio_loaded 2
+goto_if_false @NPCS_VICEPORT_GARAGE_INIT_LOAD
+Actor.Create($npc_lance, 4, #SPECIAL01, -835.6341, -1491.0969, 11.1087)
+Actor.Angle($npc_lance) = 338.6403
+set_char_suffers_critical_hits $npc_lance dismemberment_possible 0
+//clear_char_threat_search $npc_lance
+set_char_wait_state $npc_lance anim 32 wait_state_time 9999999
+open_garage $689
+$npcs_viceport_garage_interacted = 0
+$npcs_viceport_garage_explained = 0
+$npcs_viceport_garage_state = 1
+return
+
+:NPCS_VICEPORT_GARAGE_DESTROY
+Actor.DestroyWithFade($npc_lance)
+unload_special_character 1
+remove_animation 'STRIP'
+clear_mission_audio 1
+clear_mission_audio 2
+close_garage $689
+$npcs_viceport_garage_state = 0
+return
+
+:NPCS_VICEPORT_GARAGE_TICK
+if
+    $npcs_viceport_garage_interacted == 0
+then
+    if
+        locate_char_any_means_char_3d $player_actor near_actor $npc_lance radius 2.0 2.0 2.0 sphere 0
+    then
+        set_mission_audio_position 1 location -835.6341 -1491.0969 11.1087
+        play_mission_audio 1
+        $npcs_viceport_garage_interacted = 1
+    end
+end
+if
+    $npcs_viceport_garage_interacted == 1
+then
+    if
+        has_mission_audio_finished 1
+    then
+        get_player_coordinates $player_char position_to 0@ 1@ 2@
+        set_mission_audio_position 2 location 0@ 1@ 2@
+        play_mission_audio 2
+        $npcs_viceport_garage_interacted = 2
+    end
+end
+if
+    $npcs_viceport_garage_explained == 0
+then
+    if
+        is_player_in_area_2d $player_char 0 -844.0 -1493.0 -827.0 -1482.0
+    then
+        print_now 'NPCPORT' time 8000 1
+        $npcs_viceport_garage_explained = 1
+    end
+end
+return
 
 //-------------Random interactions---------------
 //
@@ -1628,6 +1723,7 @@ terminate_this_script
 script_name 'INTERAC'
 set_deatharrest_state 0
 $interactions_golf_barrels_state = 0
+$interactions_viceport_garage_triggered = 0
 
 :INTERACTIONS_UNDEF
 if or
@@ -1672,6 +1768,29 @@ then
 end
 
 :INTERACTIONS_2
+if
+    $interactions_viceport_garage_triggered == 0
+goto_if_false @INTERACTIONS_2B
+if
+    is_player_in_zone $player_char in_zone 'DOCKS' // Viceport
+goto_if_false @INTERACTIONS_3
+if and
+    is_player_in_area_2d $player_char 0 -841.0 -1488.0 -820.0 -1475.0
+    Player.PressingHorn($player_char)
+goto_if_false @INTERACTIONS_3
+$interactions_viceport_garage_triggered = 10
+goto @INTERACTIONS_3
+
+:INTERACTIONS_2B
+if
+    $interactions_viceport_garage_triggered == 10
+goto_if_false @INTERACTIONS_3
+if
+    not Player.PressingHorn($player_char)
+goto_if_false @INTERACTIONS_3
+$interactions_viceport_garage_triggered = 1
+
+:INTERACTIONS_3
 goto @INTERACTIONS_1
 
 :INTERACTIONS_FIN
@@ -1680,6 +1799,7 @@ if
 then
     INTERACTIONS_GOLF_BARRELS_DESTROY()
 end
+$interactions_viceport_garage_triggered = 0
 goto @INTERACTIONS_UNDEF
 
 :INTERACTIONS_GOLF_BARRELS_INIT
