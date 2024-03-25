@@ -6744,21 +6744,31 @@ Model.Load(#CABBIE)
 Model.Load(#KAUFMAN)
 Model.Load(#WMOCA)
 Model.Load(#HMOCA)
+Model.Load(#ap_rland03)
+Model.Load(#ap_runsigns5_01)
+Model.Load(#ap_runsign7_03)
+Model.Load(#ap_steps1_08)
+Model.Load(#ap_smahangar2_01)
+Model.Load(#air_brway_030)
+Model.Load(#ap_runsign10_03)
+Model.Load(#ap_roadsect3b)
+Model.Load(#ap_terminA_01)
+Model.Load(#ap_termwindows1b)
+Model.Load(#ap_security2)
+Model.Load(#ap_termsign1_dy)
 load_special_character 1 'PLAYER9'
 load_mission_audio 'TAX2_7' as 1
 load_all_models_now
 
 :INTRO_LOAD
+if or
+    not has_special_character_loaded 1
+    not has_mission_audio_loaded 1
+goto_if_false @INTRO_LOADED
 wait 0
-if and
-    Model.Available(#TAXI)
-    Model.Available(#CABBIE)
-    Model.Available(#KAUFMAN)
-    Model.Available(#WMOCA)
-    Model.Available(#HMOCA)
-    has_special_character_loaded 1
-    has_mission_audio_loaded 1
-goto_if_false @INTRO_LOAD
+goto @INTRO_LOAD
+
+:INTRO_LOADED
 do_fade 1 (out) 200
 Car.Create(0@, #TAXI, -1634.0433, -1549.4225, 34.8682) //14.8682
 create_char_inside_car 1@ = create_actor 4 #WMOCA in_car 0@
@@ -7007,6 +7017,18 @@ Model.Destroy(#CABBIE)
 Model.Destroy(#KAUFMAN)
 Model.Destroy(#WMOCA)
 Model.Destroy(#HMOCA)
+Model.Destroy(#ap_rland03)
+Model.Destroy(#ap_runsigns5_01)
+Model.Destroy(#ap_runsign7_03)
+Model.Destroy(#ap_steps1_08)
+Model.Destroy(#ap_smahangar2_01)
+Model.Destroy(#air_brway_030)
+Model.Destroy(#ap_runsign10_03)
+Model.Destroy(#ap_roadsect3b)
+Model.Destroy(#ap_terminA_01)
+Model.Destroy(#ap_termwindows1b)
+Model.Destroy(#ap_security2)
+Model.Destroy(#ap_termsign1_dy)
 unload_special_character 1
 clear_mission_audio 1
 Camera.SetBehindPlayer
