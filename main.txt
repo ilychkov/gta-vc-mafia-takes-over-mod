@@ -49,6 +49,7 @@ Pickup.Create($119, #BRIBE, 15, -973.7, 61.0, 10.4)
 Pickup.Create($120, #BRIBE, 15, -937.9, -114.1, 17.0)
 Pickup.Create($121, #BRIBE, 15, -1015.9, -627.9, 11.2)
 Pickup.Create($122, #BRIBE, 15, -906.3, -834.0, 15.7)
+Pickup.Create($bribe_safehouse, #BRIBE, 15, -287.7546, -352.2908, 11.173)
 
 $info_pickup_1_x = -262.1507
 $info_pickup_1_y = -376.0211
@@ -1341,8 +1342,8 @@ goto_if_false @NPCS_WORKERS_INIT_LOAD
 Car.Create($npc_workers_car, #BENSON, -729.67, -1169.09, 9.63)
 Car.Angle($npc_workers_car) = 111.15
 pop_car_boot $npc_workers_car
-Car.Create($npc_workers_boat, #REEFER, -717.3156, -1164.8083, 6.7133)
-Car.Angle($npc_workers_boat) = 289.572
+Car.Create($npc_workers_boat, #REEFER, -720.5333, -1169.814, 6.0522)
+Car.Angle($npc_workers_boat) = 195.2337
 Model.Destroy(#BENSON)
 Model.Destroy(#REEFER)
 Actor.Create($npc_worker_1, 4, #WMYCW, -725.56, -1167.7, 9.73)
@@ -1419,7 +1420,7 @@ if
 goto_if_false @NPC_WORKERS_SCRIPT_LEAVE
 if and
     locate_car_2d $npc_workers_car sphere 0 near_point -729.67 -1169.09 radius 3.0 3.0
-    locate_car_2d $npc_workers_boat sphere 0 near_point -717.3156 -1164.8083 radius 3.0 3.0
+    locate_car_2d $npc_workers_boat sphere 0 near_point -720.5333 -1169.814 radius 3.0 3.0
 goto_if_false @NPC_WORKERS_SCRIPT_CLEAR
 if
     15@ == 0
@@ -1543,8 +1544,8 @@ then
     then
         Object.ToggleInMovingList($npc_workers_box, True)
         generate_random_float_in_range 0@ = random_float -0.5 0.5
-        0@ += 2.5
-        add_to_object_velocity $npc_workers_box scatter 7.0 0@ 0.0
+        0@ += 0.0
+        add_to_object_velocity $npc_workers_box scatter 4.0 0@ 0.0
         Object.RemoveReferences($npc_workers_box)
         15@++
         TIMERA = 0
@@ -6594,6 +6595,10 @@ create_car_generator $tommy_car_spawn_2 = init_car_generator #SENTXS 78 0 force_
 switch_car_generator $tommy_car_spawn_2 cars_to_generate_to 0
 create_car_generator $tommy_car_spawn_3 = init_car_generator #PATRIOT -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -247.3018 -299.1029 9.8397 angle 85.5567
 switch_car_generator $tommy_car_spawn_3 cars_to_generate_to 0
+create_car_generator $tommy_car_spawn_4 = init_car_generator #SQUALO -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -216.1165 -285.5043 5.2384 angle 40.7156
+switch_car_generator $tommy_car_spawn_4 cars_to_generate_to 0
+create_car_generator $car_spawn_1 = init_car_generator #SPEEDER -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -799.9042 -334.4113 6.1757 angle 0.452
+switch_car_generator $car_spawn_1 cars_to_generate_to 101
 
 Pickup.Create($2035, #BAT, 2, 30.0, -1330.9, 13.0)
 Pickup.Create($1999, #BAT, 2, 206.7, -1254.4, 12.0)
