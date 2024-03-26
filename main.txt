@@ -2120,7 +2120,8 @@ if or
     has_object_been_damaged $golf_barrel_4
     has_object_been_damaged $golf_barrel_5
     has_object_been_damaged $golf_barrel_6
-    locate_player_any_means_3d $player_char 0 95.8965 264.4538 21.7719 radius 20.0 20.0 20.0
+    locate_player_any_means_3d $player_char 0 95.8965 264.4538 21.7719 radius 5.0 5.0 5.0
+    locate_player_any_means_3d $player_char 0 81.1972 241.7551 23.5315 radius 3.0 3.0 3.0
 then
     Object.RemoveReferences($golf_barrel_1)
     Object.RemoveReferences($golf_barrel_2)
