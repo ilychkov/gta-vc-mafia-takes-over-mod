@@ -1343,10 +1343,6 @@ goto @HAILACAB_LOOKFOR
 :NPCS
 script_name 'NPCS'
 set_deatharrest_state 0
-$npcs_diaz_state = 0
-$npcs_workers_state = 0
-$npcs_viceport_garage_state = 0
-$npcs_carjackers_state = 0
 
 :NPCS_1
 wait $default_wait_time
@@ -1506,6 +1502,36 @@ then
 end
 
 :NPCS_6
+if and
+    Player.Defined($player_char)
+    $game_saving == 0
+goto_if_false @NPCS_6B
+if
+    is_player_in_zone $player_char in_zone 'DTOWN' // Downtown
+goto_if_false @NPCS_6B
+if
+    locate_player_any_means_2d $player_char 0 -865.3 1158.4 radius 150.0 150.0
+goto_if_false @NPCS_6B
+if
+    $npcs_lovefist_state == 0
+then
+    NPCS_LOVEFIST_INIT()
+end
+if
+    $npcs_lovefist_state == 1
+then
+    NPCS_LOVEFIST_TICK()
+end
+goto @NPCS_7
+
+:NPCS_6B
+if
+    $npcs_lovefist_state == 1
+then
+    NPCS_LOVEFIST_DESTROY()
+end
+
+:NPCS_7
 goto @NPCS_1
 
 :NPCS_DIAZ_INIT
@@ -2199,6 +2225,168 @@ Object.Destroy($npc_golfcamp_box_1)
 Object.Destroy($npc_golfcamp_box_2)
 remove_script_fire $npc_golfcamp_fire
 $npcs_golfcamp_state = 0
+return
+
+:NPCS_LOVEFIST_INIT
+Model.Load(#LOVEFIST)
+Model.Load(#HFYST)
+Model.Load(#BMYRI)
+Model.Load(#BMYPI)
+Model.Load(#WMOBU)
+Model.Load(#WFORI)
+Model.Load(#WFOTR)
+Model.Load(#GOLFCLUB)
+Model.Load(#BAT)
+Model.Load(#HAMMER)
+load_special_character 1 'IGDICK'
+
+:NPCS_LOVEFIST_INIT_LOAD
+wait 0
+if or
+    not Player.Defined($player_char)
+    not $game_saving == 0
+then
+    return
+end
+if and
+    Model.Available(#LOVEFIST)
+    Model.Available(#HFYST)
+    Model.Available(#BMYRI)
+    Model.Available(#BMYPI)
+    Model.Available(#WMOBU)
+    Model.Available(#WFORI)
+    Model.Available(#WFOTR)
+goto_if_false @NPCS_LOVEFIST_INIT_LOAD
+if and
+    Model.Available(#GOLFCLUB)
+    Model.Available(#BAT)
+    Model.Available(#HAMMER)
+    has_special_character_loaded 1
+goto_if_false @NPCS_LOVEFIST_INIT_LOAD
+Car.Create($npc_lovefist_car, #LOVEFIST, -865.2949, 1158.359, 9.8204)
+Car.Angle($npc_lovefist_car) = 2.347
+Actor.Create($npc_lovefist_1, 5, #HFYST, -865.3, 1153.4, 9.8)
+Actor.Create($npc_lovefist_2, 4, #BMYRI, -867.3, 1155.4, 9.8)
+Actor.Create($npc_lovefist_3, 4, #BMYPI, -867.3, 1158.4, 9.8)
+Actor.Create($npc_lovefist_4, 4, #WMOBU, -867.3, 1161.4, 9.8)
+Actor.Create($npc_lovefist_5, 5, #WFORI, -863.3, 1156.9, 9.8)
+Actor.Create($npc_lovefist_6, 5, #WFOTR, -863.3, 1159.9, 9.8)
+Actor.Create($npc_lovefist_7, 4, #SPECIAL01, -865.3, 1163.4, 9.8)
+Actor.Angle($npc_lovefist_1) = 0.0
+Actor.Angle($npc_lovefist_2) = 270.0
+Actor.Angle($npc_lovefist_3) = 270.0
+Actor.Angle($npc_lovefist_4) = 270.0
+Actor.Angle($npc_lovefist_5) = 90.0
+Actor.Angle($npc_lovefist_6) = 90.0
+Actor.Angle($npc_lovefist_7) = 180.0
+Actor.Health($npc_lovefist_1) = 1000
+Actor.Health($npc_lovefist_2) = 1000
+Actor.Health($npc_lovefist_3) = 1000
+Actor.Health($npc_lovefist_4) = 1000
+Actor.Health($npc_lovefist_5) = 1000
+Actor.Health($npc_lovefist_6) = 1000
+Actor.Health($npc_lovefist_7) = 1000
+set_char_personality $npc_lovefist_1 ped_stats_to 39
+set_char_personality $npc_lovefist_2 ped_stats_to 39
+set_char_personality $npc_lovefist_3 ped_stats_to 39
+set_char_personality $npc_lovefist_4 ped_stats_to 39
+set_char_personality $npc_lovefist_5 ped_stats_to 39
+set_char_personality $npc_lovefist_6 ped_stats_to 39
+set_char_personality $npc_lovefist_7 ped_stats_to 39
+set_char_suffers_critical_hits $npc_lovefist_1 dismemberment_possible 0
+set_char_suffers_critical_hits $npc_lovefist_2 dismemberment_possible 0
+set_char_suffers_critical_hits $npc_lovefist_3 dismemberment_possible 0
+set_char_suffers_critical_hits $npc_lovefist_4 dismemberment_possible 0
+set_char_suffers_critical_hits $npc_lovefist_5 dismemberment_possible 0
+set_char_suffers_critical_hits $npc_lovefist_6 dismemberment_possible 0
+set_char_suffers_critical_hits $npc_lovefist_7 dismemberment_possible 0
+set_char_never_targeted $npc_lovefist_1 untargetable 1
+set_char_never_targeted $npc_lovefist_2 untargetable 1
+set_char_never_targeted $npc_lovefist_3 untargetable 1
+set_char_never_targeted $npc_lovefist_4 untargetable 1
+set_char_never_targeted $npc_lovefist_5 untargetable 1
+set_char_never_targeted $npc_lovefist_6 untargetable 1
+set_char_never_targeted $npc_lovefist_7 untargetable 1
+give_weapon_to_char $npc_lovefist_1 weapon 6 ammo 1
+give_weapon_to_char $npc_lovefist_2 weapon 7 ammo 1
+give_weapon_to_char $npc_lovefist_3 weapon 6 ammo 1
+give_weapon_to_char $npc_lovefist_4 weapon 7 ammo 1
+give_weapon_to_char $npc_lovefist_5 weapon 6 ammo 1
+give_weapon_to_char $npc_lovefist_6 weapon 7 ammo 1
+give_weapon_to_char $npc_lovefist_7 weapon 3 ammo 1
+set_char_obj_destroy_car $npc_lovefist_1 destroy_car $npc_lovefist_car
+set_char_obj_destroy_car $npc_lovefist_2 destroy_car $npc_lovefist_car
+set_char_obj_destroy_car $npc_lovefist_3 destroy_car $npc_lovefist_car
+set_char_obj_destroy_car $npc_lovefist_4 destroy_car $npc_lovefist_car
+set_char_obj_destroy_car $npc_lovefist_5 destroy_car $npc_lovefist_car
+set_char_obj_destroy_car $npc_lovefist_6 destroy_car $npc_lovefist_car
+set_char_obj_destroy_car $npc_lovefist_7 destroy_car $npc_lovefist_car
+Model.Destroy(#LOVEFIST)
+Model.Destroy(#HFYST)
+Model.Destroy(#BMYRI)
+Model.Destroy(#BMYPI)
+Model.Destroy(#WMOBU)
+Model.Destroy(#WFORI)
+Model.Destroy(#WFOTR)
+Model.Destroy(#GOLFCLUB)
+Model.Destroy(#BAT)
+Model.Destroy(#HAMMER)
+unload_special_character 1
+$npc_lovefist_interacted = 0
+$npcs_lovefist_state = 1
+return
+
+:NPCS_LOVEFIST_DESTROY
+Car.RemoveReferences($npc_lovefist_car)
+Actor.RemoveReferences($npc_lovefist_1)
+Actor.RemoveReferences($npc_lovefist_2)
+Actor.RemoveReferences($npc_lovefist_3)
+Actor.RemoveReferences($npc_lovefist_4)
+Actor.RemoveReferences($npc_lovefist_5)
+Actor.RemoveReferences($npc_lovefist_6)
+Actor.RemoveReferences($npc_lovefist_7)
+clear_mission_audio 1
+$npcs_lovefist_state = 0
+return
+
+:NPCS_LOVEFIST_TICK
+if
+    not Car.Wrecked($npc_lovefist_car)
+then
+    if
+        $npc_lovefist_interacted == 0
+    then
+        if
+            locate_player_any_means_car_3d $player_char near_car $npc_lovefist_car radius 10.0 10.0 10.0 unknown 0
+        then
+            clear_mission_audio 1
+            load_mission_audio 'PSYCH_2' as 1
+            while not has_mission_audio_loaded 1
+                wait 0
+                if
+                    not Player.Defined($player_char)
+                then
+                    return
+                end
+            end
+            Actor.StorePos($npc_lovefist_7, 0@, 1@, 2@)
+            set_mission_audio_position 1 location 0@ 1@ 2@
+            play_mission_audio 1
+            $npc_lovefist_interacted = 1
+        end
+    end
+    if
+        not is_car_health_greater $npc_lovefist_car health > 249
+    then
+        set_char_obj_flee_on_foot_till_safe $npc_lovefist_1
+        set_char_obj_flee_on_foot_till_safe $npc_lovefist_2
+        set_char_obj_flee_on_foot_till_safe $npc_lovefist_3
+        set_char_obj_flee_on_foot_till_safe $npc_lovefist_4
+        set_char_obj_flee_on_foot_till_safe $npc_lovefist_5
+        set_char_obj_flee_on_foot_till_safe $npc_lovefist_6
+        set_char_obj_flee_on_foot_till_safe $npc_lovefist_7
+    end
+end
 return
 
 //-------------Random interactions---------------
@@ -6880,8 +7068,6 @@ create_car_generator $1992 = init_car_generator #ADMIRAL 8 8 force_spawn 0 alarm
 switch_car_generator $1992 cars_to_generate_to 101
 create_car_generator $1991 = init_car_generator #VICECHEE -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -870.4673 -717.2427 10.1069 angle 94.1213
 switch_car_generator $1991 cars_to_generate_to 101
-create_car_generator $1990 = init_car_generator #LOVEFIST -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -865.2949 1158.359 9.8204 angle 2.347
-switch_car_generator $1990 cars_to_generate_to 0
 create_car_generator $1989 = init_car_generator #FLATBED -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1034.889 -1452.775 10.7 angle 248.8739
 switch_car_generator $1989 cars_to_generate_to 101
 create_car_generator $1844 = init_car_generator #DINGHY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 403.0317 -178.5811 5.7 angle 350.0462
