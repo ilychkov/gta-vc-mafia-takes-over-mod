@@ -7277,13 +7277,11 @@ Model.Load(#ap_smahangar2_01)
 Model.Load(#air_brway_030)
 Model.Load(#ap_runsign10_03)
 Model.Load(#ap_roadsect3b)
-load_special_character 1 'PLAYER9'
 load_mission_audio 'TAX2_7' as 1
 load_all_models_now
 
 :INTRO_LOAD
-if or
-    not has_special_character_loaded 1
+if
     not has_mission_audio_loaded 1
 goto_if_false @INTRO_LOADED
 wait 0
@@ -7293,7 +7291,7 @@ goto @INTRO_LOAD
 do_fade 1 (out) 200
 Car.Create(0@, #TAXI, -1634.0433, -1549.4225, 34.8682) //14.8682
 create_char_inside_car 1@ = create_actor 4 #WMOCA in_car 0@
-create_char_as_passenger 2@ = create_actor_pedtype 10 model #SPECIAL01 in_car 0@ passenger_seat 0
+create_char_as_passenger 2@ = create_actor_pedtype 10 model #NULL in_car 0@ passenger_seat 0
 Car.Angle(0@) = 359.6142
 set_car_driving_style 0@ traffic_behavior_to 3
 Car.ImmuneToNonPlayer(0@, True)
@@ -7363,7 +7361,7 @@ if and
     TIMERA >= 8100
 then
     $scene_step++
-    Actor.Create(3@, 4, #SPECIAL01, -1407.7283, -831.9881, 13.8715)
+    Actor.Create(3@, 4, #NULL, -1407.7283, -831.9881, 13.8715)
     Actor.Angle(3@) = 47.075
     set_char_obj_run_to_coord 3@ run_to -1413.7323 -826.7162
     set_char_use_pednode_seek 3@ use_pednode_seek 0
@@ -7547,7 +7545,6 @@ Model.Destroy(#ap_smahangar2_01)
 Model.Destroy(#air_brway_030)
 Model.Destroy(#ap_runsign10_03)
 Model.Destroy(#ap_roadsect3b)
-unload_special_character 1
 clear_mission_audio 1
 Camera.SetBehindPlayer
 Camera.Restore_WithJumpCut
