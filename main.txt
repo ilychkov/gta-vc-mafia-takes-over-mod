@@ -754,6 +754,7 @@ Pickup.Destroy($info_pickup_14)
 $info_14_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO14'
+add_short_range_sprite_blip_for_coord $icon_hotel = create_icon_marker_without_sphere 19 at 219.8 -1273.5 11.0
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
