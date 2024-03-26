@@ -1352,7 +1352,7 @@ wait $default_wait_time
 if and
     Player.Defined($player_char)
     $game_saving == 0
-goto_if_false @NPCS_FIN
+goto_if_false @NPCS_1B
 if
     is_player_in_zone $player_char in_zone 'STARI' // Starfish Island
 goto_if_false @NPCS_1B
@@ -1382,7 +1382,7 @@ end
 if and
     Player.Defined($player_char)
     $game_saving == 0
-goto_if_false @NPCS_FIN
+goto_if_false @NPCS_2B
 if
     is_player_in_zone $player_char in_zone 'DOCKS' // Viceport
 goto_if_false @NPCS_2B
@@ -1412,7 +1412,7 @@ end
 if and
     Player.Defined($player_char)
     $game_saving == 0
-goto_if_false @NPCS_FIN
+goto_if_false @NPCS_3C
 if
     is_player_in_zone $player_char in_zone 'DOCKS' // Viceport
 goto_if_false @NPCS_3C
@@ -1448,25 +1448,33 @@ end
 if and
     Player.Defined($player_char)
     $game_saving == 0
-goto_if_false @NPCS_FIN
-goto @NPCS_1
+goto_if_false @NPCS_4B
+if
+    is_player_in_zone $player_char in_zone 'HAVANA' // Little Havana
+goto_if_false @NPCS_4B
+if
+    locate_player_any_means_2d $player_char 0 -1170.0 -607.0 radius 100.0 100.0
+goto_if_false @NPCS_4B
+if
+    $npcs_cuban_cafe_state == 0
+then
+    NPCS_CUBAN_CAFE_INIT()
+end
+if
+    $npcs_cuban_cafe_state == 1
+then
+    NPCS_CUBAN_CAFE_TICK()
+end
+goto @NPCS_5
 
-:NPCS_FIN
+:NPCS_4B
 if
-    $npcs_diaz_state == 1
+    $npcs_cuban_cafe_state == 1
 then
-    NPCS_DIAZ_DESTROY()
+    NPCS_CUBAN_CAFE_DESTROY()
 end
-if
-    $npcs_workers_state == 1
-then
-    NPCS_WORKERS_DESTROY()
-end
-if
-    $npcs_viceport_garage_state == 1
-then
-    NPCS_VICEPORT_GARAGE_DESTROY()
-end
+
+:NPCS_5
 goto @NPCS_1
 
 :NPCS_DIAZ_INIT
@@ -1494,6 +1502,7 @@ Actor.Angle($npc_diaz) = 270.6989
 set_char_suffers_critical_hits $npc_diaz dismemberment_possible 0
 give_weapon_to_char $npc_diaz weapon 3 ammo 3000
 clear_char_threat_search $npc_diaz
+set_char_never_targeted $npc_diaz untargetable 1
 $npc_diaz_interacted = 0
 $npcs_diaz_state = 1
 start_new_script @NPC_DIAZ_SCRIPT
@@ -1654,10 +1663,12 @@ Actor.Create($npc_worker_1, 4, #WMYCW, -725.56, -1167.7, 9.73)
 Actor.Angle($npc_worker_1) = 24.68
 set_char_suffers_critical_hits $npc_worker_1 dismemberment_possible 0
 clear_char_threat_search $npc_worker_1
+set_char_never_targeted $npc_worker_1 untargetable 1
 Actor.Create($npc_worker_2, 4, #BMODK, -724.73, -1167.36, 9.73) // -724.18, -1167.13
 Actor.Angle($npc_worker_2) = 22.48
 set_char_suffers_critical_hits $npc_worker_2 dismemberment_possible 0
 clear_char_threat_search $npc_worker_2
+set_char_never_targeted $npc_worker_2 untargetable 1
 $npc_workers_interacted = 0
 $npcs_workers_state = 1
 start_new_script @NPC_WORKERS_SCRIPT
@@ -1922,7 +1933,8 @@ goto_if_false @NPCS_VICEPORT_GARAGE_INIT_LOAD
 Actor.Create($npc_lance, 4, #SPECIAL01, -835.6341, -1491.0969, 11.1087)
 Actor.Angle($npc_lance) = 338.6403
 set_char_suffers_critical_hits $npc_lance dismemberment_possible 0
-//clear_char_threat_search $npc_lance
+clear_char_threat_search $npc_lance
+set_char_never_targeted $npc_lance untargetable 1
 set_char_wait_state $npc_lance anim 32 wait_state_time 9999999
 open_garage $689
 $npcs_viceport_garage_interacted = 0
@@ -1976,6 +1988,130 @@ then
 end
 return
 
+:NPCS_CUBAN_CAFE_INIT
+Model.Load(#CBA)
+Model.Load(#CBB)
+Model.Load(#UZI)
+while True
+    if and
+        Model.Available(#CBA)
+        Model.Available(#CBB)
+        Model.Available(#UZI)
+    then
+        break
+    end
+    wait 0
+    if or
+        not Player.Defined($player_char)
+        not $game_saving == 0
+    then
+        return
+    end
+end
+Actor.Create($npc_cuban_guard_1, 4, #CBA, -1171.35, -607.45, 10.6)
+Actor.Angle($npc_cuban_guard_1) = 5.0
+Actor.Health($npc_cuban_guard_1) = 500
+set_char_suffers_critical_hits $npc_cuban_guard_1 dismemberment_possible 0
+clear_char_threat_search $npc_cuban_guard_1
+set_char_never_targeted $npc_cuban_guard_1 untargetable 1
+give_weapon_to_char $npc_cuban_guard_1 weapon 23 ammo 9999
+set_char_accuracy $npc_cuban_guard_1 weapon_accuracy_to 30
+set_char_stay_in_same_place $npc_cuban_guard_1 maintain_position_when_attacked 1
+Actor.Create($npc_cuban_guard_2, 4, #CBB, -1168.77, -607.2, 10.6)
+Actor.Angle($npc_cuban_guard_2) = 5.0
+Actor.Health($npc_cuban_guard_2) = 500
+set_char_suffers_critical_hits $npc_cuban_guard_2 dismemberment_possible 0
+clear_char_threat_search $npc_cuban_guard_2
+set_char_never_targeted $npc_cuban_guard_2 untargetable 1
+give_weapon_to_char $npc_cuban_guard_2 weapon 23 ammo 9999
+set_char_accuracy $npc_cuban_guard_2 weapon_accuracy_to 30
+set_char_stay_in_same_place $npc_cuban_guard_2 maintain_position_when_attacked 1
+Model.Destroy(#CBA)
+Model.Destroy(#CBB)
+Model.Destroy(#UZI)
+$npc_cuban_guard_1_engaged = 0
+$npc_cuban_guard_2_engaged = 0
+$npc_cuban_attacked_car_1 = 0
+$npc_cuban_attacked_car_2 = 0
+$npcs_cuban_cafe_state = 1
+return
+
+:NPCS_CUBAN_CAFE_DESTROY
+Actor.DestroyWithFade($npc_cuban_guard_1)
+Actor.DestroyWithFade($npc_cuban_guard_2)
+$npcs_cuban_cafe_state = 0
+return
+
+:NPCS_CUBAN_CAFE_TICK
+set_lvar_int_to_var_int 15@ = $npc_cuban_guard_1
+set_lvar_int_to_var_int 14@ = $npc_cuban_attacked_car_1
+set_lvar_int_to_var_int 13@ = $npc_cuban_guard_1_engaged
+NPCS_CUBAN_CAFE_TICK_GUARD()
+set_var_int_to_lvar_int = $npc_cuban_attacked_car_1 = 14@
+set_var_int_to_lvar_int = $npc_cuban_guard_1_engaged = 13@
+
+set_lvar_int_to_var_int 15@ = $npc_cuban_guard_2
+set_lvar_int_to_var_int 14@ = $npc_cuban_attacked_car_2
+set_lvar_int_to_var_int 13@ = $npc_cuban_guard_2_engaged
+NPCS_CUBAN_CAFE_TICK_GUARD()
+set_var_int_to_lvar_int = $npc_cuban_attacked_car_2 = 14@
+set_var_int_to_lvar_int = $npc_cuban_guard_2_engaged = 13@
+return
+
+:NPCS_CUBAN_CAFE_TICK_GUARD
+if
+    not Actor.Dead(15@)
+goto_if_false @NPCS_CUBAN_CAFE_TICK_GUARD_END
+0@ = 0
+if
+    not Car.Wrecked(14@)
+then
+    get_driver_of_car 1@ = car 14@
+    if and
+        locate_char_any_means_car_2d 15@ near_car 14@ radius 30.0 30.0 sphere 0
+        not 1@ == -1
+    then
+        0@ = 1
+    end
+end
+if
+    0@ == 0
+goto_if_false @NPCS_CUBAN_CAFE_TICK_GUARD_END
+1@ = -1
+if
+    not Player.WantedLevel($player_char) > 1
+then
+    get_random_car_of_type_in_area_no_save 0@ = get_random_car_with_actors #POLICE in_area -1190.0 -627.0 -1150.0 -587.0
+    if
+        not 0@ == -1
+    then
+        get_driver_of_car 1@ = car 0@
+    end
+end
+if
+    not 1@ == -1
+then
+    if
+        13@ == 0
+    then
+        set_lvar_int_to_lvar_int 14@ = 0@
+        set_char_obj_destroy_car 15@ destroy_car 14@
+        13@ = 1
+    end
+else
+    if
+        13@ == 1
+    then
+        set_char_obj_no_obj 15@
+        set_char_obj_wait_on_foot 15@
+        Actor.Angle(15@) = 5.0
+        13@ = 0
+    end
+end
+
+:NPCS_CUBAN_CAFE_TICK_GUARD_END
+return
+
 //-------------Random interactions---------------
 //
 
@@ -1998,7 +2134,7 @@ wait 0
 if and
     Player.Defined($player_char)
     $game_saving == 0
-goto_if_false @INTERACTIONS_FIN
+goto_if_false @INTERACTIONS_1B
 if or
     is_player_in_zone $player_char in_zone 'GOLFC' // Leaf Links
     is_player_in_zone $player_char in_zone 'BEACH3' // Vice Point
@@ -2028,14 +2164,20 @@ then
 end
 
 :INTERACTIONS_2
+if and
+    Player.Defined($player_char)
+    $game_saving == 0
+goto_if_false @INTERACTIONS_2C
+if
+    is_player_in_zone $player_char in_zone 'DOCKS' // Viceport
+goto_if_false @INTERACTIONS_2C
+if
+    is_player_in_area_2d $player_char 0 -841.0 -1488.0 -820.0 -1475.0
+goto_if_false @INTERACTIONS_2C
 if
     $interactions_viceport_garage_triggered == 0
 goto_if_false @INTERACTIONS_2B
 if
-    is_player_in_zone $player_char in_zone 'DOCKS' // Viceport
-goto_if_false @INTERACTIONS_3
-if and
-    is_player_in_area_2d $player_char 0 -841.0 -1488.0 -820.0 -1475.0
     Player.PressingHorn($player_char)
 goto_if_false @INTERACTIONS_3
 $interactions_viceport_garage_triggered = 10
@@ -2049,18 +2191,13 @@ if
     not Player.PressingHorn($player_char)
 goto_if_false @INTERACTIONS_3
 $interactions_viceport_garage_triggered = 1
+goto @INTERACTIONS_3
+
+:INTERACTIONS_2C
+$interactions_viceport_garage_triggered = 0
 
 :INTERACTIONS_3
 goto @INTERACTIONS_1
-
-:INTERACTIONS_FIN
-if
-    $interactions_golf_barrels_state > 0
-then
-    INTERACTIONS_GOLF_BARRELS_DESTROY()
-end
-$interactions_viceport_garage_triggered = 0
-goto @INTERACTIONS_UNDEF
 
 :INTERACTIONS_GOLF_BARRELS_INIT
 Model.Load(#BARREL4)
