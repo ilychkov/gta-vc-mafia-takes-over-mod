@@ -1790,7 +1790,7 @@ if and
     not Actor.Dead($npc_worker_2)
 goto_if_false @NPC_WORKERS_SCRIPT_CLEAR
 if
-    15 >= 6@
+    10 >= 6@
 goto_if_false @NPC_WORKERS_SCRIPT_LEAVE
 if and
     locate_car_2d $npc_workers_car sphere 0 near_point -729.67 -1169.09 radius 3.0 3.0
@@ -1940,12 +1940,21 @@ then
     7@ = 1
 end
 if and
+    7@ == 1
     is_char_sitting_in_any_car $npc_worker_1
     is_char_sitting_in_any_car $npc_worker_2
 then
+    Car.DriveTo($npc_workers_car, -742.9812, -1185.043, 11.0712)
+    Car.SetMaxSpeed($npc_workers_car, 10.0)
+    7@ = 2
+end
+if and
+    7@ == 2
+    locate_car_2d $npc_workers_car sphere 0 near_point -742.9812 -1185.043 radius 2.0 2.0
+then
     Car.SetToPsychoDriver($npc_workers_car)
     Car.SetMaxSpeed($npc_workers_car, 15.0)
-    terminate_this_script
+    7@ = 2
 end
 goto @NPC_WORKERS_SCRIPT_LOOP
 
