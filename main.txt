@@ -1419,6 +1419,7 @@ goto_if_false @NPCS_3C
 if
     $interactions_viceport_garage_triggered == 1
 goto_if_false @NPCS_3B
+$interactions_viceport_garage_triggered = 0
 if
     $npcs_viceport_garage_state == 0
 then
@@ -1518,7 +1519,7 @@ if
     $npc_diaz_interacted == 0
 then
     if
-        locate_char_any_means_char_3d $player_actor near_actor $npc_diaz radius 2.0 2.0 2.0 sphere 0
+        locate_char_any_means_char_3d $player_actor near_actor $npc_diaz radius 3.0 3.0 3.0 sphere 0
     then
         clear_mission_audio 1
         load_mission_audio 'CUB4_16' as 1
@@ -1944,7 +1945,7 @@ if
     $npcs_viceport_garage_interacted == 0
 then
     if
-        locate_char_any_means_char_3d $player_actor near_actor $npc_lance radius 2.0 2.0 2.0 sphere 0
+        locate_char_any_means_char_3d $player_actor near_actor $npc_lance radius 3.0 3.0 3.0 sphere 0
     then
         set_mission_audio_position 1 location -835.6341 -1491.0969 11.1087
         play_mission_audio 1
