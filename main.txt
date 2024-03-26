@@ -210,13 +210,13 @@ jump @InfLoop
 
 :INTRO_SKIPPED
 script_name 'INTSKIP'
-print_now 'INTSKIP' time 4000 1
+print 'INTSKIP' time 4000 1
 Player.WantedLevel($player_char) = 1
 wait 4000
 if
     Player.Defined($player_char)
 goto_if_false @INTRO_SKIPPED_END
-print_now 'INTSKI2' time 1000 1
+print 'INTSKI2' time 1000 1
 Player.WantedLevel($player_char) = 0
 
 :INTRO_SKIPPED_END
@@ -7201,11 +7201,12 @@ end
 
 if and
     $scene_step == 3
-    TIMERA >= 6300
+    is_char_on_foot 2@
 then
     $scene_step++
     Actor.Angle(2@) = 279.4725
     set_char_wait_state 2@ anim 13 wait_state_time 1000
+    wait 0
     Camera.SetAtPos(-1411.1111, -819.9204, 14.702)
 end
 
