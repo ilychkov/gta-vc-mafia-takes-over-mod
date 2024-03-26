@@ -1476,6 +1476,36 @@ then
 end
 
 :NPCS_5
+if and
+    Player.Defined($player_char)
+    $game_saving == 0
+goto_if_false @NPCS_5B
+if
+    is_player_in_zone $player_char in_zone 'BEACH3' // Vice Point
+goto_if_false @NPCS_5B
+if
+    locate_player_any_means_3d $player_char 0 257.0 27.0 12.0 radius 30.0 30.0 100.0
+goto_if_false @NPCS_5B
+get_time_of_day 0@ = hours, 1@ = minutes
+if or
+    0@ >= 23
+    4 >= 0@
+goto_if_false @NPCS_5B
+if
+    $npcs_golfcamp_state == 0
+then
+    NPCS_GOLFCAMP_INIT()
+end
+goto @NPCS_6
+
+:NPCS_5B
+if
+    $npcs_golfcamp_state == 1
+then
+    NPCS_GOLFCAMP_DESTROY()
+end
+
+:NPCS_6
 goto @NPCS_1
 
 :NPCS_DIAZ_INIT
@@ -1670,6 +1700,8 @@ Actor.Angle($npc_worker_2) = 22.48
 set_char_suffers_critical_hits $npc_worker_2 dismemberment_possible 0
 clear_char_threat_search $npc_worker_2
 set_char_never_targeted $npc_worker_2 untargetable 1
+Model.Destroy(#WMYCW)
+Model.Destroy(#BMODK)
 $npc_workers_interacted = 0
 $npcs_workers_state = 1
 start_new_script @NPC_WORKERS_SCRIPT
@@ -2111,6 +2143,62 @@ else
 end
 
 :NPCS_CUBAN_CAFE_TICK_GUARD_END
+return
+
+:NPCS_GOLFCAMP_INIT
+Model.Load(#WMYPI)
+Model.Load(#VICE5)
+Model.Load(#GUNBOX)
+while True
+    if and
+        Model.Available(#WMYPI)
+        Model.Available(#VICE5)
+        Model.Available(#GUNBOX)
+    then
+        break
+    end
+    wait 0
+    if or
+        not Player.Defined($player_char)
+        not $game_saving == 0
+    then
+        return
+    end
+end
+Actor.Create($npc_golfcamp_1, 4, #WMYPI, 171.3297, 51.9779, 10.9873)
+Actor.Angle($npc_golfcamp_1) = 348.1444
+set_char_suffers_critical_hits $npc_golfcamp_1 dismemberment_possible 0
+clear_char_threat_search $npc_golfcamp_1
+set_char_never_targeted $npc_golfcamp_1 untargetable 1
+set_char_proofs $npc_golfcamp_1 immunities BP 1 FP 1 EP 1 CP 1 MP 1
+set_char_wait_state $npc_golfcamp_1 anim 24 wait_state_time 1000000
+Actor.Create($npc_golfcamp_2, 4, #VICE5, 172.1381, 57.9639, 11.5094)
+Actor.Angle($npc_golfcamp_2) = 176.726
+set_char_suffers_critical_hits $npc_golfcamp_2 dismemberment_possible 0
+clear_char_threat_search $npc_golfcamp_2
+set_char_never_targeted $npc_golfcamp_2 untargetable 1
+set_char_proofs $npc_golfcamp_2 immunities BP 1 FP 1 EP 1 CP 1 MP 1
+set_char_wait_state $npc_golfcamp_2 anim 24 wait_state_time 1000000
+get_offset_from_char_in_world_coords 0@ 1@ 2@ from_actor $npc_golfcamp_1 offset 0.0 -0.5 -1.25
+Object.Create($npc_golfcamp_box_1, #GUNBOX, 0@, 1@, 2@)
+Object.CollisionDetection($npc_golfcamp_box_1, False)
+get_offset_from_char_in_world_coords 0@ 1@ 2@ from_actor $npc_golfcamp_2 offset 0.0 -0.5 -1.25
+Object.Create($npc_golfcamp_box_2, #GUNBOX, 0@, 1@, 2@)
+Object.CollisionDetection($npc_golfcamp_box_2, False)
+start_script_fire $npc_golfcamp_fire = create_fire_at 171.895 55.1739 11.2744
+Model.Destroy(#WMYPI)
+Model.Destroy(#VICE5)
+Model.Destroy(#GUNBOX)
+$npcs_golfcamp_state = 1
+return
+
+:NPCS_GOLFCAMP_DESTROY
+Actor.DestroyWithFade($npc_golfcamp_1)
+Actor.DestroyWithFade($npc_golfcamp_2)
+Object.Destroy($npc_golfcamp_box_1)
+Object.Destroy($npc_golfcamp_box_2)
+remove_script_fire $npc_golfcamp_fire
+$npcs_golfcamp_state = 0
 return
 
 //-------------Random interactions---------------
