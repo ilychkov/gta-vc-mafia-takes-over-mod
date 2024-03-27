@@ -483,6 +483,7 @@ then
     INFOPICS_PRINT_COUNT()
 end
 print_help 'INFO2C'
+UPDATE_LAST_HELP_PRINTING_TIME()
 flash_hud_object 8
 wait 3000
 flash_hud_object -1
@@ -499,6 +500,7 @@ Pickup.Destroy($info_pickup_3)
 $info_3_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO3'
+UPDATE_LAST_HELP_PRINTING_TIME()
 if
     $player_knows_about_info_pickups == 1
 then
@@ -518,6 +520,7 @@ Pickup.Destroy($info_pickup_4)
 $info_4_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO4'
+UPDATE_LAST_HELP_PRINTING_TIME_DOUBLE()
 wait 5000
 print_help 'INFO4B'
 wait 1000
@@ -535,6 +538,7 @@ Pickup.Destroy($info_pickup_5)
 $info_5_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO5'
+UPDATE_LAST_HELP_PRINTING_TIME()
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
@@ -616,6 +620,7 @@ Pickup.Destroy($info_pickup_7)
 $info_7_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO7W'
+UPDATE_LAST_HELP_PRINTING_TIME()
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
@@ -675,6 +680,7 @@ Pickup.Destroy($info_pickup_8)
 $info_8_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO8'
+UPDATE_LAST_HELP_PRINTING_TIME()
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
@@ -690,6 +696,7 @@ Pickup.Destroy($info_pickup_9)
 $info_9_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO9'
+UPDATE_LAST_HELP_PRINTING_TIME()
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
@@ -705,6 +712,7 @@ Pickup.Destroy($info_pickup_10)
 $info_10_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO10'
+UPDATE_LAST_HELP_PRINTING_TIME()
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
@@ -720,6 +728,7 @@ Pickup.Destroy($info_pickup_11)
 $info_11_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO11'
+UPDATE_LAST_HELP_PRINTING_TIME_DOUBLE()
 wait 5000
 print_help 'INFO11B'
 wait 1000
@@ -737,6 +746,7 @@ Pickup.Destroy($info_pickup_12)
 $info_12_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO12'
+UPDATE_LAST_HELP_PRINTING_TIME()
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
@@ -752,6 +762,7 @@ Pickup.Destroy($info_pickup_13)
 $info_13_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO13'
+UPDATE_LAST_HELP_PRINTING_TIME()
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
@@ -767,6 +778,7 @@ Pickup.Destroy($info_pickup_14)
 $info_14_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO14'
+UPDATE_LAST_HELP_PRINTING_TIME()
 add_short_range_sprite_blip_for_coord $icon_hotel = create_icon_marker_without_sphere 19 at 219.8 -1273.5 11.0
 wait 1000
 INFOPICS_PRINT_COUNT()
@@ -783,6 +795,7 @@ Pickup.Destroy($info_pickup_15)
 $info_15_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO15'
+UPDATE_LAST_HELP_PRINTING_TIME()
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
@@ -798,6 +811,7 @@ Pickup.Destroy($info_pickup_16)
 $info_16_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO16'
+UPDATE_LAST_HELP_PRINTING_TIME()
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
@@ -944,11 +958,16 @@ TIMERA = 0
 
 :INFOPICS_ALL_WAIT
 wait $default_wait_time
-if and
+if
     Player.Defined($player_char)
+goto_if_false @INFOPICS_ALL_WAIT
+get_game_timer $now
+if and
     TIMERA > 10000
+    is_int_var_greater_than_int_var $now > $last_help_printing_time
 goto_if_false @INFOPICS_ALL_WAIT
 print_help 'INFOALL'
+UPDATE_LAST_HELP_PRINTING_TIME()
 terminate_this_script
 
 :SUPER_CARS_START
@@ -968,7 +987,12 @@ if or
     is_player_in_model $player_char driving_vehicle_type #SENTXS
     is_player_in_model $player_char driving_vehicle_type #PATRIOT
 goto_if_false @SUPER_CARS
-print_help 'SUPACAR'
+get_game_timer $now
+if
+    is_int_var_greater_than_int_var $now > $last_help_printing_time
+then
+    print_help 'SUPACAR'
+end
 store_car_player_is_in_no_save $player_car = player $player_char
 set_car_traction $player_car improve_handling 2.0
 Car.SetImmunities($player_car, 1, 1, 1, 0, 0)
@@ -983,6 +1007,16 @@ if
     is_player_in_area_in_car_2d $player_char 0 -300.0 -330.0 -230.0 -280.0
 goto_if_false @SUPER_CARS
 goto @SUPER_CARS_LEAVE
+
+:UPDATE_LAST_HELP_PRINTING_TIME
+get_game_timer $last_help_printing_time
+$last_help_printing_time += 5000
+return
+
+:UPDATE_LAST_HELP_PRINTING_TIME_DOUBLE
+get_game_timer $last_help_printing_time
+$last_help_printing_time += 10000
+return
 
 //-------------Clothes pickups script---------------
 //
@@ -1144,6 +1178,10 @@ Player.ClearWantedLevel($player_char)
 Player.CanMove($player_char, True)
 $1180 = 0
 do_fade 1 500
+get_game_timer $now
+if
+    is_int_var_greater_than_int_var $now > $last_help_printing_time
+goto_if_false @CLOTHES_937
 if
     $1351 == 0
 goto_if_false @CLOTHES_927
@@ -1165,32 +1203,92 @@ return
 
 :CLOTH1
 script_name 'CLOTH1'
-wait 5000
+TIMERA = 0
+
+:CLOTH1_LOOP
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @CLOTH1_LOOP
+get_game_timer $now
+if and
+    TIMERA > 5000
+    is_int_var_greater_than_int_var $now > $last_help_printing_time
+goto_if_false @CLOTH1_LOOP
 print_help 'CLOTH1'
+get_game_timer $last_help_printing_time
 terminate_this_script
 
 :CLOTH2
 script_name 'CLOTH2'
-wait 5000
+TIMERA = 0
+
+:CLOTH2_LOOP
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @CLOTH2_LOOP
+get_game_timer $now
+if and
+    TIMERA > 5000
+    is_int_var_greater_than_int_var $now > $last_help_printing_time
+goto_if_false @CLOTH2_LOOP
 print_help 'CLOTH2'
+get_game_timer $last_help_printing_time
 terminate_this_script
 
 :CLOTH3
 script_name 'CLOTH3'
-wait 5000
+TIMERA = 0
+
+:CLOTH3_LOOP
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @CLOTH3_LOOP
+get_game_timer $now
+if and
+    TIMERA > 5000
+    is_int_var_greater_than_int_var $now > $last_help_printing_time
+goto_if_false @CLOTH3_LOOP
 print_help 'CLOTH3'
+get_game_timer $last_help_printing_time
 terminate_this_script
 
 :CLOTH4
 script_name 'CLOTH4'
-wait 5000
+TIMERA = 0
+
+:CLOTH4_LOOP
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @CLOTH4_LOOP
+get_game_timer $now
+if and
+    TIMERA > 5000
+    is_int_var_greater_than_int_var $now > $last_help_printing_time
+goto_if_false @CLOTH4_LOOP
 print_help 'CLOTH4'
+get_game_timer $last_help_printing_time
 terminate_this_script
 
 :CLOTH5
 script_name 'CLOTH5'
-wait 5000
+TIMERA = 0
+
+:CLOTH5_LOOP
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @CLOTH5_LOOP
+get_game_timer $now
+if and
+    TIMERA > 5000
+    is_int_var_greater_than_int_var $now > $last_help_printing_time
+goto_if_false @CLOTH5_LOOP
 print_help 'CLOTH5'
+get_game_timer $last_help_printing_time
 terminate_this_script
 
 
@@ -4947,6 +5045,7 @@ goto @USJ_7621
 :USJ_7570
 print_big_q 'USJ' time 5000 style 5 // UNIQUE STUNT BONUS!
 print_help 'USJ_ALL' // ALL UNIQUE STUNTS COMPLETED!
+UPDATE_LAST_HELP_PRINTING_TIME()
 print_with_number_big 'REWARD' number 10000 time 6000 style 6 // REWARD $~1~
 Player.Money($player_char) += 10000
 
@@ -6386,6 +6485,7 @@ const icon_golf = 13
 const icon_police = 10
 $allow_police_chases = 0
 $police_chases_bonus = 1000
+$last_help_printing_time = 0
 
 add_short_range_sprite_blip_for_coord $icon_vercetti = create_icon_marker_without_sphere 29 at -246.0713 -324.6199 10.2586
 add_short_range_sprite_blip_for_coord $439 = create_icon_marker_without_sphere 27 at -3.8 -1265.8 12.0
