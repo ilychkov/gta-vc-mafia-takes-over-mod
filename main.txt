@@ -190,7 +190,7 @@ else
     Player.InfiniteRun($player_char, True)
     Model.Load(#PCJ600)
     load_all_models_now
-    $start_y += 1.0
+    $start_x += 1.0
     Car.Create($bike, #PCJ600, $start_x, $start_y, $start_z)
     Car.RemoveReferences($bike)
     Model.Destroy(#PCJ600)
@@ -4169,7 +4169,7 @@ $792 = 0
 $791 = 0
 $794 = 0
 set_deatharrest_state 0
-$unique_jumps_total = 2 //todo
+$unique_jumps_total = 13
 set_unique_jumps_total $unique_jumps_total
 script_name 'USJ'
 
@@ -4195,8 +4195,9 @@ end
 if
     is_player_in_zone $player_char in_zone 'A_PORT' // Escobar International
 goto_if_false @USJ_BEACH2
-if
+if and
     $793 == 0
+    $onmission == 0
 then
     if
         $usj_1_passed == 0
@@ -4225,9 +4226,11 @@ goto @USJ_298
 if or
     is_player_in_zone $player_char in_zone 'BEACH2' // Washington Beach
     is_player_in_zone $player_char in_zone 'BEACH3' // Vice Point
+    is_player_in_area_2d $player_char 0 50.0 -352.0 170.0 -270.0
 goto_if_false @USJ_HAVANA
-if
+if and
     $793 == 0
+    $onmission == 0
 then
     if
         $usj_2_passed == 0
@@ -4238,6 +4241,21 @@ then
         $usj_3_passed == 0
     then
         draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 197.65 -304.5664 12.8274
+    end
+    if
+        $usj_5_passed == 0
+    then
+        draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 58.3801 -280.7855 12.1762
+    end
+    if
+        $usj_8_passed == 0
+    then
+        draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 408.0301 -673.4932 12.6285
+    end
+    if
+        $usj_9_passed == 0
+    then
+        draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 529.3526 318.5157 15.6223
     end
 end
 if
@@ -4267,14 +4285,51 @@ then
     $837 = 12.8274
     goto @USJ_5369
 end
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 58.3801 -280.7855 12.1762 radius 3.0 3.0 3.0
+then
+    $792 = 5
+    $832 = 61.1236
+    $833 = -246.2242
+    $834 = 8.9821
+    $835 = 57.0192
+    $836 = -265.9685
+    $837 = 16.8497
+    goto @USJ_5369
+end
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 408.0301 -673.4932 12.6285 radius 3.0 3.0 3.0
+then
+    $792 = 8
+    $832 = 382.2866
+    $833 = -660.8958
+    $834 = 20.6553
+    $835 = 381.0317
+    $836 = -663.313
+    $837 = 23.3764
+    goto @USJ_5369
+end
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 529.3526 318.5157 15.6223 radius 3.0 3.0 3.0
+then
+    $792 = 9
+    $832 = 544.4255
+    $833 = 341.1689
+    $834 = 16.9942
+    $835 = 536.4199
+    $836 = 333.2578
+    $837 = 18.3971
+    goto @USJ_5369
+end
 goto @USJ_298
 
 :USJ_HAVANA
 if
     is_player_in_zone $player_char in_zone 'HAVANA' // Little Havana
-goto_if_false @USJ_298
-if
+goto_if_false @USJ_BEACH1
+if and
     $793 == 0
+    $onmission == 0
 then
     if
         $usj_4_passed == 0
@@ -4295,6 +4350,164 @@ then
     $835 = -808.1541
     $836 = -501.5899
     $837 = 28.9661
+    goto @USJ_5369
+end
+goto @USJ_298
+
+:USJ_BEACH1
+if
+    is_player_in_zone $player_char in_zone 'BEACH1' // Ocean Beach
+goto_if_false @USJ_DTOWN
+if and
+    $793 == 0
+    $onmission == 0
+then
+    if
+        $usj_6_passed == 0
+    then
+        draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 8.4339 -1494.3721 12.0914
+    end
+    if
+        $usj_7_passed == 0
+    then
+        draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 35.9051 -1493.8719 16.7796
+    end
+end
+if
+    $may_start_jump == 1
+goto_if_false @USJ_298
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 8.4339 -1494.3721 12.0914 radius 3.0 3.0 3.0
+then
+    $792 = 6
+    $832 = 32.3471
+    $833 = -1491.7144
+    $834 = 17.2075
+    $835 = 14.3512
+    $836 = -1493.9012
+    $837 = 14.7461
+    goto @USJ_5369
+end
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 35.9051 -1493.8719 16.7796 radius 3.0 3.0 3.0
+then
+    $792 = 7
+    $832 = 41.727
+    $833 = -1486.6896
+    $834 = 14.4866
+    $835 = 35.3583
+    $836 = -1484.2842
+    $837 = 14.4296
+    goto @USJ_5369
+end
+goto @USJ_298
+
+:USJ_DTOWN
+if
+    is_player_in_zone $player_char in_zone 'DTOWN' // Downtown
+goto_if_false @USJ_HAITI
+if and
+    $793 == 0
+    $onmission == 0
+then
+    if
+        $usj_10_passed == 0
+    then
+        draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at -992.7476 1324.7122 11.5037
+    end
+    if
+        $usj_11_passed == 0
+    then
+        draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at -742.4 774.7 14.0
+    end
+end
+if
+    $may_start_jump == 1
+goto_if_false @USJ_298
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -992.7476 1324.7122 11.5037 radius 3.0 3.0 3.0
+then
+    $792 = 10
+    $832 = -1019.894
+    $833 = 1338.2388
+    $834 = 8.7368
+    $835 = -1006.0764
+    $836 = 1327.2264
+    $837 = 14.3023
+    goto @USJ_5369
+end
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -742.4 774.7 14.0 radius 3.0 3.0 3.0
+then
+    $792 = 11
+    $832 = -750.7026
+    $833 = 737.7878
+    $834 = 11.9159
+    $835 = -742.3757
+    $836 = 766.8336
+    $837 = 20.5888
+    goto @USJ_5369
+end
+goto @USJ_298
+
+:USJ_HAITI
+if
+    is_player_in_zone $player_char in_zone 'HAITI' // Little Haiti
+goto_if_false @USJ_DOCKS
+if and
+    $793 == 0
+    $onmission == 0
+then
+    if
+        $usj_12_passed == 0
+    then
+        draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at -935.7979 13.2934 10.7082
+    end
+end
+if
+    $may_start_jump == 1
+goto_if_false @USJ_298
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -935.7979 13.2934 10.7082 radius 3.0 3.0 3.0
+then
+    $792 = 12
+    $832 = -926.6302
+    $833 = 60.159
+    $834 = 11.6767
+    $835 = -935.1532
+    $836 = 29.8964
+    $837 = 13.7501
+    goto @USJ_5369
+end
+goto @USJ_298
+
+:USJ_DOCKS
+if
+    is_player_in_zone $player_char in_zone 'DOCKS' // Viceport
+goto_if_false @USJ_298
+if and
+    $793 == 0
+    $onmission == 0
+then
+    if
+        $usj_13_passed == 0
+    then
+        draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at -646.4009 -1366.9537 16.2779
+    end
+end
+if
+    $may_start_jump == 1
+goto_if_false @USJ_298
+if
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -646.4009 -1366.9537 16.2779 radius 3.0 3.0 3.0
+then
+    $792 = 13
+    $832 = -670.8126
+    $833 = -1370.2648
+    $834 = 11.0712
+    $835 = -657.4781
+    $836 = -1370.8634
+    $837 = 15.5587
     goto @USJ_5369
 end
 goto @USJ_298
@@ -6643,6 +6856,9 @@ Object.RemoveFromMissionCleanupList($dtn_sr_door_1)
 Object.Init($dtn_sr_door_2, #DTN_STADDOORB, -667.01, 1212.0, 11.2)
 Object.Angle($dtn_sr_door_2) = 270.0
 Object.RemoveFromMissionCleanupList($dtn_sr_door_2)
+Object.Init($ramp_1, #WATERJUMP1, 58.5874, -283.3163, 9.457)
+Object.Angle($ramp_1) = 3.4672
+Object.RemoveFromMissionCleanupList($ramp_1)
 
 create_car_generator $1992 = init_car_generator #ADMIRAL 8 8 force_spawn 0 alarm 50 door_lock 0 min_delay 0 max_delay 10000 at -401.2715 -534.6655 11.7534 angle 149.2032
 switch_car_generator $1992 cars_to_generate_to 101
