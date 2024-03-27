@@ -1670,6 +1670,31 @@ then
 end
 
 :NPCS_7
+if and
+    Player.Defined($player_char)
+    $game_saving == 0
+goto_if_false @NPCS_7B
+if
+    is_player_in_zone $player_char in_zone 'STARI' // Starfish Island
+goto_if_false @NPCS_7B
+if
+    locate_player_any_means_2d $player_char 0 -246.0713 -324.6199 radius 100.0 100.0
+goto_if_false @NPCS_7B
+if
+    $npcs_house_party_state == 0
+then
+    NPCS_HOUSE_PARTY_INIT()
+end
+goto @NPCS_8
+
+:NPCS_7B
+if
+    $npcs_house_party_state == 1
+then
+    NPCS_HOUSE_PARTY_DESTROY()
+end
+
+:NPCS_8
 goto @NPCS_1
 
 :NPCS_DIAZ_INIT
@@ -2534,6 +2559,71 @@ then
         set_char_obj_flee_on_foot_till_safe $npc_lovefist_7
     end
 end
+return
+
+:NPCS_HOUSE_PARTY_INIT
+Model.Load(#PGA)
+Model.Load(#PGB)
+request_animation 'RIOT'
+request_animation 'STRIP'
+while True
+    if and
+        Model.Available(#PGA)
+        Model.Available(#PGB)
+        has_animation_loaded 'RIOT'
+        has_animation_loaded 'STRIP'
+    then
+        break
+    end
+    wait 0
+    if or
+        not Player.Defined($player_char)
+        not $game_saving == 0
+    then
+        return
+    end
+end
+Actor.Create($npc_house_party_1, 4, #PGA, -248.3843, -321.4468, 17.5884)
+Actor.Angle($npc_house_party_1) = 114.4969
+Actor.Create($npc_house_party_2, 4, #PGB, -245.5869, -322.9634, 19.0269)
+Actor.Angle($npc_house_party_2) = 104.4155
+Actor.Create($npc_house_party_3, 4, #PGB, -244.0454, -326.4719, 20.3051)
+Actor.Angle($npc_house_party_3) = 129.1691
+Actor.Create($npc_house_party_4, 4, #PGA, -243.4519, -329.4233, 20.993)
+Actor.Angle($npc_house_party_4) = 159.876
+Actor.Health($npc_house_party_1) = 500
+Actor.Health($npc_house_party_2) = 500
+Actor.Health($npc_house_party_3) = 500
+Actor.Health($npc_house_party_4) = 500
+set_char_suffers_critical_hits $npc_house_party_1 dismemberment_possible 0
+set_char_suffers_critical_hits $npc_house_party_2 dismemberment_possible 0
+set_char_suffers_critical_hits $npc_house_party_3 dismemberment_possible 0
+set_char_suffers_critical_hits $npc_house_party_4 dismemberment_possible 0
+clear_char_threat_search $npc_house_party_1
+clear_char_threat_search $npc_house_party_2
+clear_char_threat_search $npc_house_party_3
+clear_char_threat_search $npc_house_party_4
+set_char_never_targeted $npc_house_party_1 untargetable 1
+set_char_never_targeted $npc_house_party_2 untargetable 1
+set_char_never_targeted $npc_house_party_3 untargetable 1
+set_char_never_targeted $npc_house_party_4 untargetable 1
+set_char_wait_state $npc_house_party_1 anim 29 wait_state_time 9999999
+set_char_wait_state $npc_house_party_2 anim 32 wait_state_time 9999999
+set_char_wait_state $npc_house_party_3 anim 29 wait_state_time 9999999
+set_char_wait_state $npc_house_party_4 anim 32 wait_state_time 9999999
+Model.Destroy(#PGA)
+Model.Destroy(#PGB)
+$npcs_house_party_state = 1
+return
+
+:NPCS_HOUSE_PARTY_DESTROY
+Actor.DestroyWithFade($npc_house_party_1)
+Actor.DestroyWithFade($npc_house_party_2)
+Actor.DestroyWithFade($npc_house_party_3)
+Actor.DestroyWithFade($npc_house_party_4)
+remove_animation 'RIOT'
+remove_animation 'STRIP'
+$npcs_house_party_state = 0
 return
 
 //-------------Random interactions---------------
