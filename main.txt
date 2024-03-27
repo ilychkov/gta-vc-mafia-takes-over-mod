@@ -187,6 +187,7 @@ else
     Player.CanMove($player_char, True)
     $allow_police_chases = 1
     set_time_of_day start_time_hours start_time_minutes
+    Player.InfiniteRun($player_char, True)
     Model.Load(#PCJ600)
     load_all_models_now
     $start_y += 1.0
@@ -3668,7 +3669,8 @@ if and
     $onmission == 0
     is_player_in_zone $player_char in_zone 'GOLFC' // Leaf Links
 goto_if_false @GOLF_MARKER_LOOP_END
-if
+if and
+    Player.Controllable($player_char)
     locate_stopped_player_any_means_3d $player_char 0 $golf_x $golf_y $golf_z radius 2.0 2.0 2.0
 goto_if_false @GOLF_MARKER_LOOP_END
 if
@@ -3704,7 +3706,8 @@ if and
     $onmission == 0
     is_player_in_zone $player_char in_zone 'BEACH2' // Washington Beach
 goto_if_false @POLICE_1_MARKER_LOOP_END
-if
+if and
+    Player.Controllable($player_char)
     locate_player_on_foot_3d $player_char 0 $police_x $police_y $police_z radius 1.2 1.2 2.0
 goto_if_false @POLICE_1_MARKER_LOOP_END
 print_big 'POLICE1' 15000 ms 2
@@ -7437,7 +7440,6 @@ then
 end
 load_mission_text 'GOLF'
 wait 0
-print_now 'GOLF1' time 5000 1
 $race_step = 0
 $race_point_1_x = -139.2477
 $race_point_1_y = 440.2561
@@ -7478,9 +7480,9 @@ $race_point_12_z = 22.6103
 $race_point_13_x = -70.1871
 $race_point_13_y = -82.7057
 $race_point_13_z = 12.2612
-$race_point_14_x = 29.2908
-$race_point_14_y = -87.0549
-$race_point_14_z = 13.577
+$race_point_14_x = 27.9207
+$race_point_14_y = -90.4448
+$race_point_14_z = 13.2636
 $race_point_15_x = 53.3256
 $race_point_15_y = -130.2419
 $race_point_15_z = 10.7211
@@ -7502,15 +7504,15 @@ $race_point_20_z = 27.612
 $race_point_21_x = -5.9777
 $race_point_21_y = 194.4387
 $race_point_21_z = 26.752
-$race_point_22_x = 23.4038
-$race_point_22_y = 220.7085
-$race_point_22_z = 25.622
-$race_point_23_x = 38.0899
-$race_point_23_y = 235.1594
-$race_point_23_z = 24.2837
-$race_point_24_x = 37.6481
-$race_point_24_y = 276.0324
-$race_point_24_z = 21.4866
+$race_point_22_x = 20.8328
+$race_point_22_y = 208.5555
+$race_point_22_z = 24.9415
+$race_point_23_x = 10.999
+$race_point_23_y = 264.7458
+$race_point_23_z = 22.9514
+$race_point_24_x = 59.5548
+$race_point_24_y = 239.6233
+$race_point_24_z = 20.7715
 $race_point_25_x = 88.3494
 $race_point_25_y = 395.7704
 $race_point_25_z = 19.5261
@@ -7526,10 +7528,11 @@ $race_point_28_z = 13.5882
 $race_point_29_x = 134.3991
 $race_point_29_y = 622.8892
 $race_point_29_z = 12.7351
-$race_point_30_x = 84.084
-$race_point_30_y = 580.8598
-$race_point_30_z = 17.3853 // 14.3853
+$race_point_30_x = 83.5054
+$race_point_30_y = 580.3089
+$race_point_30_z = 18.4717
 $mission_hint_1_shown = 0
+$slomo = 0
 set_var_float_to_var_float $race_point_current_x = $race_point_1_x
 set_var_float_to_var_float $race_point_current_y = $race_point_1_y
 set_var_float_to_var_float $race_point_current_z = $race_point_1_z
@@ -7537,14 +7540,99 @@ set_var_float_to_var_float $race_point_next_x = $race_point_2_x
 set_var_float_to_var_float $race_point_next_y = $race_point_2_y
 set_var_float_to_var_float $race_point_next_z = $race_point_2_z
 store_car_player_is_in $race_car = player $player_char
-add_blip_for_coord $race_marker_1 = create_checkpoint_at $race_point_1_x $race_point_1_y $race_point_1_z
-add_blip_for_coord $race_marker_2 = create_checkpoint_at $race_point_2_x $race_point_2_y $race_point_2_z
-dim_blip $race_marker_2 brightness_to 1
-TIMERA = 0
+Player.CanMove($player_char, False)
+Model.Load(#WMOGO)
+Model.Load(#WFOGO)
+request_animation 'RIOT'
+request_animation 'STRIP'
+load_all_models_now
+
+:GOLF_LOAD
+if or
+    not has_animation_loaded 'RIOT'
+    not has_animation_loaded 'STRIP'
+goto_if_false @GOLF_LOADED
+wait 0
+goto @GOLF_LOAD
+
+:GOLF_LOADED
 Object.Create($mission_obj_1, #WATERJUMP1, 86.8847, 584.9246, 13.3714)
 Object.Angle($mission_obj_1) = 141.9693
 Object.CollisionDetection($mission_obj_1, True)
-Object.Create($mission_obj_2, #TRAFFICCONE, 46.4361, -145.4485, 11.4195)
+Object.Create($mission_obj_2, #BARREL2, 51.5916, -134.8658, 10.4111)
+Object.Create($mission_obj_3, #BARREL2, 50.5084, -134.8154, 10.4596)
+Object.Create($mission_obj_4, #BARREL2, 51.9257, -135.3643, 10.4633)
+//Object.Create($mission_obj_5, #BARREL2, 50.7091, -135.6886, 10.5667)
+Object.Create($mission_obj_6, #BARREL2, 50.9064, -135.7637, 10.7116)
+Object.CollisionDetection($mission_obj_6, False)
+Actor.Create($mission_actor_1, 4, #WMOGO, 50.9064, -135.7637, 11.9116)
+Actor.Angle($mission_actor_1) = 336.8858
+Actor.Create($mission_actor_2, 4, #WMOGO, 80.2744, 581.4982, 17.5721)
+Actor.Angle($mission_actor_2) = 303.8677
+Actor.Create($mission_actor_3, 4, #WFOGO, 78.4687, 582.3203, 17.5713)
+Actor.Angle($mission_actor_3) = 286.321
+Actor.Create($mission_actor_4, 4, #WMOGO, 78.8347, 584.4446, 17.572)
+Actor.Angle($mission_actor_4) = 293.2144
+Actor.Create($mission_actor_5, 4, #WFOGO, 83.0982, 575.8602, 17.5716)
+Actor.Angle($mission_actor_5) = 323.8979
+Actor.Create($mission_actor_6, 4, #WMOGO, 84.8799, 574.8459, 17.5723)
+Actor.Angle($mission_actor_6) = 344.5783
+Actor.Create($mission_actor_7, 4, #WFOGO, 86.272, 571.6097, 17.5709)
+Actor.Angle($mission_actor_7) = 340.3322
+Actor.Create($mission_actor_8, 4, #WMOGO, 78.0625, 587.8848, 17.5722)
+Actor.Angle($mission_actor_8) = 270.1447
+Actor.Create($mission_actor_9, 4, #WFOGO, 86.7714, 575.7628, 14.5918)
+Actor.Angle($mission_actor_9) = 350.0456
+Actor.Create($mission_actor_10, 4, #WMOGO, 79.1701, 593.3865, 15.2168)
+Actor.Angle($mission_actor_10) = 264.1917
+set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_2 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_3 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_4 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_5 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_6 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_7 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_8 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_9 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_10 dismemberment_possible 0
+clear_char_threat_search $mission_actor_1
+clear_char_threat_search $mission_actor_2
+clear_char_threat_search $mission_actor_3
+clear_char_threat_search $mission_actor_4
+clear_char_threat_search $mission_actor_5
+clear_char_threat_search $mission_actor_6
+clear_char_threat_search $mission_actor_7
+clear_char_threat_search $mission_actor_8
+clear_char_threat_search $mission_actor_9
+clear_char_threat_search $mission_actor_10
+set_char_never_targeted $mission_actor_1 untargetable 1
+set_char_never_targeted $mission_actor_2 untargetable 1
+set_char_never_targeted $mission_actor_3 untargetable 1
+set_char_never_targeted $mission_actor_4 untargetable 1
+set_char_never_targeted $mission_actor_5 untargetable 1
+set_char_never_targeted $mission_actor_6 untargetable 1
+set_char_never_targeted $mission_actor_7 untargetable 1
+set_char_never_targeted $mission_actor_8 untargetable 1
+set_char_never_targeted $mission_actor_9 untargetable 1
+set_char_never_targeted $mission_actor_10 untargetable 1
+set_char_wait_state $mission_actor_1 anim 32 wait_state_time 9999999
+set_char_wait_state $mission_actor_2 anim 29 wait_state_time 9999999
+set_char_wait_state $mission_actor_3 anim 29 wait_state_time 9999999
+set_char_wait_state $mission_actor_4 anim 29 wait_state_time 9999999
+set_char_wait_state $mission_actor_5 anim 29 wait_state_time 9999999
+set_char_wait_state $mission_actor_6 anim 29 wait_state_time 9999999
+set_char_wait_state $mission_actor_7 anim 29 wait_state_time 9999999
+set_char_wait_state $mission_actor_8 anim 29 wait_state_time 9999999
+set_char_wait_state $mission_actor_9 anim 29 wait_state_time 9999999
+set_char_wait_state $mission_actor_10 anim 29 wait_state_time 9999999
+Model.Destroy(#WMOGO)
+Model.Destroy(#WFOGO)
+print_now 'GOLF1' time 5000 1
+add_blip_for_coord $race_marker_1 = create_checkpoint_at $race_point_1_x $race_point_1_y $race_point_1_z
+add_blip_for_coord $race_marker_2 = create_checkpoint_at $race_point_2_x $race_point_2_y $race_point_2_z
+dim_blip $race_marker_2 brightness_to 1
+Player.CanMove($player_char, True)
+TIMERA = 0
 
 :GOLF_1
 wait 0
@@ -7555,12 +7643,43 @@ if
     not Car.Wrecked($race_car)
 goto_if_false @GOLF_WRECKED
 if and
-    locate_player_any_means_2d $player_char 0 50.1701 -137.8058 radius 7.0 7.0 // z: 11.6784
+    locate_player_any_means_2d $player_char 0 50.1701 -137.8058 radius 8.0 8.0 // z: 11.6784
     $mission_hint_1_shown == 0
 then
     print_now 'GOLF_TR' time 2000 1
     $mission_hint_1_shown = 1
 end
+if
+    $slomo == 0
+then
+    if
+        locate_player_in_car_2d $player_char 0 82.7413 582.5556 radius 5.0 5.0
+    then
+        get_car_speed 0@ = car $race_car
+        if
+            0@ > 10.0
+        then
+            set_time_scale 0.3
+            Camera.SetPosition(89.5669, 594.8918, 24.9822, 0.0, 0.0, 0.0)
+            // maybe point at 80.1512 583.617 14.5668
+            Camera.OnVehicle($race_car, 15, 2)
+            $slomo = 1
+            TIMERB = -1000
+        end
+    end
+else
+    if
+        TIMERB >= 0
+    then
+        set_time_scale 1.0
+        Camera.Restore_WithJumpCut
+        $slomo = 0
+    end
+end
+
+if
+    not $race_step == -1
+goto_if_false @GOLF_PASS_WAIT
 
 if
     $race_step == 29
@@ -7807,6 +7926,19 @@ print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
 return
 
 :GOLF_PASS
+$race_step = -1
+set_var_int_to_lvar_int $race_time = TIMERA
+$race_time /= 1000
+if
+    $slomo == 1
+then
+    TIMERB = -1000
+end
+
+:GOLF_PASS_WAIT
+if
+    $slomo == 0
+goto_if_false @GOLF_1
 play_mission_passed_tune 1
 print_with_number_big 'M_PASS' number 100 time 5000 style 1 // MISSION PASSED! $~1~
 Player.Money($player_char) += 100
@@ -7822,13 +7954,12 @@ then
     $clothes_pickup_3_available = 0
     start_new_script @CLOTH3
 end
-set_var_int_to_var_int 15@ = TIMERA
-15@ /= 1000
 if
-    is_int_var_greater_than_int_var $golf_record_seconds > 15@
+    is_int_var_greater_than_int_var $golf_record_seconds > $race_time
 then
-    register_fastest_time 16 to 15@
-    set_var_int_to_var_int $golf_record_seconds = 15@
+    register_fastest_time 16 to $race_time
+    set_var_int_to_var_int $golf_record_seconds = $race_time
+    set_lvar_int_to_var_int 15@ = $race_time
     14@ = 0
     while 15@ > 59
         15@ -= 60
@@ -7840,13 +7971,38 @@ return
 
 :GOLF_CLEANUP
 $onmission = 0
+if
+    $slomo == 1
+then
+    set_time_scale 1.0
+    Camera.Restore_WithJumpCut
+    $slomo = 0
+end
 Marker.Disable($race_marker_1)
 Marker.Disable($race_marker_2)
 Car.RemoveReferences($race_car)
 Object.Destroy($mission_obj_1)
 Object.Destroy($mission_obj_2)
+Object.Destroy($mission_obj_3)
+Object.Destroy($mission_obj_4)
+//Object.Destroy($mission_obj_5)
+Object.Destroy($mission_obj_6)
+Actor.DestroyWithFade($mission_actor_1)
+Actor.DestroyWithFade($mission_actor_2)
+Actor.DestroyWithFade($mission_actor_3)
+Actor.DestroyWithFade($mission_actor_4)
+Actor.DestroyWithFade($mission_actor_5)
+Actor.DestroyWithFade($mission_actor_6)
+Actor.DestroyWithFade($mission_actor_7)
+Actor.DestroyWithFade($mission_actor_8)
+Actor.DestroyWithFade($mission_actor_9)
+Actor.DestroyWithFade($mission_actor_10)
+Model.Destroy(#WMOGO)
+Model.Destroy(#WFOGO)
 Model.Destroy(#WATERJUMP1)
-Model.Destroy(#TRAFFICCONE)
+Model.Destroy(#BARREL2)
+remove_animation 'RIOT'
+remove_animation 'STRIP'
 mission_has_finished
 terminate_this_script
 
