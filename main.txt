@@ -12,8 +12,9 @@ var
 end
 set_fading_colour 0 0 0
 fade 0 (in) 0 ms
-set_total_number_of_missions 88 //todo
-set_progress_total 154 //todo
+set_total_number_of_missions 2 //todo
+// 16 info pickups, 13 unique stunts, 2 missions
+set_progress_total 31 //todo
 set_max_wanted_level 2
 set_collectable1_total 0
 set_deatharrest_state 0
@@ -214,9 +215,35 @@ launch_mission @INTERIO
 launch_mission @CARGEN
 launch_mission @AUDIO
 
-:InfLoop
-wait 2500 ms
-jump @InfLoop
+:MAIN
+wait 1000 ms
+if
+    $game_completed == 0
+goto_if_false @MAIN
+get_progress_percentage 0@
+if
+    0@ >= 100.0
+goto_if_false @MAIN
+increase_player_max_health $player_char max_health += 100
+increase_player_max_armour $player_char max_armour += 100
+add_armour_to_player $player_char armour_to 200
+set_player_health $player_char health_to 200
+$game_completed = 1
+TIMERA = 0
+
+:MAIN_INFO
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @MAIN_INFO
+get_game_timer $now
+if and
+    TIMERA > 5000
+    is_int_var_greater_than_int_var $now > $last_help_printing_time
+goto_if_false @MAIN_INFO
+print_help 'COMPLET'
+UPDATE_LAST_HELP_PRINTING_TIME()
+jump @MAIN
 
 //-------------Fooling around---------------
 //
@@ -432,7 +459,6 @@ if
 goto_if_false @INFOPICS_2
 Pickup.Destroy($info_pickup_1)
 $info_1_picked_up = 1
-INFOPICS_FOUND()
 Player.CanMove($player_char, False)
 switch_widescreen 1
 set_interpolation_parameters 0.0 3000
@@ -443,6 +469,7 @@ Player.CanMove($player_char, True)
 switch_widescreen 0
 Camera.Restore_WithJumpCut
 Camera.SetBehindPlayer
+INFOPICS_FOUND()
 if
     $player_knows_about_info_pickups == 1
 then
@@ -460,7 +487,6 @@ if
 goto_if_false @INFOPICS_3
 Pickup.Destroy($info_pickup_2)
 $info_2_picked_up = 1
-INFOPICS_FOUND()
 Player.CanMove($player_char, False)
 switch_widescreen 1
 Camera.SetPosition(-263.79, -331.11, 16.08, 0.0, 0.0, 0.0)
@@ -476,6 +502,7 @@ switch_widescreen 0
 Camera.Restore_WithJumpCut
 Camera.SetBehindPlayer
 clear_prints
+INFOPICS_FOUND()
 wait 1000
 if
     $player_knows_about_info_pickups == 1
@@ -552,7 +579,6 @@ if
 goto_if_false @INFOPICS_7
 Pickup.Destroy($info_pickup_6)
 $info_6_picked_up = 1
-INFOPICS_FOUND()
 Player.CanMove($player_char, False)
 set_fading_colour 0 0 0
 switch_widescreen 1
@@ -605,6 +631,7 @@ set_time_of_day 4@ 5@
 release_weather
 $allow_police_chases = 1
 switch_car_generator $1860 cars_to_generate_to 101
+INFOPICS_FOUND()
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
@@ -6486,6 +6513,7 @@ const icon_police = 10
 $allow_police_chases = 0
 $police_chases_bonus = 1000
 $last_help_printing_time = 0
+$game_completed = 0
 
 add_short_range_sprite_blip_for_coord $icon_vercetti = create_icon_marker_without_sphere 29 at -246.0713 -324.6199 10.2586
 add_short_range_sprite_blip_for_coord $439 = create_icon_marker_without_sphere 27 at -3.8 -1265.8 12.0
