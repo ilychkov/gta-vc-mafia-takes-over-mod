@@ -49,6 +49,8 @@ NPCWORK = They seem busy.
 NPCPORT = Dev note: I wanted to put something cool here, but couldn't think of anything, so have dancing Lance for now.
 STOLEN  = Stolen $~1~!
 COMPLET = Wow you got 100% :o
+PORNI   = North Island
+MUSIC   = You got ~y~music~w~! Go check your safehouse.
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!

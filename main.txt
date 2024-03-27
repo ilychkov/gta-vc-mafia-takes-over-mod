@@ -13,8 +13,11 @@ end
 set_fading_colour 0 0 0
 fade 0 (in) 0 ms
 set_total_number_of_missions 2 //todo
-// 16 info pickups, 13 unique stunts, 2 missions
-set_progress_total 31 //todo
+// 16 info pickups
+// 13 unique stunts
+// 2 missions
+// 1 music pickup
+set_progress_total 32 //todo
 set_max_wanted_level 2
 set_collectable1_total 0
 set_deatharrest_state 0
@@ -132,6 +135,10 @@ $clothes_pickup_2_available = 0
 $clothes_pickup_3_available = 0
 $clothes_pickup_4_available = 0
 $clothes_pickup_5_available = 0
+
+Pickup.Create($music_pickup, #PICKUPMUSIC, 3, 8.8767, 1061.8584, 12.3126)
+add_short_range_sprite_blip_for_coord $music_marker = create_icon_marker_without_sphere 31 at 8.8767 1061.8584 12.3126
+$music_found = 0
 
 set_garage $681 = create_garage_type 5 door -914.129 -1263.54 10.706 to -906.3 -1266.9 14.421 depth -907.137 -1246.626
 set_garage $683 = create_garage_type 5 door -886.157 -115.158 9.992 to -876.7 -119.83 15.58 depth -882.699 -108.312
@@ -844,6 +851,18 @@ INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
 
 :INFOPICS_17
+if
+    $music_found == 0
+goto_if_false @INFOPICS_LOOP
+if
+    Pickup.Picked_up($music_pickup)
+goto_if_false @INFOPICS_LOOP
+Pickup.Destroy($music_pickup)
+Marker.Disable($music_marker)
+$music_found = 1
+player_made_progress 1
+print_help 'MUSIC'
+UPDATE_LAST_HELP_PRINTING_TIME()
 goto @INFOPICS_LOOP
 
 :INFOPICS_ONMISSION
@@ -1674,8 +1693,9 @@ if and
     Player.Defined($player_char)
     $game_saving == 0
 goto_if_false @NPCS_7B
-if
+if and
     is_player_in_zone $player_char in_zone 'STARI' // Starfish Island
+    $music_found == 1
 goto_if_false @NPCS_7B
 if
     locate_player_any_means_2d $player_char 0 -246.0713 -324.6199 radius 100.0 100.0
@@ -2613,6 +2633,8 @@ set_char_wait_state $npc_house_party_3 anim 29 wait_state_time 9999999
 set_char_wait_state $npc_house_party_4 anim 32 wait_state_time 9999999
 Model.Destroy(#PGA)
 Model.Destroy(#PGB)
+generate_random_int_in_range 0@ = random_int_in_ranges 36 43 // 43 not included
+add_continuous_sound $npc_house_party_audio = create_sound 0@ at -246.0713 -324.6199 10.2586
 $npcs_house_party_state = 1
 return
 
@@ -2623,6 +2645,7 @@ Actor.DestroyWithFade($npc_house_party_3)
 Actor.DestroyWithFade($npc_house_party_4)
 remove_animation 'RIOT'
 remove_animation 'STRIP'
+remove_sound $npc_house_party_audio
 $npcs_house_party_state = 0
 return
 
