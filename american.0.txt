@@ -26,9 +26,10 @@ INFO12  = Sometimes you have to travel through the entire city to grab a PCJ her
 INFO13  = New ~g~Unique Stunts~w~ now available! Look for yellow markers.
 INFO14  = Welcome to the ~h~Ocean View~w~ Hotel! You can save your game here.
 INFO15  = Find a ~g~huge garage in Viceport~w~, drive there and ~g~sound the horn~w~.
-INFO16  = ~g~Under new management
+INFO16  = There's a new ~g~paint shop~w~ in Sunshine Autos.
 INFOALL = ~y~Congratulations!~w~ Something has just been delivered to the safehouse...
 SUPACAR = This car is ~h~bulletproof~w~ and has ~h~improved handling~w~
+SUPAINF = Check out the ~y~bulletproof cars~w~!
 CLOTH1  = Mr Vercetti outfit delivered to the Safehouse.
 CLOTH2  = Casual outfit delivered to the Safehouse.
 CLOTH3  = Country Club outfit delivered to the Safehouse.
@@ -50,11 +51,15 @@ STOLEN  = Stolen $~1~!
 COMPLET = Wow you got 100% :o
 PORNI   = North Island
 MUSIC   = You got ~y~music~w~! Go check your safehouse.
+PAINT   = ~h~~k~~VEHICLE_ACCELERATE~~w~, ~h~~k~~VEHICLE_BRAKE~~w~, ~h~~k~~GO_LEFT~~w~, ~h~~k~~GO_RIGHT~~w~ - change color, ~h~~k~~TOGGLE_SUBMISSIONS~~w~ - accept, ~h~~k~~VEHICLE_HORN~~w~ - cancel
+PAINT2  = ~w~Color A = ~h~~1~~w~; Color B = ~h~~1~
+PAINTNO = ~g~Not enough money! The cost is $~1~
+PAINTYE = Enjoy the new color!
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!
-GOLF_F  = You bailed!
-GOLF_W  = There goes the golf car
+GOLF_F  = ~r~You bailed!
+GOLF_W  = ~r~There goes the golf car
 GOLF_TR = Haha, trolled
 
 [POLICE1]
@@ -62,10 +67,10 @@ INTRO1  = Ah, Mr. Vercetti! Well, sir, you caused us a lot of trouble back in th
 INTRO2  = I've heard you were looking for a job. So, can you do me a small favor?
 INTRO3  = There's a parked car to the west of the station.
 INTRO4  = Go to ~y~the deli in Little Havana~w~ and get the boys some donuts. Be quick! We're hungry.
-GETIN   = Get into the car.
-GONEAWY = Where did you go???
-CARF    = The car is destroyed!
-TRAVEL  = Get to the restaurant.
-GETBACK = Get back into the car!
+GETIN   = ~g~Get into the car.
+GONEAWY = ~r~Where did you go???
+CARF    = ~r~The car is destroyed!
+TRAVEL  = ~g~Get to the restaurant.
+GETBACK = ~g~Get back into the car!
 GANG1   = There he is!
 

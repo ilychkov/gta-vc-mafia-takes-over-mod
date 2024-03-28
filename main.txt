@@ -103,9 +103,9 @@ $info_pickup_14_z = 12.0712
 $info_pickup_15_x = -738.4838
 $info_pickup_15_y = -1153.7216
 $info_pickup_15_z = 10.7252
-$info_pickup_16_x = -1734.3063
-$info_pickup_16_y = -302.1328
-$info_pickup_16_z = 14.8683
+$info_pickup_16_x = -1030.719
+$info_pickup_16_y = -897.2713
+$info_pickup_16_z = 14.0089
 Pickup.Create($info_pickup_1, #INFO, 3, $info_pickup_1_x, $info_pickup_1_y, $info_pickup_1_z)
 Pickup.Create($info_pickup_2, #INFO, 3, $info_pickup_2_x, $info_pickup_2_y, $info_pickup_2_z)
 Pickup.Create($info_pickup_3, #INFO, 3, $info_pickup_3_x, $info_pickup_3_y, $info_pickup_3_z)
@@ -196,6 +196,7 @@ else
     $allow_police_chases = 1
     set_time_of_day start_time_hours start_time_minutes
     Player.InfiniteRun($player_char, True)
+    Player.Money($player_char) += 49963
     Model.Load(#PCJ600)
     load_all_models_now
     $start_x += 1.0
@@ -213,6 +214,7 @@ start_new_script @NPCS
 start_new_script @INTERACTIONS
 start_new_script @DROPMONEY
 start_new_script @POLICE_CHASES
+start_new_script @REPAINT
 start_new_script @GOLF_MARKER
 start_new_script @POLICE_1_MARKER
 
@@ -1033,6 +1035,7 @@ terminate_this_script
 :SUPER_CARS_START
 script_name 'SUPACAR'
 set_deatharrest_state 0
+start_new_script @SUPER_CARS_INFO
 
 :SUPER_CARS
 wait $default_wait_time
@@ -1067,6 +1070,29 @@ if
     is_player_in_area_in_car_2d $player_char 0 -300.0 -330.0 -230.0 -280.0
 goto_if_false @SUPER_CARS
 goto @SUPER_CARS_LEAVE
+
+:SUPER_CARS_INFO
+script_name 'SUPAINF'
+set_deatharrest_state 0
+
+:SUPER_CARS_INFO_WAIT
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @SUPER_CARS_INFO_WAIT
+if
+    is_player_in_area_2d $player_char 0 -300.0 -330.0 -230.0 -280.0
+goto_if_false @SUPER_CARS_INFO_WAIT
+get_game_timer $now
+if
+    is_int_var_greater_than_int_var $now > $last_help_printing_time
+goto_if_false @SUPER_CARS_INFO_WAIT
+print_help 'SUPAINF'
+UPDATE_LAST_HELP_PRINTING_TIME()
+terminate_this_script
+
+//-------------print_help helpers---------------
+//
 
 :UPDATE_LAST_HELP_PRINTING_TIME
 get_game_timer $last_help_printing_time
@@ -4118,6 +4144,195 @@ else
 end
 goto @POLICE_CHASES_WAIT
 
+//-------------Car repaint garage---------------
+//
+
+:REPAINT
+script_name 'REPAINT'
+set_deatharrest_state 0
+set_garage $682 = create_garage_type 15 door -1014.341 -857.732 6.325 to -1014.341 -841.532 10.885 depth -1001.315 -857.732
+set_rotating_garage_door $682
+open_garage $682
+const repaint_cost = -200
+const repaint_cost_minus_one = 199
+
+:REPAINT_WAIT
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @REPAINT_WAIT
+if and
+    is_player_in_zone $player_char in_zone 'HAVANA' // Little Havana
+    $onmission == 0
+goto_if_false @REPAINT_WAIT
+if and
+    is_player_stopped_in_area_in_car_3d $player_char 0 -1014.341 -857.732 6.325 -1001.315 -841.532 10.885
+    Player.Controllable($player_char)
+goto_if_false @REPAINT_WAIT
+if
+    not Player.Money($player_char) > repaint_cost_minus_one
+then
+    0@ = 0
+    0@ -= repaint_cost
+    print_with_number 'PAINTNO' 0@ time 250 1
+    jump @REPAINT_WAIT
+end
+Player.CanMove($player_char, False)
+print_help_forever 'PAINT'
+store_car_player_is_in_no_save 11@ = player $player_char
+get_car_colours 11@ color 12@ 13@
+set_lvar_int_to_lvar_int 14@ = 12@
+set_lvar_int_to_lvar_int 15@ = 13@
+set_interpolation_parameters 0.0 1500
+Camera.SetPosition(-1002.842, -842.3333, 10.365, 0.0, 0.0, 0.0)
+Camera.OnVehicle(11@, 15, 1)
+0@ = 0
+
+:REPAINT_PROCESS
+wait 0
+print_with_2_numbers_now 'PAINT2' 14@ 15@ time 50 1
+if
+    is_button_pressed 0 pressed_button 14
+then
+    0@ = 1
+    goto @REPAINT_CHANGE
+end
+if
+    is_button_pressed 0 pressed_button 16
+then
+    0@ = 2
+    goto @REPAINT_CHANGE
+end
+if
+    is_button_pressed 0 pressed_button 10
+then
+    0@ = 3
+    goto @REPAINT_CHANGE
+end
+if
+    is_button_pressed 0 pressed_button 11
+then
+    0@ = 4
+    goto @REPAINT_CHANGE
+end
+if
+    is_button_pressed 0 pressed_button 18
+then
+    goto @REPAINT_CANCEL
+end
+if
+    is_button_pressed 0 pressed_button 19
+then
+    0@ = 1
+    goto @REPAINT_ACCEPT
+end
+jump @REPAINT_PROCESS
+
+:REPAINT_CHANGE
+TIMERA = -200
+1@ = 0
+
+:REPAINT_CHANGE_WAIT
+wait 0
+print_with_2_numbers_now 'PAINT2' 14@ 15@ time 50 1
+if or
+    is_button_pressed 0 pressed_button 14
+    is_button_pressed 0 pressed_button 16
+    is_button_pressed 0 pressed_button 10
+    is_button_pressed 0 pressed_button 11
+then
+    if
+        TIMERA > 10
+    goto_if_false @REPAINT_CHANGE_WAIT
+    TIMERA = 0
+    1@ = 1
+else
+    1@ = 0
+end
+if
+    0@ == 1
+then
+    14@--
+    if
+        0 > 14@
+    then
+        14@ = 94
+    end
+end
+if
+    0@ == 2
+then
+    14@++
+    if
+        14@ > 94
+    then
+        14@ = 0
+    end
+end
+if
+    0@ == 3
+then
+    15@--
+    if
+        0 > 15@
+    then
+        15@ = 94
+    end
+end
+if
+    0@ == 4
+then
+    15@++
+    if
+        15@ > 94
+    then
+        15@ = 0
+    end
+end
+change_car_colour 11@ color_to 14@ 15@
+if
+    1@ == 0
+goto_if_false @REPAINT_CHANGE_WAIT
+goto @REPAINT_PROCESS
+
+:REPAINT_CANCEL
+wait 0
+if
+    not is_button_pressed 0 pressed_button 18
+goto_if_false @REPAINT_CANCEL
+change_car_colour 11@ color_to 12@ 13@
+0@ = 0
+goto @REPAINT_END
+
+:REPAINT_ACCEPT
+wait 0
+if
+    not is_button_pressed 0 pressed_button 19
+goto_if_false @REPAINT_ACCEPT
+Player.Money($player_char) += repaint_cost
+0@ = 1
+
+:REPAINT_END
+clear_help
+clear_prints
+if
+    0@ == 1
+then
+    print_big_q 'PAINTYE' time 5000 style 5
+end
+Player.CanMove($player_char, True)
+Camera.Restore_WithJumpCut
+
+:REPAINT_WAIT_FOR_LEAVE
+wait $default_wait_time
+if
+    Player.Defined($player_char)
+goto_if_false @REPAINT_WAIT
+if
+    is_player_in_area_in_car_3d $player_char 0 -1014.341 -857.732 6.325 -1001.315 -841.532 10.885
+goto_if_false @REPAINT_WAIT
+goto @REPAINT_WAIT_FOR_LEAVE
+
 //-------------Golf mission marker script---------------
 //
 
@@ -6859,6 +7074,7 @@ add_short_range_sprite_blip_for_coord $439 = create_icon_marker_without_sphere 2
 add_short_range_sprite_blip_for_coord $440 = create_icon_marker_without_sphere 27 at 319.0 441.3 12.0
 add_short_range_sprite_blip_for_coord $441 = create_icon_marker_without_sphere 27 at -903.0 -1261.1 12.0
 add_short_range_sprite_blip_for_coord $442 = create_icon_marker_without_sphere 27 at -876.2 -105.5 12.0
+add_short_range_sprite_blip_for_coord $repaint_marker = create_icon_marker_without_sphere 26 at -1007.3 -849.6 7.365
 add_sprite_blip_for_contact_point $icon_golf = create_icon_marker_and_sphere icon_golf at $golf_x $golf_y $golf_z
 add_sprite_blip_for_contact_point $icon_police = create_icon_marker_and_sphere icon_police at $police_x $police_y $police_z
 
@@ -7480,7 +7696,7 @@ create_car_generator $1881 = init_car_generator #STRETCH -1 -1 force_spawn 0 ala
 switch_car_generator $1881 cars_to_generate_to 101
 create_car_generator $1987 = init_car_generator #MAVERICK -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -391.0 -573.0 40.0 angle 355.5
 switch_car_generator $1987 cars_to_generate_to 0
-create_car_generator $1920 = init_car_generator #CHEETAH -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -221.3 -422.7 11.2 angle 90.0
+create_car_generator $1920 = init_car_generator #PCJ600 68 0 force_spawn 0 alarm 50 door_lock 0 min_delay 0 max_delay 10000 at -221.3 -422.7 11.2 angle 90.0
 switch_car_generator $1920 cars_to_generate_to 101
 create_car_generator $1922 = init_car_generator #STINGER -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -492.8 -429.4 10.6 angle 0.0
 switch_car_generator $1922 cars_to_generate_to 101
