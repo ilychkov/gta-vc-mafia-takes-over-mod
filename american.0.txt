@@ -50,6 +50,8 @@ NPCPORT = Dev note: I wanted to put something cool here, but couldn't think of a
 STOLEN  = Stolen $~1~!
 COMPLET = Wow you got 100% :o
 PORNI   = North Island
+NIGOLF  = Guys, he's wearing golf clothes!
+NIGOLF2 = Must be the wrong guy, don't shoot!
 MUSIC   = You got ~y~music~w~! Go check your safehouse.
 PAINT   = ~h~~k~~VEHICLE_ACCELERATE~~w~, ~h~~k~~VEHICLE_BRAKE~~w~, ~h~~k~~GO_LEFT~~w~, ~h~~k~~GO_RIGHT~~w~ - change color, ~h~~k~~TOGGLE_SUBMISSIONS~~w~ - accept, ~h~~k~~VEHICLE_HORN~~w~ - cancel
 PAINT2  = ~w~Color A = ~h~~1~~w~; Color B = ~h~~1~

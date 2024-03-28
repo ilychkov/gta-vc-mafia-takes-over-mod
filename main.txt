@@ -1759,6 +1759,12 @@ if and
     Player.Defined($player_char)
     $game_saving == 0
 goto_if_false @NPCS_8B
+if and
+    $restart_overriden == 1
+    not is_player_in_zone $player_char in_zone 'PORNI' // Prawn Island
+then
+    cancel_override_restart
+end
 if
     is_player_in_area_2d $player_char 0 -270.0 750.0 250.0 1300.0
 goto_if_false @NPCS_8B
@@ -1767,11 +1773,16 @@ if
 then
     NPCS_NORTH_ISLAND_INIT()
 end
+if
+    $npcs_north_island_state > 0
+then
+    NPCS_NORTH_ISLAND_TICK()
+end
 goto @NPCS_9
 
 :NPCS_8B
 if
-    $npcs_north_island_state == 1
+    $npcs_north_island_state > 0
 then
     NPCS_NORTH_ISLAND_DESTROY()
 end
@@ -2769,20 +2780,67 @@ while True
         return
     end
 end
-Car.Create($npc_ni_car_1, #GANGBUR, -109.4051, 1082.913, 9.9269)
-Car.Angle($npc_ni_car_1) = 89.435
-Car.Create($npc_ni_car_2, #GANGBUR, -113.5147, 1058.0549, 9.8696)
-Car.Angle($npc_ni_car_2) = 60.7398
+$npc_ni_car_1 = 0
+$npc_ni_car_2 = 0
+$npc_ni_car_4 = 0
+$npc_ni_car_5 = 0
+$npc_ni_1 = 0
+$npc_ni_2 = 0
+$npc_ni_3 = 0
+$npc_ni_4 = 0
+if
+    is_player_in_zone $player_char in_zone 'DTOWN' // Downtown
+then
+    Car.Create($npc_ni_car_1, #GANGBUR, -109.4051, 1082.913, 9.9269)
+    Car.Angle($npc_ni_car_1) = 89.435
+    Car.Create($npc_ni_car_2, #GANGBUR, -113.5147, 1058.0549, 9.8696)
+    Car.Angle($npc_ni_car_2) = 60.7398
+    lock_car_doors $npc_ni_car_1 door_status_to 3
+    lock_car_doors $npc_ni_car_2 door_status_to 3
+    Actor.Create($npc_ni_1, 4, #SGA, -104.1021, 1079.8887, 10.2301)
+    Actor.Create($npc_ni_2, 4, #SGB, -109.2758, 1058.9487, 10.2163)
+    Actor.Angle($npc_ni_1) = 180.0
+    Actor.Health($npc_ni_1) = 1000
+    Actor.Health($npc_ni_2) = 1000
+    set_char_suffers_critical_hits $npc_ni_1 dismemberment_possible 0
+    set_char_suffers_critical_hits $npc_ni_2 dismemberment_possible 0
+    clear_char_threat_search $npc_ni_1
+    clear_char_threat_search $npc_ni_2
+    give_weapon_to_char $npc_ni_1 weapon 23 ammo 9999
+    give_weapon_to_char $npc_ni_2 weapon 23 ammo 9999
+    set_char_accuracy $npc_ni_1 weapon_accuracy_to 90
+    set_char_accuracy $npc_ni_2 weapon_accuracy_to 90
+    set_char_stay_in_same_place $npc_ni_1 maintain_position_when_attacked 1
+    set_char_stay_in_same_place $npc_ni_2 maintain_position_when_attacked 1
+end
+if
+    is_player_in_zone $player_char in_zone 'BEACH3' // Vice Point
+then
+    Car.Create($npc_ni_car_4, #GANGBUR, 113.7184, 1013.6627, 10.3533)
+    Car.Angle($npc_ni_car_4) = 225.6319
+    Car.Create($npc_ni_car_5, #GANGBUR, 105.2093, 991.6122, 10.4461)
+    Car.Angle($npc_ni_car_5) = 279.4296
+    lock_car_doors $npc_ni_car_4 door_status_to 3
+    lock_car_doors $npc_ni_car_5 door_status_to 3
+    Actor.Create($npc_ni_3, 4, #SGA, 110.9132, 991.3585, 11.5455)
+    Actor.Create($npc_ni_4, 4, #SGB, 121.8202, 1010.4925, 12.0289)
+    Actor.Angle($npc_ni_4) = 180.0
+    Actor.Health($npc_ni_3) = 1000
+    Actor.Health($npc_ni_4) = 1000
+    set_char_suffers_critical_hits $npc_ni_3 dismemberment_possible 0
+    set_char_suffers_critical_hits $npc_ni_4 dismemberment_possible 0
+    clear_char_threat_search $npc_ni_3
+    clear_char_threat_search $npc_ni_4
+    give_weapon_to_char $npc_ni_3 weapon 23 ammo 9999
+    give_weapon_to_char $npc_ni_4 weapon 23 ammo 9999
+    set_char_accuracy $npc_ni_3 weapon_accuracy_to 90
+    set_char_accuracy $npc_ni_4 weapon_accuracy_to 90
+    set_char_stay_in_same_place $npc_ni_3 maintain_position_when_attacked 1
+    set_char_stay_in_same_place $npc_ni_4 maintain_position_when_attacked 1
+end
 Car.Create($npc_ni_car_3, #GANGBUR, -6.568, 1057.2262, 9.8295)
 Car.Angle($npc_ni_car_3) = 224.6226
-Car.Create($npc_ni_car_4, #GANGBUR, 113.7184, 1013.6627, 10.3533)
-Car.Angle($npc_ni_car_4) = 225.6319
-Car.Create($npc_ni_car_5, #GANGBUR, 105.2093, 991.6122, 10.4461)
-Car.Angle($npc_ni_car_5) = 279.4296
-Actor.Create($npc_ni_1, 4, #SGA, -104.1021, 1079.8887, 10.2301)
-Actor.Create($npc_ni_2, 4, #SGB, -109.2758, 1058.9487, 10.2163)
-Actor.Create($npc_ni_3, 4, #SGA, 110.9132, 991.3585, 11.5455)
-Actor.Create($npc_ni_4, 4, #SGB, 121.8202, 1010.4925, 12.0289)
+lock_car_doors $npc_ni_car_3 door_status_to 3
 Actor.Create($npc_ni_5, 4, #SGA, 10.6145, 1060.0016, 11.1686)
 Actor.Create($npc_ni_6, 4, #SGB, 7.0084, 1060.3077, 11.079)
 Actor.Create($npc_ni_7, 4, #SGA, 47.9054, 1040.8206, 9.982)
@@ -2794,10 +2852,15 @@ Actor.Create($npc_ni_12, 4, #SGB, 41.6618, 1057.3385, 9.9809)
 Actor.Create($npc_ni_13, 4, #SGA, -1.5825, 1078.766, 12.9022)
 Actor.Create($npc_ni_14, 4, #SGB, 9.8554, 1019.0069, 18.1238)
 Actor.Create($npc_ni_15, 4, #SGA, -21.9508, 1027.8894, 18.119)
-Actor.Health($npc_ni_1) = 1000
-Actor.Health($npc_ni_2) = 1000
-Actor.Health($npc_ni_3) = 1000
-Actor.Health($npc_ni_4) = 1000
+Actor.Angle($npc_ni_5) = 180.0
+Actor.Angle($npc_ni_6) = 180.0
+Actor.Angle($npc_ni_7) = 180.0
+Actor.Angle($npc_ni_8) = 180.0
+Actor.Angle($npc_ni_9) = 180.0
+Actor.Angle($npc_ni_10) = 180.0
+Actor.Angle($npc_ni_11) = 180.0
+Actor.Angle($npc_ni_12) = 180.0
+Actor.Angle($npc_ni_13) = 180.0
 Actor.Health($npc_ni_5) = 1000
 Actor.Health($npc_ni_6) = 1000
 Actor.Health($npc_ni_7) = 1000
@@ -2809,10 +2872,6 @@ Actor.Health($npc_ni_12) = 1000
 Actor.Health($npc_ni_13) = 1000
 Actor.Health($npc_ni_14) = 1000
 Actor.Health($npc_ni_15) = 1000
-set_char_suffers_critical_hits $npc_ni_1 dismemberment_possible 0
-set_char_suffers_critical_hits $npc_ni_2 dismemberment_possible 0
-set_char_suffers_critical_hits $npc_ni_3 dismemberment_possible 0
-set_char_suffers_critical_hits $npc_ni_4 dismemberment_possible 0
 set_char_suffers_critical_hits $npc_ni_5 dismemberment_possible 0
 set_char_suffers_critical_hits $npc_ni_6 dismemberment_possible 0
 set_char_suffers_critical_hits $npc_ni_7 dismemberment_possible 0
@@ -2824,11 +2883,6 @@ set_char_suffers_critical_hits $npc_ni_12 dismemberment_possible 0
 set_char_suffers_critical_hits $npc_ni_13 dismemberment_possible 0
 set_char_suffers_critical_hits $npc_ni_14 dismemberment_possible 0
 set_char_suffers_critical_hits $npc_ni_15 dismemberment_possible 0
-set_char_suffers_critical_hits $npc_ni_1 dismemberment_possible 0
-clear_char_threat_search $npc_ni_1
-clear_char_threat_search $npc_ni_2
-clear_char_threat_search $npc_ni_3
-clear_char_threat_search $npc_ni_4
 clear_char_threat_search $npc_ni_5
 clear_char_threat_search $npc_ni_6
 clear_char_threat_search $npc_ni_7
@@ -2840,10 +2894,6 @@ clear_char_threat_search $npc_ni_12
 clear_char_threat_search $npc_ni_13
 clear_char_threat_search $npc_ni_14
 clear_char_threat_search $npc_ni_15
-give_weapon_to_char $npc_ni_1 weapon 23 ammo 9999
-give_weapon_to_char $npc_ni_2 weapon 23 ammo 9999
-give_weapon_to_char $npc_ni_3 weapon 23 ammo 9999
-give_weapon_to_char $npc_ni_4 weapon 23 ammo 9999
 give_weapon_to_char $npc_ni_5 weapon 32 ammo 9999
 give_weapon_to_char $npc_ni_6 weapon 32 ammo 9999
 give_weapon_to_char $npc_ni_7 weapon 23 ammo 9999
@@ -2855,10 +2905,6 @@ give_weapon_to_char $npc_ni_12 weapon 32 ammo 9999
 give_weapon_to_char $npc_ni_13 weapon 32 ammo 9999
 give_weapon_to_char $npc_ni_14 weapon 32 ammo 9999
 give_weapon_to_char $npc_ni_15 weapon 32 ammo 9999
-set_char_accuracy $npc_ni_1 weapon_accuracy_to 90
-set_char_accuracy $npc_ni_2 weapon_accuracy_to 90
-set_char_accuracy $npc_ni_3 weapon_accuracy_to 90
-set_char_accuracy $npc_ni_4 weapon_accuracy_to 90
 set_char_accuracy $npc_ni_5 weapon_accuracy_to 90
 set_char_accuracy $npc_ni_6 weapon_accuracy_to 90
 set_char_accuracy $npc_ni_7 weapon_accuracy_to 90
@@ -2870,10 +2916,6 @@ set_char_accuracy $npc_ni_12 weapon_accuracy_to 90
 set_char_accuracy $npc_ni_13 weapon_accuracy_to 90
 set_char_accuracy $npc_ni_14 weapon_accuracy_to 90
 set_char_accuracy $npc_ni_15 weapon_accuracy_to 90
-set_char_stay_in_same_place $npc_ni_1 maintain_position_when_attacked 1
-set_char_stay_in_same_place $npc_ni_2 maintain_position_when_attacked 1
-set_char_stay_in_same_place $npc_ni_3 maintain_position_when_attacked 1
-set_char_stay_in_same_place $npc_ni_4 maintain_position_when_attacked 1
 set_char_stay_in_same_place $npc_ni_5 maintain_position_when_attacked 1
 set_char_stay_in_same_place $npc_ni_6 maintain_position_when_attacked 1
 set_char_stay_in_same_place $npc_ni_7 maintain_position_when_attacked 1
@@ -2885,28 +2927,118 @@ set_char_stay_in_same_place $npc_ni_12 maintain_position_when_attacked 1
 set_char_stay_in_same_place $npc_ni_13 maintain_position_when_attacked 1
 set_char_stay_in_same_place $npc_ni_14 maintain_position_when_attacked 1
 set_char_stay_in_same_place $npc_ni_15 maintain_position_when_attacked 1
-set_char_obj_kill_player_on_foot $npc_ni_1 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_2 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_3 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_4 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_5 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_6 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_7 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_8 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_9 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_10 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_11 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_12 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_13 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_14 kill_player $player_char
-set_char_obj_kill_player_on_foot $npc_ni_15 kill_player $player_char
+if
+    not is_player_wearing $player_char skin == 'PLAYER4'
+then
+    if and
+        not Actor.Dead($npc_ni_1)
+        not Actor.Dead($npc_ni_2)
+    then
+        set_char_obj_kill_player_on_foot $npc_ni_1 kill_player $player_char
+        set_char_obj_kill_player_on_foot $npc_ni_2 kill_player $player_char
+    end
+    if and
+        not Actor.Dead($npc_ni_3)
+        not Actor.Dead($npc_ni_4)
+    then
+        set_char_obj_kill_player_on_foot $npc_ni_3 kill_player $player_char
+        set_char_obj_kill_player_on_foot $npc_ni_4 kill_player $player_char
+    end
+    set_char_obj_kill_player_on_foot $npc_ni_5 kill_player $player_char
+    set_char_obj_kill_player_on_foot $npc_ni_6 kill_player $player_char
+    set_char_obj_kill_player_on_foot $npc_ni_7 kill_player $player_char
+    set_char_obj_kill_player_on_foot $npc_ni_8 kill_player $player_char
+    set_char_obj_kill_player_on_foot $npc_ni_9 kill_player $player_char
+    set_char_obj_kill_player_on_foot $npc_ni_10 kill_player $player_char
+    set_char_obj_kill_player_on_foot $npc_ni_11 kill_player $player_char
+    set_char_obj_kill_player_on_foot $npc_ni_12 kill_player $player_char
+    set_char_obj_kill_player_on_foot $npc_ni_13 kill_player $player_char
+    set_char_obj_kill_player_on_foot $npc_ni_14 kill_player $player_char
+    set_char_obj_kill_player_on_foot $npc_ni_15 kill_player $player_char
+else
+    $npcs_north_island_state++
+end
 Model.Destroy(#GANGBUR)
 Model.Destroy(#SGA)
 Model.Destroy(#SGB)
 Model.Destroy(#UZI)
 Model.Destroy(#MINIGUN)
 Model.Destroy(#M60)
-$npcs_north_island_state = 1
+$npcs_north_island_state++
+return
+
+:NPCS_NORTH_ISLAND_TICK
+if and
+    $npcs_north_island_state == 1
+    is_player_in_zone $player_char in_zone 'PORNI' // Prawn Island
+then
+    override_next_restart 493.5 703.1 11.1 angle 90.0
+    $restart_overriden = 1
+    $npcs_north_island_state = 9
+end
+if and
+    $npcs_north_island_state == 2
+    is_player_in_zone $player_char in_zone 'PORNI' // Prawn Island
+then
+    print_now 'NIGOLF' time 3000 1
+    TIMERA = 0
+    $npcs_north_island_state++
+end
+if and
+    $npcs_north_island_state == 3
+    TIMERA > 3000
+then
+    print_now 'NIGOLF2' time 3000 1
+    TIMERA = 0
+    TIMERB = 0
+    $npcs_north_island_state++
+end
+if and
+    $npcs_north_island_state > 3
+    9 > $npcs_north_island_state
+then
+    if
+        TIMERA > 3100
+    then
+        if
+            not Actor.Dead($npc_ni_1)
+        then
+            set_char_wait_state $npc_ni_1 anim 2 wait_state_time -1
+        end
+        if
+            not Actor.Dead($npc_ni_3)
+        then
+            set_char_wait_state $npc_ni_3 anim 2 wait_state_time -1
+        end
+        set_char_wait_state $npc_ni_5 anim 2 wait_state_time -1
+        set_char_wait_state $npc_ni_7 anim 2 wait_state_time -1
+        set_char_wait_state $npc_ni_9 anim 2 wait_state_time -1
+        set_char_wait_state $npc_ni_11 anim 2 wait_state_time -1
+        set_char_wait_state $npc_ni_13 anim 2 wait_state_time -1
+        set_char_wait_state $npc_ni_15 anim 2 wait_state_time -1
+        TIMERA = 0
+    end
+    if
+        TIMERB > 3400
+    then
+        if
+            not Actor.Dead($npc_ni_2)
+        then
+            set_char_wait_state $npc_ni_2 anim 8 wait_state_time -1
+        end
+        if
+            not Actor.Dead($npc_ni_4)
+        then
+            set_char_wait_state $npc_ni_4 anim 8 wait_state_time -1
+        end
+        set_char_wait_state $npc_ni_6 anim 8 wait_state_time -1
+        set_char_wait_state $npc_ni_8 anim 8 wait_state_time -1
+        set_char_wait_state $npc_ni_10 anim 8 wait_state_time -1
+        set_char_wait_state $npc_ni_12 anim 8 wait_state_time -1
+        set_char_wait_state $npc_ni_14 anim 8 wait_state_time -1
+        TIMERB = 0
+    end
+end
 return
 
 :NPCS_NORTH_ISLAND_DESTROY
@@ -7139,6 +7271,7 @@ $allow_police_chases = 0
 $police_chases_bonus = 1000
 $last_help_printing_time = 0
 $game_completed = 0
+$restart_overriden = 0
 
 add_short_range_sprite_blip_for_coord $icon_vercetti = create_icon_marker_without_sphere 29 at -246.0713 -324.6199 10.2586
 add_short_range_sprite_blip_for_coord $439 = create_icon_marker_without_sphere 27 at -3.8 -1265.8 12.0
