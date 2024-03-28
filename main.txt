@@ -7574,6 +7574,10 @@ Object.Init($1801, #DTS_GS_LIFTDOORL, -559.476, 783.107, 23.279)
 Object.RemoveFromMissionCleanupList($1801)
 Object.Init($1802, #DTS_GS_LIFTDOORR, -559.476, 781.34, 23.279)
 Object.RemoveFromMissionCleanupList($1802)
+Object.Init($film_studio_front_gate_closed, #CI_GATESCLOSED, 11.697, 963.176, 12.258)
+Object.RemoveFromMissionCleanupList($film_studio_front_gate_closed)
+Object.Init($film_studio_back_gate_closed, #CI_BACKGATECLOSE, -11.853, 884.06, 13.542)
+Object.RemoveFromMissionCleanupList($film_studio_back_gate_closed)
 Object.Init($1811, #CI_JETYGATESCLOSED, -116.738, 1027.729, 11.34)
 Object.RemoveFromMissionCleanupList($1811)
 Object.Init($1812, #NHAITPLATDR, -981.114, 265.419, 8.939)
@@ -7933,6 +7937,14 @@ create_car_generator $1939 = init_car_generator #ZEBRA -1 -1 force_spawn 0 alarm
 switch_car_generator $1939 cars_to_generate_to 0
 create_car_generator $84 = init_car_generator #POLMAV -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -614.0 804.0 30.0 angle 0.0
 switch_car_generator $84 cars_to_generate_to 101
+create_car_generator $87 = init_car_generator #REGINA 8 32 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1022.6 -868.6 12.2 angle 175.0
+switch_car_generator $87 cars_to_generate_to 101
+create_car_generator $88 = init_car_generator #SABRE 35 0 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1014.1 -869.4 12.2 angle 188.0
+switch_car_generator $88 cars_to_generate_to 101
+create_car_generator $89 = init_car_generator #RANCHER 84 48 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1014.3 -868.8 17.9 angle 195.0
+switch_car_generator $89 cars_to_generate_to 101
+create_car_generator $90 = init_car_generator #INFERNUS 60 0 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1023.2 -868.1 17.9 angle 172.0
+switch_car_generator $90 cars_to_generate_to 101
 //create_car_generator $tommy_car_spawn_1 = init_car_generator #CADDY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -281.5 -304.8 9.9 angle 231.0
 //create_car_generator $tommy_car_spawn_2 = init_car_generator #CADDY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -282.5 -308.9 9.9 angle 235.0
 //create_car_generator $tommy_car_spawn_3 = init_car_generator #CADDY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -283.5 -313.0 9.9 angle 239.0
