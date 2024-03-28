@@ -1777,6 +1777,38 @@ then
 end
 
 :NPCS_9
+if and
+    Player.Defined($player_char)
+    $game_saving == 0
+goto_if_false @NPCS_9B
+if
+    is_player_in_zone $player_char in_zone 'STARI' // Starfish Island
+goto_if_false @NPCS_9B
+if and
+    is_player_in_model $player_char driving_vehicle_type #PCJ600
+    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -221.3 -422.7 11.2 radius 2.0 2.0 2.0
+then
+    if
+        $npcs_nice_bike_state == 0
+    then
+        NPCS_NICE_BIKE_INIT()
+    end
+end
+if
+    $npcs_nice_bike_state > 0
+then
+    NPCS_NICE_BIKE_TICK()
+end
+goto @NPCS_10
+
+:NPCS_9B
+if
+    $npcs_nice_bike_state > 0
+then
+    NPCS_NICE_BIKE_DESTROY()
+end
+
+:NPCS_10
 goto @NPCS_1
 
 :NPCS_DIAZ_INIT
@@ -2899,6 +2931,45 @@ Actor.DestroyWithFade($npc_ni_13)
 Actor.DestroyWithFade($npc_ni_14)
 Actor.DestroyWithFade($npc_ni_15)
 $npcs_north_island_state = 0
+return
+
+:NPCS_NICE_BIKE_INIT
+load_mission_audio 'LAW1_7' as 1
+load_mission_audio 'LAW1_8' as 2
+while True
+    if and
+        has_mission_audio_loaded 1
+        has_mission_audio_loaded 2
+    then
+        break
+    end
+    wait 0
+    if or
+        not Player.Defined($player_char)
+        not $game_saving == 0
+    then
+        return
+    end
+end
+set_mission_audio_position 1 location -221.3 -422.7 11.2
+play_mission_audio 1
+$npcs_nice_bike_state = 1
+return
+
+:NPCS_NICE_BIKE_TICK
+if
+    has_mission_audio_finished 1
+then
+    set_mission_audio_position 2 location -201.3 -422.7 11.2
+    play_mission_audio 2
+    $npcs_nice_bike_state++
+end
+return
+
+:NPCS_NICE_BIKE_DESTROY
+clear_mission_audio 1
+clear_mission_audio 2
+$npcs_nice_bike_state = 0
 return
 
 //-------------Random interactions---------------
@@ -8195,7 +8266,7 @@ then
         locate_stopped_char_on_foot_2d 3@ stopped 0 -1413.7323 -826.7162 radius 2.0 2.0
     then
         $scene_step++
-        set_char_obj_sprint_to_coord 3@ sprint_to -1405.4761 -829.575 14.8713
+        set_char_obj_sprint_to_coord 3@ sprint_to -1405.4761 -829.575
         set_char_use_pednode_seek 3@ use_pednode_seek 0
     end
 end
