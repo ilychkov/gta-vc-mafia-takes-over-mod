@@ -13,7 +13,6 @@ INFO4   = You sure love picking these up, huh? There's ~y~quite a few~w~ of them
 INFO4B  = That wasn't a great joke, I apologize.
 INFO5   = What are you doing, man? Get back down!
 INFO6   = It's a beautiful view, isn't it?
-INFO6B  = I can imagine the dev team really enjoyed working on this game.
 INFO7A  = You can't catch me!
 INFO7B  = Oh no you don't!
 INFO7C  = How about this?!

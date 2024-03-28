@@ -592,7 +592,7 @@ switch_widescreen 1
 set_interpolation_parameters 0.0 3000
 get_time_of_day 4@ 5@
 $allow_police_chases = 0
-set_time_of_day 2 0 // 2 AM
+set_time_of_day 2 0
 set_weather 4
 switch_car_generator $1860 cars_to_generate_to 0
 clear_area 0 at $golf_x $golf_y $golf_z range 1.0
@@ -601,32 +601,46 @@ Camera.PointAt(-173.7567, 444.1601, 18.915, 1) // -173.9067, 444.1601, 11.915
 wait 3000
 print_now 'INFO6' time 3000 2
 wait 2000
-// from 2 AM to 5:30 AM
-for 0@ = 120 to 330 step 4
+// from 4 AM to 5:30 AM
+TIMERA = 0
+while 4500 > TIMERA
+    wait 30
     if
-        210 > 0@
+        1500 > TIMERA
     then
-        wait 20
+        set_lvar_int_to_lvar_int 0@ = TIMERA
+        0@ *= 20
+        0@ /= 1500
+        set_lvar_int_to_lvar_int 12@ = 0@
     else
         if
-            270 > 0@
+            3000 > TIMERA
         then
-            wait 60
+            set_lvar_int_to_lvar_int 1@ = TIMERA
+            1@ -= 1500
+            1@ *= 50
+            1@ /= 1500
+            add_int_lvar_to_int_lvar 1@ += 0@
+            set_lvar_int_to_lvar_int 12@ = 1@
         else
-            wait 140
+            set_lvar_int_to_lvar_int 2@ = TIMERA
+            2@ -= 3000
+            2@ *= 20
+            2@ /= 1500
+            add_int_lvar_to_int_lvar 2@ += 1@
+            set_lvar_int_to_lvar_int 12@ = 2@
         end
     end
-    set_var_int_to_var_int 1@ = 0@
-    1@ /= 60
-    set_var_int_to_var_int 2@ = 1@
-    2@ *= 60
-    set_var_int_to_var_int 3@ = 0@
-    sub_int_var_from_int_var 3@ -= 2@
-    set_time_of_day 1@ 3@
+    12@ += 240 // 4 AM
+    set_var_int_to_var_int 13@ = 12@
+    13@ /= 60
+    set_var_int_to_var_int 14@ = 13@
+    14@ *= 60
+    set_var_int_to_var_int 15@ = 12@
+    sub_int_var_from_int_var 15@ -= 14@
+    set_time_of_day 13@ 15@
 end
-wait 500
-print_now 'INFO6B' time 4500 2
-wait 4800
+wait 1500
 fade 0 500
 wait 500
 fade 1 1000
@@ -3245,7 +3259,7 @@ end
 
 generate_random_int_in_range 0@ = random_int_in_ranges 1000 60000
 TIMERA = 0
-while 0@ > TIMERA
+while is_int_lvar_greater_than_int_lvar 0@ > TIMERA
     wait $default_wait_time
     if and
         Player.Defined($player_char)
@@ -7309,6 +7323,9 @@ Object.RemoveFromMissionCleanupList($dtn_sr_door_1)
 Object.Init($dtn_sr_door_2, #DTN_STADDOORB, -667.01, 1212.0, 11.2)
 Object.Angle($dtn_sr_door_2) = 270.0
 Object.RemoveFromMissionCleanupList($dtn_sr_door_2)
+Object.Init($ob_ap_door, #PH_BUILD_DR_CLOSED, 26.8, -1328.8, 13.0)
+Object.Angle($ob_ap_door) = 85.0
+Object.RemoveFromMissionCleanupList($ob_ap_door)
 Object.Init($ramp_1, #WATERJUMP1, 58.5874, -283.3163, 9.457)
 Object.Angle($ramp_1) = 3.4672
 Object.RemoveFromMissionCleanupList($ramp_1)
