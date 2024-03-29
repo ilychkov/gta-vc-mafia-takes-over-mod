@@ -1759,12 +1759,6 @@ if and
     Player.Defined($player_char)
     $game_saving == 0
 goto_if_false @NPCS_8B
-if and
-    $restart_overriden == 1
-    not is_player_in_zone $player_char in_zone 'PORNI' // Prawn Island
-then
-    cancel_override_restart
-end
 if
     is_player_in_area_2d $player_char 0 -270.0 750.0 250.0 1300.0
 goto_if_false @NPCS_8B
@@ -1773,18 +1767,50 @@ if
 then
     NPCS_NORTH_ISLAND_INIT()
 end
-if
-    $npcs_north_island_state > 0
-then
-    NPCS_NORTH_ISLAND_TICK()
-end
-goto @NPCS_9
+goto @NPCS_8_2
 
 :NPCS_8B
 if
     $npcs_north_island_state > 0
 then
     NPCS_NORTH_ISLAND_DESTROY()
+end
+
+:NPCS_8_2
+if and
+    Player.Defined($player_char)
+    $game_saving == 0
+goto_if_false @NPCS_8_2B
+if
+    is_player_in_zone $player_char in_zone 'PORNI' // Prawn Island
+goto_if_false @NPCS_8_2C
+if
+    $npcs_north_island_inner_state == 0
+then
+    NPCS_NORTH_ISLAND_INNER_INIT()
+end
+if
+    $npcs_north_island_inner_state > 0
+then
+    NPCS_NORTH_ISLAND_INNER_TICK()
+end
+goto @NPCS_9
+
+:NPCS_8_2C
+if
+    $restart_overriden == 1
+then
+    cancel_override_restart
+end
+if
+    not is_player_in_area_2d $player_char 0 -270.0 750.0 250.0 1300.0
+goto_if_false @NPCS_9
+
+:NPCS_8_2B
+if
+    $npcs_north_island_inner_state > 0
+then
+    NPCS_NORTH_ISLAND_INNER_DESTROY()
 end
 
 :NPCS_9
@@ -2759,16 +2785,12 @@ Model.Load(#GANGBUR)
 Model.Load(#SGA)
 Model.Load(#SGB)
 Model.Load(#UZI)
-Model.Load(#MINIGUN)
-Model.Load(#M60)
 while True
     if and
         Model.Available(#GANGBUR)
         Model.Available(#SGA)
         Model.Available(#SGB)
         Model.Available(#UZI)
-        Model.Available(#MINIGUN)
-        Model.Available(#M60)
     then
         break
     end
@@ -2837,6 +2859,71 @@ then
     set_char_accuracy $npc_ni_4 weapon_accuracy_to 90
     set_char_stay_in_same_place $npc_ni_3 maintain_position_when_attacked 1
     set_char_stay_in_same_place $npc_ni_4 maintain_position_when_attacked 1
+end
+if
+    not is_player_wearing $player_char skin == 'PLAYER4'
+then
+    if and
+        not Actor.Dead($npc_ni_1)
+        not Actor.Dead($npc_ni_2)
+    then
+        set_char_obj_kill_player_on_foot $npc_ni_1 kill_player $player_char
+        set_char_obj_kill_player_on_foot $npc_ni_2 kill_player $player_char
+    end
+    if and
+        not Actor.Dead($npc_ni_3)
+        not Actor.Dead($npc_ni_4)
+    then
+        set_char_obj_kill_player_on_foot $npc_ni_3 kill_player $player_char
+        set_char_obj_kill_player_on_foot $npc_ni_4 kill_player $player_char
+    end
+else
+    $npcs_north_island_state++
+end
+Model.Destroy(#GANGBUR)
+Model.Destroy(#SGA)
+Model.Destroy(#SGB)
+Model.Destroy(#UZI)
+$npcs_north_island_state++
+return
+
+:NPCS_NORTH_ISLAND_DESTROY
+Car.RemoveReferences($npc_ni_car_1)
+Car.RemoveReferences($npc_ni_car_2)
+Car.RemoveReferences($npc_ni_car_4)
+Car.RemoveReferences($npc_ni_car_5)
+Actor.DestroyWithFade($npc_ni_1)
+Actor.DestroyWithFade($npc_ni_2)
+Actor.DestroyWithFade($npc_ni_3)
+Actor.DestroyWithFade($npc_ni_4)
+$npcs_north_island_state = 0
+return
+
+:NPCS_NORTH_ISLAND_INNER_INIT
+Model.Load(#GANGBUR)
+Model.Load(#SGA)
+Model.Load(#SGB)
+Model.Load(#UZI)
+Model.Load(#MINIGUN)
+Model.Load(#M60)
+while True
+    if and
+        Model.Available(#GANGBUR)
+        Model.Available(#SGA)
+        Model.Available(#SGB)
+        Model.Available(#UZI)
+        Model.Available(#MINIGUN)
+        Model.Available(#M60)
+    then
+        break
+    end
+    wait 0
+    if or
+        not Player.Defined($player_char)
+        not $game_saving == 0
+    then
+        return
+    end
 end
 Car.Create($npc_ni_car_3, #GANGBUR, -6.568, 1057.2262, 9.8295)
 Car.Angle($npc_ni_car_3) = 224.6226
@@ -2930,20 +3017,6 @@ set_char_stay_in_same_place $npc_ni_15 maintain_position_when_attacked 1
 if
     not is_player_wearing $player_char skin == 'PLAYER4'
 then
-    if and
-        not Actor.Dead($npc_ni_1)
-        not Actor.Dead($npc_ni_2)
-    then
-        set_char_obj_kill_player_on_foot $npc_ni_1 kill_player $player_char
-        set_char_obj_kill_player_on_foot $npc_ni_2 kill_player $player_char
-    end
-    if and
-        not Actor.Dead($npc_ni_3)
-        not Actor.Dead($npc_ni_4)
-    then
-        set_char_obj_kill_player_on_foot $npc_ni_3 kill_player $player_char
-        set_char_obj_kill_player_on_foot $npc_ni_4 kill_player $player_char
-    end
     set_char_obj_kill_player_on_foot $npc_ni_5 kill_player $player_char
     set_char_obj_kill_player_on_foot $npc_ni_6 kill_player $player_char
     set_char_obj_kill_player_on_foot $npc_ni_7 kill_player $player_char
@@ -2956,7 +3029,9 @@ then
     set_char_obj_kill_player_on_foot $npc_ni_14 kill_player $player_char
     set_char_obj_kill_player_on_foot $npc_ni_15 kill_player $player_char
 else
-    $npcs_north_island_state++
+    print_now 'NIGOLF' time 3000 1
+    TIMERA = 0
+    $npcs_north_island_inner_state++
 end
 Model.Destroy(#GANGBUR)
 Model.Destroy(#SGA)
@@ -2964,38 +3039,23 @@ Model.Destroy(#SGB)
 Model.Destroy(#UZI)
 Model.Destroy(#MINIGUN)
 Model.Destroy(#M60)
-$npcs_north_island_state++
+override_next_restart 493.5 703.1 11.1 angle 90.0
+$restart_overriden = 1
+$npcs_north_island_inner_state++
 return
 
-:NPCS_NORTH_ISLAND_TICK
+:NPCS_NORTH_ISLAND_INNER_TICK
 if and
-    $npcs_north_island_state == 1
-    is_player_in_zone $player_char in_zone 'PORNI' // Prawn Island
-then
-    override_next_restart 493.5 703.1 11.1 angle 90.0
-    $restart_overriden = 1
-    $npcs_north_island_state = 9
-end
-if and
-    $npcs_north_island_state == 2
-    is_player_in_zone $player_char in_zone 'PORNI' // Prawn Island
-then
-    print_now 'NIGOLF' time 3000 1
-    TIMERA = 0
-    $npcs_north_island_state++
-end
-if and
-    $npcs_north_island_state == 3
+    $npcs_north_island_inner_state == 2
     TIMERA > 3000
 then
     print_now 'NIGOLF2' time 3000 1
     TIMERA = 0
     TIMERB = 0
-    $npcs_north_island_state++
+    $npcs_north_island_inner_state++
 end
-if and
-    $npcs_north_island_state > 3
-    9 > $npcs_north_island_state
+if
+    $npcs_north_island_inner_state > 2
 then
     if
         TIMERA > 3100
@@ -3041,16 +3101,8 @@ then
 end
 return
 
-:NPCS_NORTH_ISLAND_DESTROY
-Car.RemoveReferences($npc_ni_car_1)
-Car.RemoveReferences($npc_ni_car_2)
+:NPCS_NORTH_ISLAND_INNER_DESTROY
 Car.RemoveReferences($npc_ni_car_3)
-Car.RemoveReferences($npc_ni_car_4)
-Car.RemoveReferences($npc_ni_car_5)
-Actor.DestroyWithFade($npc_ni_1)
-Actor.DestroyWithFade($npc_ni_2)
-Actor.DestroyWithFade($npc_ni_3)
-Actor.DestroyWithFade($npc_ni_4)
 Actor.DestroyWithFade($npc_ni_5)
 Actor.DestroyWithFade($npc_ni_6)
 Actor.DestroyWithFade($npc_ni_7)
@@ -3062,7 +3114,7 @@ Actor.DestroyWithFade($npc_ni_12)
 Actor.DestroyWithFade($npc_ni_13)
 Actor.DestroyWithFade($npc_ni_14)
 Actor.DestroyWithFade($npc_ni_15)
-$npcs_north_island_state = 0
+$npcs_north_island_inner_state = 0
 return
 
 :NPCS_NICE_BIKE_INIT
