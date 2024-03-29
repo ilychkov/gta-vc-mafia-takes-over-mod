@@ -6,10 +6,6 @@ DEFINE MISSION 3 AT @POLICE_1          // Special Delivery
 
 //-------------MAIN---------------
 thread 'MAIN'
-var
-    $player_char: Player
-    $player_actor: Actor
-end
 set_fading_colour 0 0 0
 fade 0 (in) 0 ms
 set_total_number_of_missions 2 //todo
@@ -30,29 +26,29 @@ $skip_intro = 0
 {$I incl.debug.txt}
 
 request_collision $start_x $start_y
-Camera.SetAtPos($start_x, $start_y, $start_z)
-Player.Create($player_char, #NULL, $start_x, $start_y, $start_z)
-Actor.EmulateFromPlayer($player_actor, $player_char)
+load_scene $start_x $start_y $start_z
+create_player $player_char = create_player #NULL at $start_x $start_y $start_z
+get_player_char $player_actor = create_emulated_actor_from_player $player_char
 set_player_heading $player_char z_angle_to 94.052
-Player.Money($player_char) += 37
+add_score $player_char money += 37
 set_weather 0
 
 start_mission INITIAL
 
-Pickup.Create($110, #BRIBE, 15, 393.9, -60.2, 11.5)
-Pickup.Create($111, #BRIBE, 15, 116.0, -1313.1, 4.4)
-Pickup.Create($112, #BRIBE, 15, 393.7, -660.6, 10.7)
-Pickup.Create($113, #BRIBE, 15, 470.7, 70.1, 10.8)
-Pickup.Create($114, #BRIBE, 15, 382.7, 364.1, 10.8)
-Pickup.Create($115, #BRIBE, 15, 422.4, 971.2, 12.1)
-Pickup.Create($116, #BRIBE, 15, 89.1, 887.4, 10.5)
-Pickup.Create($117, #BRIBE, 15, -822.7, 1304.5, 11.7)
-Pickup.Create($118, #BRIBE, 15, -900.69, 251.4, 17.1)
-Pickup.Create($119, #BRIBE, 15, -973.7, 61.0, 10.4)
-Pickup.Create($120, #BRIBE, 15, -937.9, -114.1, 17.0)
-Pickup.Create($121, #BRIBE, 15, -1015.9, -627.9, 11.2)
-Pickup.Create($122, #BRIBE, 15, -906.3, -834.0, 15.7)
-Pickup.Create($bribe_safehouse, #BRIBE, 15, -287.7546, -352.2908, 11.173)
+create_pickup $110 = create_pickup #BRIBE type 15 at 393.9 -60.2 11.5
+create_pickup $111 = create_pickup #BRIBE type 15 at 116.0 -1313.1 4.4
+create_pickup $112 = create_pickup #BRIBE type 15 at 393.7 -660.6 10.7
+create_pickup $113 = create_pickup #BRIBE type 15 at 470.7 70.1 10.8
+create_pickup $114 = create_pickup #BRIBE type 15 at 382.7 364.1 10.8
+create_pickup $115 = create_pickup #BRIBE type 15 at 422.4 971.2 12.1
+create_pickup $116 = create_pickup #BRIBE type 15 at 89.1 887.4 10.5
+create_pickup $117 = create_pickup #BRIBE type 15 at -822.7 1304.5 11.7
+create_pickup $118 = create_pickup #BRIBE type 15 at -900.69 251.4 17.1
+create_pickup $119 = create_pickup #BRIBE type 15 at -973.7 61.0 10.4
+create_pickup $120 = create_pickup #BRIBE type 15 at -937.9 -114.1 17.0
+create_pickup $121 = create_pickup #BRIBE type 15 at -1015.9 -627.9 11.2
+create_pickup $122 = create_pickup #BRIBE type 15 at -906.3 -834.0 15.7
+create_pickup $bribe_safehouse = create_pickup #BRIBE type 15 at -287.7546 -352.2908 11.173
 
 $info_pickup_1_x = -262.1507
 $info_pickup_1_y = -376.0211
@@ -106,22 +102,22 @@ $info_pickup_15_z = 10.7252
 $info_pickup_16_x = -1030.719
 $info_pickup_16_y = -897.2713
 $info_pickup_16_z = 14.0089
-Pickup.Create($info_pickup_1, #INFO, 3, $info_pickup_1_x, $info_pickup_1_y, $info_pickup_1_z)
-Pickup.Create($info_pickup_2, #INFO, 3, $info_pickup_2_x, $info_pickup_2_y, $info_pickup_2_z)
-Pickup.Create($info_pickup_3, #INFO, 3, $info_pickup_3_x, $info_pickup_3_y, $info_pickup_3_z)
-Pickup.Create($info_pickup_4, #INFO, 3, $info_pickup_4_x, $info_pickup_4_y, $info_pickup_4_z)
-Pickup.Create($info_pickup_5, #INFO, 3, $info_pickup_5_x, $info_pickup_5_y, $info_pickup_5_z)
-Pickup.Create($info_pickup_6, #INFO, 3, $info_pickup_6_x, $info_pickup_6_y, $info_pickup_6_z)
-Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_x, $info_pickup_7_y, $info_pickup_7_z)
-Pickup.Create($info_pickup_8, #INFO, 3, $info_pickup_8_x, $info_pickup_8_y, $info_pickup_8_z)
-Pickup.Create($info_pickup_9, #INFO, 3, $info_pickup_9_x, $info_pickup_9_y, $info_pickup_9_z)
-Pickup.Create($info_pickup_10, #INFO, 3, $info_pickup_10_x, $info_pickup_10_y, $info_pickup_10_z)
-Pickup.Create($info_pickup_11, #INFO, 3, $info_pickup_11_x, $info_pickup_11_y, $info_pickup_11_z)
-Pickup.Create($info_pickup_12, #INFO, 3, $info_pickup_12_x, $info_pickup_12_y, $info_pickup_12_z)
-Pickup.Create($info_pickup_13, #INFO, 3, $info_pickup_13_x, $info_pickup_13_y, $info_pickup_13_z)
-Pickup.Create($info_pickup_14, #INFO, 3, $info_pickup_14_x, $info_pickup_14_y, $info_pickup_14_z)
-Pickup.Create($info_pickup_15, #INFO, 3, $info_pickup_15_x, $info_pickup_15_y, $info_pickup_15_z)
-Pickup.Create($info_pickup_16, #INFO, 3, $info_pickup_16_x, $info_pickup_16_y, $info_pickup_16_z)
+create_pickup $info_pickup_1 = create_pickup #INFO type 3 at $info_pickup_1_x $info_pickup_1_y $info_pickup_1_z
+create_pickup $info_pickup_2 = create_pickup #INFO type 3 at $info_pickup_2_x $info_pickup_2_y $info_pickup_2_z
+create_pickup $info_pickup_3 = create_pickup #INFO type 3 at $info_pickup_3_x $info_pickup_3_y $info_pickup_3_z
+create_pickup $info_pickup_4 = create_pickup #INFO type 3 at $info_pickup_4_x $info_pickup_4_y $info_pickup_4_z
+create_pickup $info_pickup_5 = create_pickup #INFO type 3 at $info_pickup_5_x $info_pickup_5_y $info_pickup_5_z
+create_pickup $info_pickup_6 = create_pickup #INFO type 3 at $info_pickup_6_x $info_pickup_6_y $info_pickup_6_z
+create_pickup $info_pickup_7 = create_pickup #INFO type 3 at $info_pickup_7_x $info_pickup_7_y $info_pickup_7_z
+create_pickup $info_pickup_8 = create_pickup #INFO type 3 at $info_pickup_8_x $info_pickup_8_y $info_pickup_8_z
+create_pickup $info_pickup_9 = create_pickup #INFO type 3 at $info_pickup_9_x $info_pickup_9_y $info_pickup_9_z
+create_pickup $info_pickup_10 = create_pickup #INFO type 3 at $info_pickup_10_x $info_pickup_10_y $info_pickup_10_z
+create_pickup $info_pickup_11 = create_pickup #INFO type 3 at $info_pickup_11_x $info_pickup_11_y $info_pickup_11_z
+create_pickup $info_pickup_12 = create_pickup #INFO type 3 at $info_pickup_12_x $info_pickup_12_y $info_pickup_12_z
+create_pickup $info_pickup_13 = create_pickup #INFO type 3 at $info_pickup_13_x $info_pickup_13_y $info_pickup_13_z
+create_pickup $info_pickup_14 = create_pickup #INFO type 3 at $info_pickup_14_x $info_pickup_14_y $info_pickup_14_z
+create_pickup $info_pickup_15 = create_pickup #INFO type 3 at $info_pickup_15_x $info_pickup_15_y $info_pickup_15_z
+create_pickup $info_pickup_16 = create_pickup #INFO type 3 at $info_pickup_16_x $info_pickup_16_y $info_pickup_16_z
 $info_pickups_active = 1 // for disabling the pickups while on a mission
 
 create_clothes_pickup $clothes_pickup_0 = create_clothes_pickup 1 at -253.23 -315.51 10.13
@@ -136,7 +132,7 @@ $clothes_pickup_3_available = 0
 $clothes_pickup_4_available = 0
 $clothes_pickup_5_available = 0
 
-Pickup.Create($music_pickup, #PICKUPMUSIC, 3, 8.8767, 1061.8584, 12.3126)
+create_pickup $music_pickup = create_pickup #PICKUPMUSIC type 3 at 8.8767 1061.8584 12.3126
 add_short_range_sprite_blip_for_coord $music_marker = create_icon_marker_without_sphere 31 at 8.8767 1061.8584 12.3126
 $music_found = 0
 
@@ -153,17 +149,17 @@ set_rotating_garage_door $garage1
 no_special_camera_for_this_garage $garage1
 set_maximum_number_of_cars_in_garage $garage1 max_cars_to 4
 
-Object.Init($714, #YT_MAIN_BODY, -375.499, -1322.31, 9.81124)
-Object.Init($715, #YT_MAIN_BODY2, -375.499, -1322.31, 9.81124)
-Object.Init($717, #YT_DOORS14, -375.499, -1322.31, 9.81124)
-Object.Init($718, #YT_TMP_BOAT, -375.499, -1322.31, 9.81124)
-Object.Init($719, #LODMAIN_BODY, -375.499, -1322.31, 9.81124)
+create_object_no_offset $714 = init_object #YT_MAIN_BODY at -375.499 -1322.31 9.81124
+create_object_no_offset $715 = init_object #YT_MAIN_BODY2 at -375.499 -1322.31 9.81124
+create_object_no_offset $717 = init_object #YT_DOORS14 at -375.499 -1322.31 9.81124
+create_object_no_offset $718 = init_object #YT_TMP_BOAT at -375.499 -1322.31 9.81124
+create_object_no_offset $719 = init_object #LODMAIN_BODY at -375.499 -1322.31 9.81124
 
 declare_mission_flag $onmission
 $game_saving = 0
 wait 0
 if
-    NOT Actor.Dead($player_actor)
+    not is_char_dead $player_actor
 then
     if
         $skip_intro == 1
@@ -177,10 +173,10 @@ then
 end
 //fade 1 (out) 1000 ms
 if
-    $player_char.Defined
+    is_player_playing $player_char
 then
     select_interior 0
-    Player.CanMove($player_char, False)
+    set_player_control $player_char can_move 0
     release_weather
 end
 wait 0
@@ -192,17 +188,17 @@ then
     start_mission INTRO
 else
     fade 1 0
-    Player.CanMove($player_char, True)
+    set_player_control $player_char can_move 1
     $allow_police_chases = 1
     set_time_of_day start_time_hours start_time_minutes
-    Player.InfiniteRun($player_char, True)
-    Player.Money($player_char) += 49963
-    Model.Load(#PCJ600)
+    set_player_never_gets_tired $player_char infinite_run_to 1
+    add_score $player_char money += 49963
+    request_model #PCJ600
     load_all_models_now
     $start_x += 1.0
-    Car.Create($bike, #PCJ600, $start_x, $start_y, $start_z)
-    Car.RemoveReferences($bike)
-    Model.Destroy(#PCJ600)
+    create_car $bike = create_car #PCJ600 at $start_x $start_y $start_z
+    mark_car_as_no_longer_needed $bike
+    mark_model_as_no_longer_needed #PCJ600
 end
 
 start_new_script @PSAVE1
@@ -243,7 +239,7 @@ TIMERA = 0
 :MAIN_INFO
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @MAIN_INFO
 get_game_timer $now
 if and
@@ -260,13 +256,13 @@ jump @MAIN
 :INTRO_SKIPPED
 script_name 'INTSKIP'
 print 'INTSKIP' time 4000 1
-Player.WantedLevel($player_char) = 1
+alter_wanted_level $player_char wanted_level_to 1
 wait 4000
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @INTRO_SKIPPED_END
 print 'INTSKI2' time 1000 1
-Player.WantedLevel($player_char) = 0
+alter_wanted_level $player_char wanted_level_to 0
 
 :INTRO_SKIPPED_END
 terminate_this_script
@@ -280,13 +276,13 @@ script_name 'PSAVE1'
 :PSAVE1_10
 wait 250
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @PSAVE1_311
 if
     is_player_in_zone $player_char in_zone 'STARI' // Starfish Island
 goto_if_false @PSAVE1_311
 if
-    Player.Controllable($player_char)
+    can_player_start_mission $player_char
 goto_if_false @PSAVE1_311
 if
     $onmission == 0
@@ -294,25 +290,25 @@ goto_if_false @PSAVE1_281
 if
     $save_pickup_1_exists == 0
 goto_if_false @PSAVE1_138
-Pickup.Create($save_pickup_1, #PICKUPSAVE, 3, -246.0713, -324.6199, 10.2586)
+create_pickup $save_pickup_1 = create_pickup #PICKUPSAVE type 3 at -246.0713 -324.6199 10.2586
 $save_pickup_1_exists = 1
 
 :PSAVE1_138
 if
-    Pickup.Picked_up($save_pickup_1)
+    has_pickup_been_collected $save_pickup_1
 goto_if_false @PSAVE1_274
 HELP_ME()
-Camera.SetPosition(-260.73, -322.83, 10.29, 0.0, 0.0, 0.0)
-Camera.PointAt(-249.48, -327.64, 10.18, 2)
+set_fixed_camera_position -260.73 -322.83 10.29 rotation 0.0 0.0 0.0
+point_camera_at_point -249.48 -327.64 10.18 switchstyle 2
 set_char_obj_run_to_coord $player_actor run_to -244.79 -323.32
 wait 1500
 set_char_obj_no_obj $player_actor
 HELP_4118()
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @PSAVE1_267
-Pickup.Destroy($save_pickup_1)
-Pickup.Create($save_pickup_1, #PICKUPSAVE, 3, -246.0713, -324.6199, 10.2586)
+remove_pickup $save_pickup_1
+create_pickup $save_pickup_1 = create_pickup #PICKUPSAVE type 3 at -246.0713 -324.6199 10.2586
 do_fade 1 1000
 clear_area 1 at -248.4922 -327.0389 10.1529 range 1.0
 set_player_coordinates $player_char at -248.4922 -327.0389 9.1529
@@ -328,7 +324,7 @@ goto @PSAVE1_311
 if
     $save_pickup_1_exists == 1
 goto_if_false @PSAVE1_311
-Pickup.Destroy($save_pickup_1)
+remove_pickup $save_pickup_1
 $save_pickup_1_exists = 0
 
 :PSAVE1_311
@@ -340,13 +336,13 @@ script_name 'PSAVE2'
 :PSAVE2_10
 wait 250
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @PSAVE2_311
 if
     is_player_in_zone $player_char in_zone 'BEACH1' // Ocean Beach
 goto_if_false @PSAVE2_311
 if
-    Player.Controllable($player_char)
+    can_player_start_mission $player_char
 goto_if_false @PSAVE2_311
 if
     $onmission == 0
@@ -354,26 +350,26 @@ goto_if_false @PSAVE2_281
 if
     $save_pickup_2_exists == 0
 goto_if_false @PSAVE2_138
-Pickup.Create($save_pickup_2, #PICKUPSAVE, 3, 219.3, -1273.5, 11.5)
+create_pickup $save_pickup_2 = create_pickup #PICKUPSAVE type 3 at 219.3 -1273.5 11.5
 $save_pickup_2_exists = 1
 
 :PSAVE2_138
 if
-    Pickup.Picked_up($save_pickup_2)
+    has_pickup_been_collected $save_pickup_2
 goto_if_false @PSAVE2_274
 HELP_ME()
-Camera.SetPosition(225.4271, -1282.7252, 12.0732, 0.0, 0.0, 0.0)
-Camera.PointAt(207.54, -1288.39, 13.3, 2)
-Actor.PutAt($player_actor, 211.11, -1289.15, 11.09)
+set_fixed_camera_position 225.4271 -1282.7252 12.0732 rotation 0.0 0.0 0.0
+point_camera_at_point 207.54 -1288.39 13.3 switchstyle 2
+set_char_coordinates $player_actor at 211.11 -1289.15 11.09
 set_char_obj_run_to_coord $player_actor run_to 204.15 -1287.58
 wait 1500
 set_char_obj_no_obj $player_actor
 HELP_4118()
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @PSAVE2_267
-Pickup.Destroy($save_pickup_2)
-Pickup.Create($save_pickup_2, #PICKUPSAVE, 3, 219.3, -1273.5, 11.5)
+remove_pickup $save_pickup_2
+create_pickup $save_pickup_2 = create_pickup #PICKUPSAVE type 3 at 219.3 -1273.5 11.5
 do_fade 1 1000
 clear_area 1 at 223.1 -1276.7 11.0 range 1.0
 set_player_coordinates $player_char at 223.1 -1276.7 11.0
@@ -389,7 +385,7 @@ goto @PSAVE2_311
 if
     $save_pickup_2_exists == 1
 goto_if_false @PSAVE2_311
-Pickup.Destroy($save_pickup_2)
+remove_pickup $save_pickup_2
 $save_pickup_2_exists = 0
 
 :PSAVE2_311
@@ -398,7 +394,7 @@ goto @PSAVE2_10
 :HELP_ME
 $game_saving = 1
 $onmission = 1
-Player.CanMove($player_char, False)
+set_player_control $player_char can_move 0
 return
 
 :HELP_4118
@@ -417,27 +413,27 @@ $game_saving = 0
 set_fading_colour 0 0 0
 do_fade 0 1000
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @HELP_4208
 set_player_health $player_char health_to 200
-Player.CanMove($player_char, False)
+set_player_control $player_char can_move 0
 
 :HELP_4208
 return
 
 :HELP_4210
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @HELP_4230
-Camera.Restore_WithJumpCut
-Camera.SetBehindPlayer
+restore_camera_jumpcut
+set_camera_behind_player
 
 :HELP_4230
 wait 500
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @HELP_4265
-Player.CanMove($player_char, True)
+set_player_control $player_char can_move 1
 $onmission = 0
 
 :HELP_4265
@@ -452,7 +448,7 @@ script_name 'INFOPIC'
 :INFOPICS_LOOP
 wait 0
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @INFOPICS_LOOP
 if
     $onmission == 0
@@ -464,20 +460,20 @@ if
     $info_1_picked_up == 0
 goto_if_false @INFOPICS_2
 if
-    Pickup.Picked_up($info_pickup_1)
+    has_pickup_been_collected $info_pickup_1
 goto_if_false @INFOPICS_2
-Pickup.Destroy($info_pickup_1)
+remove_pickup $info_pickup_1
 $info_1_picked_up = 1
-Player.CanMove($player_char, False)
+set_player_control $player_char can_move 0
 switch_widescreen 1
 set_interpolation_parameters 0.0 3000
-Camera.SetPosition(-256.1952, -354.6713, 20.6009, 0.0, 0.0, 0.0)
-Camera.PointAt(-249.0279, -328.2032, 12.1777, 1) // 10.1777
+set_fixed_camera_position -256.1952 -354.6713 20.6009 rotation 0.0 0.0 0.0
+point_camera_at_point -249.0279 -328.2032 12.1777 switchstyle 1 // 10.1777
 wait 4300
-Player.CanMove($player_char, True)
+set_player_control $player_char can_move 1
 switch_widescreen 0
-Camera.Restore_WithJumpCut
-Camera.SetBehindPlayer
+restore_camera_jumpcut
+set_camera_behind_player
 INFOPICS_FOUND()
 if
     $player_knows_about_info_pickups == 1
@@ -492,24 +488,24 @@ if
     $info_2_picked_up == 0
 goto_if_false @INFOPICS_3
 if
-    Pickup.Picked_up($info_pickup_2)
+    has_pickup_been_collected $info_pickup_2
 goto_if_false @INFOPICS_3
-Pickup.Destroy($info_pickup_2)
+remove_pickup $info_pickup_2
 $info_2_picked_up = 1
-Player.CanMove($player_char, False)
+set_player_control $player_char can_move 0
 switch_widescreen 1
-Camera.SetPosition(-263.79, -331.11, 16.08, 0.0, 0.0, 0.0)
-Camera.PointAt(-256.03, -327.92, 14.63, 2)
+set_fixed_camera_position -263.79 -331.11 16.08 rotation 0.0 0.0 0.0
+point_camera_at_point -256.03 -327.92 14.63 switchstyle 2
 print_now 'INFO2' time 5000 1
 wait 5000
 set_interpolation_parameters 0.0 3000
-Camera.PointAt(-266.65, -314.12, 11.3, 1)
+point_camera_at_point -266.65 -314.12 11.3 switchstyle 1
 print_now 'INFO2B' time 4000 1
 wait 4000
-Player.CanMove($player_char, True)
+set_player_control $player_char can_move 1
 switch_widescreen 0
-Camera.Restore_WithJumpCut
-Camera.SetBehindPlayer
+restore_camera_jumpcut
+set_camera_behind_player
 clear_prints
 INFOPICS_FOUND()
 wait 1000
@@ -530,9 +526,9 @@ if
     $info_3_picked_up == 0
 goto_if_false @INFOPICS_4
 if
-    Pickup.Picked_up($info_pickup_3)
+    has_pickup_been_collected $info_pickup_3
 goto_if_false @INFOPICS_4
-Pickup.Destroy($info_pickup_3)
+remove_pickup $info_pickup_3
 $info_3_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO3'
@@ -550,9 +546,9 @@ if
     $info_4_picked_up == 0
 goto_if_false @INFOPICS_5
 if
-    Pickup.Picked_up($info_pickup_4)
+    has_pickup_been_collected $info_pickup_4
 goto_if_false @INFOPICS_5
-Pickup.Destroy($info_pickup_4)
+remove_pickup $info_pickup_4
 $info_4_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO4'
@@ -568,9 +564,9 @@ if
     $info_5_picked_up == 0
 goto_if_false @INFOPICS_6
 if
-    Pickup.Picked_up($info_pickup_5)
+    has_pickup_been_collected $info_pickup_5
 goto_if_false @INFOPICS_6
-Pickup.Destroy($info_pickup_5)
+remove_pickup $info_pickup_5
 $info_5_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO5'
@@ -584,11 +580,11 @@ if
     $info_6_picked_up == 0
 goto_if_false @INFOPICS_7
 if
-    Pickup.Picked_up($info_pickup_6)
+    has_pickup_been_collected $info_pickup_6
 goto_if_false @INFOPICS_7
-Pickup.Destroy($info_pickup_6)
+remove_pickup $info_pickup_6
 $info_6_picked_up = 1
-Player.CanMove($player_char, False)
+set_player_control $player_char can_move 0
 set_fading_colour 0 0 0
 switch_widescreen 1
 set_interpolation_parameters 0.0 3000
@@ -598,8 +594,8 @@ set_time_of_day 2 0
 set_weather 4
 switch_car_generator $1860 cars_to_generate_to 0
 clear_area 0 at $golf_x $golf_y $golf_z range 1.0
-Camera.SetPosition(-173.0802, 445.9708, 19.1287, 0.0, 0.0, 0.0) // -173.0802, 445.9708, 12.2287
-Camera.PointAt(-173.7567, 444.1601, 18.915, 1) // -173.9067, 444.1601, 11.915
+set_fixed_camera_position -173.0802 445.9708 19.1287 rotation 0.0 0.0 0.0 // -173.0802, 445.9708, 12.2287
+point_camera_at_point -173.7567 444.1601 18.915 switchstyle 1 // -173.9067, 444.1601, 11.915
 wait 3000
 print_now 'INFO6' time 3000 2
 wait 2000
@@ -646,10 +642,10 @@ wait 1500
 fade 0 500
 wait 500
 fade 1 1000
-Player.CanMove($player_char, True)
+set_player_control $player_char can_move 1
 switch_widescreen 0
-Camera.Restore_WithJumpCut
-Camera.SetBehindPlayer
+restore_camera_jumpcut
+set_camera_behind_player
 set_time_of_day 4@ 5@
 release_weather
 $allow_police_chases = 1
@@ -664,9 +660,9 @@ if
     $info_7_picked_up == 0
 goto_if_false @INFOPICS_8
 if
-    Pickup.Picked_up($info_pickup_7)
+    has_pickup_been_collected $info_pickup_7
 goto_if_false @INFOPICS_7_TRICKERY
-Pickup.Destroy($info_pickup_7)
+remove_pickup $info_pickup_7
 $info_7_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO7W'
@@ -685,8 +681,8 @@ goto_if_false @INFOPICS_7_TRICKERY2
 if
     locate_player_any_means_2d $player_char 0 $info_pickup_7_x $info_pickup_7_y radius 3.5 3.5
 then
-    Pickup.Destroy($info_pickup_7)
-    Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_moved_x, $info_pickup_7_moved_y, $info_pickup_7_moved_z)
+    remove_pickup $info_pickup_7
+    create_pickup $info_pickup_7 = create_pickup #INFO type 3 at $info_pickup_7_moved_x $info_pickup_7_moved_y $info_pickup_7_moved_z
     $info_7_moved = 1
     print_now 'INFO7A' time 3000 1
 end
@@ -699,8 +695,8 @@ goto_if_false @INFOPICS_7_TRICKERY3
 if
     locate_player_any_means_2d $player_char 0 $info_pickup_7_moved_x $info_pickup_7_moved_y radius 3.5 3.5
 then
-    Pickup.Destroy($info_pickup_7)
-    Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_x, $info_pickup_7_y, $info_pickup_7_z)
+    remove_pickup $info_pickup_7
+    create_pickup $info_pickup_7 = create_pickup #INFO type 3 at $info_pickup_7_x $info_pickup_7_y $info_pickup_7_z
     $info_7_moved = 2
     print_now 'INFO7B' time 3000 1
 end
@@ -713,8 +709,8 @@ goto_if_false @INFOPICS_8
 if
     locate_player_any_means_2d $player_char 0 $info_pickup_7_x $info_pickup_7_y radius 3.5 3.5
 then
-    Pickup.Destroy($info_pickup_7)
-    Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_x, $info_pickup_7_y, $info_pickup_7_movedtwice_z)
+    remove_pickup $info_pickup_7
+    create_pickup $info_pickup_7 = create_pickup #INFO type 3 at $info_pickup_7_x $info_pickup_7_y $info_pickup_7_movedtwice_z
     $info_7_moved = 3
     print_now 'INFO7C' time 3000 1
 end
@@ -724,9 +720,9 @@ if
     $info_8_picked_up == 0
 goto_if_false @INFOPICS_9
 if
-    Pickup.Picked_up($info_pickup_8)
+    has_pickup_been_collected $info_pickup_8
 goto_if_false @INFOPICS_9
-Pickup.Destroy($info_pickup_8)
+remove_pickup $info_pickup_8
 $info_8_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO8'
@@ -740,9 +736,9 @@ if
     $info_9_picked_up == 0
 goto_if_false @INFOPICS_10
 if
-    Pickup.Picked_up($info_pickup_9)
+    has_pickup_been_collected $info_pickup_9
 goto_if_false @INFOPICS_10
-Pickup.Destroy($info_pickup_9)
+remove_pickup $info_pickup_9
 $info_9_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO9'
@@ -756,9 +752,9 @@ if
     $info_10_picked_up == 0
 goto_if_false @INFOPICS_11
 if
-    Pickup.Picked_up($info_pickup_10)
+    has_pickup_been_collected $info_pickup_10
 goto_if_false @INFOPICS_11
-Pickup.Destroy($info_pickup_10)
+remove_pickup $info_pickup_10
 $info_10_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO10'
@@ -772,9 +768,9 @@ if
     $info_11_picked_up == 0
 goto_if_false @INFOPICS_12
 if
-    Pickup.Picked_up($info_pickup_11)
+    has_pickup_been_collected $info_pickup_11
 goto_if_false @INFOPICS_12
-Pickup.Destroy($info_pickup_11)
+remove_pickup $info_pickup_11
 $info_11_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO11'
@@ -790,9 +786,9 @@ if
     $info_12_picked_up == 0
 goto_if_false @INFOPICS_13
 if
-    Pickup.Picked_up($info_pickup_12)
+    has_pickup_been_collected $info_pickup_12
 goto_if_false @INFOPICS_13
-Pickup.Destroy($info_pickup_12)
+remove_pickup $info_pickup_12
 $info_12_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO12'
@@ -806,9 +802,9 @@ if
     $info_13_picked_up == 0
 goto_if_false @INFOPICS_14
 if
-    Pickup.Picked_up($info_pickup_13)
+    has_pickup_been_collected $info_pickup_13
 goto_if_false @INFOPICS_14
-Pickup.Destroy($info_pickup_13)
+remove_pickup $info_pickup_13
 $info_13_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO13'
@@ -822,9 +818,9 @@ if
     $info_14_picked_up == 0
 goto_if_false @INFOPICS_15
 if
-    Pickup.Picked_up($info_pickup_14)
+    has_pickup_been_collected $info_pickup_14
 goto_if_false @INFOPICS_15
-Pickup.Destroy($info_pickup_14)
+remove_pickup $info_pickup_14
 $info_14_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO14'
@@ -839,9 +835,9 @@ if
     $info_15_picked_up == 0
 goto_if_false @INFOPICS_16
 if
-    Pickup.Picked_up($info_pickup_15)
+    has_pickup_been_collected $info_pickup_15
 goto_if_false @INFOPICS_16
-Pickup.Destroy($info_pickup_15)
+remove_pickup $info_pickup_15
 $info_15_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO15'
@@ -855,9 +851,9 @@ if
     $info_16_picked_up == 0
 goto_if_false @INFOPICS_17
 if
-    Pickup.Picked_up($info_pickup_16)
+    has_pickup_been_collected $info_pickup_16
 goto_if_false @INFOPICS_17
-Pickup.Destroy($info_pickup_16)
+remove_pickup $info_pickup_16
 $info_16_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO16'
@@ -871,10 +867,10 @@ if
     $music_found == 0
 goto_if_false @INFOPICS_LOOP
 if
-    Pickup.Picked_up($music_pickup)
+    has_pickup_been_collected $music_pickup
 goto_if_false @INFOPICS_LOOP
-Pickup.Destroy($music_pickup)
-Marker.Disable($music_marker)
+remove_pickup $music_pickup
+remove_blip $music_marker
 $music_found = 1
 player_made_progress 1
 print_help 'MUSIC'
@@ -885,22 +881,22 @@ goto @INFOPICS_LOOP
 if
     $info_pickups_active == 1
 goto_if_false @INFOPICS_LOOP
-Pickup.Destroy($info_pickup_1)
-Pickup.Destroy($info_pickup_2)
-Pickup.Destroy($info_pickup_3)
-Pickup.Destroy($info_pickup_4)
-Pickup.Destroy($info_pickup_5)
-Pickup.Destroy($info_pickup_6)
-Pickup.Destroy($info_pickup_7)
-Pickup.Destroy($info_pickup_8)
-Pickup.Destroy($info_pickup_9)
-Pickup.Destroy($info_pickup_10)
-Pickup.Destroy($info_pickup_11)
-Pickup.Destroy($info_pickup_12)
-Pickup.Destroy($info_pickup_13)
-Pickup.Destroy($info_pickup_14)
-Pickup.Destroy($info_pickup_15)
-Pickup.Destroy($info_pickup_16)
+remove_pickup $info_pickup_1
+remove_pickup $info_pickup_2
+remove_pickup $info_pickup_3
+remove_pickup $info_pickup_4
+remove_pickup $info_pickup_5
+remove_pickup $info_pickup_6
+remove_pickup $info_pickup_7
+remove_pickup $info_pickup_8
+remove_pickup $info_pickup_9
+remove_pickup $info_pickup_10
+remove_pickup $info_pickup_11
+remove_pickup $info_pickup_12
+remove_pickup $info_pickup_13
+remove_pickup $info_pickup_14
+remove_pickup $info_pickup_15
+remove_pickup $info_pickup_16
 $info_pickups_active = 0
 goto @INFOPICS_LOOP
 
@@ -908,82 +904,82 @@ goto @INFOPICS_LOOP
 if
     $info_1_picked_up == 0
 then
-    Pickup.Create($info_pickup_1, #INFO, 3, $info_pickup_1_x, $info_pickup_1_y, $info_pickup_1_z)
+    create_pickup $info_pickup_1 = create_pickup #INFO type 3 at $info_pickup_1_x $info_pickup_1_y $info_pickup_1_z
 end
 if
     $info_2_picked_up == 0
 then
-    Pickup.Create($info_pickup_2, #INFO, 3, $info_pickup_2_x, $info_pickup_2_y, $info_pickup_2_z)
+    create_pickup $info_pickup_2 = create_pickup #INFO type 3 at $info_pickup_2_x $info_pickup_2_y $info_pickup_2_z
 end
 if
     $info_3_picked_up == 0
 then
-    Pickup.Create($info_pickup_3, #INFO, 3, $info_pickup_3_x, $info_pickup_3_y, $info_pickup_3_z)
+    create_pickup $info_pickup_3 = create_pickup #INFO type 3 at $info_pickup_3_x $info_pickup_3_y $info_pickup_3_z
 end
 if
     $info_4_picked_up == 0
 then
-    Pickup.Create($info_pickup_4, #INFO, 3, $info_pickup_4_x, $info_pickup_4_y, $info_pickup_4_z)
+    create_pickup $info_pickup_4 = create_pickup #INFO type 3 at $info_pickup_4_x $info_pickup_4_y $info_pickup_4_z
 end
 if
     $info_5_picked_up == 0
 then
-    Pickup.Create($info_pickup_5, #INFO, 3, $info_pickup_5_x, $info_pickup_5_y, $info_pickup_5_z)
+    create_pickup $info_pickup_5 = create_pickup #INFO type 3 at $info_pickup_5_x $info_pickup_5_y $info_pickup_5_z
 end
 if
     $info_6_picked_up == 0
 then
-    Pickup.Create($info_pickup_6, #INFO, 3, $info_pickup_6_x, $info_pickup_6_y, $info_pickup_6_z)
+    create_pickup $info_pickup_6 = create_pickup #INFO type 3 at $info_pickup_6_x $info_pickup_6_y $info_pickup_6_z
 end
 if
     $info_7_picked_up == 0
 then
-    Pickup.Create($info_pickup_7, #INFO, 3, $info_pickup_7_x, $info_pickup_7_y, $info_pickup_7_z)
+    create_pickup $info_pickup_7 = create_pickup #INFO type 3 at $info_pickup_7_x $info_pickup_7_y $info_pickup_7_z
 end
 if
     $info_8_picked_up == 0
 then
-    Pickup.Create($info_pickup_8, #INFO, 3, $info_pickup_8_x, $info_pickup_8_y, $info_pickup_8_z)
+    create_pickup $info_pickup_8 = create_pickup #INFO type 3 at $info_pickup_8_x $info_pickup_8_y $info_pickup_8_z
 end
 if
     $info_9_picked_up == 0
 then
-    Pickup.Create($info_pickup_9, #INFO, 3, $info_pickup_9_x, $info_pickup_9_y, $info_pickup_9_z)
+    create_pickup $info_pickup_9 = create_pickup #INFO type 3 at $info_pickup_9_x $info_pickup_9_y $info_pickup_9_z
 end
 if
     $info_10_picked_up == 0
 then
-    Pickup.Create($info_pickup_10, #INFO, 3, $info_pickup_10_x, $info_pickup_10_y, $info_pickup_10_z)
+    create_pickup $info_pickup_10 = create_pickup #INFO type 3 at $info_pickup_10_x $info_pickup_10_y $info_pickup_10_z
 end
 if
     $info_11_picked_up == 0
 then
-    Pickup.Create($info_pickup_11, #INFO, 3, $info_pickup_11_x, $info_pickup_11_y, $info_pickup_11_z)
+    create_pickup $info_pickup_11 = create_pickup #INFO type 3 at $info_pickup_11_x $info_pickup_11_y $info_pickup_11_z
 end
 if
     $info_12_picked_up == 0
 then
-    Pickup.Create($info_pickup_12, #INFO, 3, $info_pickup_12_x, $info_pickup_12_y, $info_pickup_12_z)
+    create_pickup $info_pickup_12 = create_pickup #INFO type 3 at $info_pickup_12_x $info_pickup_12_y $info_pickup_12_z
 end
 if
     $info_13_picked_up == 0
 then
-    Pickup.Create($info_pickup_13, #INFO, 3, $info_pickup_13_x, $info_pickup_13_y, $info_pickup_13_z)
+    create_pickup $info_pickup_13 = create_pickup #INFO type 3 at $info_pickup_13_x $info_pickup_13_y $info_pickup_13_z
 end
 if
     $info_14_picked_up == 0
 then
-    Pickup.Create($info_pickup_14, #INFO, 3, $info_pickup_14_x, $info_pickup_14_y, $info_pickup_14_z)
+    create_pickup $info_pickup_14 = create_pickup #INFO type 3 at $info_pickup_14_x $info_pickup_14_y $info_pickup_14_z
 end
 if
     $info_15_picked_up == 0
 then
-    Pickup.Create($info_pickup_15, #INFO, 3, $info_pickup_15_x, $info_pickup_15_y, $info_pickup_15_z)
+    create_pickup $info_pickup_15 = create_pickup #INFO type 3 at $info_pickup_15_x $info_pickup_15_y $info_pickup_15_z
 end
 if
     $info_16_picked_up == 0
 then
-    Pickup.Create($info_pickup_16, #INFO, 3, $info_pickup_16_x, $info_pickup_16_y, $info_pickup_16_z)
+    create_pickup $info_pickup_16 = create_pickup #INFO type 3 at $info_pickup_16_x $info_pickup_16_y $info_pickup_16_z
 end
 $info_pickups_active = 1
 $info_7_moved = 0
@@ -1021,7 +1017,7 @@ TIMERA = 0
 :INFOPICS_ALL_WAIT
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @INFOPICS_ALL_WAIT
 get_game_timer $now
 if and
@@ -1040,7 +1036,7 @@ start_new_script @SUPER_CARS_INFO
 :SUPER_CARS
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @SUPER_CARS
 if
     is_player_in_area_in_car_2d $player_char 0 -290.0 -320.0 -240.0 -290.0
@@ -1058,13 +1054,13 @@ then
 end
 store_car_player_is_in_no_save $player_car = player $player_char
 set_car_traction $player_car improve_handling 2.0
-Car.SetImmunities($player_car, 1, 1, 1, 0, 0)
+set_car_proofs $player_car immunities 1 1 1 0 0
 set_can_burst_car_tyres $player_car tires_vulnerable 0
 
 :SUPER_CARS_LEAVE
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @SUPER_CARS
 if
     is_player_in_area_in_car_2d $player_char 0 -300.0 -330.0 -230.0 -280.0
@@ -1078,7 +1074,7 @@ set_deatharrest_state 0
 :SUPER_CARS_INFO_WAIT
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @SUPER_CARS_INFO_WAIT
 if
     is_player_in_area_2d $player_char 0 -300.0 -330.0 -230.0 -280.0
@@ -1114,11 +1110,11 @@ set_deatharrest_state 0
 :CLOTHES_LOOP
 wait $default_wait_time
 if
-    Pickup.Picked_up($clothes_pickup_0)
+    has_pickup_been_collected $clothes_pickup_0
 goto_if_false @CLOTHES_1
 CLOTHES_673()
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 then
     undress_char $player_actor skin_to 'PLAYER'
     add_money_spent_on_clothes 50
@@ -1130,11 +1126,11 @@ if
     $clothes_pickup_1_available == 1
 goto_if_false @CLOTHES_2
 if
-    Pickup.Picked_up($clothes_pickup_1)
+    has_pickup_been_collected $clothes_pickup_1
 goto_if_false @CLOTHES_2
 CLOTHES_673()
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 then
     undress_char $player_actor skin_to 'PLAYER9'
     add_money_spent_on_clothes 50
@@ -1146,11 +1142,11 @@ if
     $clothes_pickup_2_available == 1
 goto_if_false @CLOTHES_3
 if
-    Pickup.Picked_up($clothes_pickup_2)
+    has_pickup_been_collected $clothes_pickup_2
 goto_if_false @CLOTHES_3
 CLOTHES_673()
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 then
     undress_char $player_actor skin_to 'PLAYER8'
     add_money_spent_on_clothes 50
@@ -1162,11 +1158,11 @@ if
     $clothes_pickup_3_available == 1
 goto_if_false @CLOTHES_4
 if
-    Pickup.Picked_up($clothes_pickup_3)
+    has_pickup_been_collected $clothes_pickup_3
 goto_if_false @CLOTHES_4
 CLOTHES_673()
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 then
     undress_char $player_actor skin_to 'PLAYER4'
     add_money_spent_on_clothes 50
@@ -1178,11 +1174,11 @@ if
     $clothes_pickup_4_available == 1
 goto_if_false @CLOTHES_5
 if
-    Pickup.Picked_up($clothes_pickup_4)
+    has_pickup_been_collected $clothes_pickup_4
 goto_if_false @CLOTHES_5
 CLOTHES_673()
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 then
     undress_char $player_actor skin_to 'PLAYER2'
     add_money_spent_on_clothes 50
@@ -1194,11 +1190,11 @@ if
     $clothes_pickup_5_available == 1
 goto_if_false @CLOTHES_6
 if
-    Pickup.Picked_up($clothes_pickup_5)
+    has_pickup_been_collected $clothes_pickup_5
 goto_if_false @CLOTHES_6
 CLOTHES_673()
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 then
     undress_char $player_actor skin_to 'PLAYER6'
     add_money_spent_on_clothes 50
@@ -1211,7 +1207,7 @@ goto @CLOTHES_LOOP
 :CLOTHES_673
 $1180 = 1
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @CLOTHES_742
 set_fading_colour 0 0 1
 do_fade 0 500
@@ -1231,10 +1227,10 @@ $1180 = 0
 
 :CLOTHES_749
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @CLOTHES_786
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
-Player.CanMove($player_char, False)
+set_player_control $player_char can_move 0
 goto @CLOTHES_793
 
 :CLOTHES_786
@@ -1245,23 +1241,23 @@ return
 
 :CLOTHES_795
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @CLOTHES_944
 load_all_models_now
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @CLOTHES_834
 dress_char $player_actor
 
 :CLOTHES_834
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 if
-    not Player.WantedLevel($player_char) > 2
+    not is_wanted_level_greater $player_char wanted_level > 2
 goto_if_false @CLOTHES_864
-Player.ClearWantedLevel($player_char)
+clear_wanted_level $player_char
 
 :CLOTHES_864
-Player.CanMove($player_char, True)
+set_player_control $player_char can_move 1
 $1180 = 0
 do_fade 1 500
 get_game_timer $now
@@ -1294,7 +1290,7 @@ TIMERA = 0
 :CLOTH1_LOOP
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @CLOTH1_LOOP
 get_game_timer $now
 if and
@@ -1312,7 +1308,7 @@ TIMERA = 0
 :CLOTH2_LOOP
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @CLOTH2_LOOP
 get_game_timer $now
 if and
@@ -1330,7 +1326,7 @@ TIMERA = 0
 :CLOTH3_LOOP
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @CLOTH3_LOOP
 get_game_timer $now
 if and
@@ -1348,7 +1344,7 @@ TIMERA = 0
 :CLOTH4_LOOP
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @CLOTH4_LOOP
 get_game_timer $now
 if and
@@ -1366,7 +1362,7 @@ TIMERA = 0
 :CLOTH5_LOOP
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @CLOTH5_LOOP
 get_game_timer $now
 if and
@@ -1390,15 +1386,15 @@ const taxi_cost_minus_one = 9
 :HAILACAB_LOOKFOR
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @HAILACAB_LOOKFOR
 if
     $onmission == 0
 goto_if_false @HAILACAB_LOOKFOR
 if and
     is_player_on_foot $player_char
-    Player.Money($player_char) > taxi_cost_minus_one
-    not Player.WantedLevel($player_char) > 0
+    is_score_greater $player_char money > taxi_cost_minus_one
+    not is_wanted_level_greater $player_char wanted_level > 0
 goto_if_false @HAILACAB_LOOKFOR
 get_player_coordinates $player_char position_to 0@ 1@ 2@
 set_var_float_to_var_float 2@ = 0@
@@ -1427,15 +1423,15 @@ get_driver_of_car 15@ = car $cab
 if
     not 15@ == -1
 goto_if_false @HAILACAB_LOOKFOR
-Car.ToggleTaxiLight($cab, True)
+set_taxi_lights $cab 1
 
 :HAILACAB_FOUND
 wait 0
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @HAILACAB_LOOKFOR
 if
-    not Car.Wrecked($cab)
+    not is_car_dead $cab
 goto_if_false @HAILACAB_LOOKFOR
 get_driver_of_car 15@ = car $cab
 if and
@@ -1448,18 +1444,18 @@ if
 goto_if_false @HAILACAB_FOUND
 
 :HAILACAB_BOARD
-Car.SetToNormalDriver($cab)
-Car.SetMaxSpeed($cab, 0.0)
+car_set_idle $cab
+set_car_cruise_speed $cab max_speed_to 0.0
 set_char_wait_state $player_actor anim 16 wait_state_time 800
 set_char_obj_enter_car_as_passenger $player_actor go_to_car $cab
 
 :HAILACAB_BOARDING
 wait 0
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @HAILACAB_LOOKFOR
 if
-    not Car.Wrecked($cab)
+    not is_car_dead $cab
 goto_if_false @HAILACAB_LOOKFOR
 if
     $onmission == 0
@@ -1478,34 +1474,34 @@ goto_if_false @HAILACAB_BOARD
 goto @HAILACAB_BOARDING
 
 :HAILACAB_BOARDED
-Car.ToggleTaxiLight($cab, False)
-Car.SetToPsychoDriver($cab)
-Car.SetMaxSpeed($cab, 100.0)
+set_taxi_lights $cab 0
+car_wander_randomly $cab
+set_car_cruise_speed $cab max_speed_to 100.0
 set_car_driving_style $cab traffic_behavior_to 3
 set_fading_colour 0 0 0
 fade 0 2000
 wait 2000
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @HAILACAB_LOOKFOR
 if
-    not Car.Wrecked($cab)
+    not is_car_dead $cab
 goto_if_false @HAILACAB_LOOKFOR
 if
     is_char_sitting_in_car $player_actor sitting_in_car $cab
 goto_if_false @HAILACAB_LOOKFOR
 clear_area 0 at -258.372 -403.3983 10.1736 range 5.0
-Car.PutAt($cab, -258.372, -403.3983, 10.1736)
-Car.Angle($cab) = 29.894
+set_car_coordinates $cab at -258.372 -403.3983 10.1736
+set_car_heading $cab z_angle_to 29.894
 set_car_forward_speed $cab speed_instantly 20.0
-Car.SetToNormalDriver($cab)
+car_set_idle $cab
 fade 1 1000
 while not is_car_stopped $cab
     if
-        Player.Defined($player_char)
+        is_player_playing $player_char
     goto_if_false @HAILACAB_LOOKFOR
     if
-        not Car.Wrecked($cab)
+        not is_car_dead $cab
     goto_if_false @HAILACAB_LOOKFOR
     if
         is_char_sitting_in_car $player_actor sitting_in_car $cab
@@ -1513,25 +1509,25 @@ while not is_car_stopped $cab
     wait 0
 end
 set_char_obj_leave_any_car $player_actor
-Player.Money($player_char) += taxi_cost
+add_score $player_char money += taxi_cost
 wait 1000
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @HAILACAB_LOOKFOR
 if
-    not Car.Wrecked($cab)
+    not is_car_dead $cab
 goto_if_false @HAILACAB_LOOKFOR
-Car.SetToPsychoDriver($cab)
-Car.SetMaxSpeed($cab, 100.0)
+car_wander_randomly $cab
+set_car_cruise_speed $cab max_speed_to 100.0
 
 :HAILACAB_UNFOUND
-Car.ToggleTaxiLight($cab, False)
+set_taxi_lights $cab 0
 goto @HAILACAB_LOOKFOR
 
 :HAILACAB_UNBOARD
-Car.ToggleTaxiLight($cab, False)
-Car.SetToPsychoDriver($cab)
-Car.SetMaxSpeed($cab, 100.0)
+set_taxi_lights $cab 0
+car_wander_randomly $cab
+set_car_cruise_speed $cab max_speed_to 100.0
 goto @HAILACAB_LOOKFOR
 
 //-------------NPCs on the map---------------
@@ -1544,7 +1540,7 @@ set_deatharrest_state 0
 :NPCS_1
 wait $default_wait_time
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $game_saving == 0
 goto_if_false @NPCS_1B
 if
@@ -1574,7 +1570,7 @@ end
 
 :NPCS_2
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $game_saving == 0
 goto_if_false @NPCS_2B
 if
@@ -1604,7 +1600,7 @@ end
 
 :NPCS_3
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $game_saving == 0
 goto_if_false @NPCS_3C
 if
@@ -1640,7 +1636,7 @@ end
 
 :NPCS_4
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $game_saving == 0
 goto_if_false @NPCS_4B
 if
@@ -1670,7 +1666,7 @@ end
 
 :NPCS_5
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $game_saving == 0
 goto_if_false @NPCS_5B
 if
@@ -1700,7 +1696,7 @@ end
 
 :NPCS_6
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $game_saving == 0
 goto_if_false @NPCS_6B
 if
@@ -1730,7 +1726,7 @@ end
 
 :NPCS_7
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $game_saving == 0
 goto_if_false @NPCS_7B
 if and
@@ -1756,7 +1752,7 @@ end
 
 :NPCS_8
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $game_saving == 0
 goto_if_false @NPCS_8B
 if
@@ -1778,7 +1774,7 @@ end
 
 :NPCS_8_2
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $game_saving == 0
 goto_if_false @NPCS_8_2B
 if
@@ -1815,7 +1811,7 @@ end
 
 :NPCS_9
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $game_saving == 0
 goto_if_false @NPCS_9B
 if
@@ -1849,27 +1845,27 @@ end
 goto @NPCS_1
 
 :NPCS_DIAZ_INIT
-Model.Load(#GOLFCLUB)
-Model.Load(#PIZZABOX)
+request_model #GOLFCLUB
+request_model #PIZZABOX
 load_special_character 1 'IGDIAZ'
 while True
     if and
-        Model.Available(#GOLFCLUB)
-        Model.Available(#PIZZABOX)
+        has_model_loaded #GOLFCLUB
+        has_model_loaded #PIZZABOX
         has_special_character_loaded 1
     then
         break
     end
     wait 0
     if or
-        not Player.Defined($player_char)
+        not is_player_playing $player_char
         not $game_saving == 0
     then
         return
     end
 end
-Actor.Create($npc_diaz, 4, #SPECIAL01, -378.5385, -546.1594, 34.5) // -378.4412 -554.1082 39.7731
-Actor.Angle($npc_diaz) = 270.6989
+create_char $npc_diaz = create_actor_pedtype 4 model #SPECIAL01 at -378.5385 -546.1594 34.5 // -378.4412 -554.1082 39.7731
+set_char_heading $npc_diaz z_angle_to 270.6989
 set_char_suffers_critical_hits $npc_diaz dismemberment_possible 0
 give_weapon_to_char $npc_diaz weapon 3 ammo 3000
 clear_char_threat_search $npc_diaz
@@ -1880,14 +1876,14 @@ start_new_script @NPC_DIAZ_SCRIPT
 return
 
 :NPCS_DIAZ_DESTROY
-Actor.DestroyInstantly($npc_diaz)
-Object.Destroy($golf_ball_1)
-Object.Destroy($golf_ball_2)
-Object.Destroy($golf_ball_3)
-Object.Destroy($golf_ball_4)
-Object.Destroy($golf_ball_5)
-Model.Destroy(#GOLFCLUB)
-Model.Destroy(#PIZZABOX)
+delete_char $npc_diaz
+delete_object $golf_ball_1
+delete_object $golf_ball_2
+delete_object $golf_ball_3
+delete_object $golf_ball_4
+delete_object $golf_ball_5
+mark_model_as_no_longer_needed #GOLFCLUB
+mark_model_as_no_longer_needed #PIZZABOX
 unload_special_character 1
 clear_mission_audio 1
 $npc_diaz_interacted = 0
@@ -1906,7 +1902,7 @@ then
         while not has_mission_audio_loaded 1
             wait 0
             if
-                not Player.Defined($player_char)
+                not is_player_playing $player_char
             then
                 return
             end
@@ -1933,12 +1929,12 @@ wait 1000
 :NPC_DIAZ_SCRIPT_LOOP
 wait 100
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $npcs_diaz_state == 1
     $game_saving == 0
 goto_if_false @NPC_DIAZ_SCRIPT_END
 if
-    not Actor.Dead($npc_diaz)
+    not is_char_dead $npc_diaz
 goto_if_false @NPC_DIAZ_SCRIPT_CLEAR
 if
     15@ == 0
@@ -1951,24 +1947,24 @@ if and
     15@ == 1
     TIMERA >= 300
 then
-    Object.RemoveReferences($golf_ball_5)
+    mark_object_as_no_longer_needed $golf_ball_5
     set_var_int_to_var_int $golf_ball_5 = $golf_ball_4
     set_var_int_to_var_int $golf_ball_4 = $golf_ball_3
     set_var_int_to_var_int $golf_ball_3 = $golf_ball_2
     set_var_int_to_var_int $golf_ball_2 = $golf_ball_1
     get_offset_from_char_in_world_coords 0@ 1@ 2@ from_actor $npc_diaz offset 0.0 0.9 -0.3
-    Model.Load(#PIZZABOX)
-    while not Model.Available(#PIZZABOX)
+    request_model #PIZZABOX
+    while not has_model_loaded #PIZZABOX
         wait 0
         if and
-            Player.Defined($player_char)
+            is_player_playing $player_char
             $npcs_diaz_state == 1
             $game_saving == 0
         goto_if_false @NPC_DIAZ_SCRIPT_END
     end
-    Object.Init($golf_ball_1, #PIZZABOX, 0@, 1@, 2@)
-    Object.CollisionDetection($golf_ball_1, True)
-    Object.ToggleInMovingList($golf_ball_1, True)
+    create_object_no_offset $golf_ball_1 = init_object #PIZZABOX at 0@ 1@ 2@
+    set_object_collision $golf_ball_1 collision_detection 1
+    set_object_dynamic $golf_ball_1 toggle_in_moving_list 1
     generate_random_float_in_range 0@ = random_float -2.0 2.0
     generate_random_float_in_range 1@ = random_float 10.0 20.0
     generate_random_float_in_range 2@ = random_float 0.0 15.0
@@ -1988,79 +1984,79 @@ goto @NPC_DIAZ_SCRIPT_LOOP
 :NPC_DIAZ_SCRIPT_CLEAR
 
 :NPC_DIAZ_SCRIPT_END
-Object.RemoveReferences($npc_workers_box)
+mark_object_as_no_longer_needed $npc_workers_box
 terminate_this_script
 
 :NPCS_WORKERS_INIT
-Model.Load(#BENSON)
-Model.Load(#REEFER)
-Model.Load(#WMYCW)
-Model.Load(#BMODK)
-Model.Load(#GUNBOX)
-Model.Load(#WOODENBOX)
-Model.Load(#BARREL2)
-Model.Load(#BARREL4)
-Model.Load(#TRAFFICCONE)
+request_model #BENSON
+request_model #REEFER
+request_model #WMYCW
+request_model #BMODK
+request_model #GUNBOX
+request_model #WOODENBOX
+request_model #BARREL2
+request_model #BARREL4
+request_model #TRAFFICCONE
 
 :NPCS_WORKERS_INIT_LOAD
 wait 0
 if or
-    not Player.Defined($player_char)
+    not is_player_playing $player_char
     not $game_saving == 0
 then
     return
 end
 if and
-    Model.Available(#BENSON)
-    Model.Available(#REEFER)
-    Model.Available(#WMYCW)
-    Model.Available(#BMODK)
+    has_model_loaded #BENSON
+    has_model_loaded #REEFER
+    has_model_loaded #WMYCW
+    has_model_loaded #BMODK
 goto_if_false @NPCS_WORKERS_INIT_LOAD
 if and
-    Model.Available(#GUNBOX)
-    Model.Available(#WOODENBOX)
-    Model.Available(#BARREL2)
-    Model.Available(#BARREL4)
-    Model.Available(#TRAFFICCONE)
+    has_model_loaded #GUNBOX
+    has_model_loaded #WOODENBOX
+    has_model_loaded #BARREL2
+    has_model_loaded #BARREL4
+    has_model_loaded #TRAFFICCONE
 goto_if_false @NPCS_WORKERS_INIT_LOAD
-Car.Create($npc_workers_car, #BENSON, -729.67, -1169.09, 9.63)
-Car.Angle($npc_workers_car) = 111.15
+create_car $npc_workers_car = create_car #BENSON at -729.67 -1169.09 9.63
+set_car_heading $npc_workers_car z_angle_to 111.15
 pop_car_boot $npc_workers_car
-Car.Create($npc_workers_boat, #REEFER, -720.5333, -1169.814, 6.0522)
-Car.Angle($npc_workers_boat) = 195.2337
-Model.Destroy(#BENSON)
-Model.Destroy(#REEFER)
-Actor.Create($npc_worker_1, 4, #WMYCW, -725.56, -1167.7, 9.73)
-Actor.Angle($npc_worker_1) = 24.68
+create_car $npc_workers_boat = create_car #REEFER at -720.5333 -1169.814 6.0522
+set_car_heading $npc_workers_boat z_angle_to 195.2337
+mark_model_as_no_longer_needed #BENSON
+mark_model_as_no_longer_needed #REEFER
+create_char $npc_worker_1 = create_actor_pedtype 4 model #WMYCW at -725.56 -1167.7 9.73
+set_char_heading $npc_worker_1 z_angle_to 24.68
 set_char_suffers_critical_hits $npc_worker_1 dismemberment_possible 0
 clear_char_threat_search $npc_worker_1
 set_char_never_targeted $npc_worker_1 untargetable 1
-Actor.Create($npc_worker_2, 4, #BMODK, -724.73, -1167.36, 9.73) // -724.18, -1167.13
-Actor.Angle($npc_worker_2) = 22.48
+create_char $npc_worker_2 = create_actor_pedtype 4 model #BMODK at -724.73 -1167.36 9.73 // -724.18, -1167.13
+set_char_heading $npc_worker_2 z_angle_to 22.48
 set_char_suffers_critical_hits $npc_worker_2 dismemberment_possible 0
 clear_char_threat_search $npc_worker_2
 set_char_never_targeted $npc_worker_2 untargetable 1
-Model.Destroy(#WMYCW)
-Model.Destroy(#BMODK)
+mark_model_as_no_longer_needed #WMYCW
+mark_model_as_no_longer_needed #BMODK
 $npc_workers_interacted = 0
 $npcs_workers_state = 1
 start_new_script @NPC_WORKERS_SCRIPT
 return
 
 :NPCS_WORKERS_DESTROY
-Car.RemoveReferences($npc_workers_car)
-Car.RemoveReferences($npc_workers_boat)
-Actor.DestroyInstantly($npc_worker_1)
-Actor.DestroyInstantly($npc_worker_2)
-Model.Destroy(#BENSON)
-Model.Destroy(#REEFER)
-Model.Destroy(#WMYCW)
-Model.Destroy(#BMODK)
-Model.Destroy(#GUNBOX)
-Model.Destroy(#WOODENBOX)
-Model.Destroy(#BARREL2)
-Model.Destroy(#BARREL4)
-Model.Destroy(#TRAFFICCONE)
+mark_car_as_no_longer_needed $npc_workers_car
+mark_car_as_no_longer_needed $npc_workers_boat
+delete_char $npc_worker_1
+delete_char $npc_worker_2
+mark_model_as_no_longer_needed #BENSON
+mark_model_as_no_longer_needed #REEFER
+mark_model_as_no_longer_needed #WMYCW
+mark_model_as_no_longer_needed #BMODK
+mark_model_as_no_longer_needed #GUNBOX
+mark_model_as_no_longer_needed #WOODENBOX
+mark_model_as_no_longer_needed #BARREL2
+mark_model_as_no_longer_needed #BARREL4
+mark_model_as_no_longer_needed #TRAFFICCONE
 $npcs_workers_state = 0
 return
 
@@ -2093,15 +2089,15 @@ TIMERA = 0
 :NPC_WORKERS_SCRIPT_LOOP
 wait 0
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $npcs_workers_state == 1
     $game_saving == 0
 goto_if_false @NPC_WORKERS_SCRIPT_END
 if and
-    not Car.Wrecked($npc_workers_car)
-    not Car.Wrecked($npc_workers_boat)
-    not Actor.Dead($npc_worker_1)
-    not Actor.Dead($npc_worker_2)
+    not is_car_dead $npc_workers_car
+    not is_car_dead $npc_workers_boat
+    not is_char_dead $npc_worker_1
+    not is_char_dead $npc_worker_2
 goto_if_false @NPC_WORKERS_SCRIPT_CLEAR
 if
     10 >= 6@
@@ -2113,7 +2109,7 @@ goto_if_false @NPC_WORKERS_SCRIPT_CLEAR
 if
     15@ == 0
 then
-    Actor.Angle($npc_worker_1) = npc_worker_1_start_angle
+    set_char_heading $npc_worker_1 z_angle_to npc_worker_1_start_angle
     set_char_wait_state $npc_worker_1 anim 25 wait_state_time 3000
     15@++
     TIMERA = 0
@@ -2145,17 +2141,17 @@ then
     then
         14@ = #TRAFFICCONE
     end
-    Model.Load(14@)
-    while not Model.Available(14@)
+    request_model 14@
+    while not has_model_loaded 14@
         wait 0
         if and
-            Player.Defined($player_char)
+            is_player_playing $player_char
             $npcs_workers_state == 1
             $game_saving == 0
         goto_if_false @NPC_WORKERS_SCRIPT_END
     end
-    Object.Init($npc_workers_box, 14@, 0@, 1@, 2@)
-    Object.RemoveFromMissionCleanupList($npc_workers_box)
+    create_object_no_offset $npc_workers_box = init_object 14@ at 0@ 1@ 2@
+    dont_remove_object $npc_workers_box
     15@++
     TIMERA = 0
 end
@@ -2171,7 +2167,7 @@ if and
     15@ == 3
     TIMERA >= 0
 then
-    Actor.Angle($npc_worker_2) = npc_worker_2_start_angle
+    set_char_heading $npc_worker_2 z_angle_to npc_worker_2_start_angle
     cset_lvar_float_to_lvar_int 4@ = integer_to_float TIMERA
     4@ /= 1100.0
     4@ *= 180.0
@@ -2184,7 +2180,7 @@ then
     3@ -= npc_worker_1_start_angle
     mult_float_lvar_by_float_lvar 3@ *= 5@
     3@ += npc_worker_1_start_angle
-    Actor.Angle($npc_worker_1) = 3@
+    set_char_heading $npc_worker_1 z_angle_to 3@
     get_offset_from_char_in_world_coords 0@ 1@ 2@ from_actor $npc_worker_1 offset 0.0 0.9 0.0
     set_object_coordinates $npc_workers_box at 0@ 1@ 2@
     if
@@ -2209,17 +2205,17 @@ then
     3@ -= npc_worker_2_start_angle
     mult_float_lvar_by_float_lvar 3@ *= 4@
     3@ += npc_worker_2_start_angle
-    Actor.Angle($npc_worker_2) = 3@
+    set_char_heading $npc_worker_2 z_angle_to 3@
     get_offset_from_char_in_world_coords 0@ 1@ 2@ from_actor $npc_worker_2 offset 0.0 0.9 0.0
     set_object_coordinates $npc_workers_box at 0@ 1@ 2@
     if
         TIMERA >= 500
     then
-        Object.ToggleInMovingList($npc_workers_box, True)
+        set_object_dynamic $npc_workers_box toggle_in_moving_list 1
         generate_random_float_in_range 0@ = random_float -0.5 0.5
         0@ += 0.0
         add_to_object_velocity $npc_workers_box scatter 4.0 0@ 0.0
-        Object.RemoveReferences($npc_workers_box)
+        mark_object_as_no_longer_needed $npc_workers_box
         15@++
         TIMERA = 0
     end
@@ -2249,7 +2245,7 @@ then
     set_char_obj_enter_car_as_driver $npc_worker_2 go_to_and_drive_car $npc_workers_car
     set_char_obj_enter_car_as_passenger $npc_worker_1 go_to_car $npc_workers_car
     set_char_stay_in_car_when_jacked $npc_worker_1 stay_in_car_when_jacked 1
-    Object.RemoveReferences($npc_workers_box)
+    mark_object_as_no_longer_needed $npc_workers_box
     $npc_workers_interacted = 1
     7@ = 1
 end
@@ -2258,36 +2254,36 @@ if and
     is_char_sitting_in_any_car $npc_worker_1
     is_char_sitting_in_any_car $npc_worker_2
 then
-    Car.DriveTo($npc_workers_car, -742.9812, -1185.043, 11.0712)
-    Car.SetMaxSpeed($npc_workers_car, 10.0)
+    car_goto_coordinates $npc_workers_car drive_to -742.9812 -1185.043 11.0712
+    set_car_cruise_speed $npc_workers_car max_speed_to 10.0
     7@ = 2
 end
 if and
     7@ == 2
     locate_car_2d $npc_workers_car sphere 0 near_point -742.9812 -1185.043 radius 2.0 2.0
 then
-    Car.SetToPsychoDriver($npc_workers_car)
-    Car.SetMaxSpeed($npc_workers_car, 15.0)
+    car_wander_randomly $npc_workers_car
+    set_car_cruise_speed $npc_workers_car max_speed_to 15.0
     7@ = 2
 end
 goto @NPC_WORKERS_SCRIPT_LOOP
 
 :NPC_WORKERS_SCRIPT_CLEAR
 if
-    not Actor.Dead($npc_worker_1)
+    not is_char_dead $npc_worker_1
 then
     clear_all_char_anims $npc_worker_1
     set_char_obj_flee_on_foot_till_safe $npc_worker_1
 end
 if
-    not Actor.Dead($npc_worker_2)
+    not is_char_dead $npc_worker_2
 then
     clear_all_char_anims $npc_worker_2
     set_char_obj_flee_on_foot_till_safe $npc_worker_2
 end
 
 :NPC_WORKERS_SCRIPT_END
-Object.RemoveReferences($npc_workers_box)
+mark_object_as_no_longer_needed $npc_workers_box
 terminate_this_script
 
 :NPCS_VICEPORT_GARAGE_INIT
@@ -2301,7 +2297,7 @@ load_mission_audio 'MOB_17E' as 2
 :NPCS_VICEPORT_GARAGE_INIT_LOAD
 wait 0
 if or
-    not Player.Defined($player_char)
+    not is_player_playing $player_char
     not $game_saving == 0
 then
     return
@@ -2312,8 +2308,8 @@ if and
     has_mission_audio_loaded 1
     has_mission_audio_loaded 2
 goto_if_false @NPCS_VICEPORT_GARAGE_INIT_LOAD
-Actor.Create($npc_lance, 4, #SPECIAL01, -835.6341, -1491.0969, 11.1087)
-Actor.Angle($npc_lance) = 338.6403
+create_char $npc_lance = create_actor_pedtype 4 model #SPECIAL01 at -835.6341 -1491.0969 11.1087
+set_char_heading $npc_lance z_angle_to 338.6403
 set_char_suffers_critical_hits $npc_lance dismemberment_possible 0
 clear_char_threat_search $npc_lance
 set_char_never_targeted $npc_lance untargetable 1
@@ -2325,7 +2321,7 @@ $npcs_viceport_garage_state = 1
 return
 
 :NPCS_VICEPORT_GARAGE_DESTROY
-Actor.DestroyWithFade($npc_lance)
+remove_char_elegantly $npc_lance
 unload_special_character 1
 remove_animation 'STRIP'
 clear_mission_audio 1
@@ -2371,46 +2367,46 @@ end
 return
 
 :NPCS_CUBAN_CAFE_INIT
-Model.Load(#CBA)
-Model.Load(#CBB)
-Model.Load(#UZI)
+request_model #CBA
+request_model #CBB
+request_model #UZI
 while True
     if and
-        Model.Available(#CBA)
-        Model.Available(#CBB)
-        Model.Available(#UZI)
+        has_model_loaded #CBA
+        has_model_loaded #CBB
+        has_model_loaded #UZI
     then
         break
     end
     wait 0
     if or
-        not Player.Defined($player_char)
+        not is_player_playing $player_char
         not $game_saving == 0
     then
         return
     end
 end
-Actor.Create($npc_cuban_guard_1, 4, #CBA, -1171.35, -607.45, 10.6)
-Actor.Angle($npc_cuban_guard_1) = 5.0
-Actor.Health($npc_cuban_guard_1) = 500
+create_char $npc_cuban_guard_1 = create_actor_pedtype 4 model #CBA at -1171.35 -607.45 10.6
+set_char_heading $npc_cuban_guard_1 z_angle_to 5.0
+set_char_health $npc_cuban_guard_1 health_to 500
 set_char_suffers_critical_hits $npc_cuban_guard_1 dismemberment_possible 0
 clear_char_threat_search $npc_cuban_guard_1
 set_char_never_targeted $npc_cuban_guard_1 untargetable 1
 give_weapon_to_char $npc_cuban_guard_1 weapon 23 ammo 9999
 set_char_accuracy $npc_cuban_guard_1 weapon_accuracy_to 30
 set_char_stay_in_same_place $npc_cuban_guard_1 maintain_position_when_attacked 1
-Actor.Create($npc_cuban_guard_2, 4, #CBB, -1168.77, -607.2, 10.6)
-Actor.Angle($npc_cuban_guard_2) = 5.0
-Actor.Health($npc_cuban_guard_2) = 500
+create_char $npc_cuban_guard_2 = create_actor_pedtype 4 model #CBB at -1168.77 -607.2 10.6
+set_char_heading $npc_cuban_guard_2 z_angle_to 5.0
+set_char_health $npc_cuban_guard_2 health_to 500
 set_char_suffers_critical_hits $npc_cuban_guard_2 dismemberment_possible 0
 clear_char_threat_search $npc_cuban_guard_2
 set_char_never_targeted $npc_cuban_guard_2 untargetable 1
 give_weapon_to_char $npc_cuban_guard_2 weapon 23 ammo 9999
 set_char_accuracy $npc_cuban_guard_2 weapon_accuracy_to 30
 set_char_stay_in_same_place $npc_cuban_guard_2 maintain_position_when_attacked 1
-Model.Destroy(#CBA)
-Model.Destroy(#CBB)
-Model.Destroy(#UZI)
+mark_model_as_no_longer_needed #CBA
+mark_model_as_no_longer_needed #CBB
+mark_model_as_no_longer_needed #UZI
 $npc_cuban_guard_1_engaged = 0
 $npc_cuban_guard_2_engaged = 0
 $npc_cuban_attacked_car_1 = 0
@@ -2419,8 +2415,8 @@ $npcs_cuban_cafe_state = 1
 return
 
 :NPCS_CUBAN_CAFE_DESTROY
-Actor.DestroyWithFade($npc_cuban_guard_1)
-Actor.DestroyWithFade($npc_cuban_guard_2)
+remove_char_elegantly $npc_cuban_guard_1
+remove_char_elegantly $npc_cuban_guard_2
 $npcs_cuban_cafe_state = 0
 return
 
@@ -2442,11 +2438,11 @@ return
 
 :NPCS_CUBAN_CAFE_TICK_GUARD
 if
-    not Actor.Dead(15@)
+    not is_char_dead 15@
 goto_if_false @NPCS_CUBAN_CAFE_TICK_GUARD_END
 0@ = 0
 if
-    not Car.Wrecked(14@)
+    not is_car_dead 14@
 then
     get_driver_of_car 1@ = car 14@
     if and
@@ -2461,7 +2457,7 @@ if
 goto_if_false @NPCS_CUBAN_CAFE_TICK_GUARD_END
 1@ = -1
 if
-    not Player.WantedLevel($player_char) > 1
+    not is_wanted_level_greater $player_char wanted_level > 1
 then
     get_random_car_of_type_in_area_no_save 0@ = get_random_car_with_actors #POLICE in_area -1190.0 -627.0 -1150.0 -587.0
     if
@@ -2486,7 +2482,7 @@ else
     then
         set_char_obj_no_obj 15@
         set_char_obj_wait_on_foot 15@
-        Actor.Angle(15@) = 5.0
+        set_char_heading 15@ z_angle_to 5.0
         13@ = 0
     end
 end
@@ -2495,120 +2491,120 @@ end
 return
 
 :NPCS_GOLFCAMP_INIT
-Model.Load(#WMYPI)
-Model.Load(#VICE5)
-Model.Load(#GUNBOX)
+request_model #WMYPI
+request_model #VICE5
+request_model #GUNBOX
 while True
     if and
-        Model.Available(#WMYPI)
-        Model.Available(#VICE5)
-        Model.Available(#GUNBOX)
+        has_model_loaded #WMYPI
+        has_model_loaded #VICE5
+        has_model_loaded #GUNBOX
     then
         break
     end
     wait 0
     if or
-        not Player.Defined($player_char)
+        not is_player_playing $player_char
         not $game_saving == 0
     then
         return
     end
 end
-Actor.Create($npc_golfcamp_1, 4, #WMYPI, 171.3297, 51.9779, 10.9873)
-Actor.Angle($npc_golfcamp_1) = 348.1444
+create_char $npc_golfcamp_1 = create_actor_pedtype 4 model #WMYPI at 171.3297 51.9779 10.9873
+set_char_heading $npc_golfcamp_1 z_angle_to 348.1444
 set_char_suffers_critical_hits $npc_golfcamp_1 dismemberment_possible 0
 clear_char_threat_search $npc_golfcamp_1
 set_char_never_targeted $npc_golfcamp_1 untargetable 1
 set_char_proofs $npc_golfcamp_1 immunities BP 1 FP 1 EP 1 CP 1 MP 1
 set_char_wait_state $npc_golfcamp_1 anim 24 wait_state_time 1000000
-Actor.Create($npc_golfcamp_2, 4, #VICE5, 172.1381, 57.9639, 11.5094)
-Actor.Angle($npc_golfcamp_2) = 176.726
+create_char $npc_golfcamp_2 = create_actor_pedtype 4 model #VICE5 at 172.1381 57.9639 11.5094
+set_char_heading $npc_golfcamp_2 z_angle_to 176.726
 set_char_suffers_critical_hits $npc_golfcamp_2 dismemberment_possible 0
 clear_char_threat_search $npc_golfcamp_2
 set_char_never_targeted $npc_golfcamp_2 untargetable 1
 set_char_proofs $npc_golfcamp_2 immunities BP 1 FP 1 EP 1 CP 1 MP 1
 set_char_wait_state $npc_golfcamp_2 anim 24 wait_state_time 1000000
 get_offset_from_char_in_world_coords 0@ 1@ 2@ from_actor $npc_golfcamp_1 offset 0.0 -0.5 -1.25
-Object.Create($npc_golfcamp_box_1, #GUNBOX, 0@, 1@, 2@)
-Object.CollisionDetection($npc_golfcamp_box_1, False)
+create_object $npc_golfcamp_box_1 = create_object #GUNBOX at 0@ 1@ 2@
+set_object_collision $npc_golfcamp_box_1 collision_detection 0
 get_offset_from_char_in_world_coords 0@ 1@ 2@ from_actor $npc_golfcamp_2 offset 0.0 -0.5 -1.25
-Object.Create($npc_golfcamp_box_2, #GUNBOX, 0@, 1@, 2@)
-Object.CollisionDetection($npc_golfcamp_box_2, False)
+create_object $npc_golfcamp_box_2 = create_object #GUNBOX at 0@ 1@ 2@
+set_object_collision $npc_golfcamp_box_2 collision_detection 0
 start_script_fire $npc_golfcamp_fire = create_fire_at 171.895 55.1739 11.2744
-Model.Destroy(#WMYPI)
-Model.Destroy(#VICE5)
-Model.Destroy(#GUNBOX)
+mark_model_as_no_longer_needed #WMYPI
+mark_model_as_no_longer_needed #VICE5
+mark_model_as_no_longer_needed #GUNBOX
 $npcs_golfcamp_state = 1
 return
 
 :NPCS_GOLFCAMP_DESTROY
-Actor.DestroyWithFade($npc_golfcamp_1)
-Actor.DestroyWithFade($npc_golfcamp_2)
-Object.Destroy($npc_golfcamp_box_1)
-Object.Destroy($npc_golfcamp_box_2)
+remove_char_elegantly $npc_golfcamp_1
+remove_char_elegantly $npc_golfcamp_2
+delete_object $npc_golfcamp_box_1
+delete_object $npc_golfcamp_box_2
 remove_script_fire $npc_golfcamp_fire
 $npcs_golfcamp_state = 0
 return
 
 :NPCS_LOVEFIST_INIT
-Model.Load(#LOVEFIST)
-Model.Load(#HFYST)
-Model.Load(#BMYRI)
-Model.Load(#BMYPI)
-Model.Load(#WMOBU)
-Model.Load(#WFORI)
-Model.Load(#WFOTR)
-Model.Load(#GOLFCLUB)
-Model.Load(#BAT)
-Model.Load(#HAMMER)
+request_model #LOVEFIST
+request_model #HFYST
+request_model #BMYRI
+request_model #BMYPI
+request_model #WMOBU
+request_model #WFORI
+request_model #WFOTR
+request_model #GOLFCLUB
+request_model #BAT
+request_model #HAMMER
 load_special_character 1 'IGDICK'
 
 :NPCS_LOVEFIST_INIT_LOAD
 wait 0
 if or
-    not Player.Defined($player_char)
+    not is_player_playing $player_char
     not $game_saving == 0
 then
     return
 end
 if and
-    Model.Available(#LOVEFIST)
-    Model.Available(#HFYST)
-    Model.Available(#BMYRI)
-    Model.Available(#BMYPI)
-    Model.Available(#WMOBU)
-    Model.Available(#WFORI)
-    Model.Available(#WFOTR)
+    has_model_loaded #LOVEFIST
+    has_model_loaded #HFYST
+    has_model_loaded #BMYRI
+    has_model_loaded #BMYPI
+    has_model_loaded #WMOBU
+    has_model_loaded #WFORI
+    has_model_loaded #WFOTR
 goto_if_false @NPCS_LOVEFIST_INIT_LOAD
 if and
-    Model.Available(#GOLFCLUB)
-    Model.Available(#BAT)
-    Model.Available(#HAMMER)
+    has_model_loaded #GOLFCLUB
+    has_model_loaded #BAT
+    has_model_loaded #HAMMER
     has_special_character_loaded 1
 goto_if_false @NPCS_LOVEFIST_INIT_LOAD
-Car.Create($npc_lovefist_car, #LOVEFIST, -865.2949, 1158.359, 9.8204)
-Car.Angle($npc_lovefist_car) = 2.347
-Actor.Create($npc_lovefist_1, 5, #HFYST, -865.3, 1153.4, 9.8)
-Actor.Create($npc_lovefist_2, 4, #BMYRI, -867.3, 1155.4, 9.8)
-Actor.Create($npc_lovefist_3, 4, #BMYPI, -867.3, 1158.4, 9.8)
-Actor.Create($npc_lovefist_4, 4, #WMOBU, -867.3, 1161.4, 9.8)
-Actor.Create($npc_lovefist_5, 5, #WFORI, -863.3, 1156.9, 9.8)
-Actor.Create($npc_lovefist_6, 5, #WFOTR, -863.3, 1159.9, 9.8)
-Actor.Create($npc_lovefist_7, 4, #SPECIAL01, -865.3, 1163.4, 9.8)
-Actor.Angle($npc_lovefist_1) = 0.0
-Actor.Angle($npc_lovefist_2) = 270.0
-Actor.Angle($npc_lovefist_3) = 270.0
-Actor.Angle($npc_lovefist_4) = 270.0
-Actor.Angle($npc_lovefist_5) = 90.0
-Actor.Angle($npc_lovefist_6) = 90.0
-Actor.Angle($npc_lovefist_7) = 180.0
-Actor.Health($npc_lovefist_1) = 1000
-Actor.Health($npc_lovefist_2) = 1000
-Actor.Health($npc_lovefist_3) = 1000
-Actor.Health($npc_lovefist_4) = 1000
-Actor.Health($npc_lovefist_5) = 1000
-Actor.Health($npc_lovefist_6) = 1000
-Actor.Health($npc_lovefist_7) = 1000
+create_car $npc_lovefist_car = create_car #LOVEFIST at -865.2949 1158.359 9.8204
+set_car_heading $npc_lovefist_car z_angle_to 2.347
+create_char $npc_lovefist_1 = create_actor_pedtype 5 model #HFYST at -865.3 1153.4 9.8
+create_char $npc_lovefist_2 = create_actor_pedtype 4 model #BMYRI at -867.3 1155.4 9.8
+create_char $npc_lovefist_3 = create_actor_pedtype 4 model #BMYPI at -867.3 1158.4 9.8
+create_char $npc_lovefist_4 = create_actor_pedtype 4 model #WMOBU at -867.3 1161.4 9.8
+create_char $npc_lovefist_5 = create_actor_pedtype 5 model #WFORI at -863.3 1156.9 9.8
+create_char $npc_lovefist_6 = create_actor_pedtype 5 model #WFOTR at -863.3 1159.9 9.8
+create_char $npc_lovefist_7 = create_actor_pedtype 4 model #SPECIAL01 at -865.3 1163.4 9.8
+set_char_heading $npc_lovefist_1 z_angle_to 0.0
+set_char_heading $npc_lovefist_2 z_angle_to 270.0
+set_char_heading $npc_lovefist_3 z_angle_to 270.0
+set_char_heading $npc_lovefist_4 z_angle_to 270.0
+set_char_heading $npc_lovefist_5 z_angle_to 90.0
+set_char_heading $npc_lovefist_6 z_angle_to 90.0
+set_char_heading $npc_lovefist_7 z_angle_to 180.0
+set_char_health $npc_lovefist_1 health_to 1000
+set_char_health $npc_lovefist_2 health_to 1000
+set_char_health $npc_lovefist_3 health_to 1000
+set_char_health $npc_lovefist_4 health_to 1000
+set_char_health $npc_lovefist_5 health_to 1000
+set_char_health $npc_lovefist_6 health_to 1000
+set_char_health $npc_lovefist_7 health_to 1000
 set_char_personality $npc_lovefist_1 ped_stats_to 39
 set_char_personality $npc_lovefist_2 ped_stats_to 39
 set_char_personality $npc_lovefist_3 ped_stats_to 39
@@ -2644,37 +2640,37 @@ set_char_obj_destroy_car $npc_lovefist_4 destroy_car $npc_lovefist_car
 set_char_obj_destroy_car $npc_lovefist_5 destroy_car $npc_lovefist_car
 set_char_obj_destroy_car $npc_lovefist_6 destroy_car $npc_lovefist_car
 set_char_obj_destroy_car $npc_lovefist_7 destroy_car $npc_lovefist_car
-Model.Destroy(#LOVEFIST)
-Model.Destroy(#HFYST)
-Model.Destroy(#BMYRI)
-Model.Destroy(#BMYPI)
-Model.Destroy(#WMOBU)
-Model.Destroy(#WFORI)
-Model.Destroy(#WFOTR)
-Model.Destroy(#GOLFCLUB)
-Model.Destroy(#BAT)
-Model.Destroy(#HAMMER)
+mark_model_as_no_longer_needed #LOVEFIST
+mark_model_as_no_longer_needed #HFYST
+mark_model_as_no_longer_needed #BMYRI
+mark_model_as_no_longer_needed #BMYPI
+mark_model_as_no_longer_needed #WMOBU
+mark_model_as_no_longer_needed #WFORI
+mark_model_as_no_longer_needed #WFOTR
+mark_model_as_no_longer_needed #GOLFCLUB
+mark_model_as_no_longer_needed #BAT
+mark_model_as_no_longer_needed #HAMMER
 unload_special_character 1
 $npc_lovefist_interacted = 0
 $npcs_lovefist_state = 1
 return
 
 :NPCS_LOVEFIST_DESTROY
-Car.RemoveReferences($npc_lovefist_car)
-Actor.RemoveReferences($npc_lovefist_1)
-Actor.RemoveReferences($npc_lovefist_2)
-Actor.RemoveReferences($npc_lovefist_3)
-Actor.RemoveReferences($npc_lovefist_4)
-Actor.RemoveReferences($npc_lovefist_5)
-Actor.RemoveReferences($npc_lovefist_6)
-Actor.RemoveReferences($npc_lovefist_7)
+mark_car_as_no_longer_needed $npc_lovefist_car
+mark_char_as_no_longer_needed $npc_lovefist_1
+mark_char_as_no_longer_needed $npc_lovefist_2
+mark_char_as_no_longer_needed $npc_lovefist_3
+mark_char_as_no_longer_needed $npc_lovefist_4
+mark_char_as_no_longer_needed $npc_lovefist_5
+mark_char_as_no_longer_needed $npc_lovefist_6
+mark_char_as_no_longer_needed $npc_lovefist_7
 clear_mission_audio 1
 $npcs_lovefist_state = 0
 return
 
 :NPCS_LOVEFIST_TICK
 if
-    not Car.Wrecked($npc_lovefist_car)
+    not is_car_dead $npc_lovefist_car
 then
     if
         $npc_lovefist_interacted == 0
@@ -2687,12 +2683,12 @@ then
             while not has_mission_audio_loaded 1
                 wait 0
                 if
-                    not Player.Defined($player_char)
+                    not is_player_playing $player_char
                 then
                     return
                 end
             end
-            Actor.StorePos($npc_lovefist_7, 0@, 1@, 2@)
+            get_char_coordinates $npc_lovefist_7 position_to 0@ 1@ 2@
             set_mission_audio_position 1 location 0@ 1@ 2@
             play_mission_audio 1
             $npc_lovefist_interacted = 1
@@ -2713,14 +2709,14 @@ end
 return
 
 :NPCS_HOUSE_PARTY_INIT
-Model.Load(#PGA)
-Model.Load(#PGB)
+request_model #PGA
+request_model #PGB
 request_animation 'RIOT'
 request_animation 'STRIP'
 while True
     if and
-        Model.Available(#PGA)
-        Model.Available(#PGB)
+        has_model_loaded #PGA
+        has_model_loaded #PGB
         has_animation_loaded 'RIOT'
         has_animation_loaded 'STRIP'
     then
@@ -2728,24 +2724,24 @@ while True
     end
     wait 0
     if or
-        not Player.Defined($player_char)
+        not is_player_playing $player_char
         not $game_saving == 0
     then
         return
     end
 end
-Actor.Create($npc_house_party_1, 4, #PGA, -248.3843, -321.4468, 17.5884)
-Actor.Angle($npc_house_party_1) = 114.4969
-Actor.Create($npc_house_party_2, 4, #PGB, -245.5869, -322.9634, 19.0269)
-Actor.Angle($npc_house_party_2) = 104.4155
-Actor.Create($npc_house_party_3, 4, #PGB, -244.0454, -326.4719, 20.3051)
-Actor.Angle($npc_house_party_3) = 129.1691
-Actor.Create($npc_house_party_4, 4, #PGA, -243.4519, -329.4233, 20.993)
-Actor.Angle($npc_house_party_4) = 159.876
-Actor.Health($npc_house_party_1) = 500
-Actor.Health($npc_house_party_2) = 500
-Actor.Health($npc_house_party_3) = 500
-Actor.Health($npc_house_party_4) = 500
+create_char $npc_house_party_1 = create_actor_pedtype 4 model #PGA at -248.3843 -321.4468 17.5884
+set_char_heading $npc_house_party_1 z_angle_to 114.4969
+create_char $npc_house_party_2 = create_actor_pedtype 4 model #PGB at -245.5869 -322.9634 19.0269
+set_char_heading $npc_house_party_2 z_angle_to 104.4155
+create_char $npc_house_party_3 = create_actor_pedtype 4 model #PGB at -244.0454 -326.4719 20.3051
+set_char_heading $npc_house_party_3 z_angle_to 129.1691
+create_char $npc_house_party_4 = create_actor_pedtype 4 model #PGA at -243.4519 -329.4233 20.993
+set_char_heading $npc_house_party_4 z_angle_to 159.876
+set_char_health $npc_house_party_1 health_to 500
+set_char_health $npc_house_party_2 health_to 500
+set_char_health $npc_house_party_3 health_to 500
+set_char_health $npc_house_party_4 health_to 500
 set_char_suffers_critical_hits $npc_house_party_1 dismemberment_possible 0
 set_char_suffers_critical_hits $npc_house_party_2 dismemberment_possible 0
 set_char_suffers_critical_hits $npc_house_party_3 dismemberment_possible 0
@@ -2762,18 +2758,18 @@ set_char_wait_state $npc_house_party_1 anim 29 wait_state_time 9999999
 set_char_wait_state $npc_house_party_2 anim 32 wait_state_time 9999999
 set_char_wait_state $npc_house_party_3 anim 29 wait_state_time 9999999
 set_char_wait_state $npc_house_party_4 anim 32 wait_state_time 9999999
-Model.Destroy(#PGA)
-Model.Destroy(#PGB)
+mark_model_as_no_longer_needed #PGA
+mark_model_as_no_longer_needed #PGB
 generate_random_int_in_range 0@ = random_int_in_ranges 36 43 // 43 not included
 add_continuous_sound $npc_house_party_audio = create_sound 0@ at -246.0713 -324.6199 10.2586
 $npcs_house_party_state = 1
 return
 
 :NPCS_HOUSE_PARTY_DESTROY
-Actor.DestroyWithFade($npc_house_party_1)
-Actor.DestroyWithFade($npc_house_party_2)
-Actor.DestroyWithFade($npc_house_party_3)
-Actor.DestroyWithFade($npc_house_party_4)
+remove_char_elegantly $npc_house_party_1
+remove_char_elegantly $npc_house_party_2
+remove_char_elegantly $npc_house_party_3
+remove_char_elegantly $npc_house_party_4
 remove_animation 'RIOT'
 remove_animation 'STRIP'
 remove_sound $npc_house_party_audio
@@ -2781,22 +2777,22 @@ $npcs_house_party_state = 0
 return
 
 :NPCS_NORTH_ISLAND_INIT
-Model.Load(#GANGBUR)
-Model.Load(#SGA)
-Model.Load(#SGB)
-Model.Load(#UZI)
+request_model #GANGBUR
+request_model #SGA
+request_model #SGB
+request_model #UZI
 while True
     if and
-        Model.Available(#GANGBUR)
-        Model.Available(#SGA)
-        Model.Available(#SGB)
-        Model.Available(#UZI)
+        has_model_loaded #GANGBUR
+        has_model_loaded #SGA
+        has_model_loaded #SGB
+        has_model_loaded #UZI
     then
         break
     end
     wait 0
     if or
-        not Player.Defined($player_char)
+        not is_player_playing $player_char
         not $game_saving == 0
     then
         return
@@ -2813,17 +2809,17 @@ $npc_ni_4 = 0
 if
     is_player_in_zone $player_char in_zone 'DTOWN' // Downtown
 then
-    Car.Create($npc_ni_car_1, #GANGBUR, -109.4051, 1082.913, 9.9269)
-    Car.Angle($npc_ni_car_1) = 89.435
-    Car.Create($npc_ni_car_2, #GANGBUR, -113.5147, 1058.0549, 9.8696)
-    Car.Angle($npc_ni_car_2) = 60.7398
+    create_car $npc_ni_car_1 = create_car #GANGBUR at -109.4051 1082.913 9.9269
+    set_car_heading $npc_ni_car_1 z_angle_to 89.435
+    create_car $npc_ni_car_2 = create_car #GANGBUR at -113.5147 1058.0549 9.8696
+    set_car_heading $npc_ni_car_2 z_angle_to 60.7398
     lock_car_doors $npc_ni_car_1 door_status_to 3
     lock_car_doors $npc_ni_car_2 door_status_to 3
-    Actor.Create($npc_ni_1, 4, #SGA, -104.1021, 1079.8887, 10.2301)
-    Actor.Create($npc_ni_2, 4, #SGB, -109.2758, 1058.9487, 10.2163)
-    Actor.Angle($npc_ni_1) = 180.0
-    Actor.Health($npc_ni_1) = 1000
-    Actor.Health($npc_ni_2) = 1000
+    create_char $npc_ni_1 = create_actor_pedtype 4 model #SGA at -104.1021 1079.8887 10.2301
+    create_char $npc_ni_2 = create_actor_pedtype 4 model #SGB at -109.2758 1058.9487 10.2163
+    set_char_heading $npc_ni_1 z_angle_to 180.0
+    set_char_health $npc_ni_1 health_to 1000
+    set_char_health $npc_ni_2 health_to 1000
     set_char_suffers_critical_hits $npc_ni_1 dismemberment_possible 0
     set_char_suffers_critical_hits $npc_ni_2 dismemberment_possible 0
     clear_char_threat_search $npc_ni_1
@@ -2838,17 +2834,17 @@ end
 if
     is_player_in_zone $player_char in_zone 'BEACH3' // Vice Point
 then
-    Car.Create($npc_ni_car_4, #GANGBUR, 113.7184, 1013.6627, 10.3533)
-    Car.Angle($npc_ni_car_4) = 225.6319
-    Car.Create($npc_ni_car_5, #GANGBUR, 105.2093, 991.6122, 10.4461)
-    Car.Angle($npc_ni_car_5) = 279.4296
+    create_car $npc_ni_car_4 = create_car #GANGBUR at 113.7184 1013.6627 10.3533
+    set_car_heading $npc_ni_car_4 z_angle_to 225.6319
+    create_car $npc_ni_car_5 = create_car #GANGBUR at 105.2093 991.6122 10.4461
+    set_car_heading $npc_ni_car_5 z_angle_to 279.4296
     lock_car_doors $npc_ni_car_4 door_status_to 3
     lock_car_doors $npc_ni_car_5 door_status_to 3
-    Actor.Create($npc_ni_3, 4, #SGA, 110.9132, 991.3585, 11.5455)
-    Actor.Create($npc_ni_4, 4, #SGB, 121.8202, 1010.4925, 12.0289)
-    Actor.Angle($npc_ni_4) = 180.0
-    Actor.Health($npc_ni_3) = 1000
-    Actor.Health($npc_ni_4) = 1000
+    create_char $npc_ni_3 = create_actor_pedtype 4 model #SGA at 110.9132 991.3585 11.5455
+    create_char $npc_ni_4 = create_actor_pedtype 4 model #SGB at 121.8202 1010.4925 12.0289
+    set_char_heading $npc_ni_4 z_angle_to 180.0
+    set_char_health $npc_ni_3 health_to 1000
+    set_char_health $npc_ni_4 health_to 1000
     set_char_suffers_critical_hits $npc_ni_3 dismemberment_possible 0
     set_char_suffers_critical_hits $npc_ni_4 dismemberment_possible 0
     clear_char_threat_search $npc_ni_3
@@ -2864,15 +2860,15 @@ if
     not is_player_wearing $player_char skin == 'PLAYER4'
 then
     if and
-        not Actor.Dead($npc_ni_1)
-        not Actor.Dead($npc_ni_2)
+        not is_char_dead $npc_ni_1
+        not is_char_dead $npc_ni_2
     then
         set_char_obj_kill_player_on_foot $npc_ni_1 kill_player $player_char
         set_char_obj_kill_player_on_foot $npc_ni_2 kill_player $player_char
     end
     if and
-        not Actor.Dead($npc_ni_3)
-        not Actor.Dead($npc_ni_4)
+        not is_char_dead $npc_ni_3
+        not is_char_dead $npc_ni_4
     then
         set_char_obj_kill_player_on_foot $npc_ni_3 kill_player $player_char
         set_char_obj_kill_player_on_foot $npc_ni_4 kill_player $player_char
@@ -2880,85 +2876,85 @@ then
 else
     $npcs_north_island_state++
 end
-Model.Destroy(#GANGBUR)
-Model.Destroy(#SGA)
-Model.Destroy(#SGB)
-Model.Destroy(#UZI)
+mark_model_as_no_longer_needed #GANGBUR
+mark_model_as_no_longer_needed #SGA
+mark_model_as_no_longer_needed #SGB
+mark_model_as_no_longer_needed #UZI
 $npcs_north_island_state++
 return
 
 :NPCS_NORTH_ISLAND_DESTROY
-Car.RemoveReferences($npc_ni_car_1)
-Car.RemoveReferences($npc_ni_car_2)
-Car.RemoveReferences($npc_ni_car_4)
-Car.RemoveReferences($npc_ni_car_5)
-Actor.DestroyWithFade($npc_ni_1)
-Actor.DestroyWithFade($npc_ni_2)
-Actor.DestroyWithFade($npc_ni_3)
-Actor.DestroyWithFade($npc_ni_4)
+mark_car_as_no_longer_needed $npc_ni_car_1
+mark_car_as_no_longer_needed $npc_ni_car_2
+mark_car_as_no_longer_needed $npc_ni_car_4
+mark_car_as_no_longer_needed $npc_ni_car_5
+remove_char_elegantly $npc_ni_1
+remove_char_elegantly $npc_ni_2
+remove_char_elegantly $npc_ni_3
+remove_char_elegantly $npc_ni_4
 $npcs_north_island_state = 0
 return
 
 :NPCS_NORTH_ISLAND_INNER_INIT
-Model.Load(#GANGBUR)
-Model.Load(#SGA)
-Model.Load(#SGB)
-Model.Load(#UZI)
-Model.Load(#MINIGUN)
-Model.Load(#M60)
+request_model #GANGBUR
+request_model #SGA
+request_model #SGB
+request_model #UZI
+request_model #MINIGUN
+request_model #M60
 while True
     if and
-        Model.Available(#GANGBUR)
-        Model.Available(#SGA)
-        Model.Available(#SGB)
-        Model.Available(#UZI)
-        Model.Available(#MINIGUN)
-        Model.Available(#M60)
+        has_model_loaded #GANGBUR
+        has_model_loaded #SGA
+        has_model_loaded #SGB
+        has_model_loaded #UZI
+        has_model_loaded #MINIGUN
+        has_model_loaded #M60
     then
         break
     end
     wait 0
     if or
-        not Player.Defined($player_char)
+        not is_player_playing $player_char
         not $game_saving == 0
     then
         return
     end
 end
-Car.Create($npc_ni_car_3, #GANGBUR, -6.568, 1057.2262, 9.8295)
-Car.Angle($npc_ni_car_3) = 224.6226
+create_car $npc_ni_car_3 = create_car #GANGBUR at -6.568 1057.2262 9.8295
+set_car_heading $npc_ni_car_3 z_angle_to 224.6226
 lock_car_doors $npc_ni_car_3 door_status_to 3
-Actor.Create($npc_ni_5, 4, #SGA, 10.6145, 1060.0016, 11.1686)
-Actor.Create($npc_ni_6, 4, #SGB, 7.0084, 1060.3077, 11.079)
-Actor.Create($npc_ni_7, 4, #SGA, 47.9054, 1040.8206, 9.982)
-Actor.Create($npc_ni_8, 4, #SGB, -49.0681, 1064.7114, 9.9779)
-Actor.Create($npc_ni_9, 4, #SGA, -34.4972, 1099.9049, 16.0775)
-Actor.Create($npc_ni_10, 4, #SGB, 14.1585, 1089.5227, 16.3365)
-Actor.Create($npc_ni_11, 4, #SGA, 54.6846, 1094.2517, 17.7556)
-Actor.Create($npc_ni_12, 4, #SGB, 41.6618, 1057.3385, 9.9809)
-Actor.Create($npc_ni_13, 4, #SGA, -1.5825, 1078.766, 12.9022)
-Actor.Create($npc_ni_14, 4, #SGB, 9.8554, 1019.0069, 18.1238)
-Actor.Create($npc_ni_15, 4, #SGA, -21.9508, 1027.8894, 18.119)
-Actor.Angle($npc_ni_5) = 180.0
-Actor.Angle($npc_ni_6) = 180.0
-Actor.Angle($npc_ni_7) = 180.0
-Actor.Angle($npc_ni_8) = 180.0
-Actor.Angle($npc_ni_9) = 180.0
-Actor.Angle($npc_ni_10) = 180.0
-Actor.Angle($npc_ni_11) = 180.0
-Actor.Angle($npc_ni_12) = 180.0
-Actor.Angle($npc_ni_13) = 180.0
-Actor.Health($npc_ni_5) = 1000
-Actor.Health($npc_ni_6) = 1000
-Actor.Health($npc_ni_7) = 1000
-Actor.Health($npc_ni_8) = 1000
-Actor.Health($npc_ni_9) = 1000
-Actor.Health($npc_ni_10) = 1000
-Actor.Health($npc_ni_11) = 1000
-Actor.Health($npc_ni_12) = 1000
-Actor.Health($npc_ni_13) = 1000
-Actor.Health($npc_ni_14) = 1000
-Actor.Health($npc_ni_15) = 1000
+create_char $npc_ni_5 = create_actor_pedtype 4 model #SGA at 10.6145 1060.0016 11.1686
+create_char $npc_ni_6 = create_actor_pedtype 4 model #SGB at 7.0084 1060.3077 11.079
+create_char $npc_ni_7 = create_actor_pedtype 4 model #SGA at 47.9054 1040.8206 9.982
+create_char $npc_ni_8 = create_actor_pedtype 4 model #SGB at -49.0681 1064.7114 9.9779
+create_char $npc_ni_9 = create_actor_pedtype 4 model #SGA at -34.4972 1099.9049 16.0775
+create_char $npc_ni_10 = create_actor_pedtype 4 model #SGB at 14.1585 1089.5227 16.3365
+create_char $npc_ni_11 = create_actor_pedtype 4 model #SGA at 54.6846 1094.2517 17.7556
+create_char $npc_ni_12 = create_actor_pedtype 4 model #SGB at 41.6618 1057.3385 9.9809
+create_char $npc_ni_13 = create_actor_pedtype 4 model #SGA at -1.5825 1078.766 12.9022
+create_char $npc_ni_14 = create_actor_pedtype 4 model #SGB at 9.8554 1019.0069 18.1238
+create_char $npc_ni_15 = create_actor_pedtype 4 model #SGA at -21.9508 1027.8894 18.119
+set_char_heading $npc_ni_5 z_angle_to 180.0
+set_char_heading $npc_ni_6 z_angle_to 180.0
+set_char_heading $npc_ni_7 z_angle_to 180.0
+set_char_heading $npc_ni_8 z_angle_to 180.0
+set_char_heading $npc_ni_9 z_angle_to 180.0
+set_char_heading $npc_ni_10 z_angle_to 180.0
+set_char_heading $npc_ni_11 z_angle_to 180.0
+set_char_heading $npc_ni_12 z_angle_to 180.0
+set_char_heading $npc_ni_13 z_angle_to 180.0
+set_char_health $npc_ni_5 health_to 1000
+set_char_health $npc_ni_6 health_to 1000
+set_char_health $npc_ni_7 health_to 1000
+set_char_health $npc_ni_8 health_to 1000
+set_char_health $npc_ni_9 health_to 1000
+set_char_health $npc_ni_10 health_to 1000
+set_char_health $npc_ni_11 health_to 1000
+set_char_health $npc_ni_12 health_to 1000
+set_char_health $npc_ni_13 health_to 1000
+set_char_health $npc_ni_14 health_to 1000
+set_char_health $npc_ni_15 health_to 1000
 set_char_suffers_critical_hits $npc_ni_5 dismemberment_possible 0
 set_char_suffers_critical_hits $npc_ni_6 dismemberment_possible 0
 set_char_suffers_critical_hits $npc_ni_7 dismemberment_possible 0
@@ -3033,12 +3029,12 @@ else
     TIMERA = 0
     $npcs_north_island_inner_state++
 end
-Model.Destroy(#GANGBUR)
-Model.Destroy(#SGA)
-Model.Destroy(#SGB)
-Model.Destroy(#UZI)
-Model.Destroy(#MINIGUN)
-Model.Destroy(#M60)
+mark_model_as_no_longer_needed #GANGBUR
+mark_model_as_no_longer_needed #SGA
+mark_model_as_no_longer_needed #SGB
+mark_model_as_no_longer_needed #UZI
+mark_model_as_no_longer_needed #MINIGUN
+mark_model_as_no_longer_needed #M60
 override_next_restart 493.5 703.1 11.1 angle 90.0
 $restart_overriden = 1
 $npcs_north_island_inner_state++
@@ -3061,12 +3057,12 @@ then
         TIMERA > 3100
     then
         if
-            not Actor.Dead($npc_ni_1)
+            not is_char_dead $npc_ni_1
         then
             set_char_wait_state $npc_ni_1 anim 2 wait_state_time -1
         end
         if
-            not Actor.Dead($npc_ni_3)
+            not is_char_dead $npc_ni_3
         then
             set_char_wait_state $npc_ni_3 anim 2 wait_state_time -1
         end
@@ -3082,12 +3078,12 @@ then
         TIMERB > 3400
     then
         if
-            not Actor.Dead($npc_ni_2)
+            not is_char_dead $npc_ni_2
         then
             set_char_wait_state $npc_ni_2 anim 8 wait_state_time -1
         end
         if
-            not Actor.Dead($npc_ni_4)
+            not is_char_dead $npc_ni_4
         then
             set_char_wait_state $npc_ni_4 anim 8 wait_state_time -1
         end
@@ -3102,18 +3098,18 @@ end
 return
 
 :NPCS_NORTH_ISLAND_INNER_DESTROY
-Car.RemoveReferences($npc_ni_car_3)
-Actor.DestroyWithFade($npc_ni_5)
-Actor.DestroyWithFade($npc_ni_6)
-Actor.DestroyWithFade($npc_ni_7)
-Actor.DestroyWithFade($npc_ni_8)
-Actor.DestroyWithFade($npc_ni_9)
-Actor.DestroyWithFade($npc_ni_10)
-Actor.DestroyWithFade($npc_ni_11)
-Actor.DestroyWithFade($npc_ni_12)
-Actor.DestroyWithFade($npc_ni_13)
-Actor.DestroyWithFade($npc_ni_14)
-Actor.DestroyWithFade($npc_ni_15)
+mark_car_as_no_longer_needed $npc_ni_car_3
+remove_char_elegantly $npc_ni_5
+remove_char_elegantly $npc_ni_6
+remove_char_elegantly $npc_ni_7
+remove_char_elegantly $npc_ni_8
+remove_char_elegantly $npc_ni_9
+remove_char_elegantly $npc_ni_10
+remove_char_elegantly $npc_ni_11
+remove_char_elegantly $npc_ni_12
+remove_char_elegantly $npc_ni_13
+remove_char_elegantly $npc_ni_14
+remove_char_elegantly $npc_ni_15
 $npcs_north_island_inner_state = 0
 return
 
@@ -3129,7 +3125,7 @@ while True
     end
     wait 0
     if or
-        not Player.Defined($player_char)
+        not is_player_playing $player_char
         not $game_saving == 0
     then
         return
@@ -3167,7 +3163,7 @@ $interactions_viceport_garage_triggered = 0
 
 :INTERACTIONS_UNDEF
 if or
-    not Player.Defined($player_char)
+    not is_player_playing $player_char
     not $game_saving == 0
 goto_if_false @INTERACTIONS_1
 wait 0
@@ -3176,7 +3172,7 @@ goto @INTERACTIONS_UNDEF
 :INTERACTIONS_1
 wait 0
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $game_saving == 0
 goto_if_false @INTERACTIONS_1B
 if or
@@ -3209,7 +3205,7 @@ end
 
 :INTERACTIONS_2
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $game_saving == 0
 goto_if_false @INTERACTIONS_2C
 if
@@ -3222,7 +3218,7 @@ if
     $interactions_viceport_garage_triggered == 0
 goto_if_false @INTERACTIONS_2B
 if
-    Player.PressingHorn($player_char)
+    is_player_pressing_horn $player_char
 goto_if_false @INTERACTIONS_3
 $interactions_viceport_garage_triggered = 10
 goto @INTERACTIONS_3
@@ -3232,7 +3228,7 @@ if
     $interactions_viceport_garage_triggered == 10
 goto_if_false @INTERACTIONS_3
 if
-    not Player.PressingHorn($player_char)
+    not is_player_pressing_horn $player_char
 goto_if_false @INTERACTIONS_3
 $interactions_viceport_garage_triggered = 1
 goto @INTERACTIONS_3
@@ -3244,51 +3240,51 @@ $interactions_viceport_garage_triggered = 0
 goto @INTERACTIONS_1
 
 :INTERACTIONS_GOLF_BARRELS_INIT
-Model.Load(#BARREL4)
-while not Model.Available(#BARREL4)
+request_model #BARREL4
+while not has_model_loaded #BARREL4
     wait 0
     if or
-        not Player.Defined($player_char)
+        not is_player_playing $player_char
         not $game_saving == 0
     then
         return
     end
 end
-Object.Create($golf_barrel_1, #BARREL4, 164.77, 252.57, 18.33)
-Object.Create($golf_barrel_2, #BARREL4, 163.77, 251.2, 18.29)
-Object.Create($golf_barrel_3, #BARREL4, 165.84, 251.49, 18.28)
-Object.Create($golf_barrel_4, #BARREL4, 52.36, 200.35, 18.23)
-Object.Create($golf_barrel_5, #BARREL4, 54.71, 200.99, 18.17)
-Object.Create($golf_barrel_6, #BARREL4, 54.61, 200.94, 19.27)
+create_object $golf_barrel_1 = create_object #BARREL4 at 164.77 252.57 18.33
+create_object $golf_barrel_2 = create_object #BARREL4 at 163.77 251.2 18.29
+create_object $golf_barrel_3 = create_object #BARREL4 at 165.84 251.49 18.28
+create_object $golf_barrel_4 = create_object #BARREL4 at 52.36 200.35 18.23
+create_object $golf_barrel_5 = create_object #BARREL4 at 54.71 200.99 18.17
+create_object $golf_barrel_6 = create_object #BARREL4 at 54.61 200.94 19.27
 make_object_targetable $golf_barrel_1
 make_object_targetable $golf_barrel_2
 make_object_targetable $golf_barrel_3
 make_object_targetable $golf_barrel_4
 make_object_targetable $golf_barrel_5
 make_object_targetable $golf_barrel_6
-Object.RemoveFromMissionCleanupList($golf_barrel_1)
-Object.RemoveFromMissionCleanupList($golf_barrel_2)
-Object.RemoveFromMissionCleanupList($golf_barrel_3)
-Object.RemoveFromMissionCleanupList($golf_barrel_4)
-Object.RemoveFromMissionCleanupList($golf_barrel_5)
-Object.RemoveFromMissionCleanupList($golf_barrel_6)
+dont_remove_object $golf_barrel_1
+dont_remove_object $golf_barrel_2
+dont_remove_object $golf_barrel_3
+dont_remove_object $golf_barrel_4
+dont_remove_object $golf_barrel_5
+dont_remove_object $golf_barrel_6
 $interactions_golf_barrels_state = 1
 return
 
 :INTERACTIONS_GOLF_BARRELS_DESTROY
-Object.Destroy($golf_barrel_1)
-Object.Destroy($golf_barrel_2)
-Object.Destroy($golf_barrel_3)
-Object.Destroy($golf_barrel_4)
-Object.Destroy($golf_barrel_5)
-Object.Destroy($golf_barrel_6)
-Model.Destroy(#BARREL4)
+delete_object $golf_barrel_1
+delete_object $golf_barrel_2
+delete_object $golf_barrel_3
+delete_object $golf_barrel_4
+delete_object $golf_barrel_5
+delete_object $golf_barrel_6
+mark_model_as_no_longer_needed #BARREL4
 if
     $interactions_golf_barrels_state > 1
 then
-    Object.Destroy($1821)
-    Object.Init($1821, #GOLF_GATESCLOSED, 107.671, 227.729, 20.634)
-    Object.RemoveFromMissionCleanupList($1821)
+    delete_object $1821
+    create_object_no_offset $1821 = init_object #GOLF_GATESCLOSED at 107.671 227.729 20.634
+    dont_remove_object $1821
 end
 $interactions_golf_barrels_state = 0
 return
@@ -3304,15 +3300,15 @@ if or
     locate_player_any_means_3d $player_char 0 95.8965 264.4538 21.7719 radius 5.0 5.0 5.0
     locate_player_any_means_3d $player_char 0 81.1972 241.7551 23.5315 radius 3.0 3.0 3.0
 then
-    Object.RemoveReferences($golf_barrel_1)
-    Object.RemoveReferences($golf_barrel_2)
-    Object.RemoveReferences($golf_barrel_3)
-    Object.RemoveReferences($golf_barrel_4)
-    Object.RemoveReferences($golf_barrel_5)
-    Object.RemoveReferences($golf_barrel_6)
-    Object.Destroy($1821)
-    Object.Init($1821, #GOLF_GATESOPEN, 107.81, 228.072, 20.989)
-    Object.RemoveFromMissionCleanupList($1821)
+    mark_object_as_no_longer_needed $golf_barrel_1
+    mark_object_as_no_longer_needed $golf_barrel_2
+    mark_object_as_no_longer_needed $golf_barrel_3
+    mark_object_as_no_longer_needed $golf_barrel_4
+    mark_object_as_no_longer_needed $golf_barrel_5
+    mark_object_as_no_longer_needed $golf_barrel_6
+    delete_object $1821
+    create_object_no_offset $1821 = init_object #GOLF_GATESOPEN at 107.81 228.072 20.989
+    dont_remove_object $1821
     $interactions_golf_barrels_state = 2
 end
 return
@@ -3328,7 +3324,7 @@ $dropped_money_pickups_exist = 1
 :DROPMONEY_LOOP
 wait $default_wait_time
 if
-    not Player.Defined($player_char)
+    not is_player_playing $player_char
 then
     if
         $dropped_money_pickups_exist == 1
@@ -3345,11 +3341,11 @@ if
 then
     DROPMONEY_DESTROYPICKUPS()
 end
-Actor.StoreDeadActorPos($player_actor, 0@, 1@, 2@)
-Actor.StoreDeadActorPos($player_actor, 3@, 4@, 5@)
-Actor.StoreDeadActorPos($player_actor, 6@, 7@, 8@)
-Actor.StoreDeadActorPos($player_actor, 9@, 10@, 11@)
-Actor.StoreDeadActorPos($player_actor, 12@, 13@, 14@)
+get_dead_char_pickup_coords $player_actor store_to 0@ 1@ 2@
+get_dead_char_pickup_coords $player_actor store_to 3@ 4@ 5@
+get_dead_char_pickup_coords $player_actor store_to 6@ 7@ 8@
+get_dead_char_pickup_coords $player_actor store_to 9@ 10@ 11@
+get_dead_char_pickup_coords $player_actor store_to 12@ 13@ 14@
 create_money_pickup $player_dropped_cash_1 = create_cash_pickup 20 at 0@ 1@ 2@
 create_money_pickup $player_dropped_cash_2 = create_cash_pickup 20 at 3@ 4@ 5@
 create_money_pickup $player_dropped_cash_3 = create_cash_pickup 20 at 6@ 7@ 8@
@@ -3359,62 +3355,62 @@ create_money_pickup $player_dropped_cash_5 = create_cash_pickup 20 at 12@ 13@ 14
 :DROPMONEY_WAIT
 wait 0
 if
-    not Player.Defined($player_char)
+    not is_player_playing $player_char
 goto_if_false @DROPMONEY_WAIT
 
 :DROPMONEY_WAIT_2
 wait 0
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @DROPMONEY_WAIT_2
 if
-    Pickup.Picked_up($player_dropped_cash_1)
+    has_pickup_been_collected $player_dropped_cash_1
 then
-    Pickup.Destroy($player_dropped_cash_1)
+    remove_pickup $player_dropped_cash_1
 else
-    Pickup.Destroy($player_dropped_cash_1)
+    remove_pickup $player_dropped_cash_1
     create_money_pickup $player_dropped_cash_1 = create_cash_pickup 20 at 0@ 1@ 2@
 end
 if
-    Pickup.Picked_up($player_dropped_cash_2)
+    has_pickup_been_collected $player_dropped_cash_2
 then
-    Pickup.Destroy($player_dropped_cash_2)
+    remove_pickup $player_dropped_cash_2
 else
-    Pickup.Destroy($player_dropped_cash_2)
+    remove_pickup $player_dropped_cash_2
     create_money_pickup $player_dropped_cash_2 = create_cash_pickup 20 at 3@ 4@ 5@
 end
 if
-    Pickup.Picked_up($player_dropped_cash_3)
+    has_pickup_been_collected $player_dropped_cash_3
 then
-    Pickup.Destroy($player_dropped_cash_3)
+    remove_pickup $player_dropped_cash_3
 else
-    Pickup.Destroy($player_dropped_cash_3)
+    remove_pickup $player_dropped_cash_3
     create_money_pickup $player_dropped_cash_3 = create_cash_pickup 20 at 6@ 7@ 8@
 end
 if
-    Pickup.Picked_up($player_dropped_cash_4)
+    has_pickup_been_collected $player_dropped_cash_4
 then
-    Pickup.Destroy($player_dropped_cash_4)
+    remove_pickup $player_dropped_cash_4
 else
-    Pickup.Destroy($player_dropped_cash_4)
+    remove_pickup $player_dropped_cash_4
     create_money_pickup $player_dropped_cash_4 = create_cash_pickup 20 at 9@ 10@ 11@
 end
 if
-    Pickup.Picked_up($player_dropped_cash_5)
+    has_pickup_been_collected $player_dropped_cash_5
 then
-    Pickup.Destroy($player_dropped_cash_5)
+    remove_pickup $player_dropped_cash_5
 else
-    Pickup.Destroy($player_dropped_cash_5)
+    remove_pickup $player_dropped_cash_5
     create_money_pickup $player_dropped_cash_5 = create_cash_pickup 20 at 12@ 13@ 14@
 end
 goto @DROPMONEY_LOOP
 
 :DROPMONEY_DESTROYPICKUPS
-Pickup.Destroy($player_dropped_cash_1)
-Pickup.Destroy($player_dropped_cash_2)
-Pickup.Destroy($player_dropped_cash_3)
-Pickup.Destroy($player_dropped_cash_4)
-Pickup.Destroy($player_dropped_cash_5)
+remove_pickup $player_dropped_cash_1
+remove_pickup $player_dropped_cash_2
+remove_pickup $player_dropped_cash_3
+remove_pickup $player_dropped_cash_4
+remove_pickup $player_dropped_cash_5
 $dropped_money_pickups_exist = 0
 return
 
@@ -3520,7 +3516,7 @@ return
 :POLICE_CHASES_WAIT
 wait $default_wait_time
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $allow_police_chases == 1
     $game_saving == 0
 goto_if_false @POLICE_CHASES_WAIT
@@ -3543,7 +3539,7 @@ TIMERA = 0
 while is_int_lvar_greater_than_int_lvar 0@ > TIMERA
     wait $default_wait_time
     if and
-        Player.Defined($player_char)
+        is_player_playing $player_char
         $allow_police_chases == 1
         $game_saving == 0
     goto_if_false @POLICE_CHASES_WAIT
@@ -3575,7 +3571,7 @@ while 10000 > TIMERA
     end
     wait $default_wait_time
     if and
-        Player.Defined($player_char)
+        is_player_playing $player_char
         $allow_police_chases == 1
         $game_saving == 0
     goto_if_false @POLICE_CHASES_WAIT
@@ -3621,38 +3617,38 @@ else
 end
 
 POLICE_CHASES_SET_GANG_MODELS()
-Model.Load(#POLICE)
-Model.Load(#COP)
-Model.Load(#UZI)
-Model.Load(#MP5LNG)
-Model.Load(pc_gang_car_model)
-Model.Load(pc_gang_1_model)
-Model.Load(pc_gang_2_model)
+request_model #POLICE
+request_model #COP
+request_model #UZI
+request_model #MP5LNG
+request_model pc_gang_car_model
+request_model pc_gang_1_model
+request_model pc_gang_2_model
 
 :POLICE_CHASES_LOAD
 if or
-    not Model.Available(#POLICE)
-    not Model.Available(#COP)
-    not Model.Available(#UZI)
-    not Model.Available(#MP5LNG)
-    not Model.Available(pc_gang_car_model)
-    not Model.Available(pc_gang_1_model)
-    not Model.Available(pc_gang_2_model)
+    not has_model_loaded #POLICE
+    not has_model_loaded #COP
+    not has_model_loaded #UZI
+    not has_model_loaded #MP5LNG
+    not has_model_loaded pc_gang_car_model
+    not has_model_loaded pc_gang_1_model
+    not has_model_loaded pc_gang_2_model
 goto_if_false @POLICE_CHASES_LOADED
 wait 0
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $allow_police_chases == 1
     $game_saving == 0
 goto_if_false @POLICE_CHASES_WAIT
 goto @POLICE_CHASES_LOAD
 
 :POLICE_CHASES_LOADED
-Car.Create(pc_police_car_1, #POLICE, 0@, 1@, 2@)
-Car.Angle(pc_police_car_1) = 3@
+create_car pc_police_car_1 = create_car #POLICE at 0@ 1@ 2@
+set_car_heading pc_police_car_1 z_angle_to 3@
 get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car pc_police_car_1 offset 0.0 7.0 0.0
-Car.Create(pc_gang_car, pc_gang_car_model, 0@, 1@, 2@)
-Car.Angle(pc_gang_car) = 3@
+create_car pc_gang_car = create_car pc_gang_car_model at 0@ 1@ 2@
+set_car_heading pc_gang_car z_angle_to 3@
 pc_police_car_2 = 0
 pc_cop_3 = 0
 generate_random_float_in_range 0@ = random_float 0.0 1.0
@@ -3660,12 +3656,12 @@ if
     police_chases_two_police_cars_chance > 0@
 then
     get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car pc_police_car_1 offset 0.0 -7.0 0.0
-    Car.Create(pc_police_car_2, #POLICE, 0@, 1@, 2@)
-    Car.Angle(pc_police_car_2) = 3@
+    create_car pc_police_car_2 = create_car #POLICE at 0@ 1@ 2@
+    set_car_heading pc_police_car_2 z_angle_to 3@
 end
 
-Car.Health(pc_police_car_1) = police_chases_police_car_start_health
-Car.Health(pc_gang_car) = police_chases_gang_car_start_health
+set_car_health pc_police_car_1 health_to police_chases_police_car_start_health
+set_car_health pc_gang_car health_to police_chases_gang_car_start_health
 //set_can_burst_car_tyres pc_police_car_1 tires_vulnerable 0
 //set_can_burst_car_tyres pc_gang_car tires_vulnerable 0
 add_upsidedown_car_check pc_police_car_1
@@ -3682,19 +3678,19 @@ set_char_suffers_critical_hits pc_cop_1 dismemberment_possible 0
 set_char_suffers_critical_hits pc_gang_1 dismemberment_possible 0
 set_char_running pc_cop_1 running 1
 set_char_running pc_gang_1 running 1
-Actor.Health(pc_cop_1) = 200
-Actor.Health(pc_gang_1) = 200
-Car.SetMaxSpeed(pc_police_car_1, police_chases_police_car_max_speed)
-Car.SetMaxSpeed(pc_gang_car, police_chases_gang_car_max_speed)
+set_char_health pc_cop_1 health_to 200
+set_char_health pc_gang_1 health_to 200
+set_car_cruise_speed pc_police_car_1 max_speed_to police_chases_police_car_max_speed
+set_car_cruise_speed pc_gang_car max_speed_to police_chases_gang_car_max_speed
 set_car_driving_style pc_police_car_1 traffic_behavior_to 2
 set_car_driving_style pc_gang_car traffic_behavior_to 2
 switch_car_siren pc_police_car_1 siren = 1
 set_car_ram_car pc_police_car_1 ram pc_gang_car
-Car.SetToPsychoDriver(pc_gang_car)
+car_wander_randomly pc_gang_car
 if
-    not Car.Wrecked(pc_police_car_2)
+    not is_car_dead pc_police_car_2
 then
-    Car.Health(pc_police_car_2) = police_chases_police_car_start_health
+    set_car_health pc_police_car_2 health_to police_chases_police_car_start_health
     //set_can_burst_car_tyres pc_police_car_2 tires_vulnerable 0
     add_upsidedown_car_check pc_police_car_2
     add_stuck_car_check pc_police_car_2 distance 0.5 time 3000
@@ -3703,15 +3699,15 @@ then
     set_char_personality pc_cop_3 ped_stats_to 16
     set_char_suffers_critical_hits pc_cop_3 dismemberment_possible 0
     set_char_running pc_cop_3 running 1
-    Actor.Health(pc_cop_3) = 200
-    Car.SetMaxSpeed(pc_police_car_2, police_chases_police_car_max_speed)
+    set_char_health pc_cop_3 health_to 200
+    set_car_cruise_speed pc_police_car_2 max_speed_to police_chases_police_car_max_speed
     set_car_driving_style pc_police_car_2 traffic_behavior_to 2
     switch_car_siren pc_police_car_2 siren = 1
     set_car_ram_car pc_police_car_2 ram pc_gang_car
 end
 
-Actor.Create(pc_cop_2, 4, #COP, 0.0, 0.0, 0.0)
-Actor.Create(pc_gang_2, 4, pc_gang_2_model, 0.0, 0.0, 0.0)
+create_char pc_cop_2 = create_actor_pedtype 4 model #COP at 0.0 0.0 0.0
+create_char pc_gang_2 = create_actor_pedtype 4 model pc_gang_2_model at 0.0 0.0 0.0
 clear_char_threat_search pc_cop_2
 clear_char_threat_search pc_gang_2
 set_char_personality pc_cop_2 ped_stats_to 16
@@ -3722,18 +3718,18 @@ attach_char_to_car pc_cop_2 into_turret_on_car pc_police_car_1 at_car_offset 0.5
 attach_char_to_car pc_gang_2 into_turret_on_car pc_gang_car at_car_offset 0.5 0.0 0.8 position 2 angle 180.0 with_weapon 23
 set_char_accuracy pc_cop_2 weapon_accuracy_to police_chases_weapon_accuracy_in_car
 set_char_accuracy pc_gang_2 weapon_accuracy_to police_chases_weapon_accuracy_in_car
-Actor.Health(pc_cop_2) = 200
-Actor.Health(pc_gang_2) = 200
+set_char_health pc_cop_2 health_to 200
+set_char_health pc_gang_2 health_to 200
 set_char_obj_destroy_car pc_cop_2 destroy_car pc_gang_car
 set_char_obj_destroy_car pc_gang_2 destroy_car pc_police_car_1
 
-Model.Destroy(#POLICE)
-Model.Destroy(#COP)
-Model.Destroy(pc_gang_car_model)
-Model.Destroy(pc_gang_1_model)
-Model.Destroy(pc_gang_2_model)
-Model.Destroy(#UZI)
-Model.Destroy(#MP5LNG)
+mark_model_as_no_longer_needed #POLICE
+mark_model_as_no_longer_needed #COP
+mark_model_as_no_longer_needed pc_gang_car_model
+mark_model_as_no_longer_needed pc_gang_1_model
+mark_model_as_no_longer_needed pc_gang_2_model
+mark_model_as_no_longer_needed #UZI
+mark_model_as_no_longer_needed #MP5LNG
 
 1@ = 0 // on foot fight enabled
 generate_random_float_in_range 0@ = random_float 0.0 1.0
@@ -3746,7 +3742,7 @@ end
 :POLICE_CHASES_LOOP
 wait $default_wait_time
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $allow_police_chases == 1
 goto_if_false @POLICE_CHASES_DESTROY
 if
@@ -3762,7 +3758,7 @@ if
 goto_if_false @POLICE_CHASES_TAKEOVER
 3@ = 0
 if
-    not Actor.Dead(pc_cop_1)
+    not is_char_dead pc_cop_1
 then
     if
         locate_player_any_means_char_2d $player_char 0 pc_cop_1 radius police_chase_despawn_distance police_chase_despawn_distance
@@ -3772,7 +3768,7 @@ then
 end
 if and
     3@ == 0
-    not Actor.Dead(pc_cop_2)
+    not is_char_dead pc_cop_2
 then
     if
         locate_player_any_means_char_2d $player_char 0 pc_cop_2 radius police_chase_despawn_distance police_chase_despawn_distance
@@ -3782,7 +3778,7 @@ then
 end
 if and
     3@ == 0
-    not Actor.Dead(pc_gang_1)
+    not is_char_dead pc_gang_1
 then
     if
         locate_player_any_means_char_2d $player_char 0 pc_gang_1 radius police_chase_despawn_distance police_chase_despawn_distance
@@ -3792,7 +3788,7 @@ then
 end
 if and
     3@ == 0
-    not Actor.Dead(pc_gang_2)
+    not is_char_dead pc_gang_2
 then
     if
         locate_player_any_means_char_2d $player_char 0 pc_gang_2 radius police_chase_despawn_distance police_chase_despawn_distance
@@ -3809,16 +3805,16 @@ if or
     pc_step == 1000
 goto_if_false @POLICE_CHASES_LOOP_FLEE_POLICE
 if and
-    not Car.Wrecked(pc_police_car_1)
-    not Car.Wrecked(pc_gang_car)
-    not Actor.Dead(pc_cop_1)
-    not Actor.Dead(pc_cop_2)
-    not Actor.Dead(pc_gang_1)
-    not Actor.Dead(pc_gang_2)
+    not is_car_dead pc_police_car_1
+    not is_car_dead pc_gang_car
+    not is_char_dead pc_cop_1
+    not is_char_dead pc_cop_2
+    not is_char_dead pc_gang_1
+    not is_char_dead pc_gang_2
 goto_if_false @POLICE_CHASES_ABANDON
 if and
-    not Car.Wrecked(pc_police_car_2)
-    not Actor.Dead(pc_cop_3)
+    not is_car_dead pc_police_car_2
+    not is_char_dead pc_cop_3
 then
     if or
         not is_car_health_greater pc_police_car_2 health > 249
@@ -3828,13 +3824,13 @@ then
     end
     if and
         is_car_stuck pc_police_car_2
-        not Actor.Dead(pc_gang_1)
+        not is_char_dead pc_gang_1
     then
         set_char_obj_kill_char_on_foot pc_cop_3 kill_actor pc_gang_1
     end
 end
 if
-    Car.Wrecked(pc_police_car_2)
+    not is_car_dead pc_police_car_2
 then
     set_char_obj_destroy_car pc_gang_2 destroy_car pc_police_car_1
 else
@@ -3877,25 +3873,25 @@ end
 goto @POLICE_CHASES_LOOP
 
 :POLICE_CHASES_FLEE_POLICE
-Actor.DestroyWithFade(pc_gang_2)
+remove_char_elegantly pc_gang_2
 if
-    not Car.Wrecked(pc_gang_car)
+    not is_car_dead pc_gang_car
 then
-    Car.Health(pc_gang_car) = 1000
+    set_car_health pc_gang_car health_to 1000
 end
 if
-    not Car.Wrecked(pc_police_car_2)
+    not is_car_dead pc_police_car_2
 then
-    Car.Health(pc_police_car_2) = 1000
-    Car.SetToPsychoDriver(pc_police_car_2)
+    set_car_health pc_police_car_2 health_to 1000
+    car_wander_randomly pc_police_car_2
     switch_car_siren pc_police_car_2 siren = 0
 end
 set_char_obj_flee_car pc_cop_1 leave_car pc_police_car_1
-Model.Load(#COP)
-while not Model.Available(#COP)
+request_model #COP
+while not has_model_loaded #COP
     wait 0
     if and
-        Player.Defined($player_char)
+        is_player_playing $player_char
         $allow_police_chases == 1
     goto_if_false @POLICE_CHASES_DESTROY
     if
@@ -3904,7 +3900,7 @@ while not Model.Available(#COP)
 end
 POLICE_CHASES_RECREATE_ACTORS_COP()
 if
-    not Actor.Dead(pc_cop_2)
+    not is_char_dead pc_cop_2
 then
     set_char_obj_flee_on_foot_till_safe pc_cop_2
 end
@@ -3921,35 +3917,35 @@ if
 goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
 //do not combine below 2 ifs, because crashes
 if
-    not Actor.Dead(pc_cop_1)
+    not is_char_dead pc_cop_1
 goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
 if
-    Actor.Driving(pc_cop_1)
+    is_char_in_any_car pc_cop_1
 goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
 goto @POLICE_CHASES_LOOP
 
 :POLICE_CHASES_FLEE_GANG
-Actor.DestroyWithFade(pc_cop_2)
+remove_char_elegantly pc_cop_2
 if
-    not Car.Wrecked(pc_police_car_1)
+    not is_car_dead pc_police_car_1
 then
-    Car.Health(pc_police_car_1) = 1000
-    Car.SetToPsychoDriver(pc_police_car_1)
+    set_car_health pc_police_car_1 health_to 1000
+    car_wander_randomly pc_police_car_1
     switch_car_siren pc_police_car_1 siren = 0
 end
 if
-    not Car.Wrecked(pc_police_car_2)
+    not is_car_dead pc_police_car_2
 then
-    Car.Health(pc_police_car_2) = 1000
-    Car.SetToPsychoDriver(pc_police_car_2)
+    set_car_health pc_police_car_2 health_to 1000
+    car_wander_randomly pc_police_car_2
     switch_car_siren pc_police_car_2 siren = 0
 end
 set_char_obj_flee_car pc_gang_1 leave_car pc_gang_car
-Model.Load(pc_gang_2_model)
-while not Model.Available(pc_gang_2_model)
+request_model pc_gang_2_model
+while not has_model_loaded pc_gang_2_model
     wait 0
     if and
-        Player.Defined($player_char)
+        is_player_playing $player_char
         $allow_police_chases == 1
     goto_if_false @POLICE_CHASES_DESTROY
     if
@@ -3958,7 +3954,7 @@ while not Model.Available(pc_gang_2_model)
 end
 POLICE_CHASES_RECREATE_ACTORS_GANG()
 if
-    not Actor.Dead(pc_gang_2)
+    not is_char_dead pc_gang_2
 then
     set_char_obj_flee_on_foot_till_safe pc_gang_2
 end
@@ -3975,33 +3971,33 @@ if
 goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
 //do not combine below 2 ifs, because crashes
 if
-    not Actor.Dead(pc_gang_1)
+    not is_char_dead pc_gang_1
 goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
 if
-    Actor.Driving(pc_gang_1)
+    is_char_in_any_car pc_gang_1
 goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
 goto @POLICE_CHASES_LOOP
 
 :POLICE_CHASES_ONFOOT
-Model.Load(#COP)
-Model.Load(#COLT45)
-Model.Load(#TEC9)
-Model.Load(#UZI)
-Model.Load(#MP5LNG)
-Model.Load(pc_gang_2_model)
+request_model #COP
+request_model #COLT45
+request_model #TEC9
+request_model #UZI
+request_model #MP5LNG
+request_model pc_gang_2_model
 
 :POLICE_CHASES_ONFOOT_LOAD
 if or
-    not Model.Available(#COP)
-    not Model.Available(#COLT45)
-    not Model.Available(#TEC9)
-    not Model.Available(#UZI)
-    not Model.Available(#MP5LNG)
-    not Model.Available(pc_gang_2_model)
+    not has_model_loaded #COP
+    not has_model_loaded #COLT45
+    not has_model_loaded #TEC9
+    not has_model_loaded #UZI
+    not has_model_loaded #MP5LNG
+    not has_model_loaded pc_gang_2_model
 goto_if_false @POLICE_CHASES_ONFOOT_LOADED
 wait 0
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $allow_police_chases == 1
 goto_if_false @POLICE_CHASES_DESTROY
 if
@@ -4022,7 +4018,7 @@ give_weapon_to_char pc_gang_1 weapon 22 ammo 9999
 set_char_accuracy pc_cop_1 weapon_accuracy_to police_chases_weapon_accuracy_on_foot
 set_char_accuracy pc_gang_1 weapon_accuracy_to police_chases_weapon_accuracy_on_foot
 if
-    not Actor.Dead(pc_cop_2)
+    not is_char_dead pc_cop_2
 then
     give_weapon_to_char pc_cop_2 weapon 25 ammo 9999
     set_char_accuracy pc_cop_2 weapon_accuracy_to police_chases_weapon_accuracy_on_foot
@@ -4030,7 +4026,7 @@ then
     set_char_obj_kill_char_on_foot pc_gang_1 kill_actor pc_cop_2
 end
 if
-    not Actor.Dead(pc_gang_2)
+    not is_char_dead pc_gang_2
 then
     give_weapon_to_char pc_gang_2 weapon 23 ammo 9999
     set_char_accuracy pc_gang_2 weapon_accuracy_to police_chases_weapon_accuracy_on_foot
@@ -4038,20 +4034,20 @@ then
     set_char_obj_kill_char_on_foot pc_cop_1 kill_actor pc_gang_2
 end
 if
-    not Actor.Dead(pc_cop_3)
+    not is_char_dead pc_cop_3
 then
     give_weapon_to_char pc_cop_3 weapon 17 ammo 9999
     set_char_accuracy pc_cop_3 weapon_accuracy_to police_chases_weapon_accuracy_on_foot
-    Actor.Health(pc_cop_3) = 200
+    set_char_health pc_cop_3 health_to 200
     set_char_obj_kill_char_on_foot pc_cop_3 kill_actor pc_gang_1
 end
 
-Model.Destroy(#COP)
-Model.Destroy(pc_gang_2_model)
-Model.Destroy(#COLT45)
-Model.Destroy(#TEC9)
-Model.Destroy(#UZI)
-Model.Destroy(#MP5LNG)
+mark_model_as_no_longer_needed #COP
+mark_model_as_no_longer_needed pc_gang_2_model
+mark_model_as_no_longer_needed #COLT45
+mark_model_as_no_longer_needed #TEC9
+mark_model_as_no_longer_needed #UZI
+mark_model_as_no_longer_needed #MP5LNG
 pc_step += 3
 
 :POLICE_CHASES_LOOP_ON_FOOT
@@ -4060,22 +4056,22 @@ if or
     pc_step == 1003
 goto_if_false @POLICE_CHASES_LOOP_VICTORY
 if or
-    not Actor.Dead(pc_cop_1)
-    not Actor.Dead(pc_cop_2)
-    not Actor.Dead(pc_cop_3)
+    not is_char_dead pc_cop_1
+    not is_char_dead pc_cop_2
+    not is_char_dead pc_cop_3
 goto_if_false @POLICE_CHASES_VICTORY
 if or
-    not Actor.Dead(pc_gang_1)
-    not Actor.Dead(pc_gang_2)
+    not is_char_dead pc_gang_1
+    not is_char_dead pc_gang_2
 goto_if_false @POLICE_CHASES_VICTORY
 if
-    Actor.Dead(pc_cop_1)
+    is_char_dead pc_cop_1
 then
     if
-        not Actor.Dead(pc_gang_2)
+        not is_char_dead pc_gang_2
     then
         if
-            not Actor.Dead(pc_cop_2)
+            not is_char_dead pc_cop_2
         then
             set_char_obj_kill_char_on_foot pc_gang_2 kill_actor pc_cop_2
         else
@@ -4084,13 +4080,13 @@ then
     end
 end
 if
-    Actor.Dead(pc_cop_2)
+    is_char_dead pc_cop_2
 then
     if
-        not Actor.Dead(pc_gang_1)
+        not is_char_dead pc_gang_1
     then
         if
-            not Actor.Dead(pc_cop_1)
+            not is_char_dead pc_cop_1
         then
             set_char_obj_kill_char_on_foot pc_gang_1 kill_actor pc_cop_1
         else
@@ -4099,10 +4095,10 @@ then
     end
 end
 if
-    Actor.Dead(pc_gang_1)
+    is_char_dead pc_gang_1
 then
     if
-        not Actor.Dead(pc_cop_2)
+        not is_char_dead pc_cop_2
     then
         set_char_obj_kill_char_on_foot pc_cop_2 kill_actor pc_gang_2
     end
@@ -4113,10 +4109,10 @@ then
     end
 end
 if
-    Actor.Dead(pc_gang_2)
+    is_char_dead pc_gang_2
 then
     if
-        not Actor.Dead(pc_cop_1)
+        not is_char_dead pc_cop_1
     then
         set_char_obj_kill_char_on_foot pc_cop_1 kill_actor pc_gang_1
     end
@@ -4128,39 +4124,39 @@ goto @POLICE_CHASES_LOOP
 1@ = 0 // police car 2 boarding
 2@ = 0 // gang car boarding
 if
-    not Car.Wrecked(pc_police_car_1)
+    not is_car_dead pc_police_car_1
 then
     if
-        not Actor.Dead(pc_cop_1)
+        not is_char_dead pc_cop_1
     then
         set_char_obj_enter_car_as_driver pc_cop_1 go_to_and_drive_car pc_police_car_1
         0@ = 1
     end
     if
-        not Actor.Dead(pc_cop_2)
+        not is_char_dead pc_cop_2
     then
         set_char_obj_enter_car_as_driver pc_cop_2 go_to_and_drive_car pc_police_car_1
         0@ = 1
     end
 end
 if and
-    not Car.Wrecked(pc_police_car_2)
-    not Actor.Dead(pc_cop_3)
+    not is_car_dead pc_police_car_2
+    not is_char_dead pc_cop_3
 then
     set_char_obj_enter_car_as_driver pc_cop_3 go_to_and_drive_car pc_police_car_2
     1@ = 1
 end
 if
-    not Car.Wrecked(pc_gang_car)
+    not is_car_dead pc_gang_car
 then
     if
-        not Actor.Dead(pc_gang_1)
+        not is_char_dead pc_gang_1
     then
         set_char_obj_enter_car_as_driver pc_gang_1 go_to_and_drive_car pc_gang_car
         2@ = 1
     end
     if
-        not Actor.Dead(pc_gang_2)
+        not is_char_dead pc_gang_2
     then
         set_char_obj_enter_car_as_driver pc_gang_2 go_to_and_drive_car pc_gang_car
         2@ = 1
@@ -4177,13 +4173,13 @@ if
     0@ == 1
 then
     if
-        Car.Wrecked(pc_police_car_1)
+        not is_car_dead pc_police_car_1
     then
         0@ = 0
     end
     if and
-        Actor.Dead(pc_cop_1)
-        Actor.Dead(pc_cop_2)
+        is_char_dead pc_cop_1
+        is_char_dead pc_cop_2
     then
         0@ = 0
     end
@@ -4195,8 +4191,8 @@ then
     if
         not 3@ == -1
     then
-        Car.SetToPsychoDriver(pc_police_car_1)
-        Car.SetMaxSpeed(pc_police_car_1, police_chases_police_car_max_speed)
+        car_wander_randomly pc_police_car_1
+        set_car_cruise_speed pc_police_car_1 max_speed_to police_chases_police_car_max_speed
         switch_car_siren pc_police_car_1 siren = 0
         0@ = 0
     end
@@ -4205,8 +4201,8 @@ if
     1@ == 1
 then
     if or
-        Car.Wrecked(pc_police_car_2)
-        Actor.Dead(pc_cop_3)
+        not is_car_dead pc_police_car_2
+        is_char_dead pc_cop_3
     then
         1@ = 0
     end
@@ -4218,8 +4214,8 @@ then
     if
         not 3@ == -1
     then
-        Car.SetToPsychoDriver(pc_police_car_2)
-        Car.SetMaxSpeed(pc_police_car_2, police_chases_police_car_max_speed)
+        car_wander_randomly pc_police_car_2
+        set_car_cruise_speed pc_police_car_2 max_speed_to police_chases_police_car_max_speed
         switch_car_siren pc_police_car_2 siren = 0
         1@ = 0
     end
@@ -4228,13 +4224,13 @@ if
     2@ == 1
 then
     if
-        Car.Wrecked(pc_gang_car)
+        not is_car_dead pc_gang_car
     then
         2@ = 0
     end
     if and
-        Actor.Dead(pc_gang_1)
-        Actor.Dead(pc_gang_2)
+        is_char_dead pc_gang_1
+        is_char_dead pc_gang_2
     then
         2@ = 0
     end
@@ -4246,8 +4242,8 @@ then
     if
         not 3@ == -1
     then
-        Car.SetToPsychoDriver(pc_gang_car)
-        Car.SetMaxSpeed(pc_gang_car, police_chases_gang_car_max_speed)
+        car_wander_randomly pc_gang_car
+        set_car_cruise_speed pc_gang_car max_speed_to police_chases_gang_car_max_speed
         2@ = 0
     end
 end
@@ -4266,63 +4262,63 @@ return
 
 :POLICE_CHASES_RECREATE_ACTORS_COP
 if and
-    not Car.Wrecked(pc_police_car_1)
-    not Actor.Dead(pc_cop_2)
+    not is_car_dead pc_police_car_1
+    not is_char_dead pc_cop_2
 then
-    Actor.StorePos(pc_cop_2, 0@, 1@, 2@)
-    3@ = Actor.Angle(pc_cop_2)
-    Actor.DestroyInstantly(pc_cop_2)
-    Actor.Create(pc_cop_2, 4, #COP, 0@, 1@, 2@)
-    Actor.Angle(pc_cop_2) = 3@
+    get_char_coordinates pc_cop_2 position_to 0@ 1@ 2@
+    get_char_heading 3@ = actor pc_cop_2
+    delete_char pc_cop_2
+    create_char pc_cop_2 = create_actor_pedtype 4 model #COP at 0@ 1@ 2@
+    set_char_heading pc_cop_2 z_angle_to 3@
     clear_char_threat_search pc_cop_2
     set_char_personality pc_cop_2 ped_stats_to 16
     set_char_suffers_critical_hits pc_cop_2 dismemberment_possible 0
     set_char_running pc_cop_2 running 1
-    Actor.Health(pc_cop_2) = 200
+    set_char_health pc_cop_2 health_to 200
 else
-    Actor.DestroyWithFade(pc_cop_2)
+    remove_char_elegantly pc_cop_2
 end
 
 :POLICE_CHASES_RECREATE_ACTORS_GANG
 if and
-    not Car.Wrecked(pc_gang_car)
-    not Actor.Dead(pc_gang_2)
+    not is_car_dead pc_gang_car
+    not is_char_dead pc_gang_2
 then
-    Actor.StorePos(pc_gang_2, 0@, 1@, 2@)
-    3@ = Actor.Angle(pc_gang_2)
-    Actor.DestroyInstantly(pc_gang_2)
-    Actor.Create(pc_gang_2, 4, pc_gang_2_model, 0@, 1@, 2@)
-    Actor.Angle(pc_gang_2) = 3@
+    get_char_coordinates pc_gang_2 position_to 0@ 1@ 2@
+    get_char_heading 3@ = actor pc_gang_2
+    delete_char pc_gang_2
+    create_char pc_gang_2 = create_actor_pedtype 4 model pc_gang_2_model at 0@ 1@ 2@
+    set_char_heading pc_gang_2 z_angle_to 3@
     clear_char_threat_search pc_gang_2
     set_char_personality pc_gang_2 ped_stats_to 16
     set_char_suffers_critical_hits pc_gang_2 dismemberment_possible 0
     set_char_running pc_gang_2 running 1
-    Actor.Health(pc_gang_2) = 200
+    set_char_health pc_gang_2 health_to 200
 else
-    Actor.DestroyWithFade(pc_gang_2)
+    remove_char_elegantly pc_gang_2
 end
 return
 
 :POLICE_CHASES_TAKEOVER
 print_with_number_big 'STOLEN' number $police_chases_bonus time 6000 style 6
 add_one_off_sound 1 at 0.0 0.0 0.0
-Player.Money($player_char) += $police_chases_bonus
-Player.SetMinWantedLevel($player_char, 2)
+add_score $player_char money += $police_chases_bonus
+alter_wanted_level_no_drop $player_char minimum_wanted_level_to 2
 if or
     pc_step == 0
     pc_step == 1000
 goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
-Model.Load(#COP)
-Model.Load(pc_gang_2_model)
+request_model #COP
+request_model pc_gang_2_model
 
 :POLICE_CHASES_TAKEOVER_LOAD
 if or
-    not Model.Available(#COP)
-    not Model.Available(pc_gang_2_model)
+    not has_model_loaded #COP
+    not has_model_loaded pc_gang_2_model
 goto_if_false @POLICE_CHASES_TAKEOVER_LOADED
 wait 0
 if and
-    Player.Defined($player_char)
+    is_player_playing $player_char
     $allow_police_chases == 1
 goto_if_false @POLICE_CHASES_DESTROY
 if
@@ -4340,18 +4336,18 @@ if or
     pc_step == 1000
 goto_if_false @POLICE_CHASES_ABANDON_ON_FOOT
 // to avoid game crashes because of collision issues
-Actor.DestroyWithFade(pc_cop_2)
-Actor.DestroyWithFade(pc_gang_2)
+remove_char_elegantly pc_cop_2
+remove_char_elegantly pc_gang_2
 goto @POLICE_CHASES_ABANDON_COMMON
 
 :POLICE_CHASES_ABANDON_ON_FOOT
-Actor.RemoveReferences(pc_cop_2)
-Actor.RemoveReferences(pc_gang_2)
+mark_char_as_no_longer_needed pc_cop_2
+mark_char_as_no_longer_needed pc_gang_2
 
 :POLICE_CHASES_ABANDON_COMMON
-Actor.RemoveReferences(pc_cop_1)
-Actor.RemoveReferences(pc_cop_3)
-Actor.RemoveReferences(pc_gang_1)
+mark_char_as_no_longer_needed pc_cop_1
+mark_char_as_no_longer_needed pc_cop_3
+mark_char_as_no_longer_needed pc_gang_1
 remove_stuck_car_check pc_police_car_1
 remove_stuck_car_check pc_police_car_2
 remove_stuck_car_check pc_gang_car
@@ -4359,35 +4355,35 @@ remove_upsidedown_car_check pc_police_car_1
 remove_upsidedown_car_check pc_police_car_2
 remove_upsidedown_car_check pc_gang_car
 if
-    not Car.Wrecked(pc_police_car_1)
+    not is_car_dead pc_police_car_1
 then
     switch_car_siren pc_police_car_1 siren = 0
 end
 if
-    not Car.Wrecked(pc_police_car_2)
+    not is_car_dead pc_police_car_2
 then
     switch_car_siren pc_police_car_2 siren = 0
 end
-Car.RemoveReferences(pc_police_car_1)
-Car.RemoveReferences(pc_police_car_2)
-Car.RemoveReferences(pc_gang_car)
+mark_car_as_no_longer_needed pc_police_car_1
+mark_car_as_no_longer_needed pc_police_car_2
+mark_car_as_no_longer_needed pc_gang_car
 goto @POLICE_CHASES_RESET
 
 :POLICE_CHASES_DESTROY
-Actor.DestroyWithFade(pc_cop_1)
-Actor.DestroyWithFade(pc_cop_2)
-Actor.DestroyWithFade(pc_cop_3)
-Actor.DestroyWithFade(pc_gang_1)
-Actor.DestroyWithFade(pc_gang_2)
+remove_char_elegantly pc_cop_1
+remove_char_elegantly pc_cop_2
+remove_char_elegantly pc_cop_3
+remove_char_elegantly pc_gang_1
+remove_char_elegantly pc_gang_2
 remove_stuck_car_check pc_police_car_1
 remove_stuck_car_check pc_police_car_2
 remove_stuck_car_check pc_gang_car
 remove_upsidedown_car_check pc_police_car_1
 remove_upsidedown_car_check pc_police_car_2
 remove_upsidedown_car_check pc_gang_car
-Car.RemoveReferences(pc_police_car_1)
-Car.RemoveReferences(pc_police_car_2)
-Car.RemoveReferences(pc_gang_car)
+mark_car_as_no_longer_needed pc_police_car_1
+mark_car_as_no_longer_needed pc_police_car_2
+mark_car_as_no_longer_needed pc_gang_car
 
 :POLICE_CHASES_RESET
 if
@@ -4414,7 +4410,7 @@ const repaint_cost_minus_one = 199
 :REPAINT_WAIT
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @REPAINT_WAIT
 if and
     is_player_in_zone $player_char in_zone 'HAVANA' // Little Havana
@@ -4422,25 +4418,25 @@ if and
 goto_if_false @REPAINT_WAIT
 if and
     is_player_stopped_in_area_in_car_3d $player_char 0 -1014.341 -857.732 6.325 -1001.315 -841.532 10.885
-    Player.Controllable($player_char)
+    can_player_start_mission $player_char
 goto_if_false @REPAINT_WAIT
 if
-    not Player.Money($player_char) > repaint_cost_minus_one
+    not is_score_greater $player_char money > repaint_cost_minus_one
 then
     0@ = 0
     0@ -= repaint_cost
     print_with_number 'PAINTNO' 0@ time 250 1
     jump @REPAINT_WAIT
 end
-Player.CanMove($player_char, False)
+set_player_control $player_char can_move 0
 print_help_forever 'PAINT'
 store_car_player_is_in_no_save 11@ = player $player_char
 get_car_colours 11@ color 12@ 13@
 set_lvar_int_to_lvar_int 14@ = 12@
 set_lvar_int_to_lvar_int 15@ = 13@
 set_interpolation_parameters 0.0 1500
-Camera.SetPosition(-1002.842, -842.3333, 10.365, 0.0, 0.0, 0.0)
-Camera.OnVehicle(11@, 15, 1)
+set_fixed_camera_position -1002.842 -842.3333 10.365 rotation 0.0 0.0 0.0
+point_camera_at_car 11@ mode 15 switchstyle 1
 0@ = 0
 
 :REPAINT_PROCESS
@@ -4564,7 +4560,7 @@ wait 0
 if
     not is_button_pressed 0 pressed_button 19
 goto_if_false @REPAINT_ACCEPT
-Player.Money($player_char) += repaint_cost
+add_score $player_char money += repaint_cost
 0@ = 1
 
 :REPAINT_END
@@ -4575,13 +4571,13 @@ if
 then
     print_big_q 'PAINTYE' time 5000 style 5
 end
-Player.CanMove($player_char, True)
-Camera.Restore_WithJumpCut
+set_player_control $player_char can_move 1
+restore_camera_jumpcut
 
 :REPAINT_WAIT_FOR_LEAVE
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @REPAINT_WAIT
 if
     is_player_in_area_in_car_3d $player_char 0 -1014.341 -857.732 6.325 -1001.315 -841.532 10.885
@@ -4597,14 +4593,14 @@ script_name 'GOLFM'
 :GOLF_MARKER_LOOP
 wait $default_wait_time
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @GOLF_MARKER_LOOP_END
 if and
     $onmission == 0
     is_player_in_zone $player_char in_zone 'GOLFC' // Leaf Links
 goto_if_false @GOLF_MARKER_LOOP_END
 if and
-    Player.Controllable($player_char)
+    can_player_start_mission $player_char
     locate_stopped_player_any_means_3d $player_char 0 $golf_x $golf_y $golf_z radius 2.0 2.0 2.0
 goto_if_false @GOLF_MARKER_LOOP_END
 if
@@ -4634,14 +4630,14 @@ then
     terminate_this_script
 end
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @POLICE_1_MARKER_LOOP_END
 if and
     $onmission == 0
     is_player_in_zone $player_char in_zone 'BEACH2' // Washington Beach
 goto_if_false @POLICE_1_MARKER_LOOP_END
 if and
-    Player.Controllable($player_char)
+    can_player_start_mission $player_char
     locate_player_on_foot_3d $player_char 0 $police_x $police_y $police_z radius 1.2 1.2 2.0
 goto_if_false @POLICE_1_MARKER_LOOP_END
 print_big 'POLICE1' 15000 ms 2
@@ -4661,7 +4657,7 @@ $740 = 0
 :HJ_21
 wait 0
 if
-    not Player.Defined($player_char)
+    not is_player_playing $player_char
 goto_if_false @HJ_48
 goto @HJ_21
 
@@ -4702,7 +4698,7 @@ cset_var_int_to_var_float $770 = float_to_integer $763
 set_var_int_to_var_int $726 = $768
 add_int_var_to_int_var $726 += $769
 $726 /= 2
-Player.Money($player_char) += $726
+add_score $player_char money += $726
 if
     are_measurements_in_metres
 goto_if_false @HJ_315
@@ -4730,7 +4726,7 @@ add_int_var_to_int_var $726 += $776
 $726 *= 2
 $726 /= 5
 $726 /= 2
-Player.Money($player_char) += $726
+add_score $player_char money += $726
 if
     are_measurements_in_metres
 goto_if_false @HJ_523
@@ -4756,7 +4752,7 @@ cset_var_int_to_var_float $784 = float_to_integer $763
 set_var_int_to_var_int $726 = $782
 add_int_var_to_int_var $726 += $783
 $726 /= 2
-Player.Money($player_char) += $726
+add_score $player_char money += $726
 if
     are_measurements_in_metres
 goto_if_false @HJ_717
@@ -4816,12 +4812,12 @@ if or
     10 > $746
 goto_if_false @HJ_1570
 $746 += 1
-Car.StorePos($727, $750, $751, $752)
+get_car_coordinates $727 position_to $750 $751 $752
 set_var_float_to_var_float $764 = $762
 if
     $728 == 0
 goto_if_false @HJ_1198
-$764 = Car.Angle($727)
+get_car_heading $764 = car $727
 set_var_float_to_var_float $753 = $750
 set_var_float_to_var_float $754 = $751
 set_var_float_to_var_float $755 = $752
@@ -4830,13 +4826,13 @@ $728 = 1
 :HJ_1198
 wait 0
 if
-    Car.Wrecked($727)
+    not is_car_dead $727
 goto_if_false @HJ_1225
 goto @HJ_21
 
 :HJ_1225
 if
-    not Player.Defined($player_char)
+    not is_player_playing $player_char
 goto_if_false @HJ_1248
 goto @HJ_21
 
@@ -4862,7 +4858,7 @@ $733 += 1
 $732 = 0
 
 :HJ_1338
-$762 = Car.Angle($727)
+get_car_heading $762 = car $727
 set_var_float_to_var_float $765 = $762
 sub_float_var_from_float_var $765 -= $764
 if
@@ -4917,7 +4913,7 @@ goto @HJ_21
 if
     $728 == 1
 goto_if_false @HJ_1837
-Car.StorePos($727, $756, $757, $763)
+get_car_coordinates $727 position_to $756 $757 $763
 $737 = 0
 set_var_float_to_var_float $758 = $753
 sub_float_var_from_float_var $758 -= $756
@@ -4998,7 +4994,7 @@ $747 *= 2
 mult_int_var_by_int_var $747 *= $731
 $747 /= 3
 $747 /= 5
-Player.Money($player_char) += $747
+add_score $player_char money += $747
 if
     $731 == 1
 goto_if_false @HJ_2149
@@ -5110,7 +5106,7 @@ script_name 'USJ'
 :USJ_298
 wait 0
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @USJ_298
 if and
     is_player_in_any_car $player_char
@@ -5450,8 +5446,8 @@ goto @USJ_298
 $793 = 0
 $794 = 0
 set_time_scale 0.3
-Camera.SetPosition($832, $833, $834, 0.0, 0.0, 0.0)
-Camera.OnVehicle($789, 15, 2)
+set_fixed_camera_position $832 $833 $834 rotation 0.0 0.0 0.0
+point_camera_at_car $789 mode 15 switchstyle 2
 
 :USJ_5425
 if or
@@ -5461,7 +5457,7 @@ goto_if_false @USJ_5665
 $793 += 1
 wait 0
 if
-    Car.Wrecked($789)
+    not is_car_dead $789
 goto_if_false @USJ_5492
 $841 = 0.0
 goto @USJ_5665
@@ -5475,7 +5471,7 @@ goto @USJ_5665
 
 :USJ_5525
 if
-    not Player.Defined($player_char)
+    not is_player_playing $player_char
 goto_if_false @USJ_5558
 $841 = 0.0
 goto @USJ_5665
@@ -5502,7 +5498,7 @@ goto @USJ_5425
 :USJ_5665
 wait 300
 set_time_scale 1.0
-Camera.Restore_WithJumpCut
+restore_camera_jumpcut
 $793 = 0
 if
     $794 == 1
@@ -5875,7 +5871,7 @@ if
 goto_if_false @USJ_7570
 print_big_q 'USJ' time 5000 style 5 // UNIQUE STUNT BONUS!
 print_with_number_big 'REWARD' number $790 time 6000 style 6 // REWARD $~1~
-Player.Money($player_char) += $790
+add_score $player_char money += $790
 goto @USJ_7621
 
 :USJ_7570
@@ -5883,7 +5879,7 @@ print_big_q 'USJ' time 5000 style 5 // UNIQUE STUNT BONUS!
 print_help 'USJ_ALL' // ALL UNIQUE STUNTS COMPLETED!
 UPDATE_LAST_HELP_PRINTING_TIME()
 print_with_number_big 'REWARD' number 10000 time 6000 style 6 // REWARD $~1~
-Player.Money($player_char) += 10000
+add_score $player_char money += 10000
 
 :USJ_7621
 $794 = 0
@@ -5956,7 +5952,7 @@ script_name 'MISC'
 wait 0
 $1095 += 1
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @MISC_2674
 $1094 = 0
 if
@@ -5970,11 +5966,11 @@ if
     $1088 == 0
 goto_if_false @MISC_2427
 if
-    Player.InRemoteMode($player_char)
+    is_player_in_remote_mode $player_char
 goto_if_false @MISC_2157
-$1004 = Player.RC_car($player_char)
+get_remote_controlled_car $1004 = player $player_char
 if
-    not Car.Wrecked($1004)
+    not is_car_dead $1004
 goto_if_false @MISC_2150
 if
     locate_car_3d $1004 0 229.5 -1277.7 11.5 radius 1.5 1.5 3.0
@@ -5998,14 +5994,14 @@ goto @MISC_112
 print_big 'HOTEL' 3000 ms 2 // Ocean View
 MISC_15897()
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @MISC_2320
 if
     is_player_on_any_bike $player_char
 goto_if_false @MISC_2320
 store_car_player_is_in_no_save $1004 = player $player_char
 warp_player_from_car_to_coord $player_char at 225.0 -1277.3 11.5
-Car.Destroy($1004)
+delete_car $1004
 
 :MISC_2320
 if
@@ -6014,7 +6010,7 @@ goto_if_false @MISC_2413
 $1088 = 1
 set_area_visible 1
 switch_rubbish 0
-Camera.SetAtPos(225.0, -1277.3, 12.0)
+load_scene 225.0 -1277.3 12.0
 set_player_coordinates $player_char at 225.0 -1277.3 11.5
 set_player_heading $player_char z_angle_to 80.0
 set_extra_colours 3 fade 0
@@ -6048,7 +6044,7 @@ goto_if_false @MISC_2653
 MISC_16342()
 $1088 = 0
 clear_area 0 at 233.5 -1278.45 11.0 range 1.0
-Camera.SetAtPos(233.5, -1278.45, 11.0)
+load_scene 233.5 -1278.45 11.0
 set_player_coordinates $player_char at 233.5 -1278.45 11.0
 set_player_heading $player_char z_angle_to 270.0
 goto @MISC_2660
@@ -6067,7 +6063,7 @@ MISC_16363()
 
 :MISC_3389
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @MISC_4676
 $1094 = 0
 if or
@@ -6085,9 +6081,9 @@ goto_if_false @MISC_3564
 if
     $1009 == 0
 goto_if_false @MISC_3557
-Object.Destroy($1010)
-Object.Init($1010, #COP_DR_OPEN, 396.458, -473.047, 12.6)
-Object.RemoveFromMissionCleanupList($1010)
+delete_object $1010
+create_object_no_offset $1010 = init_object #COP_DR_OPEN at 396.458 -473.047 12.6
+dont_remove_object $1010
 $1009 = 1
 $1008 = 0
 
@@ -6098,15 +6094,15 @@ goto @MISC_3628
 if
     $1008 == 0
 goto_if_false @MISC_3628
-Object.Destroy($1010)
-Object.Init($1010, #COP_DR_CLOSED, 396.545, -472.883, 12.6)
-Object.RemoveFromMissionCleanupList($1010)
+delete_object $1010
+create_object_no_offset $1010 = init_object #COP_DR_CLOSED at 396.545 -472.883 12.6
+dont_remove_object $1010
 $1008 = 1
 $1009 = 0
 
 :MISC_3628
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @MISC_4669
 if or
     $onmission == 0
@@ -6117,11 +6113,11 @@ if
     $987 == 0
 goto_if_false @MISC_4242
 if
-    Player.InRemoteMode($player_char)
+    is_player_in_remote_mode $player_char
 goto_if_false @MISC_3791
-$1004 = Player.RC_car($player_char)
+get_remote_controlled_car $1004 = player $player_char
 if
-    not Car.Wrecked($1004)
+    not is_car_dead $1004
 goto_if_false @MISC_3784
 if
     locate_car_3d $1004 0 397.0 -472.0 12.0 radius 1.5 1.5 3.0
@@ -6145,14 +6141,14 @@ goto @MISC_112
 print_big 'POL_HQ' 3000 ms 2 // VCPD HQ
 MISC_15897()
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @MISC_3959
 if
     is_player_on_any_bike $player_char
 goto_if_false @MISC_3959
 store_car_player_is_in_no_save $1004 = player $player_char
 warp_player_from_car_to_coord $player_char at 393.8 -475.8 11.4
-Car.Destroy($1004)
+delete_car $1004
 
 :MISC_3959
 if
@@ -6171,7 +6167,7 @@ clear_area 1 at 400.0 -486.5 10.0 range 5.0
 
 :MISC_4164
 switch_rubbish 0
-Camera.SetAtPos(393.8, -475.8, 11.4)
+load_scene 393.8 -475.8 11.4
 set_player_coordinates $player_char at 393.8 -475.8 11.4
 set_player_heading $player_char z_angle_to 137.0
 set_extra_colours 5 fade 0
@@ -6215,7 +6211,7 @@ switch_ped_roads_off 354.9 -483.1 21.0 406.0 -490.0 0.0
 switch_ped_roads_off 376.66 -453.85 -10.0 328.91 -504.02 30.0
 
 :MISC_4601
-Camera.SetAtPos(399.38, -468.6, 10.7)
+load_scene 399.38 -468.6 10.7
 set_player_coordinates $player_char at 399.38 -468.6 10.7
 set_player_heading $player_char z_angle_to 330.0
 goto @MISC_4662
@@ -6234,7 +6230,7 @@ MISC_16363()
 
 :MISC_6298
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @MISC_7022
 $1094 = 0
 if or
@@ -6245,11 +6241,11 @@ if
     $1095 == 2
 goto_if_false @MISC_7015
 if
-    Player.InRemoteMode($player_char)
+    is_player_in_remote_mode $player_char
 goto_if_false @MISC_6467
-$1004 = Player.RC_car($player_char)
+get_remote_controlled_car $1004 = player $player_char
 if
-    not Car.Wrecked($1004)
+    not is_car_dead $1004
 goto_if_false @MISC_6460
 if
     locate_car_3d $1004 0 -1170.0 -609.0 11.0 radius 1.5 1.5 3.0
@@ -6276,14 +6272,14 @@ goto @MISC_112
 print_big 'UMBERTO' 3000 ms 2 // Cafe Robina
 MISC_15897()
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @MISC_6648
 if
     is_player_on_any_bike $player_char
 goto_if_false @MISC_6648
 store_car_player_is_in_no_save $1004 = player $player_char
 warp_player_from_car_to_coord $player_char at -1170.0 -611.0 11.0
-Car.Destroy($1004)
+delete_car $1004
 
 :MISC_6648
 if
@@ -6291,7 +6287,7 @@ if
 goto_if_false @MISC_6759
 $989 = 1
 set_area_visible 7
-Camera.SetAtPos(-1170.0, -611.0, 11.0)
+load_scene -1170.0 -611.0 11.0
 clear_area 0 at -1170.0 -611.0 11.0 range 1.0
 switch_rubbish 0
 set_player_coordinates $player_char at -1170.0 -611.5 11.0
@@ -6326,7 +6322,7 @@ goto_if_false @MISC_7001
 $989 = 0
 MISC_16342()
 clear_area 0 at -1170.0 -605.0 11.0 range 1.0
-Camera.SetAtPos(-1170.0, -605.0, 11.0)
+load_scene -1170.0 -605.0 11.0
 set_player_coordinates $player_char at -1170.0 -605.0 11.0
 set_player_heading $player_char z_angle_to 0.0
 set_camera_in_front_of_player
@@ -6355,9 +6351,9 @@ goto @MISC_112
 
 :MISC_15897
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @MISC_16146
-Player.CanMove($player_char, False)
+set_player_control $player_char can_move 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 set_fading_colour 0 0 1
 if and
@@ -6385,7 +6381,7 @@ if
 goto_if_false @MISC_16139
 wait 0
 if
-    not Player.Defined($player_char)
+    not is_player_playing $player_char
 goto_if_false @MISC_16075
 $992 = 1
 goto @MISC_16082
@@ -6431,7 +6427,7 @@ if
 goto_if_false @MISC_16310
 wait 0
 if
-    not Player.Defined($player_char)
+    not is_player_playing $player_char
 goto_if_false @MISC_16296
 $992 = 1
 goto @MISC_16303
@@ -6444,9 +6440,9 @@ goto @MISC_16249
 
 :MISC_16310
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @MISC_16340
-Player.CanMove($player_char, True)
+set_player_control $player_char can_move 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 
 :MISC_16340
@@ -6497,7 +6493,7 @@ set_deatharrest_state 0
 :CARGEN_14
 wait 500
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @CARGEN_1829
 if
     is_player_in_zone $player_char in_zone 'BEACH3' // Vice Point
@@ -6745,7 +6741,7 @@ $1264 = 0
 
 :CARGEN_1829
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @CARGEN_2598
 if
     is_player_in_zone $player_char in_zone 'BEACH1' // Ocean Beach
@@ -6952,7 +6948,7 @@ $1577 = 0
 wait 500
 get_time_of_day $9 = current_time_hours, $10
 if
-    Player.Defined($player_char)
+    is_player_playing $player_char
 goto_if_false @AUDIO1_1790
 if
     is_player_in_zone $player_char in_zone 'DTOWN' // Downtown
@@ -7726,85 +7722,85 @@ set_gang_weapons 6 primary_weapon_to 17 secondary_weapon_to 17
 set_threat_for_ped_type 7 add_threat 256
 set_threat_for_ped_type 8 add_threat 128
 
-Object.Init($1013, #OD_CLBDR_CLOSE, 490.34, -77.017, 11.598)
-Object.RemoveFromMissionCleanupList($1013)
-Object.Init($1010, #COP_DR_CLOSED, 396.545, -472.883, 12.6)
-Object.RemoveFromMissionCleanupList($1010)
-Object.Init($1779, #COMGATE1OPEN, -712.524, -489.428, 12.549)
-Object.RemoveFromMissionCleanupList($1779)
-Object.Init($1780, #COMGATE2OPEN, -183.824, -473.223, 12.615)
-Object.RemoveFromMissionCleanupList($1780)
-Object.Init($1787, #MANSION_NEW_DOORS, -391.19, -575.906, 24.071)
-Object.RemoveFromMissionCleanupList($1787)
-Object.Init($1788, #MAN_DOORCLOSED, -378.542, -554.006, 20.067)
-Object.RemoveFromMissionCleanupList($1788)
-Object.Init($1785, #HAITAXIDR, -1010.466, 199.125, 11.95)
-Object.RemoveFromMissionCleanupList($1785)
-Object.Init($1786, #B_HSE_DOORS, -640.012, -1485.941, 15.457)
-Object.RemoveFromMissionCleanupList($1786)
-Object.Init($1007, #STRIPCLBDRCLSD, 97.203, -1469.731, 10.578)
-Object.RemoveFromMissionCleanupList($1007)
-Object.Init($1791, #ELECTRICGATE, -1114.1, 67.0, 10.1)
-Object.Angle($1791) = 90.0
-Object.RemoveFromMissionCleanupList($1791)
-Object.Init($1778, #ELECTRICGATE, 298.0, -313.6, 11.0)
-Object.RemoveFromMissionCleanupList($1778)
-Object.Init($1792, #ELECTRICGATE, -989.9, -1252.2, 10.4)
-Object.Angle($1792) = 249.0
-Object.RemoveFromMissionCleanupList($1792)
-Object.Init($1793, #DK_CAMJONESDOOR, -837.134, -901.672, 12.03)
-Object.RemoveFromMissionCleanupList($1793)
-Object.Angle($1793) = 0.0
-Object.Init($1801, #DTS_GS_LIFTDOORL, -559.476, 783.107, 23.279)
-Object.RemoveFromMissionCleanupList($1801)
-Object.Init($1802, #DTS_GS_LIFTDOORR, -559.476, 781.34, 23.279)
-Object.RemoveFromMissionCleanupList($1802)
-Object.Init($film_studio_front_gate_closed, #CI_GATESCLOSED, 11.697, 963.176, 12.258)
-Object.RemoveFromMissionCleanupList($film_studio_front_gate_closed)
-Object.Init($film_studio_back_gate_closed, #CI_BACKGATECLOSE, -11.853, 884.06, 13.542)
-Object.RemoveFromMissionCleanupList($film_studio_back_gate_closed)
-Object.Init($1811, #CI_JETYGATESCLOSED, -116.738, 1027.729, 11.34)
-Object.RemoveFromMissionCleanupList($1811)
-Object.Init($1812, #NHAITPLATDR, -981.114, 265.419, 8.939)
-Object.RemoveFromMissionCleanupList($1812)
-Object.Init($1813, #NHAITPLATDRR, -981.114, 267.607, 8.937)
-Object.RemoveFromMissionCleanupList($1813)
-Object.Init($1814, #SPAD_DR_CLOSED1, 465.375, 30.336, 33.181)
-Object.RemoveFromMissionCleanupList($1814)
-Object.Init($1815, #SPAD_DR_CLOSED2, 465.375, 30.336, 33.181)
-Object.RemoveFromMissionCleanupList($1815)
-Object.Init($1816, #SPAD_DR_CLOSED3, 464.663, 30.336, 23.881)
-Object.RemoveFromMissionCleanupList($1816)
-Object.Init($1817, #PH_BUILD_DR_CLOSED, 569.925, 52.0, 14.616)
-Object.RemoveFromMissionCleanupList($1817)
+create_object_no_offset $1013 = init_object #OD_CLBDR_CLOSE at 490.34 -77.017 11.598
+dont_remove_object $1013
+create_object_no_offset $1010 = init_object #COP_DR_CLOSED at 396.545 -472.883 12.6
+dont_remove_object $1010
+create_object_no_offset $1779 = init_object #COMGATE1OPEN at -712.524 -489.428 12.549
+dont_remove_object $1779
+create_object_no_offset $1780 = init_object #COMGATE2OPEN at -183.824 -473.223 12.615
+dont_remove_object $1780
+create_object_no_offset $1787 = init_object #MANSION_NEW_DOORS at -391.19 -575.906 24.071
+dont_remove_object $1787
+create_object_no_offset $1788 = init_object #MAN_DOORCLOSED at -378.542 -554.006 20.067
+dont_remove_object $1788
+create_object_no_offset $1785 = init_object #HAITAXIDR at -1010.466 199.125 11.95
+dont_remove_object $1785
+create_object_no_offset $1786 = init_object #B_HSE_DOORS at -640.012 -1485.941 15.457
+dont_remove_object $1786
+create_object_no_offset $1007 = init_object #STRIPCLBDRCLSD at 97.203 -1469.731 10.578
+dont_remove_object $1007
+create_object_no_offset $1791 = init_object #ELECTRICGATE at -1114.1 67.0 10.1
+set_object_heading $1791 z_angle_to 90.0
+dont_remove_object $1791
+create_object_no_offset $1778 = init_object #ELECTRICGATE at 298.0 -313.6 11.0
+dont_remove_object $1778
+create_object_no_offset $1792 = init_object #ELECTRICGATE at -989.9 -1252.2 10.4
+set_object_heading $1792 z_angle_to 249.0
+dont_remove_object $1792
+create_object_no_offset $1793 = init_object #DK_CAMJONESDOOR at -837.134 -901.672 12.03
+dont_remove_object $1793
+set_object_heading $1793 z_angle_to 0.0
+create_object_no_offset $1801 = init_object #DTS_GS_LIFTDOORL at -559.476 783.107 23.279
+dont_remove_object $1801
+create_object_no_offset $1802 = init_object #DTS_GS_LIFTDOORR at -559.476 781.34 23.279
+dont_remove_object $1802
+create_object_no_offset $film_studio_front_gate_closed = init_object #CI_GATESCLOSED at 11.697 963.176 12.258
+dont_remove_object $film_studio_front_gate_closed
+create_object_no_offset $film_studio_back_gate_closed = init_object #CI_BACKGATECLOSE at -11.853 884.06 13.542
+dont_remove_object $film_studio_back_gate_closed
+create_object_no_offset $1811 = init_object #CI_JETYGATESCLOSED at -116.738 1027.729 11.34
+dont_remove_object $1811
+create_object_no_offset $1812 = init_object #NHAITPLATDR at -981.114 265.419 8.939
+dont_remove_object $1812
+create_object_no_offset $1813 = init_object #NHAITPLATDRR at -981.114 267.607 8.937
+dont_remove_object $1813
+create_object_no_offset $1814 = init_object #SPAD_DR_CLOSED1 at 465.375 30.336 33.181
+dont_remove_object $1814
+create_object_no_offset $1815 = init_object #SPAD_DR_CLOSED2 at 465.375 30.336 33.181
+dont_remove_object $1815
+create_object_no_offset $1816 = init_object #SPAD_DR_CLOSED3 at 464.663 30.336 23.881
+dont_remove_object $1816
+create_object_no_offset $1817 = init_object #PH_BUILD_DR_CLOSED at 569.925 52.0 14.616
+dont_remove_object $1817
 rotate_object $1817 from_angle 270.0 to_angle 270.0 flag 0
-Object.Init($1818, #ELECTRICGATE, -973.664, -519.65, 10.092)
-Object.Angle($1818) = 98.5
-Object.RemoveFromMissionCleanupList($1818)
-Object.Init($1819, #ICEDOOR, -866.689, -572.095, 12.173)
-Object.RemoveFromMissionCleanupList($1819)
-Object.Init($1820, #DTS_BBDOOR, -598.017, 651.207, 12.025)
-Object.RemoveFromMissionCleanupList($1820)
-Object.Init($1821, #GOLF_GATESCLOSED, 107.671, 227.729, 20.634)
-Object.RemoveFromMissionCleanupList($1821)
-Object.Init($1822, #PRINTDOOOR, -1063.773, -278.932, 13.024)
-Object.RemoveFromMissionCleanupList($1822)
-Object.Init($Arena_door_1, #DTN_STADDOORA, -1109.615, 1330.097, 20.372)
-Object.RemoveFromMissionCleanupList($Arena_door_1)
-Object.Init($Arena_door_2, #DTN_STADDOORB, -1109.615, 1331.932, 20.372)
-Object.RemoveFromMissionCleanupList($Arena_door_2)
-Object.Init($dtn_sr_door_1, #DTN_STADDOORA, -668.85, 1212.0, 11.3)
-Object.Angle($dtn_sr_door_1) = 270.0
-Object.RemoveFromMissionCleanupList($dtn_sr_door_1)
-Object.Init($dtn_sr_door_2, #DTN_STADDOORB, -667.01, 1212.0, 11.2)
-Object.Angle($dtn_sr_door_2) = 270.0
-Object.RemoveFromMissionCleanupList($dtn_sr_door_2)
-Object.Init($ob_ap_door, #PH_BUILD_DR_CLOSED, 26.8, -1328.8, 13.0)
-Object.Angle($ob_ap_door) = 85.0
-Object.RemoveFromMissionCleanupList($ob_ap_door)
-Object.Init($ramp_1, #WATERJUMP1, 58.5874, -283.3163, 9.457)
-Object.Angle($ramp_1) = 3.4672
-Object.RemoveFromMissionCleanupList($ramp_1)
+create_object_no_offset $1818 = init_object #ELECTRICGATE at -973.664 -519.65 10.092
+set_object_heading $1818 z_angle_to 98.5
+dont_remove_object $1818
+create_object_no_offset $1819 = init_object #ICEDOOR at -866.689 -572.095 12.173
+dont_remove_object $1819
+create_object_no_offset $1820 = init_object #DTS_BBDOOR at -598.017 651.207 12.025
+dont_remove_object $1820
+create_object_no_offset $1821 = init_object #GOLF_GATESCLOSED at 107.671 227.729 20.634
+dont_remove_object $1821
+create_object_no_offset $1822 = init_object #PRINTDOOOR at -1063.773 -278.932 13.024
+dont_remove_object $1822
+create_object_no_offset $Arena_door_1 = init_object #DTN_STADDOORA at -1109.615 1330.097 20.372
+dont_remove_object $Arena_door_1
+create_object_no_offset $Arena_door_2 = init_object #DTN_STADDOORB at -1109.615 1331.932 20.372
+dont_remove_object $Arena_door_2
+create_object_no_offset $dtn_sr_door_1 = init_object #DTN_STADDOORA at -668.85 1212.0 11.3
+set_object_heading $dtn_sr_door_1 z_angle_to 270.0
+dont_remove_object $dtn_sr_door_1
+create_object_no_offset $dtn_sr_door_2 = init_object #DTN_STADDOORB at -667.01 1212.0 11.2
+set_object_heading $dtn_sr_door_2 z_angle_to 270.0
+dont_remove_object $dtn_sr_door_2
+create_object_no_offset $ob_ap_door = init_object #PH_BUILD_DR_CLOSED at 26.8 -1328.8 13.0
+set_object_heading $ob_ap_door z_angle_to 85.0
+dont_remove_object $ob_ap_door
+create_object_no_offset $ramp_1 = init_object #WATERJUMP1 at 58.5874 -283.3163 9.457
+set_object_heading $ramp_1 z_angle_to 3.4672
+dont_remove_object $ramp_1
 
 create_car_generator $1992 = init_car_generator #ADMIRAL 8 8 force_spawn 0 alarm 50 door_lock 0 min_delay 0 max_delay 10000 at -401.2715 -534.6655 11.7534 angle 149.2032
 switch_car_generator $1992 cars_to_generate_to 101
@@ -8144,30 +8140,30 @@ switch_car_generator $tommy_car_spawn_4 cars_to_generate_to 0
 create_car_generator $car_spawn_1 = init_car_generator #SPEEDER -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -799.9042 -334.4113 6.1757 angle 0.452
 switch_car_generator $car_spawn_1 cars_to_generate_to 101
 
-Pickup.Create($2035, #BAT, 2, 30.0, -1330.9, 13.0)
-Pickup.Create($1999, #BAT, 2, 206.7, -1254.4, 12.0)
+create_pickup $2035 = create_pickup #BAT type 2 at 30.0 -1330.9 13.0
+create_pickup $1999 = create_pickup #BAT type 2 at 206.7 -1254.4 12.0
 create_pickup_with_ammo $2000 = create_weapon_pickup #COLT45 15 ammo 34 at -228.4 -1318.2 9.1
 create_pickup_with_ammo $2001 = create_weapon_pickup #COLT45 15 ammo 34 at 340.5 -249.5 12.5
 create_pickup_with_ammo $2002 = create_weapon_pickup #CHROMEGUN 15 ammo 16 at 42.3 -959.2 21.8
 create_pickup_with_ammo $2003 = create_weapon_pickup #CHROMEGUN 15 ammo 16 at 568.9 -449.3 11.1
 create_pickup_with_ammo $2004 = create_weapon_pickup #TEC9 15 ammo 100 at 287.9 50.7 10.8
 create_pickup_with_ammo $2005 = create_weapon_pickup #GRENADE 15 ammo 4 at 362.2 -500.5 12.3
-Pickup.Create($2006, #BAT, 15, 402.6, 102.5, 11.4)
+create_pickup $2006 = create_pickup #BAT type 15 at 402.6 102.5 11.4
 create_pickup_with_ammo $2007 = create_weapon_pickup #RUGER 15 ammo 60 at 418.9 589.9 18.3
-Pickup.Create($2008, #BAT, 15, 476.9, 1014.9, 19.2)
-Pickup.Create($2009, #NITESTICK, 15, 402.4, -488.3, 12.4)
-Pickup.Create($2011, #BAT, 15, 224.0, -1207.5, 11.0)
-Pickup.Create($2012, #BAT, 15, 118.7, -1546.1, 10.8)
-Pickup.Create($2013, #BAT, 15, 56.6, -459.3, 11.4)
+create_pickup $2008 = create_pickup #BAT type 15 at 476.9 1014.9 19.2
+create_pickup $2009 = create_pickup #NITESTICK type 15 at 402.4 -488.3 12.4
+create_pickup $2011 = create_pickup #BAT type 15 at 224.0 -1207.5 11.0
+create_pickup $2012 = create_pickup #BAT type 15 at 118.7 -1546.1 10.8
+create_pickup $2013 = create_pickup #BAT type 15 at 56.6 -459.3 11.4
 create_pickup_with_ammo $2014 = create_weapon_pickup #UZI 15 ammo 60 at 5.4 -1277.0 10.4
 create_pickup_with_ammo $2036 = create_weapon_pickup #UZI 15 ammo 60 at 157.0 -895.3 12.3
 create_pickup_with_ammo $2010 = create_weapon_pickup #BOMB 15 ammo 4 at 556.6 207.4 14.5
 create_pickup_with_ammo $2015 = create_weapon_pickup #M4 15 ammo 60 at -32.8 1019.2 13.0
 create_pickup_with_ammo $2016 = create_weapon_pickup #UZI 15 ammo 60 at 17.3 1145.7 23.5
-Pickup.Create($2017, #GOLFCLUB, 2, 95.0, 279.2, 21.8)
+create_pickup $2017 = create_pickup #GOLFCLUB type 2 at 95.0 279.2 21.8
 create_pickup_with_ammo $2018 = create_weapon_pickup #FLAME 15 ammo 300 at -546.0 -418.9 9.8
 create_pickup_with_ammo $2019 = create_weapon_pickup #SNIPER 15 ammo 20 at -476.4 -571.2 12.9
-Pickup.Create($2020, #BAT, 15, -554.11, -547.7, 10.7)
+create_pickup $2020 = create_pickup #BAT type 15 at -554.11 -547.7 10.7
 create_pickup_with_ammo $2021 = create_weapon_pickup #MOLOTOV 15 ammo 4 at -755.7 1347.5 11.8
 create_pickup_with_ammo $2022 = create_weapon_pickup #UZI 15 ammo 60 at -545.8 694.6 11.0
 create_pickup_with_ammo $2023 = create_weapon_pickup #M4 15 ammo 60 at -980.4 118.7 9.3
@@ -8183,54 +8179,54 @@ create_pickup_with_ammo $2032 = create_weapon_pickup #PYTHON 15 ammo 12 at -1182
 create_pickup_with_ammo $2033 = create_weapon_pickup #BUDDYSHOT 15 ammo 10 at -1305.2 177.1 11.4
 create_pickup_with_ammo $2034 = create_weapon_pickup #LASER 15 ammo 14 at -1114.3 -602.0 26.0
 
-Pickup.Create($weapon_pickup_1, #NITESTICK, 15, -251.84, -314.045, 10.115)
+create_pickup $weapon_pickup_1 = create_pickup #NITESTICK type 15 at -251.84 -314.045 10.115
 create_pickup_with_ammo $weapon_pickup_2 = create_weapon_pickup #GRENADE 15 ammo 15 at -250.45 -312.58 10.1
 create_pickup_with_ammo $weapon_pickup_3 = create_weapon_pickup #COLT45 15 ammo 170 at -249.06 -311.115 10.085
 create_pickup_with_ammo $weapon_pickup_4 = create_weapon_pickup #UZI 15 ammo 300 at -247.67 -309.65 10.07
 
-Pickup.Create($2037, #HEALTH, 1, -113.2, -975.7, 10.4)
-Pickup.Create($2038, #HEALTH, 15, -225.1, -1158.1, 9.1)
-Pickup.Create($2039, #HEALTH, 15, 456.2, -471.4, 16.6)
-Pickup.Create($2040, #HEALTH, 15, 377.4, 467.7, 11.6)
-Pickup.Create($2041, #HEALTH, 1, 469.6, 697.4, 11.7)
-Pickup.Create($2042, #HEALTH, 15, 385.3, 1210.9, 19.4)
-Pickup.Create($2043, #HEALTH, 1, 384.3, 756.6, 11.7)
-Pickup.Create($2044, #HEALTH, 15, 10.7, 1099.0, 16.6)
-Pickup.Create($2045, #HEALTH, 15, 85.3, 402.7, 19.8)
-Pickup.Create($2046, #HEALTH, 15, -711.7, -501.7, 11.3)
-Pickup.Create($2047, #HEALTH, 15, -404.0, -588.0, 11.6)
-Pickup.Create($2061, #HEALTH, 2, -406.2503, -566.4947, 19.5804)
-Pickup.Create($2048, #HEALTH, 15, -478.1, 1438.5, 16.1)
-Pickup.Create($2049, #HEALTH, 15, -675.0, 1263.3, 25.1)
-Pickup.Create($2050, #HEALTH, 15, -821.8, 1144.8, 26.1)
-Pickup.Create($2051, #HEALTH, 15, -1139.4, 55.4, 11.2)
-Pickup.Create($2052, #HEALTH, 15, -1290.9, 91.9, 26.9)
-Pickup.Create($2053, #HEALTH, 1, -885.4, -483.4, 13.1)
-Pickup.Create($2054, #HEALTH, 15, -925.1, -638.3, 16.0)
-Pickup.Create($2055, #HEALTH, 15, -692.4, -1283.8, 11.1)
-Pickup.Create($2056, #HEALTH, 15, -655.1, -1506.3, 8.1)
-Pickup.Create($2057, #HEALTH, 15, -1399.4, -865.9, 20.9)
-Pickup.Create($2058, #HEALTH, 1, -822.6, 1137.3, 12.4)
-Pickup.Create($2059, #HEALTH, 1, -851.4, -78.8, 11.5)
-Pickup.Create($2060, #HEALTH, 1, -834.2, 740.6, 11.3)
-Pickup.Create($2062, #BODYARMOUR, 15, 4.9, -1239.2, 19.2)
-Pickup.Create($2063, #BODYARMOUR, 15, 205.7, -885.7, 12.2)
-Pickup.Create($2064, #BODYARMOUR, 15, 148.8, -349.9, 8.7)
-Pickup.Create($2065, #BODYARMOUR, 15, 520.2, -171.2, 13.9)
-Pickup.Create($2066, #BODYARMOUR, 15, 430.8, 162.1, 11.8)
-Pickup.Create($2067, #BODYARMOUR, 15, 416.1, 517.7, 11.2)
-Pickup.Create($2068, #BODYARMOUR, 15, 350.2, 884.8, 25.5)
-Pickup.Create($2069, #BODYARMOUR, 15, 535.3, 1214.1, 18.9)
-Pickup.Create($2070, #BODYARMOUR, 15, 42.8, 951.1, 11.0)
-Pickup.Create($2071, #BODYARMOUR, 15, -70.8, 510.6, 11.6)
-Pickup.Create($2072, #BODYARMOUR, 15, -1695.6, -289.4, 29.7)
-Pickup.Create($2073, #BODYARMOUR, 15, -567.6, 1370.36, 16.4)
-Pickup.Create($2074, #BODYARMOUR, 15, -921.9, 722.9, 11.0)
-Pickup.Create($2076, #BODYARMOUR, 15, -1058.9, -240.6, 18.2)
-Pickup.Create($2077, #BODYARMOUR, 15, -625.5, 622.2, 11.7)
-Pickup.Create($2078, #BODYARMOUR, 15, -733.5, -1294.7, 12.4)
-Pickup.Create($2079, #BODYARMOUR, 15, -1177.0, -915.3, 14.9)
-Pickup.Create($2075, #BODYARMOUR, 15, -1171.0, -457.4, 10.7)
+create_pickup $2037 = create_pickup #HEALTH type 1 at -113.2 -975.7 10.4
+create_pickup $2038 = create_pickup #HEALTH type 15 at -225.1 -1158.1 9.1
+create_pickup $2039 = create_pickup #HEALTH type 15 at 456.2 -471.4 16.6
+create_pickup $2040 = create_pickup #HEALTH type 15 at 377.4 467.7 11.6
+create_pickup $2041 = create_pickup #HEALTH type 1 at 469.6 697.4 11.7
+create_pickup $2042 = create_pickup #HEALTH type 15 at 385.3 1210.9 19.4
+create_pickup $2043 = create_pickup #HEALTH type 1 at 384.3 756.6 11.7
+create_pickup $2044 = create_pickup #HEALTH type 15 at 10.7 1099.0 16.6
+create_pickup $2045 = create_pickup #HEALTH type 15 at 85.3 402.7 19.8
+create_pickup $2046 = create_pickup #HEALTH type 15 at -711.7 -501.7 11.3
+create_pickup $2047 = create_pickup #HEALTH type 15 at -404.0 -588.0 11.6
+create_pickup $2061 = create_pickup #HEALTH type 2 at -406.2503 -566.4947 19.5804
+create_pickup $2048 = create_pickup #HEALTH type 15 at -478.1 1438.5 16.1
+create_pickup $2049 = create_pickup #HEALTH type 15 at -675.0 1263.3 25.1
+create_pickup $2050 = create_pickup #HEALTH type 15 at -821.8 1144.8 26.1
+create_pickup $2051 = create_pickup #HEALTH type 15 at -1139.4 55.4 11.2
+create_pickup $2052 = create_pickup #HEALTH type 15 at -1290.9 91.9 26.9
+create_pickup $2053 = create_pickup #HEALTH type 1 at -885.4 -483.4 13.1
+create_pickup $2054 = create_pickup #HEALTH type 15 at -925.1 -638.3 16.0
+create_pickup $2055 = create_pickup #HEALTH type 15 at -692.4 -1283.8 11.1
+create_pickup $2056 = create_pickup #HEALTH type 15 at -655.1 -1506.3 8.1
+create_pickup $2057 = create_pickup #HEALTH type 15 at -1399.4 -865.9 20.9
+create_pickup $2058 = create_pickup #HEALTH type 1 at -822.6 1137.3 12.4
+create_pickup $2059 = create_pickup #HEALTH type 1 at -851.4 -78.8 11.5
+create_pickup $2060 = create_pickup #HEALTH type 1 at -834.2 740.6 11.3
+create_pickup $2062 = create_pickup #BODYARMOUR type 15 at 4.9 -1239.2 19.2
+create_pickup $2063 = create_pickup #BODYARMOUR type 15 at 205.7 -885.7 12.2
+create_pickup $2064 = create_pickup #BODYARMOUR type 15 at 148.8 -349.9 8.7
+create_pickup $2065 = create_pickup #BODYARMOUR type 15 at 520.2 -171.2 13.9
+create_pickup $2066 = create_pickup #BODYARMOUR type 15 at 430.8 162.1 11.8
+create_pickup $2067 = create_pickup #BODYARMOUR type 15 at 416.1 517.7 11.2
+create_pickup $2068 = create_pickup #BODYARMOUR type 15 at 350.2 884.8 25.5
+create_pickup $2069 = create_pickup #BODYARMOUR type 15 at 535.3 1214.1 18.9
+create_pickup $2070 = create_pickup #BODYARMOUR type 15 at 42.8 951.1 11.0
+create_pickup $2071 = create_pickup #BODYARMOUR type 15 at -70.8 510.6 11.6
+create_pickup $2072 = create_pickup #BODYARMOUR type 15 at -1695.6 -289.4 29.7
+create_pickup $2073 = create_pickup #BODYARMOUR type 15 at -567.6 1370.36 16.4
+create_pickup $2074 = create_pickup #BODYARMOUR type 15 at -921.9 722.9 11.0
+create_pickup $2076 = create_pickup #BODYARMOUR type 15 at -1058.9 -240.6 18.2
+create_pickup $2077 = create_pickup #BODYARMOUR type 15 at -625.5 622.2 11.7
+create_pickup $2078 = create_pickup #BODYARMOUR type 15 at -733.5 -1294.7 12.4
+create_pickup $2079 = create_pickup #BODYARMOUR type 15 at -1177.0 -915.3 14.9
+create_pickup $2075 = create_pickup #BODYARMOUR type 15 at -1171.0 -457.4 10.7
 
 add_set_piece 1 if_player_with_wanted_level_in_rectangle 225.0 -1244.0 227.4 -1248.5 spawn_policeA_at 249.0 -1255.0 headed_towards 246.0 -1250.6 spawn_policeB_at 208.4 -1238.4 headed_towards 209.6 -1243.5
 add_set_piece 6 if_player_with_wanted_level_in_rectangle 235.3 -1299.6 261.1 -1270.7 spawn_policeA_at 212.2 -1309.6 headed_towards 228.0 -1311.3 spawn_policeB_at 221.2 -1309.6 headed_towards 228.0 -1311.3
@@ -8280,27 +8276,27 @@ wait 0
 do_fade 0 (in) 0
 set_weather 0
 switch_widescreen 1
-Player.CanMove($player_char, False)
+set_player_control $player_char can_move 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 set_car_density_multiplier 0.0
 set_ped_density_multiplier 0.0
-Camera.SetAtPos(-1607.8014, -1195.0654, 15.0263)
-Camera.SetPosition(-1607.8014, -1195.0654, 16.0263, 0.0, 0.0, 0.0)
-Camera.PointAt(-1608.731, -1201.7645, 16.2263, 2) //14.868
-Model.Load(#TAXI)
-Model.Load(#CABBIE)
-Model.Load(#KAUFMAN)
-Model.Load(#WMOCA)
-Model.Load(#HMOCA)
-Model.Load(#ap_rland03)
-Model.Load(#ap_runsigns5_01)
-Model.Load(#ap_runsign7_03)
-Model.Load(#ap_steps1_08)
-Model.Load(#ap_smahangar2_01)
-Model.Load(#air_brway_030)
-Model.Load(#ap_runsign10_03)
-Model.Load(#ap_roadsect3b)
+load_scene -1607.8014 -1195.0654 15.0263
+set_fixed_camera_position -1607.8014 -1195.0654 16.0263 rotation 0.0 0.0 0.0
+point_camera_at_point -1608.731 -1201.7645 16.2263 switchstyle 2 //14.868
+request_model #TAXI
+request_model #CABBIE
+request_model #KAUFMAN
+request_model #WMOCA
+request_model #HMOCA
+request_model #ap_rland03
+request_model #ap_runsigns5_01
+request_model #ap_runsign7_03
+request_model #ap_steps1_08
+request_model #ap_smahangar2_01
+request_model #air_brway_030
+request_model #ap_runsign10_03
+request_model #ap_roadsect3b
 load_mission_audio 'TAX2_7' as 1
 load_all_models_now
 
@@ -8313,14 +8309,14 @@ goto @INTRO_LOAD
 
 :INTRO_LOADED
 do_fade 1 (out) 200
-Car.Create(0@, #TAXI, -1634.0433, -1549.4225, 34.8682) //14.8682
+create_car 0@ = create_car #TAXI at -1634.0433 -1549.4225 34.8682 //14.8682
 create_char_inside_car 1@ = create_actor 4 #WMOCA in_car 0@
 create_char_as_passenger 2@ = create_actor_pedtype 10 model #NULL in_car 0@ passenger_seat 0
-Car.Angle(0@) = 359.6142
+set_car_heading 0@ z_angle_to 359.6142
 set_car_driving_style 0@ traffic_behavior_to 3
-Car.ImmuneToNonPlayer(0@, True)
+set_car_only_damaged_by_player 0@ immune_to_nonplayer 1
 set_car_straight_line_distance 0@ abandon_path_radius 255
-Car.DriveTo(0@, -1632.5491, -1206.3263, 14.868)
+car_goto_coordinates 0@ drive_to -1632.5491 -1206.3263 14.868
 set_car_forward_speed 0@ speed_instantly 200.0
 TIMERA = 0
 $scene_step = 0
@@ -8340,7 +8336,7 @@ if and
     TIMERA >= 3000
 then
     $scene_step++
-    Camera.OnVehicle(0@, 15, 1)
+    point_camera_at_car 0@ mode 15 switchstyle 1
 end
 
 if and
@@ -8356,8 +8352,8 @@ if and
     TIMERA >= 5500
 then
     $scene_step++
-    Camera.SetPosition(-1625.7916, -1205.0001, 14.868, 0.0, 0.0, 0.0)
-    Camera.OnVehicle(0@, 15, 2)
+    set_fixed_camera_position -1625.7916 -1205.0001 14.868 rotation 0.0 0.0 0.0
+    point_camera_at_car 0@ mode 15 switchstyle 2
 end
 
 if and
@@ -8365,10 +8361,10 @@ if and
     is_char_on_foot 2@
 then
     $scene_step++
-    Actor.Angle(2@) = 279.4725
+    set_char_heading 2@ z_angle_to 279.4725
     set_char_wait_state 2@ anim 13 wait_state_time 1000
     wait 0
-    Camera.SetAtPos(-1411.1111, -819.9204, 14.702)
+    load_scene -1411.1111 -819.9204 14.702
 end
 
 if and
@@ -8385,25 +8381,25 @@ if and
     TIMERA >= 8100
 then
     $scene_step++
-    Actor.Create(3@, 4, #NULL, -1407.7283, -831.9881, 13.8715)
-    Actor.Angle(3@) = 47.075
+    create_char 3@ = create_actor_pedtype 4 model #NULL at -1407.7283 -831.9881 13.8715
+    set_char_heading 3@ z_angle_to 47.075
     set_char_obj_run_to_coord 3@ run_to -1413.7323 -826.7162
     set_char_use_pednode_seek 3@ use_pednode_seek 0
 
-    Car.Create($mission_car_1, #TAXI, -1411.8204, -792.3445, 14.7013)
-    Car.Angle($mission_car_1) = 180.8461
-    Car.Create($mission_car_2, #CABBIE, -1453.9362, -826.8669, 14.64)
-    Car.Angle($mission_car_2) = 239.1266
-    Car.Create($mission_car_3, #TAXI, -1429.6967, -804.1542, 14.8714)
-    Car.Angle($mission_car_3) = 195.5963
-    Car.Create($mission_car_4, #KAUFMAN, -1453.5037, -810.3246, 14.8714)
-    Car.Angle($mission_car_4) = 34.5414
-    Car.Create($mission_car_5, #TAXI, -1451.349, -780.7466, 14.6999)
-    Car.Angle($mission_car_5) = 90.5653
-    Car.Create($mission_car_6, #KAUFMAN, -1409.8754, -785.378, 14.6998)
-    Car.Angle($mission_car_6) = 156.0526
-    Car.Create($mission_car_7, #TAXI, -1418.5424, -806.1469, 14.8714)
-    Car.Angle($mission_car_7) = 349.6711
+    create_car $mission_car_1 = create_car #TAXI at -1411.8204 -792.3445 14.7013
+    set_car_heading $mission_car_1 z_angle_to 180.8461
+    create_car $mission_car_2 = create_car #CABBIE at -1453.9362 -826.8669 14.64
+    set_car_heading $mission_car_2 z_angle_to 239.1266
+    create_car $mission_car_3 = create_car #TAXI at -1429.6967 -804.1542 14.8714
+    set_car_heading $mission_car_3 z_angle_to 195.5963
+    create_car $mission_car_4 = create_car #KAUFMAN at -1453.5037 -810.3246 14.8714
+    set_car_heading $mission_car_4 z_angle_to 34.5414
+    create_car $mission_car_5 = create_car #TAXI at -1451.349 -780.7466 14.6999
+    set_car_heading $mission_car_5 z_angle_to 90.5653
+    create_car $mission_car_6 = create_car #KAUFMAN at -1409.8754 -785.378 14.6998
+    set_car_heading $mission_car_6 z_angle_to 156.0526
+    create_car $mission_car_7 = create_car #TAXI at -1418.5424 -806.1469 14.8714
+    set_car_heading $mission_car_7 z_angle_to 349.6711
     create_char_inside_car $mission_actor_1 = create_actor 4 #HMOCA in_car $mission_car_1
     create_char_inside_car $mission_actor_2 = create_actor 4 #WMOCA in_car $mission_car_2
     create_char_inside_car $mission_actor_3 = create_actor 4 #HMOCA in_car $mission_car_3
@@ -8411,13 +8407,13 @@ then
     create_char_inside_car $mission_actor_5 = create_actor 4 #WMOCA in_car $mission_car_5
     create_char_inside_car $mission_actor_6 = create_actor 4 #HMOCA in_car $mission_car_6
     create_char_inside_car $mission_actor_7 = create_actor 4 #WMOCA in_car $mission_car_7
-    Car.SetToNormalDriver($mission_car_1)
-    Car.SetToNormalDriver($mission_car_2)
-    Car.SetToNormalDriver($mission_car_3)
-    Car.SetToNormalDriver($mission_car_4)
-    Car.SetToNormalDriver($mission_car_5)
-    Car.SetToNormalDriver($mission_car_6)
-    Car.SetToNormalDriver($mission_car_7)
+    car_set_idle $mission_car_1
+    car_set_idle $mission_car_2
+    car_set_idle $mission_car_3
+    car_set_idle $mission_car_4
+    car_set_idle $mission_car_5
+    car_set_idle $mission_car_6
+    car_set_idle $mission_car_7
     set_car_driving_style $mission_car_1 traffic_behavior_to 2
     set_car_driving_style $mission_car_2 traffic_behavior_to 2
     set_car_driving_style $mission_car_1 traffic_behavior_to 2
@@ -8425,17 +8421,17 @@ then
     set_car_driving_style $mission_car_1 traffic_behavior_to 2
     set_car_driving_style $mission_car_1 traffic_behavior_to 2
     set_car_driving_style $mission_car_1 traffic_behavior_to 2
-    Car.SetMaxSpeed($mission_car_1, 100.0)
-    Car.SetMaxSpeed($mission_car_2, 100.0)
-    Car.SetMaxSpeed($mission_car_3, 100.0)
-    Car.SetMaxSpeed($mission_car_4, 100.0)
-    Car.SetMaxSpeed($mission_car_5, 100.0)
-    Car.SetMaxSpeed($mission_car_6, 100.0)
-    Car.SetMaxSpeed($mission_car_7, 100.0)
+    set_car_cruise_speed $mission_car_1 max_speed_to 100.0
+    set_car_cruise_speed $mission_car_2 max_speed_to 100.0
+    set_car_cruise_speed $mission_car_3 max_speed_to 100.0
+    set_car_cruise_speed $mission_car_4 max_speed_to 100.0
+    set_car_cruise_speed $mission_car_5 max_speed_to 100.0
+    set_car_cruise_speed $mission_car_6 max_speed_to 100.0
+    set_car_cruise_speed $mission_car_7 max_speed_to 100.0
 
     set_interpolation_parameters 0.0 1000
-    Camera.SetPosition(-1411.1111, -819.9204, 14.702, 0.0, 0.0, 0.0)
-    Camera.PointAt(-1407.7283, -831.9881, 14.8715, 1)
+    set_fixed_camera_position -1411.1111 -819.9204 14.702 rotation 0.0 0.0 0.0
+    point_camera_at_point -1407.7283 -831.9881 14.8715 switchstyle 1
 end
 
 if and
@@ -8445,15 +8441,15 @@ then
     $scene_step++
     set_interpolation_parameters 0.0 5000
     // big pan to the airport
-    Camera.SetPosition(-1434.0675, -805.5269, 24.8715, 0.0, 0.0, 0.0)
-    Camera.PointAt(-1407.7283, -831.9881, 14.8715, 1)
-    Car.DriveTo($mission_car_1, -1413.7323, -826.7162, 14.0)
-    Car.DriveTo($mission_car_2, -1413.7323, -826.7162, 14.0)
-    Car.DriveTo($mission_car_3, -1413.7323, -826.7162, 14.0)
-    Car.DriveTo($mission_car_4, -1413.7323, -826.7162, 14.0)
-    Car.DriveTo($mission_car_5, -1413.7323, -826.7162, 14.0)
-    Car.DriveTo($mission_car_6, -1413.7323, -826.7162, 14.0)
-    Car.DriveTo($mission_car_7, -1413.7323, -826.7162, 14.0)
+    set_fixed_camera_position -1434.0675 -805.5269 24.8715 rotation 0.0 0.0 0.0
+    point_camera_at_point -1407.7283 -831.9881 14.8715 switchstyle 1
+    car_goto_coordinates $mission_car_1 drive_to -1413.7323 -826.7162 14.0
+    car_goto_coordinates $mission_car_2 drive_to -1413.7323 -826.7162 14.0
+    car_goto_coordinates $mission_car_3 drive_to -1413.7323 -826.7162 14.0
+    car_goto_coordinates $mission_car_4 drive_to -1413.7323 -826.7162 14.0
+    car_goto_coordinates $mission_car_5 drive_to -1413.7323 -826.7162 14.0
+    car_goto_coordinates $mission_car_6 drive_to -1413.7323 -826.7162 14.0
+    car_goto_coordinates $mission_car_7 drive_to -1413.7323 -826.7162 14.0
 end
 
 if
@@ -8485,7 +8481,7 @@ if and
     TIMERB >= 1500
 then
     $scene_step++
-    Actor.Angle(3@) = 81.8553
+    set_char_heading 3@ z_angle_to 81.8553
     set_char_wait_state 3@ anim 16 wait_state_time 10000
 end
 
@@ -8493,8 +8489,8 @@ if and
     TIMERA >= 10500
     14@ == 0
 then
-    Car.Create($mission_car_8, #CABBIE, -1411.1259, -822.6219, 34.7018)
-    Car.Angle($mission_car_8) = 255.3691
+    create_car $mission_car_8 = create_car #CABBIE at -1411.1259 -822.6219 34.7018
+    set_car_heading $mission_car_8 z_angle_to 255.3691
     create_char_inside_car $mission_actor_8 = create_actor 4 #HMOCA in_car $mission_car_8
     14@ = 1
 end
@@ -8525,58 +8521,58 @@ fade 1 200
 start_new_script @INTRO_SKIPPED
 
 :INTRO_END
-Car.Destroy(0@)
-Car.Destroy($mission_car_1)
-Car.Destroy($mission_car_2)
-Car.Destroy($mission_car_3)
-Car.Destroy($mission_car_4)
-Car.Destroy($mission_car_5)
-Car.Destroy($mission_car_6)
-Car.Destroy($mission_car_7)
-Car.Destroy($mission_car_8)
-Actor.DestroyInstantly(1@)
-Actor.DestroyInstantly(2@)
-Actor.DestroyInstantly(3@)
-Actor.DestroyInstantly($mission_actor_1)
-Actor.DestroyInstantly($mission_actor_2)
-Actor.DestroyInstantly($mission_actor_3)
-Actor.DestroyInstantly($mission_actor_4)
-Actor.DestroyInstantly($mission_actor_5)
-Actor.DestroyInstantly($mission_actor_6)
-Actor.DestroyInstantly($mission_actor_7)
-Actor.DestroyInstantly($mission_actor_8)
+delete_car 0@
+delete_car $mission_car_1
+delete_car $mission_car_2
+delete_car $mission_car_3
+delete_car $mission_car_4
+delete_car $mission_car_5
+delete_car $mission_car_6
+delete_car $mission_car_7
+delete_car $mission_car_8
+delete_char 1@
+delete_char 2@
+delete_char 3@
+delete_char $mission_actor_1
+delete_char $mission_actor_2
+delete_char $mission_actor_3
+delete_char $mission_actor_4
+delete_char $mission_actor_5
+delete_char $mission_actor_6
+delete_char $mission_actor_7
+delete_char $mission_actor_8
 
-Car.Create(0@, #CABBIE, -265.7904, -381.3123, 10.5482)
-Car.Angle(0@) = 44.8726
+create_car 0@ = create_car #CABBIE at -265.7904 -381.3123 10.5482
+set_car_heading 0@ z_angle_to 44.8726
 create_char_inside_car 1@ = create_actor 4 #HMOCA in_car 0@
-Car.SetToPsychoDriver(0@)
+car_wander_randomly 0@
 set_car_driving_style 0@ traffic_behavior_to 2
-Car.SetMaxSpeed(0@, 100.0)
+set_car_cruise_speed 0@ max_speed_to 100.0
 set_car_forward_speed 0@ speed_instantly 10.0
-Car.RemoveReferences(0@)
-Actor.RemoveReferences(1@)
+mark_car_as_no_longer_needed 0@
+mark_char_as_no_longer_needed 1@
 
-Model.Destroy(#TAXI)
-Model.Destroy(#CABBIE)
-Model.Destroy(#KAUFMAN)
-Model.Destroy(#WMOCA)
-Model.Destroy(#HMOCA)
-Model.Destroy(#ap_rland03)
-Model.Destroy(#ap_runsigns5_01)
-Model.Destroy(#ap_runsign7_03)
-Model.Destroy(#ap_steps1_08)
-Model.Destroy(#ap_smahangar2_01)
-Model.Destroy(#air_brway_030)
-Model.Destroy(#ap_runsign10_03)
-Model.Destroy(#ap_roadsect3b)
+mark_model_as_no_longer_needed #TAXI
+mark_model_as_no_longer_needed #CABBIE
+mark_model_as_no_longer_needed #KAUFMAN
+mark_model_as_no_longer_needed #WMOCA
+mark_model_as_no_longer_needed #HMOCA
+mark_model_as_no_longer_needed #ap_rland03
+mark_model_as_no_longer_needed #ap_runsigns5_01
+mark_model_as_no_longer_needed #ap_runsign7_03
+mark_model_as_no_longer_needed #ap_steps1_08
+mark_model_as_no_longer_needed #ap_smahangar2_01
+mark_model_as_no_longer_needed #air_brway_030
+mark_model_as_no_longer_needed #ap_runsign10_03
+mark_model_as_no_longer_needed #ap_roadsect3b
 clear_mission_audio 1
-Camera.SetBehindPlayer
-Camera.Restore_WithJumpCut
+set_camera_behind_player
+restore_camera_jumpcut
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
 set_car_density_multiplier 1.0
 set_ped_density_multiplier 1.0
-Player.CanMove($player_char, True)
+set_player_control $player_char can_move 1
 set_time_of_day start_time_hours start_time_minutes
 release_weather
 switch_widescreen 0
@@ -8710,9 +8706,9 @@ set_var_float_to_var_float $race_point_next_x = $race_point_2_x
 set_var_float_to_var_float $race_point_next_y = $race_point_2_y
 set_var_float_to_var_float $race_point_next_z = $race_point_2_z
 store_car_player_is_in $race_car = player $player_char
-Player.CanMove($player_char, False)
-Model.Load(#WMOGO)
-Model.Load(#WFOGO)
+set_player_control $player_char can_move 0
+request_model #WMOGO
+request_model #WFOGO
 request_animation 'RIOT'
 request_animation 'STRIP'
 load_all_models_now
@@ -8726,35 +8722,35 @@ wait 0
 goto @GOLF_LOAD
 
 :GOLF_LOADED
-Object.Create($mission_obj_1, #WATERJUMP1, 86.8847, 584.9246, 13.3714)
-Object.Angle($mission_obj_1) = 141.9693
-Object.CollisionDetection($mission_obj_1, True)
-Object.Create($mission_obj_2, #BARREL2, 51.5916, -134.8658, 10.4111)
-Object.Create($mission_obj_3, #BARREL2, 50.5084, -134.8154, 10.4596)
-Object.Create($mission_obj_4, #BARREL2, 51.9257, -135.3643, 10.4633)
-//Object.Create($mission_obj_5, #BARREL2, 50.7091, -135.6886, 10.5667)
-Object.Create($mission_obj_6, #BARREL2, 50.9064, -135.7637, 10.7116)
-Object.CollisionDetection($mission_obj_6, False)
-Actor.Create($mission_actor_1, 4, #WMOGO, 50.9064, -135.7637, 11.9116)
-Actor.Angle($mission_actor_1) = 336.8858
-Actor.Create($mission_actor_2, 4, #WMOGO, 80.2744, 581.4982, 17.5721)
-Actor.Angle($mission_actor_2) = 303.8677
-Actor.Create($mission_actor_3, 4, #WFOGO, 78.4687, 582.3203, 17.5713)
-Actor.Angle($mission_actor_3) = 286.321
-Actor.Create($mission_actor_4, 4, #WMOGO, 78.8347, 584.4446, 17.572)
-Actor.Angle($mission_actor_4) = 293.2144
-Actor.Create($mission_actor_5, 4, #WFOGO, 83.0982, 575.8602, 17.5716)
-Actor.Angle($mission_actor_5) = 323.8979
-Actor.Create($mission_actor_6, 4, #WMOGO, 84.8799, 574.8459, 17.5723)
-Actor.Angle($mission_actor_6) = 344.5783
-Actor.Create($mission_actor_7, 4, #WFOGO, 86.272, 571.6097, 17.5709)
-Actor.Angle($mission_actor_7) = 340.3322
-Actor.Create($mission_actor_8, 4, #WMOGO, 78.0625, 587.8848, 17.5722)
-Actor.Angle($mission_actor_8) = 270.1447
-Actor.Create($mission_actor_9, 4, #WFOGO, 86.7714, 575.7628, 14.5918)
-Actor.Angle($mission_actor_9) = 350.0456
-Actor.Create($mission_actor_10, 4, #WMOGO, 79.1701, 593.3865, 15.2168)
-Actor.Angle($mission_actor_10) = 264.1917
+create_object $mission_obj_1 = create_object #WATERJUMP1 at 86.8847 584.9246 13.3714
+set_object_heading $mission_obj_1 z_angle_to 141.9693
+set_object_collision $mission_obj_1 collision_detection 1
+create_object $mission_obj_2 = create_object #BARREL2 at 51.5916 -134.8658 10.4111
+create_object $mission_obj_3 = create_object #BARREL2 at 50.5084 -134.8154 10.4596
+create_object $mission_obj_4 = create_object #BARREL2 at 51.9257 -135.3643 10.4633
+//create_object $mission_obj_5 = create_object #BARREL2 at 50.7091 -135.6886 10.5667
+create_object $mission_obj_6 = create_object #BARREL2 at 50.9064 -135.7637 10.7116
+set_object_collision $mission_obj_6 collision_detection 0
+create_char $mission_actor_1 = create_actor_pedtype 4 model #WMOGO at 50.9064 -135.7637 11.9116
+set_char_heading $mission_actor_1 z_angle_to 336.8858
+create_char $mission_actor_2 = create_actor_pedtype 4 model #WMOGO at 80.2744 581.4982 17.5721
+set_char_heading $mission_actor_2 z_angle_to 303.8677
+create_char $mission_actor_3 = create_actor_pedtype 4 model #WFOGO at 78.4687 582.3203 17.5713
+set_char_heading $mission_actor_3 z_angle_to 286.321
+create_char $mission_actor_4 = create_actor_pedtype 4 model #WMOGO at 78.8347 584.4446 17.572
+set_char_heading $mission_actor_4 z_angle_to 293.2144
+create_char $mission_actor_5 = create_actor_pedtype 4 model #WFOGO at 83.0982 575.8602 17.5716
+set_char_heading $mission_actor_5 z_angle_to 323.8979
+create_char $mission_actor_6 = create_actor_pedtype 4 model #WMOGO at 84.8799 574.8459 17.5723
+set_char_heading $mission_actor_6 z_angle_to 344.5783
+create_char $mission_actor_7 = create_actor_pedtype 4 model #WFOGO at 86.272 571.6097 17.5709
+set_char_heading $mission_actor_7 z_angle_to 340.3322
+create_char $mission_actor_8 = create_actor_pedtype 4 model #WMOGO at 78.0625 587.8848 17.5722
+set_char_heading $mission_actor_8 z_angle_to 270.1447
+create_char $mission_actor_9 = create_actor_pedtype 4 model #WFOGO at 86.7714 575.7628 14.5918
+set_char_heading $mission_actor_9 z_angle_to 350.0456
+create_char $mission_actor_10 = create_actor_pedtype 4 model #WMOGO at 79.1701 593.3865 15.2168
+set_char_heading $mission_actor_10 z_angle_to 264.1917
 set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
 set_char_suffers_critical_hits $mission_actor_2 dismemberment_possible 0
 set_char_suffers_critical_hits $mission_actor_3 dismemberment_possible 0
@@ -8795,13 +8791,13 @@ set_char_wait_state $mission_actor_7 anim 29 wait_state_time 9999999
 set_char_wait_state $mission_actor_8 anim 29 wait_state_time 9999999
 set_char_wait_state $mission_actor_9 anim 29 wait_state_time 9999999
 set_char_wait_state $mission_actor_10 anim 29 wait_state_time 9999999
-Model.Destroy(#WMOGO)
-Model.Destroy(#WFOGO)
+mark_model_as_no_longer_needed #WMOGO
+mark_model_as_no_longer_needed #WFOGO
 print_now 'GOLF1' time 5000 1
 add_blip_for_coord $race_marker_1 = create_checkpoint_at $race_point_1_x $race_point_1_y $race_point_1_z
 add_blip_for_coord $race_marker_2 = create_checkpoint_at $race_point_2_x $race_point_2_y $race_point_2_z
 dim_blip $race_marker_2 brightness_to 1
-Player.CanMove($player_char, True)
+set_player_control $player_char can_move 1
 TIMERA = 0
 
 :GOLF_1
@@ -8810,7 +8806,7 @@ if
     is_player_in_car $player_char in_car $race_car
 goto_if_false @GOLF_BAILED
 if
-    not Car.Wrecked($race_car)
+    not is_car_dead $race_car
 goto_if_false @GOLF_WRECKED
 if and
     locate_player_any_means_2d $player_char 0 50.1701 -137.8058 radius 8.0 8.0 // z: 11.6784
@@ -8830,9 +8826,9 @@ then
             0@ > 10.0
         then
             set_time_scale 0.3
-            Camera.SetPosition(89.5669, 594.8918, 24.9822, 0.0, 0.0, 0.0)
+            set_fixed_camera_position 89.5669 594.8918 24.9822 rotation 0.0 0.0 0.0
             // maybe point at 80.1512 583.617 14.5668
-            Camera.OnVehicle($race_car, 15, 2)
+            point_camera_at_car $race_car mode 15 switchstyle 2
             $slomo = 1
             TIMERB = -1000
         end
@@ -8842,7 +8838,7 @@ else
         TIMERB >= 0
     then
         set_time_scale 1.0
-        Camera.Restore_WithJumpCut
+        restore_camera_jumpcut
         $slomo = 0
     end
 end
@@ -8866,7 +8862,7 @@ goto_if_false @GOLF_1
 set_var_float_to_var_float $race_point_current_x = $race_point_next_x
 set_var_float_to_var_float $race_point_current_y = $race_point_next_y
 set_var_float_to_var_float $race_point_current_z = $race_point_next_z
-Marker.Disable($race_marker_1)
+remove_blip $race_marker_1
 set_var_int_to_var_int $race_marker_1 = $race_marker_2
 dim_blip $race_marker_1 brightness_to 2
 add_one_off_sound 1 at $race_point_current_x $race_point_current_y $race_point_current_z
@@ -9111,14 +9107,14 @@ if
 goto_if_false @GOLF_1
 play_mission_passed_tune 1
 print_with_number_big 'M_PASS' number 100 time 5000 style 1 // MISSION PASSED! $~1~
-Player.Money($player_char) += 100
+add_score $player_char money += 100
 if
     $passed_golf == 0
 then
     register_mission_passed 'GLFMISS'
     player_made_progress 1
     $passed_golf = 1
-    Marker.Disable($icon_golf)
+    remove_blip $icon_golf
     add_short_range_sprite_blip_for_coord $icon_golf = create_icon_marker_without_sphere icon_golf at $golf_x $golf_y $golf_z
     create_clothes_pickup $clothes_pickup_3 = create_clothes_pickup 4 at -240.0 -311.3 10.0
     $clothes_pickup_3_available = 0
@@ -9145,32 +9141,32 @@ if
     $slomo == 1
 then
     set_time_scale 1.0
-    Camera.Restore_WithJumpCut
+    restore_camera_jumpcut
     $slomo = 0
 end
-Marker.Disable($race_marker_1)
-Marker.Disable($race_marker_2)
-Car.RemoveReferences($race_car)
-Object.Destroy($mission_obj_1)
-Object.Destroy($mission_obj_2)
-Object.Destroy($mission_obj_3)
-Object.Destroy($mission_obj_4)
-//Object.Destroy($mission_obj_5)
-Object.Destroy($mission_obj_6)
-Actor.DestroyWithFade($mission_actor_1)
-Actor.DestroyWithFade($mission_actor_2)
-Actor.DestroyWithFade($mission_actor_3)
-Actor.DestroyWithFade($mission_actor_4)
-Actor.DestroyWithFade($mission_actor_5)
-Actor.DestroyWithFade($mission_actor_6)
-Actor.DestroyWithFade($mission_actor_7)
-Actor.DestroyWithFade($mission_actor_8)
-Actor.DestroyWithFade($mission_actor_9)
-Actor.DestroyWithFade($mission_actor_10)
-Model.Destroy(#WMOGO)
-Model.Destroy(#WFOGO)
-Model.Destroy(#WATERJUMP1)
-Model.Destroy(#BARREL2)
+remove_blip $race_marker_1
+remove_blip $race_marker_2
+mark_car_as_no_longer_needed $race_car
+delete_object $mission_obj_1
+delete_object $mission_obj_2
+delete_object $mission_obj_3
+delete_object $mission_obj_4
+//delete_object $mission_obj_5
+delete_object $mission_obj_6
+remove_char_elegantly $mission_actor_1
+remove_char_elegantly $mission_actor_2
+remove_char_elegantly $mission_actor_3
+remove_char_elegantly $mission_actor_4
+remove_char_elegantly $mission_actor_5
+remove_char_elegantly $mission_actor_6
+remove_char_elegantly $mission_actor_7
+remove_char_elegantly $mission_actor_8
+remove_char_elegantly $mission_actor_9
+remove_char_elegantly $mission_actor_10
+mark_model_as_no_longer_needed #WMOGO
+mark_model_as_no_longer_needed #WFOGO
+mark_model_as_no_longer_needed #WATERJUMP1
+mark_model_as_no_longer_needed #BARREL2
 remove_animation 'RIOT'
 remove_animation 'STRIP'
 mission_has_finished
@@ -9195,47 +9191,47 @@ $onmission = 1
 register_mission_given
 load_mission_text 'POLICE1'
 wait 0
-Player.CanMove($player_char, False)
+set_player_control $player_char can_move 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
 set_fading_colour 0 0 0
 switch_widescreen 1
-Model.Load(#BOBCAT)
-Model.Load(#POLICE)
-Model.Load(#COP)
+request_model #BOBCAT
+request_model #POLICE
+request_model #COP
 
 :POLICE_1_LOAD
 wait 0
 if and
-    Model.Available(#BOBCAT)
-    Model.Available(#POLICE)
-    Model.Available(#COP)
+    has_model_loaded #BOBCAT
+    has_model_loaded #POLICE
+    has_model_loaded #COP
 goto_if_false @POLICE_1_LOAD
 clear_area 0 at 333.704 -501.9003 9.7059 range 5.0
-Car.Create($objective_car, #BOBCAT, 333.704, -501.9003, 9.7059)
-Car.Angle($objective_car) = 138.7416
+create_car $objective_car = create_car #BOBCAT at 333.704 -501.9003 9.7059
+set_car_heading $objective_car z_angle_to 138.7416
 clear_area 0 at 359.5053 -514.6687 11.961 range 5.0
-Car.Create(0@, #POLICE, 359.5053, -514.6687, 11.961)
-Car.Angle(0@) = 322.4988
+create_car 0@ = create_car #POLICE at 359.5053 -514.6687 11.961
+set_car_heading 0@ z_angle_to 322.4988
 create_char_inside_car 1@ = create_actor 4 #COP in_car 0@
-Car.SetToNormalDriver(0@)
-Car.ImmuneToNonPlayer(0@, True)
+car_set_idle 0@
+set_car_only_damaged_by_player 0@ immune_to_nonplayer 1
 set_car_temp_action 0@ action 2 time 1700
-Camera.SetPosition(364.6485, -526.3016, 13.954, 0.0, 0.0, 0.0)
-Camera.PointAt(354.3607, -523.9194, 10.0632, 2)
+set_fixed_camera_position 364.6485 -526.3016 13.954 rotation 0.0 0.0 0.0
+point_camera_at_point 354.3607 -523.9194 10.0632 switchstyle 2
 set_player_coordinates $player_char at 348.0225 -524.783 8.9363
 set_player_heading $player_char z_angle_to 237.081
 wait 1700
 set_interpolation_parameters 0.0 1500
-Camera.SetPosition(345.452, -527.0284, 9.0841, 0.0, 0.0, 0.0)
-Camera.PointAt(350.2682, -525.0466, 9.9611, 1)
+set_fixed_camera_position 345.452 -527.0284 9.0841 rotation 0.0 0.0 0.0
+point_camera_at_point 350.2682 -525.0466 9.9611 switchstyle 1
 set_char_obj_leave_car 1@ leave_car 0@
 TIMERB = 0
-while Actor.Driving(1@)
+while is_char_in_any_car 1@
     if
         TIMERB > 5000
     then
-        Car.StorePos(0@, 13@, 14@, 15@)
+        get_car_coordinates 0@ position_to 13@ 14@ 15@
         15@ += 1.0
         warp_char_from_car_to_coord 1@ at 13@ 14@ 15@
         break
@@ -9273,8 +9269,8 @@ then
     $scene_step++
     print_now 'INTRO3' time 3000 2
     set_interpolation_parameters 0.0 4000
-    Camera.SetPosition(330.9225, -525.593, 10.8841, 0.0, 0.0, 0.0)
-    Camera.OnVehicle($objective_car, 15, 1)
+    set_fixed_camera_position 330.9225 -525.593 10.8841 rotation 0.0 0.0 0.0
+    point_camera_at_car $objective_car mode 15 switchstyle 1
 end
 
 if and
@@ -9296,17 +9292,17 @@ goto @POLICE_1_INTRO_LOOP
 fade 0 1000
 wait 1000
 clear_prints
-Car.Destroy(0@)
-Actor.DestroyInstantly(1@)
-Model.Destroy(#POLICE)
-Model.Destroy(#COP)
-Player.CanMove($player_char, True)
+delete_car 0@
+delete_char 1@
+mark_model_as_no_longer_needed #POLICE
+mark_model_as_no_longer_needed #COP
+set_player_control $player_char can_move 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
 switch_widescreen 0
-Camera.Restore_WithJumpCut
-Camera.SetBehindPlayer
-Marker.CreateAboveCar($objective_car_marker, $objective_car)
+restore_camera_jumpcut
+set_camera_behind_player
+add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
 fade 1 1000
 wait 1000
 print_now 'GETIN' time 5000 2
@@ -9314,7 +9310,7 @@ print_now 'GETIN' time 5000 2
 :POLICE_1_WAITING_CAR
 wait 0
 if
-    not Car.Wrecked($objective_car)
+    not is_car_dead $objective_car
 goto_if_false @POLICE_1_WRECKED
 if
     locate_player_any_means_car_2d $player_char near_car $objective_car radius 35.0 35.0 0
@@ -9322,21 +9318,21 @@ goto_if_false @POLICE_1_ABANDONED
 if
     is_player_in_car $player_char in_car $objective_car
 goto_if_false @POLICE_1_WAITING_CAR
-Marker.Disable($objective_car_marker)
+remove_blip $objective_car_marker
 add_blip_for_coord $objective_point_marker = create_checkpoint_at -842.6732 -632.8707 10.9397
 print_now 'TRAVEL' time 5000 2
 
 :POLICE_1_TRAVEL
 wait 0
 if
-    not Car.Wrecked($objective_car)
+    not is_car_dead $objective_car
 goto_if_false @POLICE_1_WRECKED
 if
     not is_player_in_car $player_char in_car $objective_car
 then
     print_now 'GETBACK' time 5000 2
-    Marker.Disable($objective_point_marker)
-    Marker.CreateAboveCar($objective_car_marker, $objective_car)
+    remove_blip $objective_point_marker
+    add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
     goto @POLICE_1_WAITING_CAR
 end
 if
@@ -9362,18 +9358,18 @@ return
 :POLICE_1_PASS
 play_mission_passed_tune 1
 print_with_number_big 'M_PASS' number 100 time 5000 style 1 // MISSION PASSED! $~1~
-Player.Money($player_char) += 100
+add_score $player_char money += 100
 register_mission_passed 'POLIC1S'
 player_made_progress 1
 $passed_police_1 = 1
-Marker.Disable($icon_police)
+remove_blip $icon_police
 return
 
 :POLICE_1_CLEANUP
 $onmission = 0
-Car.RemoveReferences($objective_car)
-Marker.Disable($objective_car_marker)
-Marker.Disable($objective_point_marker)
-Model.Destroy(#BOBCAT)
+mark_car_as_no_longer_needed $objective_car
+remove_blip $objective_car_marker
+remove_blip $objective_point_marker
+mark_model_as_no_longer_needed #BOBCAT
 mission_has_finished
 terminate_this_script
