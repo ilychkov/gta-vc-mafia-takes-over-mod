@@ -4439,6 +4439,16 @@ set_fixed_camera_position -1002.842 -842.3333 10.365 rotation 0.0 0.0 0.0
 point_camera_at_car 11@ mode 15 switchstyle 1
 0@ = 0
 
+:REPAINT_KEYUP
+if or
+    is_button_pressed 0 pressed_button 14
+    is_button_pressed 0 pressed_button 16
+    is_button_pressed 0 pressed_button 10
+    is_button_pressed 0 pressed_button 11
+goto_if_false @REPAINT_PROCESS
+wait 0
+jump @REPAINT_KEYUP
+
 :REPAINT_PROCESS
 wait 0
 print_with_2_numbers_now 'PAINT2' 14@ 15@ time 50 1
