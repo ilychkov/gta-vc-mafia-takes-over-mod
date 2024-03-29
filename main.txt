@@ -1,19 +1,21 @@
-DEFINE MISSIONS 4
+DEFINE MISSIONS 5
 DEFINE MISSION 0 AT @INITIAL           // Initial
 DEFINE MISSION 1 AT @INTRO             // Intro
 DEFINE MISSION 2 AT @GOLF              // A Little Game of Golf
 DEFINE MISSION 3 AT @POLICE_1          // Special Delivery
+DEFINE MISSION 4 AT @CAR_MECHANIC      // Car Mechanic
 
 //-------------MAIN---------------
 thread 'MAIN'
 set_fading_colour 0 0 0
 fade 0 (in) 0 ms
-set_total_number_of_missions 2 //todo
+set_total_number_of_missions 0 // not used in VC
 // 16 info pickups
 // 13 unique stunts
-// 2 missions
+// 1 story mission
+// 2 side missions
 // 1 music pickup
-set_progress_total 32 //todo
+set_progress_total 33 //todo
 set_max_wanted_level 2
 set_collectable1_total 0
 set_deatharrest_state 0
@@ -213,6 +215,7 @@ start_new_script @POLICE_CHASES
 start_new_script @REPAINT
 start_new_script @GOLF_MARKER
 start_new_script @POLICE_1_MARKER
+start_new_script @CAR_MECHANIC_ACTIVATE
 
 launch_mission @HJ
 launch_mission @USJ
@@ -4626,6 +4629,47 @@ goto @GOLF_MARKER_LOOP
 print_now 'GOLFNO' time 5000 1
 goto @GOLF_MARKER_LOOP
 
+//-------------Car mechanic mission activation script---------------
+//
+
+:CAR_MECHANIC_ACTIVATE
+script_name 'CARMECA'
+
+:CAR_MECHANIC_ACTIVATE_LOOP
+wait $default_wait_time
+if
+    is_player_playing $player_char
+goto_if_false @CAR_MECHANIC_ACTIVATE_LOOP
+if and
+    $onmission == 0
+    is_player_in_model $player_char driving_vehicle_type #PONY
+    can_player_start_mission $player_char
+goto_if_false @CAR_MECHANIC_ACTIVATE_LOOP
+print_help 'CARMHNT'
+$car_mechanic_button_pressed = 0
+
+:CAR_MECHANIC_ACTIVATE_WAIT
+wait 0
+if
+    is_player_playing $player_char
+goto_if_false @CAR_MECHANIC_ACTIVATE_LOOP
+if and
+    $onmission == 0
+    is_player_in_model $player_char driving_vehicle_type #PONY
+    can_player_start_mission $player_char
+goto_if_false @CAR_MECHANIC_ACTIVATE_LOOP
+if
+    is_button_pressed 0 pressed_button 19
+then
+    $car_mechanic_button_pressed = 1
+end
+if and
+    $car_mechanic_button_pressed == 1
+    not is_button_pressed 0 pressed_button 19
+goto_if_false @CAR_MECHANIC_ACTIVATE_WAIT
+start_mission CAR_MECHANIC
+goto @CAR_MECHANIC_ACTIVATE_LOOP
+
 //-------------Police mission 1 marker script---------------
 //
 
@@ -7330,6 +7374,8 @@ $police_chases_bonus = 1000
 $last_help_printing_time = 0
 $game_completed = 0
 $restart_overriden = 0
+$passed_police_1 = 0
+$passed_car_mechanic_count = 0
 
 add_short_range_sprite_blip_for_coord $icon_vercetti = create_icon_marker_without_sphere 29 at -246.0713 -324.6199 10.2586
 add_short_range_sprite_blip_for_coord $439 = create_icon_marker_without_sphere 27 at -3.8 -1265.8 12.0
@@ -7339,6 +7385,10 @@ add_short_range_sprite_blip_for_coord $442 = create_icon_marker_without_sphere 2
 add_short_range_sprite_blip_for_coord $repaint_marker = create_icon_marker_without_sphere 26 at -1007.3 -849.6 7.365
 add_sprite_blip_for_contact_point $icon_golf = create_icon_marker_and_sphere icon_golf at $golf_x $golf_y $golf_z
 add_sprite_blip_for_contact_point $icon_police = create_icon_marker_and_sphere icon_police at $police_x $police_y $police_z
+add_short_range_sprite_blip_for_coord $icon_car_mechanic_docks = create_icon_marker_without_sphere 18 at -717.2 -1462.2 10.3
+add_short_range_sprite_blip_for_coord $icon_car_mechanic_beach3 = create_icon_marker_without_sphere 18 at 202.7853 -299.401 11.4607
+add_short_range_sprite_blip_for_coord $icon_car_mechanic_beach1 = create_icon_marker_without_sphere 18 at -13.8297 -1325.1516 9.9804
+add_short_range_sprite_blip_for_coord $icon_car_mechanic_haiti = create_icon_marker_without_sphere 18 at -884.6706 -144.2487 10.1472
 
 set_zone_ped_info 'STREET4' 1 13 0 0 0 0 0 0 0 0 0 30
 set_zone_ped_info 'STREET4' 0 10 0 0 0 0 0 0 0 0 0 40
@@ -7830,8 +7880,10 @@ create_car_generator $1843 = init_car_generator #TROPIC -1 -1 force_spawn 0 alar
 switch_car_generator $1843 cars_to_generate_to 101
 create_car_generator $1845 = init_car_generator #TRASH -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1268.25 83.833 10.4182 angle 179.549
 switch_car_generator $1845 cars_to_generate_to 101
-create_car_generator $1852 = init_car_generator #SECURICA -1 -1 force_spawn 0 alarm 0 door_lock 70 min_delay 0 max_delay 10000 at -870.2545 -353.9059 10.0475 angle 357.8359
+create_car_generator $1852 = init_car_generator #SECURICA -1 -1 force_spawn 0 alarm 100 door_lock 0 min_delay 0 max_delay 10000 at -870.3545 -353.9059 10.0475 angle 357.8359
 switch_car_generator $1852 cars_to_generate_to 101
+create_car_generator $securi_2 = init_car_generator #SECURICA -1 -1 force_spawn 0 alarm 100 door_lock 0 min_delay 0 max_delay 10000 at -869.6688 -328.2036 10.0974 angle 358.0427
+switch_car_generator $securi_2 cars_to_generate_to 101
 create_car_generator $1868 = init_car_generator #BUS -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1184.36 -1312.62 13.7274 angle 64.6821
 switch_car_generator $1868 cars_to_generate_to 101
 create_car_generator $1869 = init_car_generator #BARRACKS -1 -1 force_spawn 0 alarm 0 door_lock 10 min_delay 0 max_delay 10000 at -1709.024 -287.6807 13.8276 angle 0.0
@@ -8124,10 +8176,14 @@ create_car_generator $1984 = init_car_generator #SANCHEZ -1 -1 force_spawn 0 ala
 switch_car_generator $1984 cars_to_generate_to 101
 create_car_generator $83 = init_car_generator #INFERNUS 1 1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -363.0 -532.2 12.0 angle 0.0
 switch_car_generator $83 cars_to_generate_to 0
-create_car_generator $1939 = init_car_generator #ZEBRA -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1003.1 207.4 11.0 angle 166.6
-switch_car_generator $1939 cars_to_generate_to 0
 create_car_generator $84 = init_car_generator #POLMAV -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -614.0 804.0 30.0 angle 0.0
 switch_car_generator $84 cars_to_generate_to 101
+create_car_generator $pony_1 = init_car_generator #PONY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 202.7853 -299.401 11.4607 angle 255.5846
+switch_car_generator $pony_1 cars_to_generate_to 101
+create_car_generator $pony_2 = init_car_generator #PONY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -13.8297 -1325.1516 9.9804 angle 2.8734
+switch_car_generator $pony_2 cars_to_generate_to 101
+create_car_generator $pony_3 = init_car_generator #PONY -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -884.6706 -144.2487 10.1472 angle 357.6233
+switch_car_generator $pony_3 cars_to_generate_to 101
 create_car_generator $87 = init_car_generator #REGINA 8 32 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1022.6 -868.6 12.2 angle 175.0
 switch_car_generator $87 cars_to_generate_to 101
 create_car_generator $88 = init_car_generator #SABRE 35 0 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -1014.1 -869.4 12.2 angle 188.0
@@ -9381,5 +9437,1580 @@ mark_car_as_no_longer_needed $objective_car
 remove_blip $objective_car_marker
 remove_blip $objective_point_marker
 mark_model_as_no_longer_needed #BOBCAT
+mission_has_finished
+terminate_this_script
+
+//-------------Mission 4---------------
+// Car Mechanic
+
+:CAR_MECHANIC
+script_name 'CARMECH'
+gosub @CAR_MECHANIC_START
+if
+    has_deatharrest_been_executed
+then
+    CAR_MECHANIC_FAIL()
+end
+CAR_MECHANIC_CLEANUP()
+terminate_this_script
+
+:CAR_MECHANIC_START
+$onmission = 1
+if
+    $passed_car_mechanic_count == 0
+then
+    register_mission_given
+end
+load_mission_text 'CARMECH'
+wait 0
+store_car_player_is_in $mission_car = player $player_char
+set_player_control $player_char can_move 0
+set_fading_colour 0 0 0
+fade 0 500
+wait 500
+undress_char $player_actor skin_to 'PLAYER3'
+request_model #ADMIRAL
+request_model #WASHING
+request_model #BANSHEE
+request_model #OCEANIC
+request_model #LANDSTAL
+request_model #HMYRI
+request_model #HMOST
+request_model #BMOST
+request_model #WFYRI
+request_model #BMYRI
+request_model #HAMMER
+request_model #BARREL4
+load_all_models_now
+dress_char $player_actor
+give_weapon_to_char $player_actor weapon 7 ammo 9999
+warp_char_into_car $player_actor in_car $mission_car
+set_player_control $player_char can_move 1
+fade 1 1000
+clear_prints
+print_big 'CARMECH' 6000 ms 5
+print 'CMINFO1' time 5000 1
+print 'CMINFO2' time 5000 1
+
+get_player_coordinates $player_char position_to 14@ 15@ 0@
+if
+    -250.0 > 14@
+then
+    if
+        -241.467 > 15@
+    then
+        0@ = -1208.21
+        1@ = -1779.61
+        2@ = -253.206
+        3@ = -241.467
+    else
+        0@ = -1208.21
+        1@ = -241.467
+        2@ = -578.289
+        3@ = 1677.32
+    end
+else
+    if
+        -351.153 > 15@
+    then
+        0@ = -253.206
+        1@ = -1805.37
+        2@ = 1254.9
+        3@ = -351.153
+    else
+        0@ = 163.656
+        1@ = -351.153
+        2@ = 1246.03
+        3@ = 1398.85
+    end
+end
+4@ = 0
+CAR_MECHANIC_GENERATE_RANDOM_COORDS()
+set_var_float_to_lvar_float $mission_car_1_x = 12@
+set_var_float_to_lvar_float $mission_car_1_y = 13@
+set_var_float_to_lvar_float $mission_car_1_z = 14@
+set_var_float_to_lvar_float $mission_car_1_angle = 15@
+4@ = 1
+CAR_MECHANIC_GENERATE_RANDOM_COORDS()
+set_var_float_to_lvar_float $mission_car_2_x = 12@
+set_var_float_to_lvar_float $mission_car_2_y = 13@
+set_var_float_to_lvar_float $mission_car_2_z = 14@
+set_var_float_to_lvar_float $mission_car_2_angle = 15@
+4@ = 2
+CAR_MECHANIC_GENERATE_RANDOM_COORDS()
+set_var_float_to_lvar_float $mission_car_3_x = 12@
+set_var_float_to_lvar_float $mission_car_3_y = 13@
+set_var_float_to_lvar_float $mission_car_3_z = 14@
+set_var_float_to_lvar_float $mission_car_3_angle = 15@
+4@ = 3
+CAR_MECHANIC_GENERATE_RANDOM_COORDS()
+set_var_float_to_lvar_float $mission_car_4_x = 12@
+set_var_float_to_lvar_float $mission_car_4_y = 13@
+set_var_float_to_lvar_float $mission_car_4_z = 14@
+set_var_float_to_lvar_float $mission_car_4_angle = 15@
+4@ = 4
+CAR_MECHANIC_GENERATE_RANDOM_COORDS()
+set_var_float_to_lvar_float $mission_car_5_x = 12@
+set_var_float_to_lvar_float $mission_car_5_y = 13@
+set_var_float_to_lvar_float $mission_car_5_z = 14@
+set_var_float_to_lvar_float $mission_car_5_angle = 15@
+4@ = 5
+CAR_MECHANIC_GENERATE_RANDOM_COORDS()
+set_var_float_to_lvar_float $mission_car_6_x = 12@
+set_var_float_to_lvar_float $mission_car_6_y = 13@
+set_var_float_to_lvar_float $mission_car_6_z = 14@
+set_var_float_to_lvar_float $mission_car_6_angle = 15@
+4@ = 6
+CAR_MECHANIC_GENERATE_RANDOM_COORDS()
+set_var_float_to_lvar_float $mission_car_7_x = 12@
+set_var_float_to_lvar_float $mission_car_7_y = 13@
+set_var_float_to_lvar_float $mission_car_7_z = 14@
+set_var_float_to_lvar_float $mission_car_7_angle = 15@
+4@ = 7
+CAR_MECHANIC_GENERATE_RANDOM_COORDS()
+set_var_float_to_lvar_float $mission_car_8_x = 12@
+set_var_float_to_lvar_float $mission_car_8_y = 13@
+set_var_float_to_lvar_float $mission_car_8_z = 14@
+set_var_float_to_lvar_float $mission_car_8_angle = 15@
+4@ = 8
+CAR_MECHANIC_GENERATE_RANDOM_COORDS()
+set_var_float_to_lvar_float $mission_car_9_x = 12@
+set_var_float_to_lvar_float $mission_car_9_y = 13@
+set_var_float_to_lvar_float $mission_car_9_z = 14@
+set_var_float_to_lvar_float $mission_car_9_angle = 15@
+4@ = 9
+CAR_MECHANIC_GENERATE_RANDOM_COORDS()
+set_var_float_to_lvar_float $mission_car_10_x = 12@
+set_var_float_to_lvar_float $mission_car_10_y = 13@
+set_var_float_to_lvar_float $mission_car_10_z = 14@
+set_var_float_to_lvar_float $mission_car_10_angle = 15@
+generate_random_int_in_range $mission_car_1_type = random_int_in_ranges 1 4
+generate_random_int_in_range $mission_car_2_type = random_int_in_ranges 1 4
+generate_random_int_in_range $mission_car_3_type = random_int_in_ranges 1 4
+generate_random_int_in_range $mission_car_4_type = random_int_in_ranges 1 4
+generate_random_int_in_range $mission_car_5_type = random_int_in_ranges 1 4
+generate_random_int_in_range $mission_car_6_type = random_int_in_ranges 1 4
+generate_random_int_in_range $mission_car_7_type = random_int_in_ranges 1 4
+generate_random_int_in_range $mission_car_8_type = random_int_in_ranges 1 4
+generate_random_int_in_range $mission_car_9_type = random_int_in_ranges 1 4
+generate_random_int_in_range $mission_car_10_type = random_int_in_ranges 1 4
+if
+    $mission_car_1_type <> 2
+then
+    generate_random_float_in_range $mission_car_1_angle = random_float 0.0 360.0
+end
+if
+    $mission_car_2_type <> 2
+then
+    generate_random_float_in_range $mission_car_2_angle = random_float 0.0 360.0
+end
+if
+    $mission_car_3_type <> 2
+then
+    generate_random_float_in_range $mission_car_3_angle = random_float 0.0 360.0
+end
+if
+    $mission_car_4_type <> 2
+then
+    generate_random_float_in_range $mission_car_4_angle = random_float 0.0 360.0
+end
+if
+    $mission_car_5_type <> 2
+then
+    generate_random_float_in_range $mission_car_5_angle = random_float 0.0 360.0
+end
+if
+    $mission_car_6_type <> 2
+then
+    generate_random_float_in_range $mission_car_6_angle = random_float 0.0 360.0
+end
+if
+    $mission_car_7_type <> 2
+then
+    generate_random_float_in_range $mission_car_7_angle = random_float 0.0 360.0
+end
+if
+    $mission_car_8_type <> 2
+then
+    generate_random_float_in_range $mission_car_8_angle = random_float 0.0 360.0
+end
+if
+    $mission_car_9_type <> 2
+then
+    generate_random_float_in_range $mission_car_9_angle = random_float 0.0 360.0
+end
+if
+    $mission_car_10_type <> 2
+then
+    generate_random_float_in_range $mission_car_10_angle = random_float 0.0 360.0
+end
+$mission_car_1_health = 1000
+$mission_car_2_health = 1000
+$mission_car_3_health = 1000
+$mission_car_4_health = 1000
+$mission_car_5_health = 1000
+$mission_car_6_health = 1000
+$mission_car_7_health = 1000
+$mission_car_8_health = 1000
+$mission_car_9_health = 1000
+$mission_car_10_health = 1000
+if
+    $mission_car_1_type == 1
+then
+    $mission_car_1_health = 400
+end
+if
+    $mission_car_2_type == 1
+then
+    $mission_car_2_health = 400
+end
+if
+    $mission_car_3_type == 1
+then
+    $mission_car_3_health = 400
+end
+if
+    $mission_car_4_type == 1
+then
+    $mission_car_4_health = 400
+end
+if
+    $mission_car_5_type == 1
+then
+    $mission_car_5_health = 400
+end
+if
+    $mission_car_6_type == 1
+then
+    $mission_car_6_health = 400
+end
+if
+    $mission_car_7_type == 1
+then
+    $mission_car_7_health = 400
+end
+if
+    $mission_car_8_type == 1
+then
+    $mission_car_8_health = 400
+end
+if
+    $mission_car_9_type == 1
+then
+    $mission_car_9_health = 400
+end
+if
+    $mission_car_10_type == 1
+then
+    $mission_car_10_health = 400
+end
+CAR_MECHANIC_GENERATE_CAR_MODEL()
+set_var_int_to_lvar_int $mission_car_1_model = 15@
+CAR_MECHANIC_GENERATE_CAR_MODEL()
+set_var_int_to_lvar_int $mission_car_2_model = 15@
+CAR_MECHANIC_GENERATE_CAR_MODEL()
+set_var_int_to_lvar_int $mission_car_3_model = 15@
+CAR_MECHANIC_GENERATE_CAR_MODEL()
+set_var_int_to_lvar_int $mission_car_4_model = 15@
+CAR_MECHANIC_GENERATE_CAR_MODEL()
+set_var_int_to_lvar_int $mission_car_5_model = 15@
+CAR_MECHANIC_GENERATE_CAR_MODEL()
+set_var_int_to_lvar_int $mission_car_6_model = 15@
+CAR_MECHANIC_GENERATE_CAR_MODEL()
+set_var_int_to_lvar_int $mission_car_7_model = 15@
+CAR_MECHANIC_GENERATE_CAR_MODEL()
+set_var_int_to_lvar_int $mission_car_8_model = 15@
+CAR_MECHANIC_GENERATE_CAR_MODEL()
+set_var_int_to_lvar_int $mission_car_9_model = 15@
+CAR_MECHANIC_GENERATE_CAR_MODEL()
+set_var_int_to_lvar_int $mission_car_10_model = 15@
+CAR_MECHANIC_GENERATE_ACTOR_MODEL()
+set_var_int_to_lvar_int $mission_car_1_actor_model = 15@
+CAR_MECHANIC_GENERATE_ACTOR_MODEL()
+set_var_int_to_lvar_int $mission_car_2_actor_model = 15@
+CAR_MECHANIC_GENERATE_ACTOR_MODEL()
+set_var_int_to_lvar_int $mission_car_3_actor_model = 15@
+CAR_MECHANIC_GENERATE_ACTOR_MODEL()
+set_var_int_to_lvar_int $mission_car_4_actor_model = 15@
+CAR_MECHANIC_GENERATE_ACTOR_MODEL()
+set_var_int_to_lvar_int $mission_car_5_actor_model = 15@
+CAR_MECHANIC_GENERATE_ACTOR_MODEL()
+set_var_int_to_lvar_int $mission_car_6_actor_model = 15@
+CAR_MECHANIC_GENERATE_ACTOR_MODEL()
+set_var_int_to_lvar_int $mission_car_7_actor_model = 15@
+CAR_MECHANIC_GENERATE_ACTOR_MODEL()
+set_var_int_to_lvar_int $mission_car_8_actor_model = 15@
+CAR_MECHANIC_GENERATE_ACTOR_MODEL()
+set_var_int_to_lvar_int $mission_car_9_actor_model = 15@
+CAR_MECHANIC_GENERATE_ACTOR_MODEL()
+set_var_int_to_lvar_int $mission_car_10_actor_model = 15@
+$mission_car_1_visible = 0
+$mission_car_2_visible = 0
+$mission_car_3_visible = 0
+$mission_car_4_visible = 0
+$mission_car_5_visible = 0
+$mission_car_6_visible = 0
+$mission_car_7_visible = 0
+$mission_car_8_visible = 0
+$mission_car_9_visible = 0
+$mission_car_10_visible = 0
+$mission_car_1_approached = 0
+$mission_car_2_approached = 0
+$mission_car_3_approached = 0
+$mission_car_4_approached = 0
+$mission_car_5_approached = 0
+$mission_car_6_approached = 0
+$mission_car_7_approached = 0
+$mission_car_8_approached = 0
+$mission_car_9_approached = 0
+$mission_car_10_approached = 0
+$mission_car_1_interacted = 0
+$mission_car_2_interacted = 0
+$mission_car_3_interacted = 0
+$mission_car_4_interacted = 0
+$mission_car_5_interacted = 0
+$mission_car_6_interacted = 0
+$mission_car_7_interacted = 0
+$mission_car_8_interacted = 0
+$mission_car_9_interacted = 0
+$mission_car_10_interacted = 0
+generate_random_int_in_range $mission_car_1_broken = random_int_in_ranges 2 5
+generate_random_int_in_range $mission_car_2_broken = random_int_in_ranges 2 5
+generate_random_int_in_range $mission_car_3_broken = random_int_in_ranges 2 5
+generate_random_int_in_range $mission_car_4_broken = random_int_in_ranges 2 5
+generate_random_int_in_range $mission_car_5_broken = random_int_in_ranges 2 5
+$mission_car_6_broken = 0
+$mission_car_7_broken = 0
+$mission_car_8_broken = 0
+$mission_car_9_broken = 0
+$mission_car_10_broken = 0
+$mission_car_1 = 0
+$mission_car_2 = 0
+$mission_car_3 = 0
+$mission_car_4 = 0
+$mission_car_5 = 0
+$mission_car_6 = 0
+$mission_car_7 = 0
+$mission_car_8 = 0
+$mission_car_9 = 0
+$mission_car_10 = 0
+$mission_car_1_driver = 0
+$mission_car_2_driver = 0
+$mission_car_3_driver = 0
+$mission_car_4_driver = 0
+$mission_car_5_driver = 0
+$mission_car_6_driver = 0
+$mission_car_7_driver = 0
+$mission_car_8_driver = 0
+$mission_car_9_driver = 0
+$mission_car_10_driver = 0
+add_blip_for_coord $mission_car_1_marker = create_checkpoint_at $mission_car_1_x $mission_car_1_y $mission_car_1_z
+add_blip_for_coord $mission_car_2_marker = create_checkpoint_at $mission_car_2_x $mission_car_2_y $mission_car_2_z
+add_blip_for_coord $mission_car_3_marker = create_checkpoint_at $mission_car_3_x $mission_car_3_y $mission_car_3_z
+add_blip_for_coord $mission_car_4_marker = create_checkpoint_at $mission_car_4_x $mission_car_4_y $mission_car_4_z
+add_blip_for_coord $mission_car_5_marker = create_checkpoint_at $mission_car_5_x $mission_car_5_y $mission_car_5_z
+$mission_car_6_marker = 0
+$mission_car_7_marker = 0
+$mission_car_8_marker = 0
+$mission_car_9_marker = 0
+$mission_car_10_marker = 0
+if
+    $passed_car_mechanic_count > 0
+then
+    generate_random_int_in_range $mission_car_6_broken = random_int_in_ranges 2 5
+    add_blip_for_coord $mission_car_6_marker = create_checkpoint_at $mission_car_6_x $mission_car_6_y $mission_car_6_z
+end
+if
+    $passed_car_mechanic_count > 1
+then
+    generate_random_int_in_range $mission_car_7_broken = random_int_in_ranges 2 5
+    add_blip_for_coord $mission_car_7_marker = create_checkpoint_at $mission_car_7_x $mission_car_7_y $mission_car_7_z
+end
+if
+    $passed_car_mechanic_count > 2
+then
+    generate_random_int_in_range $mission_car_8_broken = random_int_in_ranges 2 5
+    add_blip_for_coord $mission_car_8_marker = create_checkpoint_at $mission_car_8_x $mission_car_8_y $mission_car_8_z
+end
+if
+    $passed_car_mechanic_count > 3
+then
+    generate_random_int_in_range $mission_car_9_broken = random_int_in_ranges 2 5
+    add_blip_for_coord $mission_car_9_marker = create_checkpoint_at $mission_car_9_x $mission_car_9_y $mission_car_9_z
+end
+if
+    $passed_car_mechanic_count > 4
+then
+    generate_random_int_in_range $mission_car_10_broken = random_int_in_ranges 2 5
+    add_blip_for_coord $mission_car_10_marker = create_checkpoint_at $mission_car_10_x $mission_car_10_y $mission_car_10_z
+end
+$mission_objective_shown = 0
+$mission_timer = 600000
+display_onscreen_timer_with_string $mission_timer type 1 text 'RACES' // TIME:
+$mission_car_marker_active = 0
+$mission_car_current_marker_active = 0
+$player_weapon_set = 0
+$cm_barrel = -1
+$cm_repair_meter_shown = 0
+$cm_repair_meter_value = 0
+$cm_repair_meter_total = 0
+$cm_hint_shown = 0
+TIMERA = 0
+$cm_cancel_button_pressed = 0
+const cm_spawn_distance = 125.0
+const cm_despawn_distance = 150.0
+
+:CAR_MECHANIC_LOOP
+wait 0
+if
+    is_car_dead $mission_car
+then
+    clear_prints
+    print_now 'CMFAIL3' time 5000 1 // ~r~You destroyed our truck! You're fired.
+    goto @CAR_MECHANIC_FAIL
+end
+if
+    1 > $mission_timer
+then
+    clear_prints
+    print_now 'CMFAIL2' time 5000 1 // ~r~You are out of time. You're fired.
+    goto @CAR_MECHANIC_FAIL
+end
+if
+    is_button_pressed 0 pressed_button 19
+then
+    $cm_cancel_button_pressed = 1
+end
+if and
+    $cm_cancel_button_pressed == 1
+    not is_button_pressed 0 pressed_button 19
+then
+    clear_prints
+    print_now 'CMCANCL' time 5000 1 // ~r~Car Mechanic mission cancelled!
+    goto @CAR_MECHANIC_FAIL
+end
+if and
+    $cm_hint_shown == 0
+    TIMERA > 10000
+then
+    print_help 'CMHINT'
+    $cm_hint_shown = 1
+end
+$near_any_mission_car = 0
+if
+    $mission_car_1_broken > 0
+then
+    if
+        $mission_car_1_visible == 0
+    then
+        if and
+            locate_player_any_means_2d $player_char 0 $mission_car_1_x $mission_car_1_y radius cm_spawn_distance cm_spawn_distance
+            is_player_in_car $player_char in_car $mission_car
+        then
+            set_lvar_int_to_var_int 0@ = $mission_car_1_x
+            set_lvar_int_to_var_int 1@ = $mission_car_1_y
+            set_lvar_int_to_var_int 2@ = $mission_car_1_z
+            set_lvar_int_to_var_int 3@ = $mission_car_1_angle
+            set_lvar_int_to_var_int 4@ = $mission_car_1_model
+            set_lvar_int_to_var_int 5@ = $mission_car_1_actor_model
+            set_lvar_int_to_var_int 6@ = $mission_car_1_type
+            CAR_MECHANIC_CREATE_CAR()
+            set_var_int_to_lvar_int $mission_car_1 = 14@
+            set_var_int_to_lvar_int $mission_car_1_driver = 15@
+            $mission_car_1_visible = 1
+        end
+    else
+        if
+            not locate_player_any_means_car_2d $player_char near_car $mission_car_1 radius cm_despawn_distance cm_despawn_distance 0
+        then
+            delete_char $mission_car_1_driver
+            delete_car $mission_car_1
+            $mission_car_1_visible = 0
+        else
+            if and
+                not is_car_dead $mission_car_1
+                not is_char_dead $mission_car_1_driver
+            goto_if_false @CAR_MECHANIC_WRECKED
+            if
+                is_char_in_car $mission_car_1_driver in_car $mission_car_1
+            goto_if_false @CAR_MECHANIC_WRECKED
+            set_lvar_int_to_var_int 0@ = $mission_car_1
+            set_lvar_int_to_var_int 1@ = $mission_car_1_driver
+            set_lvar_int_to_var_int 2@ = $mission_car_1_type
+            set_lvar_int_to_var_int 3@ = $mission_car_1_broken
+            set_lvar_int_to_var_int 4@ = $mission_car_1_interacted
+            set_lvar_int_to_var_int 5@ = $mission_car_1_health
+            CAR_MECHANIC_CAR_VISIBLE()
+            set_var_int_to_lvar_int $mission_car_1_broken = 3@
+            set_var_int_to_lvar_int $mission_car_1_interacted = 4@
+            set_var_int_to_lvar_int $mission_car_1_health = 5@
+            if
+                15@ == 1
+            then
+                remove_blip $mission_car_1_marker
+                $mission_car_1_visible = 0
+            end
+        end
+    end
+end
+if
+    $mission_car_2_broken > 0
+then
+    if
+        $mission_car_2_visible == 0
+    then
+        if and
+            locate_player_any_means_2d $player_char 0 $mission_car_2_x $mission_car_2_y radius cm_spawn_distance cm_spawn_distance
+            is_player_in_car $player_char in_car $mission_car
+        then
+            set_lvar_int_to_var_int 0@ = $mission_car_2_x
+            set_lvar_int_to_var_int 1@ = $mission_car_2_y
+            set_lvar_int_to_var_int 2@ = $mission_car_2_z
+            set_lvar_int_to_var_int 3@ = $mission_car_2_angle
+            set_lvar_int_to_var_int 4@ = $mission_car_2_model
+            set_lvar_int_to_var_int 5@ = $mission_car_2_actor_model
+            set_lvar_int_to_var_int 6@ = $mission_car_2_type
+            CAR_MECHANIC_CREATE_CAR()
+            set_var_int_to_lvar_int $mission_car_2 = 14@
+            set_var_int_to_lvar_int $mission_car_2_driver = 15@
+            $mission_car_2_visible = 1
+        end
+    else
+        if
+            not locate_player_any_means_car_2d $player_char near_car $mission_car_2 radius cm_despawn_distance cm_despawn_distance 0
+        then
+            delete_char $mission_car_2_driver
+            delete_car $mission_car_2
+            $mission_car_2_visible = 0
+        else
+            if and
+                not is_car_dead $mission_car_2
+                not is_char_dead $mission_car_2_driver
+            goto_if_false @CAR_MECHANIC_WRECKED
+            if
+                is_char_in_car $mission_car_2_driver in_car $mission_car_2
+            goto_if_false @CAR_MECHANIC_WRECKED
+            set_lvar_int_to_var_int 0@ = $mission_car_2
+            set_lvar_int_to_var_int 1@ = $mission_car_2_driver
+            set_lvar_int_to_var_int 2@ = $mission_car_2_type
+            set_lvar_int_to_var_int 3@ = $mission_car_2_broken
+            set_lvar_int_to_var_int 4@ = $mission_car_2_interacted
+            set_lvar_int_to_var_int 5@ = $mission_car_2_health
+            CAR_MECHANIC_CAR_VISIBLE()
+            set_var_int_to_lvar_int $mission_car_2_broken = 3@
+            set_var_int_to_lvar_int $mission_car_2_interacted = 4@
+            set_var_int_to_lvar_int $mission_car_2_health = 5@
+            if
+                15@ == 1
+            then
+                remove_blip $mission_car_2_marker
+                $mission_car_2_visible = 0
+            end
+        end
+    end
+end
+if
+    $mission_car_3_broken > 0
+then
+    if
+        $mission_car_3_visible == 0
+    then
+        if and
+            locate_player_any_means_2d $player_char 0 $mission_car_3_x $mission_car_3_y radius cm_spawn_distance cm_spawn_distance
+            is_player_in_car $player_char in_car $mission_car
+        then
+            set_lvar_int_to_var_int 0@ = $mission_car_3_x
+            set_lvar_int_to_var_int 1@ = $mission_car_3_y
+            set_lvar_int_to_var_int 2@ = $mission_car_3_z
+            set_lvar_int_to_var_int 3@ = $mission_car_3_angle
+            set_lvar_int_to_var_int 4@ = $mission_car_3_model
+            set_lvar_int_to_var_int 5@ = $mission_car_3_actor_model
+            set_lvar_int_to_var_int 6@ = $mission_car_3_type
+            CAR_MECHANIC_CREATE_CAR()
+            set_var_int_to_lvar_int $mission_car_3 = 14@
+            set_var_int_to_lvar_int $mission_car_3_driver = 15@
+            $mission_car_3_visible = 1
+        end
+    else
+        if
+            not locate_player_any_means_car_2d $player_char near_car $mission_car_3 radius cm_despawn_distance cm_despawn_distance 0
+        then
+            delete_char $mission_car_3_driver
+            delete_car $mission_car_3
+            $mission_car_3_visible = 0
+        else
+            if and
+                not is_car_dead $mission_car_3
+                not is_char_dead $mission_car_3_driver
+            goto_if_false @CAR_MECHANIC_WRECKED
+            if
+                is_char_in_car $mission_car_3_driver in_car $mission_car_3
+            goto_if_false @CAR_MECHANIC_WRECKED
+            set_lvar_int_to_var_int 0@ = $mission_car_3
+            set_lvar_int_to_var_int 1@ = $mission_car_3_driver
+            set_lvar_int_to_var_int 2@ = $mission_car_3_type
+            set_lvar_int_to_var_int 3@ = $mission_car_3_broken
+            set_lvar_int_to_var_int 4@ = $mission_car_3_interacted
+            set_lvar_int_to_var_int 5@ = $mission_car_3_health
+            CAR_MECHANIC_CAR_VISIBLE()
+            set_var_int_to_lvar_int $mission_car_3_broken = 3@
+            set_var_int_to_lvar_int $mission_car_3_interacted = 4@
+            set_var_int_to_lvar_int $mission_car_3_health = 5@
+            if
+                15@ == 1
+            then
+                remove_blip $mission_car_3_marker
+                $mission_car_3_visible = 0
+            end
+        end
+    end
+end
+if
+    $mission_car_4_broken > 0
+then
+    if
+        $mission_car_4_visible == 0
+    then
+        if and
+            locate_player_any_means_2d $player_char 0 $mission_car_4_x $mission_car_4_y radius cm_spawn_distance cm_spawn_distance
+            is_player_in_car $player_char in_car $mission_car
+        then
+            set_lvar_int_to_var_int 0@ = $mission_car_4_x
+            set_lvar_int_to_var_int 1@ = $mission_car_4_y
+            set_lvar_int_to_var_int 2@ = $mission_car_4_z
+            set_lvar_int_to_var_int 3@ = $mission_car_4_angle
+            set_lvar_int_to_var_int 4@ = $mission_car_4_model
+            set_lvar_int_to_var_int 5@ = $mission_car_4_actor_model
+            set_lvar_int_to_var_int 6@ = $mission_car_4_type
+            CAR_MECHANIC_CREATE_CAR()
+            set_var_int_to_lvar_int $mission_car_4 = 14@
+            set_var_int_to_lvar_int $mission_car_4_driver = 15@
+            $mission_car_4_visible = 1
+        end
+    else
+        if
+            not locate_player_any_means_car_2d $player_char near_car $mission_car_4 radius cm_despawn_distance cm_despawn_distance 0
+        then
+            delete_char $mission_car_4_driver
+            delete_car $mission_car_4
+            $mission_car_4_visible = 0
+        else
+            if and
+                not is_car_dead $mission_car_4
+                not is_char_dead $mission_car_4_driver
+            goto_if_false @CAR_MECHANIC_WRECKED
+            if
+                is_char_in_car $mission_car_4_driver in_car $mission_car_4
+            goto_if_false @CAR_MECHANIC_WRECKED
+            set_lvar_int_to_var_int 0@ = $mission_car_4
+            set_lvar_int_to_var_int 1@ = $mission_car_4_driver
+            set_lvar_int_to_var_int 2@ = $mission_car_4_type
+            set_lvar_int_to_var_int 3@ = $mission_car_4_broken
+            set_lvar_int_to_var_int 4@ = $mission_car_4_interacted
+            set_lvar_int_to_var_int 5@ = $mission_car_4_health
+            CAR_MECHANIC_CAR_VISIBLE()
+            set_var_int_to_lvar_int $mission_car_4_broken = 3@
+            set_var_int_to_lvar_int $mission_car_4_interacted = 4@
+            set_var_int_to_lvar_int $mission_car_4_health = 5@
+            if
+                15@ == 1
+            then
+                remove_blip $mission_car_4_marker
+                $mission_car_4_visible = 0
+            end
+        end
+    end
+end
+if
+    $mission_car_5_broken > 0
+then
+    if
+        $mission_car_5_visible == 0
+    then
+        if and
+            locate_player_any_means_2d $player_char 0 $mission_car_5_x $mission_car_5_y radius cm_spawn_distance cm_spawn_distance
+            is_player_in_car $player_char in_car $mission_car
+        then
+            set_lvar_int_to_var_int 0@ = $mission_car_5_x
+            set_lvar_int_to_var_int 1@ = $mission_car_5_y
+            set_lvar_int_to_var_int 2@ = $mission_car_5_z
+            set_lvar_int_to_var_int 3@ = $mission_car_5_angle
+            set_lvar_int_to_var_int 4@ = $mission_car_5_model
+            set_lvar_int_to_var_int 5@ = $mission_car_5_actor_model
+            set_lvar_int_to_var_int 6@ = $mission_car_5_type
+            CAR_MECHANIC_CREATE_CAR()
+            set_var_int_to_lvar_int $mission_car_5 = 14@
+            set_var_int_to_lvar_int $mission_car_5_driver = 15@
+            $mission_car_5_visible = 1
+        end
+    else
+        if
+            not locate_player_any_means_car_2d $player_char near_car $mission_car_5 radius cm_despawn_distance cm_despawn_distance 0
+        then
+            delete_char $mission_car_5_driver
+            delete_car $mission_car_5
+            $mission_car_5_visible = 0
+        else
+            if and
+                not is_car_dead $mission_car_5
+                not is_char_dead $mission_car_5_driver
+            goto_if_false @CAR_MECHANIC_WRECKED
+            if
+                is_char_in_car $mission_car_5_driver in_car $mission_car_5
+            goto_if_false @CAR_MECHANIC_WRECKED
+            set_lvar_int_to_var_int 0@ = $mission_car_5
+            set_lvar_int_to_var_int 1@ = $mission_car_5_driver
+            set_lvar_int_to_var_int 2@ = $mission_car_5_type
+            set_lvar_int_to_var_int 3@ = $mission_car_5_broken
+            set_lvar_int_to_var_int 4@ = $mission_car_5_interacted
+            set_lvar_int_to_var_int 5@ = $mission_car_5_health
+            CAR_MECHANIC_CAR_VISIBLE()
+            set_var_int_to_lvar_int $mission_car_5_broken = 3@
+            set_var_int_to_lvar_int $mission_car_5_interacted = 4@
+            set_var_int_to_lvar_int $mission_car_5_health = 5@
+            if
+                15@ == 1
+            then
+                remove_blip $mission_car_5_marker
+                $mission_car_5_visible = 0
+            end
+        end
+    end
+end
+if
+    $mission_car_6_broken > 0
+then
+    if
+        $mission_car_6_visible == 0
+    then
+        if and
+            locate_player_any_means_2d $player_char 0 $mission_car_6_x $mission_car_6_y radius cm_spawn_distance cm_spawn_distance
+            is_player_in_car $player_char in_car $mission_car
+        then
+            set_lvar_int_to_var_int 0@ = $mission_car_6_x
+            set_lvar_int_to_var_int 1@ = $mission_car_6_y
+            set_lvar_int_to_var_int 2@ = $mission_car_6_z
+            set_lvar_int_to_var_int 3@ = $mission_car_6_angle
+            set_lvar_int_to_var_int 4@ = $mission_car_6_model
+            set_lvar_int_to_var_int 5@ = $mission_car_6_actor_model
+            set_lvar_int_to_var_int 6@ = $mission_car_6_type
+            CAR_MECHANIC_CREATE_CAR()
+            set_var_int_to_lvar_int $mission_car_6 = 14@
+            set_var_int_to_lvar_int $mission_car_6_driver = 15@
+            $mission_car_6_visible = 1
+        end
+    else
+        if
+            not locate_player_any_means_car_2d $player_char near_car $mission_car_6 radius cm_despawn_distance cm_despawn_distance 0
+        then
+            delete_char $mission_car_6_driver
+            delete_car $mission_car_6
+            $mission_car_6_visible = 0
+        else
+            if and
+                not is_car_dead $mission_car_6
+                not is_char_dead $mission_car_6_driver
+            goto_if_false @CAR_MECHANIC_WRECKED
+            if
+                is_char_in_car $mission_car_6_driver in_car $mission_car_6
+            goto_if_false @CAR_MECHANIC_WRECKED
+            set_lvar_int_to_var_int 0@ = $mission_car_6
+            set_lvar_int_to_var_int 1@ = $mission_car_6_driver
+            set_lvar_int_to_var_int 2@ = $mission_car_6_type
+            set_lvar_int_to_var_int 3@ = $mission_car_6_broken
+            set_lvar_int_to_var_int 4@ = $mission_car_6_interacted
+            set_lvar_int_to_var_int 5@ = $mission_car_6_health
+            CAR_MECHANIC_CAR_VISIBLE()
+            set_var_int_to_lvar_int $mission_car_6_broken = 3@
+            set_var_int_to_lvar_int $mission_car_6_interacted = 4@
+            set_var_int_to_lvar_int $mission_car_6_health = 5@
+            if
+                15@ == 1
+            then
+                remove_blip $mission_car_6_marker
+                $mission_car_6_visible = 0
+            end
+        end
+    end
+end
+if
+    $mission_car_7_broken > 0
+then
+    if
+        $mission_car_7_visible == 0
+    then
+        if and
+            locate_player_any_means_2d $player_char 0 $mission_car_7_x $mission_car_7_y radius cm_spawn_distance cm_spawn_distance
+            is_player_in_car $player_char in_car $mission_car
+        then
+            set_lvar_int_to_var_int 0@ = $mission_car_7_x
+            set_lvar_int_to_var_int 1@ = $mission_car_7_y
+            set_lvar_int_to_var_int 2@ = $mission_car_7_z
+            set_lvar_int_to_var_int 3@ = $mission_car_7_angle
+            set_lvar_int_to_var_int 4@ = $mission_car_7_model
+            set_lvar_int_to_var_int 5@ = $mission_car_7_actor_model
+            set_lvar_int_to_var_int 6@ = $mission_car_7_type
+            CAR_MECHANIC_CREATE_CAR()
+            set_var_int_to_lvar_int $mission_car_7 = 14@
+            set_var_int_to_lvar_int $mission_car_7_driver = 15@
+            $mission_car_7_visible = 1
+        end
+    else
+        if
+            not locate_player_any_means_car_2d $player_char near_car $mission_car_7 radius cm_despawn_distance cm_despawn_distance 0
+        then
+            delete_char $mission_car_7_driver
+            delete_car $mission_car_7
+            $mission_car_7_visible = 0
+        else
+            if and
+                not is_car_dead $mission_car_7
+                not is_char_dead $mission_car_7_driver
+            goto_if_false @CAR_MECHANIC_WRECKED
+            if
+                is_char_in_car $mission_car_7_driver in_car $mission_car_7
+            goto_if_false @CAR_MECHANIC_WRECKED
+            set_lvar_int_to_var_int 0@ = $mission_car_7
+            set_lvar_int_to_var_int 1@ = $mission_car_7_driver
+            set_lvar_int_to_var_int 2@ = $mission_car_7_type
+            set_lvar_int_to_var_int 3@ = $mission_car_7_broken
+            set_lvar_int_to_var_int 4@ = $mission_car_7_interacted
+            set_lvar_int_to_var_int 5@ = $mission_car_7_health
+            CAR_MECHANIC_CAR_VISIBLE()
+            set_var_int_to_lvar_int $mission_car_7_broken = 3@
+            set_var_int_to_lvar_int $mission_car_7_interacted = 4@
+            set_var_int_to_lvar_int $mission_car_7_health = 5@
+            if
+                15@ == 1
+            then
+                remove_blip $mission_car_7_marker
+                $mission_car_7_visible = 0
+            end
+        end
+    end
+end
+if
+    $mission_car_8_broken > 0
+then
+    if
+        $mission_car_8_visible == 0
+    then
+        if and
+            locate_player_any_means_2d $player_char 0 $mission_car_8_x $mission_car_8_y radius cm_spawn_distance cm_spawn_distance
+            is_player_in_car $player_char in_car $mission_car
+        then
+            set_lvar_int_to_var_int 0@ = $mission_car_8_x
+            set_lvar_int_to_var_int 1@ = $mission_car_8_y
+            set_lvar_int_to_var_int 2@ = $mission_car_8_z
+            set_lvar_int_to_var_int 3@ = $mission_car_8_angle
+            set_lvar_int_to_var_int 4@ = $mission_car_8_model
+            set_lvar_int_to_var_int 5@ = $mission_car_8_actor_model
+            set_lvar_int_to_var_int 6@ = $mission_car_8_type
+            CAR_MECHANIC_CREATE_CAR()
+            set_var_int_to_lvar_int $mission_car_8 = 14@
+            set_var_int_to_lvar_int $mission_car_8_driver = 15@
+            $mission_car_8_visible = 1
+        end
+    else
+        if
+            not locate_player_any_means_car_2d $player_char near_car $mission_car_8 radius cm_despawn_distance cm_despawn_distance 0
+        then
+            delete_char $mission_car_8_driver
+            delete_car $mission_car_8
+            $mission_car_8_visible = 0
+        else
+            if and
+                not is_car_dead $mission_car_8
+                not is_char_dead $mission_car_8_driver
+            goto_if_false @CAR_MECHANIC_WRECKED
+            if
+                is_char_in_car $mission_car_8_driver in_car $mission_car_8
+            goto_if_false @CAR_MECHANIC_WRECKED
+            set_lvar_int_to_var_int 0@ = $mission_car_8
+            set_lvar_int_to_var_int 1@ = $mission_car_8_driver
+            set_lvar_int_to_var_int 2@ = $mission_car_8_type
+            set_lvar_int_to_var_int 3@ = $mission_car_8_broken
+            set_lvar_int_to_var_int 4@ = $mission_car_8_interacted
+            set_lvar_int_to_var_int 5@ = $mission_car_8_health
+            CAR_MECHANIC_CAR_VISIBLE()
+            set_var_int_to_lvar_int $mission_car_8_broken = 3@
+            set_var_int_to_lvar_int $mission_car_8_interacted = 4@
+            set_var_int_to_lvar_int $mission_car_8_health = 5@
+            if
+                15@ == 1
+            then
+                remove_blip $mission_car_8_marker
+                $mission_car_8_visible = 0
+            end
+        end
+    end
+end
+if
+    $mission_car_9_broken > 0
+then
+    if
+        $mission_car_9_visible == 0
+    then
+        if and
+            locate_player_any_means_2d $player_char 0 $mission_car_9_x $mission_car_9_y radius cm_spawn_distance cm_spawn_distance
+            is_player_in_car $player_char in_car $mission_car
+        then
+            set_lvar_int_to_var_int 0@ = $mission_car_9_x
+            set_lvar_int_to_var_int 1@ = $mission_car_9_y
+            set_lvar_int_to_var_int 2@ = $mission_car_9_z
+            set_lvar_int_to_var_int 3@ = $mission_car_9_angle
+            set_lvar_int_to_var_int 4@ = $mission_car_9_model
+            set_lvar_int_to_var_int 5@ = $mission_car_9_actor_model
+            set_lvar_int_to_var_int 6@ = $mission_car_9_type
+            CAR_MECHANIC_CREATE_CAR()
+            set_var_int_to_lvar_int $mission_car_9 = 14@
+            set_var_int_to_lvar_int $mission_car_9_driver = 15@
+            $mission_car_9_visible = 1
+        end
+    else
+        if
+            not locate_player_any_means_car_2d $player_char near_car $mission_car_9 radius cm_despawn_distance cm_despawn_distance 0
+        then
+            delete_char $mission_car_9_driver
+            delete_car $mission_car_9
+            $mission_car_9_visible = 0
+        else
+            if and
+                not is_car_dead $mission_car_9
+                not is_char_dead $mission_car_9_driver
+            goto_if_false @CAR_MECHANIC_WRECKED
+            if
+                is_char_in_car $mission_car_9_driver in_car $mission_car_9
+            goto_if_false @CAR_MECHANIC_WRECKED
+            set_lvar_int_to_var_int 0@ = $mission_car_9
+            set_lvar_int_to_var_int 1@ = $mission_car_9_driver
+            set_lvar_int_to_var_int 2@ = $mission_car_9_type
+            set_lvar_int_to_var_int 3@ = $mission_car_9_broken
+            set_lvar_int_to_var_int 4@ = $mission_car_9_interacted
+            set_lvar_int_to_var_int 5@ = $mission_car_9_health
+            CAR_MECHANIC_CAR_VISIBLE()
+            set_var_int_to_lvar_int $mission_car_9_broken = 3@
+            set_var_int_to_lvar_int $mission_car_9_interacted = 4@
+            set_var_int_to_lvar_int $mission_car_9_health = 5@
+            if
+                15@ == 1
+            then
+                remove_blip $mission_car_9_marker
+                $mission_car_9_visible = 0
+            end
+        end
+    end
+end
+if
+    $mission_car_10_broken > 0
+then
+    if
+        $mission_car_10_visible == 0
+    then
+        if and
+            locate_player_any_means_2d $player_char 0 $mission_car_10_x $mission_car_10_y radius cm_spawn_distance cm_spawn_distance
+            is_player_in_car $player_char in_car $mission_car
+        then
+            set_lvar_int_to_var_int 0@ = $mission_car_10_x
+            set_lvar_int_to_var_int 1@ = $mission_car_10_y
+            set_lvar_int_to_var_int 2@ = $mission_car_10_z
+            set_lvar_int_to_var_int 3@ = $mission_car_10_angle
+            set_lvar_int_to_var_int 4@ = $mission_car_10_model
+            set_lvar_int_to_var_int 5@ = $mission_car_10_actor_model
+            set_lvar_int_to_var_int 6@ = $mission_car_10_type
+            CAR_MECHANIC_CREATE_CAR()
+            set_var_int_to_lvar_int $mission_car_10 = 14@
+            set_var_int_to_lvar_int $mission_car_10_driver = 15@
+            $mission_car_10_visible = 1
+        end
+    else
+        if
+            not locate_player_any_means_car_2d $player_char near_car $mission_car_10 radius cm_despawn_distance cm_despawn_distance 0
+        then
+            delete_char $mission_car_10_driver
+            delete_car $mission_car_10
+            $mission_car_10_visible = 0
+        else
+            if and
+                not is_car_dead $mission_car_10
+                not is_char_dead $mission_car_10_driver
+            goto_if_false @CAR_MECHANIC_WRECKED
+            if
+                is_char_in_car $mission_car_10_driver in_car $mission_car_10
+            goto_if_false @CAR_MECHANIC_WRECKED
+            set_lvar_int_to_var_int 0@ = $mission_car_10
+            set_lvar_int_to_var_int 1@ = $mission_car_10_driver
+            set_lvar_int_to_var_int 2@ = $mission_car_10_type
+            set_lvar_int_to_var_int 3@ = $mission_car_10_broken
+            set_lvar_int_to_var_int 4@ = $mission_car_10_interacted
+            set_lvar_int_to_var_int 5@ = $mission_car_10_health
+            CAR_MECHANIC_CAR_VISIBLE()
+            set_var_int_to_lvar_int $mission_car_10_broken = 3@
+            set_var_int_to_lvar_int $mission_car_10_interacted = 4@
+            set_var_int_to_lvar_int $mission_car_10_health = 5@
+            if
+                15@ == 1
+            then
+                remove_blip $mission_car_10_marker
+                $mission_car_10_visible = 0
+            end
+        end
+    end
+end
+if
+    $near_any_mission_car == 1
+then
+    if
+        is_char_shooting $player_actor
+    then
+        clear_prints
+        print_now 'CMFAIL4' time 5000 1 // ~r~You scared the customer! You're fired.
+        goto @CAR_MECHANIC_FAIL
+    end
+    if
+        has_car_been_damaged_by_weapon $mission_car hit_by_weapon 7
+    then
+        clear_car_last_weapon_damage $mission_car
+        if
+            not is_wanted_level_greater $player_char wanted_level > 1
+        then
+            clear_wanted_level $player_char
+        end
+        if
+            $cm_barrel <> -1
+        then
+            mark_object_as_no_longer_needed $cm_barrel
+        end
+        request_model #BARREL4
+        while not is_model_available #BARREL4
+            wait 0
+        end
+        get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car offset 0.0 -2.7 -0.5
+        create_object $cm_barrel = create_object #BARREL4 at 0@ 1@ 2@
+        set_object_dynamic $cm_barrel toggle_in_moving_list 1
+        get_car_heading 2@ = car $mission_car
+        2@ -= 180.0
+        cos 0@ = cosine 2@
+        sin 1@ = sine 2@
+        0@ *= 2.0
+        1@ *= 2.0
+        add_to_object_velocity $cm_barrel scatter 0@ 1@ 1.0
+    end
+else
+    $mission_objective_shown = 0
+    if
+        not is_player_in_car $player_char in_car $mission_car
+    then
+        if
+            $mission_car_marker_active == 0
+        then
+            add_blip_for_car $mission_car_marker = create_marker_above_car $mission_car
+            print_now 'CMBACK' time 5000 1 // ~g~Return to the truck.
+            $mission_car_marker_active = 1
+        end
+    else
+        if
+            $mission_car_marker_active == 1
+        then
+            remove_blip $mission_car_marker
+            clear_this_print 'CMBACK' // ~g~Return to the truck.
+            $mission_car_marker_active = 0
+        end
+    end
+    if
+        $cm_repair_meter_shown == 1
+    then
+        clear_onscreen_counter $cm_repair_meter_value
+        $cm_repair_meter_shown = 0
+    end
+    if
+        $mission_car_current_marker_active == 1
+    then
+        remove_blip $mission_car_current_marker
+        $mission_car_current_marker_active = 0
+    end
+end
+if
+    $player_weapon_set == 0
+then
+    if
+        is_player_on_foot $player_char
+    then
+        set_current_player_weapon $player_char armed_weapon_to 7
+        $player_weapon_set = 1
+    end
+end
+if
+    $cm_barrel <> -1
+then
+    if or
+        has_object_been_damaged $cm_barrel
+        not locate_char_any_means_object_2d $player_actor object $cm_barrel radius 50.0 50.0 flag 0
+    then
+        mark_object_as_no_longer_needed $cm_barrel
+        $cm_barrel = -1
+    else
+        if and
+            locate_char_any_means_object_3d $player_actor object $cm_barrel radius 1.0 1.0 1.0 flag 0
+            TIMERA > 500
+        then
+            get_player_coordinates $player_char position_to 0@ 1@ 2@
+            get_object_coordinates $cm_barrel position_to 3@ 4@ 5@
+            sub_float_lvar_from_float_lvar 3@ -= 0@
+            sub_float_lvar_from_float_lvar 4@ -= 1@
+            3@ *= 5.0
+            4@ *= 5.0
+            add_to_object_velocity $cm_barrel scatter 3@ 4@ 1.0
+            TIMERA = 0
+        end
+    end
+end
+if and
+    0 >= $mission_car_1_broken
+    0 >= $mission_car_2_broken
+    0 >= $mission_car_3_broken
+    0 >= $mission_car_4_broken
+    0 >= $mission_car_5_broken
+then
+    if and
+        0 >= $mission_car_6_broken
+        0 >= $mission_car_7_broken
+        0 >= $mission_car_8_broken
+        0 >= $mission_car_9_broken
+        0 >= $mission_car_10_broken
+    then
+        goto @CAR_MECHANIC_PASSED
+    end
+end
+jump @CAR_MECHANIC_LOOP
+
+:CAR_MECHANIC_GENERATE_RANDOM_COORDS
+generate_random_float_in_range 12@ = random_float 0@ 2@
+generate_random_float_in_range 13@ = random_float 1@ 3@
+get_closest_car_node_with_heading 12@ 13@ 15.0 store_nearby_vector_to 12@ 13@ 14@ 15@
+if or // outside of Leaf Links
+    -300.0 > 12@
+    12@ > 300.0
+    -250.0 > 13@
+    13@ > 650.0
+goto_if_false @CAR_MECHANIC_GENERATE_RANDOM_COORDS
+if
+    4@ > 0
+then
+    if or
+        not is_float_var_equal_to_float_lvar $mission_car_1_x == 12@
+        not is_float_var_equal_to_float_lvar $mission_car_1_y == 13@
+    goto_if_false @CAR_MECHANIC_GENERATE_RANDOM_COORDS
+end
+if
+    4@ > 1
+then
+    if or
+        not is_float_var_equal_to_float_lvar $mission_car_2_x == 12@
+        not is_float_var_equal_to_float_lvar $mission_car_2_y == 13@
+    goto_if_false @CAR_MECHANIC_GENERATE_RANDOM_COORDS
+end
+if
+    4@ > 2
+then
+    if or
+        not is_float_var_equal_to_float_lvar $mission_car_3_x == 12@
+        not is_float_var_equal_to_float_lvar $mission_car_3_y == 13@
+    goto_if_false @CAR_MECHANIC_GENERATE_RANDOM_COORDS
+end
+if
+    4@ > 3
+then
+    if or
+        not is_float_var_equal_to_float_lvar $mission_car_4_x == 12@
+        not is_float_var_equal_to_float_lvar $mission_car_4_y == 13@
+    goto_if_false @CAR_MECHANIC_GENERATE_RANDOM_COORDS
+end
+if
+    4@ > 4
+then
+    if or
+        not is_float_var_equal_to_float_lvar $mission_car_5_x == 12@
+        not is_float_var_equal_to_float_lvar $mission_car_5_y == 13@
+    goto_if_false @CAR_MECHANIC_GENERATE_RANDOM_COORDS
+end
+if
+    4@ > 5
+then
+    if or
+        not is_float_var_equal_to_float_lvar $mission_car_6_x == 12@
+        not is_float_var_equal_to_float_lvar $mission_car_6_y == 13@
+    goto_if_false @CAR_MECHANIC_GENERATE_RANDOM_COORDS
+end
+if
+    4@ > 6
+then
+    if or
+        not is_float_var_equal_to_float_lvar $mission_car_7_x == 12@
+        not is_float_var_equal_to_float_lvar $mission_car_7_y == 13@
+    goto_if_false @CAR_MECHANIC_GENERATE_RANDOM_COORDS
+end
+if
+    4@ > 7
+then
+    if or
+        not is_float_var_equal_to_float_lvar $mission_car_8_x == 12@
+        not is_float_var_equal_to_float_lvar $mission_car_8_y == 13@
+    goto_if_false @CAR_MECHANIC_GENERATE_RANDOM_COORDS
+end
+if
+    4@ > 8
+then
+    if or
+        not is_float_var_equal_to_float_lvar $mission_car_9_x == 12@
+        not is_float_var_equal_to_float_lvar $mission_car_9_y == 13@
+    goto_if_false @CAR_MECHANIC_GENERATE_RANDOM_COORDS
+end
+return
+
+:CAR_MECHANIC_GENERATE_CAR_MODEL
+generate_random_int_in_range 15@ = random_int_in_ranges 1 6
+if
+    15@ == 1
+then
+    15@ = #ADMIRAL
+    return
+end
+if
+    15@ == 2
+then
+    15@ = #WASHING
+    return
+end
+if
+    15@ == 3
+then
+    15@ = #BANSHEE
+    return
+end
+if
+    15@ == 4
+then
+    15@ = #OCEANIC
+    return
+end
+15@ = #LANDSTAL
+return
+
+:CAR_MECHANIC_GENERATE_ACTOR_MODEL
+generate_random_int_in_range 15@ = random_int_in_ranges 1 6
+if
+    15@ == 1
+then
+    15@ = #HMYRI
+    return
+end
+if
+    15@ == 2
+then
+    15@ = #HMOST
+    return
+end
+if
+    15@ == 3
+then
+    15@ = #BMOST
+    return
+end
+if
+    15@ == 4
+then
+    15@ = #WFYRI
+    return
+end
+15@ = #BMYRI
+return
+
+:CAR_MECHANIC_CREATE_CAR
+request_model 4@
+request_model 5@
+
+:CAR_MECHANIC_CREATE_CAR_LOAD
+if or
+    not is_model_available 4@
+    not is_model_available 5@
+goto_if_false @CAR_MECHANIC_CREATE_CAR_LOADED
+wait 0
+goto @CAR_MECHANIC_CREATE_CAR_LOAD
+
+:CAR_MECHANIC_CREATE_CAR_LOADED
+create_car 14@ = create_car 4@ at 0@ 1@ 2@
+set_car_heading 14@ z_angle_to 3@
+create_char_inside_car 15@ = create_actor 4 5@ in_car 14@
+car_set_idle 14@
+if
+    6@ == 1
+then
+    set_car_health 14@ health_to 400
+end
+boat_stop 14@
+set_car_only_damaged_by_player 14@ immune_to_nonplayer 1
+set_char_only_damaged_by_player 15@ immune_to_nonplayer 1
+return
+
+:CAR_MECHANIC_CAR_VISIBLE
+15@ = 0
+get_car_coordinates 0@ position_to 6@ 7@ 8@
+if and
+    $near_any_mission_car == 0
+    locate_car_2d $mission_car sphere 0 near_point 6@ 7@ radius 20.0 20.0
+then
+    $near_any_mission_car = 1
+    if
+        $mission_objective_shown == 0
+    then
+        $mission_objective_shown = 1
+        CAR_MECHANIC_SHOW_OBJECTIVE()
+        if
+            2@ <> 3
+        then
+            $cm_repair_meter_value = 0
+            display_nth_onscreen_counter_with_string $cm_repair_meter_value 1 line 1 'CMMETER' // Repair:
+            $cm_repair_meter_shown = 1
+            set_var_int_to_lvar_int $cm_repair_meter_total = 3@
+        end
+        remove_blip $mission_car_current_marker
+        add_blip_for_car_old $mission_car_current_marker = create_marker_above_car 0@ color 0 display 1
+        $mission_car_current_marker_active = 1
+    end
+end
+if
+    2@ == 1
+then
+    if
+        has_car_been_damaged_by_weapon 0@ hit_by_weapon 7
+    then
+        clear_car_last_weapon_damage 0@
+        if
+            not is_wanted_level_greater $player_char wanted_level > 1
+        then
+            clear_wanted_level $player_char
+        end
+        get_car_health 5@ = car 0@
+        3@--
+        add_one_off_sound 1 at 0.0 0.0 0.0
+        car_wander_randomly 0@
+        TIMERA = 0
+        4@ = 1
+
+        set_var_int_to_var_int $cm_repair_meter_value = $cm_repair_meter_total
+        sub_int_lvar_from_int_var $cm_repair_meter_value += 3@
+        $cm_repair_meter_value *= 100
+        div_int_var_by_int_var $cm_repair_meter_value /= $cm_repair_meter_total
+    end
+    if and
+        4@ == 1
+        TIMERA > 200
+    then
+        boat_stop 0@
+        4@ = 0
+    end
+else
+    if
+        2@ == 2
+    then
+        get_car_speed 14@ = car 0@
+        if and
+            14@ > 0.5
+            locate_player_in_car_car_2d $player_char near_car 0@ radius 7.0 7.0 0
+        then
+            if
+                4@ == 0
+            then
+                TIMERA = 0
+            end
+            4@ = 1
+        else
+            if
+                4@ == 1
+            then
+                4@ = 2
+                TIMERB = 0
+            end
+            if and
+                4@ == 2
+                TIMERB > 200
+            then
+                4@ = 0
+                $cm_repair_meter_value = 0
+            end
+        end
+        if
+            4@ <> 0
+        then
+            set_var_int_to_lvar_int $cm_repair_meter_value = TIMERA
+            $cm_repair_meter_value *= 100
+            $cm_repair_meter_value /= 2250
+            if
+                TIMERA > 2250
+            then
+                3@ = 0
+                add_one_off_sound 1 at 0.0 0.0 0.0
+            end
+        end
+    else
+        if
+            $cm_barrel <> -1
+        then
+            get_car_coordinates 0@ position_to 12@ 13@ 14@
+            if
+                locate_object_3d $cm_barrel near_point 12@ 13@ 14@ radius 1.4 1.4 1.4 flag 0
+            then
+                delete_object $cm_barrel
+                $cm_barrel = -1
+                3@ = 0
+                add_one_off_sound 1 at 0.0 0.0 0.0
+            end
+        end
+    end
+end
+if
+    0 >= 3@
+then
+    set_car_health 0@ health_to 1000
+    CAR_MECHANIC_FIXED()
+    4@ = 0
+    15@ = 1
+    remove_blip $mission_car_current_marker
+    $mission_car_current_marker_active = 0
+else
+    get_car_health 14@ = car 0@
+    if
+        is_int_var_greater_than_int_lvar 5@ > 14@
+    then
+        set_var_int_to_lvar_int 5@ = 14@
+        CAR_MECHANIC_FINE()
+    end
+end
+return
+
+:CAR_MECHANIC_SHOW_OBJECTIVE
+if
+    2@ == 1
+then
+    print_now 'BROKEN1' time 5000 1 // ~g~The engine is broken. Use the ~h~hammer~g~ tool to fix it.
+else
+    if
+        2@ == 2
+    then
+        print_now 'BROKEN2' time 5000 1 // ~g~The car's stuck. ~h~Push~g~ it with ~y~the truck~g~ to start the engine. Be careful!
+    else
+        print_now 'BROKEN3' time 5000 1 // ~g~The car's out of fule. Use the ~h~hammer~g~ tool to get fuel from ~y~the truck~g~.
+    end
+end
+return
+
+:CAR_MECHANIC_FINE
+add_score $player_char money += -50
+print_with_number_big 'CMFINE' number 50 time 1000 style 4 // ~r~$~1~ damage fine
+return
+
+:CAR_MECHANIC_FIXED
+add_score $player_char money += 100
+print_with_number_big 'CMFIXED' number 100 time 3000 style 4 // Car fixed! $~1~
+register_life_saved
+CAR_MECHANIC_DRIVE_AWAY()
+return
+
+:CAR_MECHANIC_DRIVE_AWAY
+if and
+    not is_car_dead 0@
+    not is_char_dead 1@
+then
+    set_car_cruise_speed 0@ max_speed_to 15.0
+    set_car_driving_style 0@ traffic_behavior_to 3
+    car_wander_randomly 0@
+end
+mark_car_as_no_longer_needed 0@
+mark_char_as_no_longer_needed 1@
+return
+
+:CAR_MECHANIC_WRECKED
+clear_prints
+print_now 'CMFAIL1' time 5000 1 // ~r~You offended the customer! You're fired.
+
+:CAR_MECHANIC_FAIL
+print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
+return
+
+:CAR_MECHANIC_PASSED
+print_with_number_big 'M_PASS' number 1000 time 5000 style 1 // MISSION PASSED! $~1~
+play_mission_passed_tune 1
+add_score $player_char money += 1000
+if
+    $passed_car_mechanic_count == 0
+then
+    player_made_progress 1
+    print_now 'CAR_WON' time 5000 1 // Car Mechanic Mission Complete. Your max Body Armor increased to 150.
+    increase_player_max_armour $player_char max_armour += 50
+end
+$passed_car_mechanic_count++
+return
+
+:CAR_MECHANIC_CLEANUP
+$onmission = 0
+remove_blip $mission_car_marker
+remove_blip $mission_car_current_marker
+remove_blip $mission_car_1_marker
+remove_blip $mission_car_2_marker
+remove_blip $mission_car_3_marker
+remove_blip $mission_car_4_marker
+remove_blip $mission_car_5_marker
+remove_blip $mission_car_6_marker
+remove_blip $mission_car_7_marker
+remove_blip $mission_car_8_marker
+remove_blip $mission_car_9_marker
+remove_blip $mission_car_10_marker
+mark_car_as_no_longer_needed $mission_car
+set_lvar_int_to_var_int 0@ = $mission_car_1
+set_lvar_int_to_var_int 1@ = $mission_car_1_driver
+CAR_MECHANIC_DRIVE_AWAY()
+set_lvar_int_to_var_int 0@ = $mission_car_2
+set_lvar_int_to_var_int 1@ = $mission_car_2_driver
+CAR_MECHANIC_DRIVE_AWAY()
+set_lvar_int_to_var_int 0@ = $mission_car_3
+set_lvar_int_to_var_int 1@ = $mission_car_3_driver
+CAR_MECHANIC_DRIVE_AWAY()
+set_lvar_int_to_var_int 0@ = $mission_car_4
+set_lvar_int_to_var_int 1@ = $mission_car_4_driver
+CAR_MECHANIC_DRIVE_AWAY()
+set_lvar_int_to_var_int 0@ = $mission_car_5
+set_lvar_int_to_var_int 1@ = $mission_car_5_driver
+CAR_MECHANIC_DRIVE_AWAY()
+set_lvar_int_to_var_int 0@ = $mission_car_6
+set_lvar_int_to_var_int 1@ = $mission_car_6_driver
+CAR_MECHANIC_DRIVE_AWAY()
+set_lvar_int_to_var_int 0@ = $mission_car_7
+set_lvar_int_to_var_int 1@ = $mission_car_7_driver
+CAR_MECHANIC_DRIVE_AWAY()
+set_lvar_int_to_var_int 0@ = $mission_car_8
+set_lvar_int_to_var_int 1@ = $mission_car_8_driver
+CAR_MECHANIC_DRIVE_AWAY()
+set_lvar_int_to_var_int 0@ = $mission_car_9
+set_lvar_int_to_var_int 1@ = $mission_car_9_driver
+CAR_MECHANIC_DRIVE_AWAY()
+set_lvar_int_to_var_int 0@ = $mission_car_10
+set_lvar_int_to_var_int 1@ = $mission_car_10_driver
+CAR_MECHANIC_DRIVE_AWAY()
+mark_object_as_no_longer_needed $cm_barrel
+mark_model_as_no_longer_needed #ADMIRAL
+mark_model_as_no_longer_needed #WASHING
+mark_model_as_no_longer_needed #BANSHEE
+mark_model_as_no_longer_needed #OCEANIC
+mark_model_as_no_longer_needed #LANDSTAL
+mark_model_as_no_longer_needed #HMYRI
+mark_model_as_no_longer_needed #HMOST
+mark_model_as_no_longer_needed #BMOST
+mark_model_as_no_longer_needed #WFYRI
+mark_model_as_no_longer_needed #BMYRI
+mark_model_as_no_longer_needed #HAMMER
+mark_model_as_no_longer_needed #BARREL4
+clear_onscreen_timer $mission_timer
+clear_onscreen_counter $cm_repair_meter_value
 mission_has_finished
 terminate_this_script

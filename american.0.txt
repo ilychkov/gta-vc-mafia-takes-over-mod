@@ -5,6 +5,7 @@ INTSKI2 = jk you're good
 INFOCNT = Found ~1~ out of ~1~ info pickups
 INFOEVR = All info pickups found!!
 FEST_RP = Info pickups found
+FEST_LS = Cars repaired
 INFO2   = This house was given to Tommy by his rich uncle, so he could get back on his feet.
 INFO2B  = You can ~y~save your game~w~ here and ~y~store cars~w~ in the garage.
 INFO2C  = Look for missions on the map.
@@ -57,12 +58,32 @@ PAINT   = ~h~~k~~VEHICLE_ACCELERATE~~w~, ~h~~k~~VEHICLE_BRAKE~~w~, ~h~~k~~GO_LEF
 PAINT2  = ~w~Color A = ~h~~1~~w~; Color B = ~h~~1~
 PAINTNO = ~g~Not enough money! The cost is $~1~
 PAINTYE = Enjoy the new color!
+CARMHNT = Press the ~h~~k~~TOGGLE_SUBMISSIONS~ ~w~button to toggle Car Mechanic missions on or off.
+CARMECH = 'CAR MECHANIC'
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!
 GOLF_F  = ~r~You bailed!
 GOLF_W  = ~r~There goes the golf car
 GOLF_TR = Haha, trolled
+
+[CARMECH]
+CMINFO1 = ~g~Find broken down cars on the map, drive to them and fix them.
+CMINFO2 = ~g~You have 10 minutes to finish the mission before the customers phone another mechanic.
+CMHINT  = Press the~h~ ~k~~TOGGLE_SUBMISSIONS~~w~ when in the truck to cancel the mission.
+CMCANCL = ~r~Car Mechanic mission cancelled!
+CMFINE  = ~r~$~1~ damage fine
+CMFIXED = Car fixed! $~1~
+CMBACK  = ~g~Return to the truck.
+BROKEN1 = ~g~The engine is broken. Use the ~h~hammer~g~ tool to fix it.
+BROKEN2 = ~g~The car's stuck. ~h~Push~g~ it with ~y~the truck~g~ to start the engine. Be careful!
+BROKEN3 = ~g~The car's out of fule. Use the ~h~hammer~g~ tool to get fuel from ~y~the truck~g~.
+CMFAIL1 = ~r~You offended the customer! You're fired.
+CMFAIL2 = ~r~You are out of time. You're fired.
+CMFAIL3 = ~r~You destroyed our truck! You're fired.
+CMFAIL4 = ~r~You scared the customer! You're fired.
+CAR_WON = Car Mechanic Mission Complete. Your max Body Armor increased to 150.
+CMMETER = Repair:
 
 [POLICE1]
 INTRO1  = Ah, Mr. Vercetti! Well, sir, you caused us a lot of trouble back in the day.
