@@ -3833,7 +3833,7 @@ then
     end
 end
 if
-    not is_car_dead pc_police_car_2
+    is_car_dead pc_police_car_2
 then
     set_char_obj_destroy_car pc_gang_2 destroy_car pc_police_car_1
 else
@@ -4176,7 +4176,7 @@ if
     0@ == 1
 then
     if
-        not is_car_dead pc_police_car_1
+        is_car_dead pc_police_car_1
     then
         0@ = 0
     end
@@ -4204,7 +4204,7 @@ if
     1@ == 1
 then
     if or
-        not is_car_dead pc_police_car_2
+        is_car_dead pc_police_car_2
         is_char_dead pc_cop_3
     then
         1@ = 0
@@ -4227,7 +4227,7 @@ if
     2@ == 1
 then
     if
-        not is_car_dead pc_gang_car
+        is_car_dead pc_gang_car
     then
         2@ = 0
     end
@@ -4902,7 +4902,7 @@ $728 = 1
 :HJ_1198
 wait 0
 if
-    not is_car_dead $727
+    is_car_dead $727
 goto_if_false @HJ_1225
 goto @HJ_21
 
@@ -5533,7 +5533,7 @@ goto_if_false @USJ_5665
 $793 += 1
 wait 0
 if
-    not is_car_dead $789
+    is_car_dead $789
 goto_if_false @USJ_5492
 $841 = 0.0
 goto @USJ_5665
