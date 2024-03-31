@@ -50,7 +50,6 @@ create_pickup $119 = create_pickup #BRIBE type 15 at -973.7 61.0 10.4
 create_pickup $120 = create_pickup #BRIBE type 15 at -937.9 -114.1 17.0
 create_pickup $121 = create_pickup #BRIBE type 15 at -1015.9 -627.9 11.2
 create_pickup $122 = create_pickup #BRIBE type 15 at -906.3 -834.0 15.7
-create_pickup $bribe_safehouse = create_pickup #BRIBE type 15 at -287.7546 -352.2908 11.173
 
 $info_pickup_1_x = -262.1507
 $info_pickup_1_y = -376.0211
@@ -123,12 +122,12 @@ create_pickup $info_pickup_16 = create_pickup #INFO type 3 at $info_pickup_16_x 
 $info_pickups_active = 1 // for disabling the pickups while on a mission
 
 create_clothes_pickup $clothes_pickup_0 = create_clothes_pickup 1 at -253.23 -315.51 10.13
-create_clothes_pickup $clothes_pickup_1 = create_clothes_pickup 9 at -244.0 -309.1 10.0
+//create_clothes_pickup $clothes_pickup_1 = create_clothes_pickup 9 at -244.0 -309.1 10.0
 //create_clothes_pickup $clothes_pickup_2 = create_clothes_pickup 8 at -242.3 -310.6 10.0
 //create_clothes_pickup $clothes_pickup_3 = create_clothes_pickup 4 at -240.0 -311.3 10.0
 //create_clothes_pickup $clothes_pickup_4 = create_clothes_pickup 2 at -237.7 -310.6 10.0
 //create_clothes_pickup $clothes_pickup_5 = create_clothes_pickup 6 at -236.0 -309.1 10.0
-$clothes_pickup_1_available = 1
+$clothes_pickup_1_available = 0
 $clothes_pickup_2_available = 0
 $clothes_pickup_3_available = 0
 $clothes_pickup_4_available = 0
@@ -213,6 +212,7 @@ start_new_script @INTERACTIONS
 start_new_script @DROPMONEY
 start_new_script @POLICE_CHASES
 start_new_script @REPAINT
+start_new_script @SAFEHOUSE_PICKUPS
 start_new_script @GOLF_MARKER
 start_new_script @POLICE_1_MARKER
 start_new_script @CAR_MECHANIC_ACTIVATE
@@ -4597,6 +4597,28 @@ if
 goto_if_false @REPAINT_WAIT
 goto @REPAINT_WAIT_FOR_LEAVE
 
+//-------------Creating initial safe-house pickups---------------
+//
+
+:SAFEHOUSE_PICKUPS
+wait $default_wait_time
+if
+    is_player_playing $player_char
+goto_if_false @SAFEHOUSE_PICKUPS
+if or
+    not locate_player_any_means_2d $player_char 0 -246.0713 -324.6199 radius 100.0 100.0
+    $game_saving == 1
+goto_if_false @SAFEHOUSE_PICKUPS
+create_pickup $bribe_safehouse = create_pickup #BRIBE type 15 at -287.7546 -352.2908 11.173
+create_clothes_pickup $clothes_pickup_1 = create_clothes_pickup 9 at -244.0 -309.1 10.0
+$clothes_pickup_1_available = 1
+create_pickup $weapon_pickup_1 = create_pickup #NITESTICK type 15 at -251.84 -314.045 10.115
+create_pickup_with_ammo $weapon_pickup_2 = create_weapon_pickup #GRENADE 15 ammo 15 at -250.45 -312.58 10.1
+create_pickup_with_ammo $weapon_pickup_3 = create_weapon_pickup #COLT45 15 ammo 170 at -249.06 -311.115 10.085
+create_pickup_with_ammo $weapon_pickup_4 = create_weapon_pickup #UZI 15 ammo 300 at -247.67 -309.65 10.07
+terminate_this_script
+
+
 //-------------Golf mission marker script---------------
 //
 
@@ -8244,11 +8266,6 @@ create_pickup_with_ammo $2031 = create_weapon_pickup #GRENADE 15 ammo 4 at -939.
 create_pickup_with_ammo $2032 = create_weapon_pickup #PYTHON 15 ammo 12 at -1182.7 -61.1 11.4
 create_pickup_with_ammo $2033 = create_weapon_pickup #BUDDYSHOT 15 ammo 10 at -1305.2 177.1 11.4
 create_pickup_with_ammo $2034 = create_weapon_pickup #LASER 15 ammo 14 at -1114.3 -602.0 26.0
-
-create_pickup $weapon_pickup_1 = create_pickup #NITESTICK type 15 at -251.84 -314.045 10.115
-create_pickup_with_ammo $weapon_pickup_2 = create_weapon_pickup #GRENADE 15 ammo 15 at -250.45 -312.58 10.1
-create_pickup_with_ammo $weapon_pickup_3 = create_weapon_pickup #COLT45 15 ammo 170 at -249.06 -311.115 10.085
-create_pickup_with_ammo $weapon_pickup_4 = create_weapon_pickup #UZI 15 ammo 300 at -247.67 -309.65 10.07
 
 create_pickup $2037 = create_pickup #HEALTH type 1 at -113.2 -975.7 10.4
 create_pickup $2038 = create_pickup #HEALTH type 15 at -225.1 -1158.1 9.1
