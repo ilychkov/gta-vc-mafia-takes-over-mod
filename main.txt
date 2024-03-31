@@ -9601,15 +9601,15 @@ set_var_float_to_lvar_float $mission_car_10_x = 12@
 set_var_float_to_lvar_float $mission_car_10_y = 13@
 set_var_float_to_lvar_float $mission_car_10_z = 14@
 set_var_float_to_lvar_float $mission_car_10_angle = 15@
-generate_random_int_in_range $mission_car_1_type = random_int_in_ranges 1 4
-generate_random_int_in_range $mission_car_2_type = random_int_in_ranges 1 4
-generate_random_int_in_range $mission_car_3_type = random_int_in_ranges 1 4
+$mission_car_1_type = 1
+$mission_car_2_type = 2
+$mission_car_3_type = 3
 generate_random_int_in_range $mission_car_4_type = random_int_in_ranges 1 4
 generate_random_int_in_range $mission_car_5_type = random_int_in_ranges 1 4
 generate_random_int_in_range $mission_car_6_type = random_int_in_ranges 1 4
-generate_random_int_in_range $mission_car_7_type = random_int_in_ranges 1 4
-generate_random_int_in_range $mission_car_8_type = random_int_in_ranges 1 4
-generate_random_int_in_range $mission_car_9_type = random_int_in_ranges 1 4
+$mission_car_7_type = 1
+$mission_car_8_type = 2
+$mission_car_9_type = 3
 generate_random_int_in_range $mission_car_10_type = random_int_in_ranges 1 4
 if
     $mission_car_1_type <> 2
@@ -10499,7 +10499,7 @@ then
             mark_object_as_no_longer_needed $cm_barrel
         end
         request_model #BARREL4
-        while not is_model_available #BARREL4
+        while not has_model_loaded #BARREL4
             wait 0
         end
         get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car offset 0.0 -2.7 -0.5
@@ -10749,8 +10749,8 @@ request_model 5@
 
 :CAR_MECHANIC_CREATE_CAR_LOAD
 if or
-    not is_model_available 4@
-    not is_model_available 5@
+    not has_model_loaded 4@
+    not has_model_loaded 5@
 goto_if_false @CAR_MECHANIC_CREATE_CAR_LOADED
 wait 0
 goto @CAR_MECHANIC_CREATE_CAR_LOAD
@@ -10810,7 +10810,13 @@ then
         end
         get_car_health 5@ = car 0@
         3@--
-        add_one_off_sound 1 at 0.0 0.0 0.0
+        if
+            3@ > 0
+        then
+            add_one_off_sound 13 at 0.0 0.0 0.0
+        else
+            add_one_off_sound 1 at 0.0 0.0 0.0
+        end
         car_wander_randomly 0@
         TIMERA = 0
         4@ = 1
@@ -10840,6 +10846,7 @@ else
                 4@ == 0
             then
                 TIMERA = 0
+                add_one_off_sound 13 at 0.0 0.0 0.0
             end
             4@ = 1
         else
@@ -10855,6 +10862,7 @@ else
             then
                 4@ = 0
                 $cm_repair_meter_value = 0
+                add_one_off_sound 14 at 0.0 0.0 0.0
             end
         end
         if
