@@ -9200,7 +9200,7 @@ then
     remove_blip $icon_golf
     add_short_range_sprite_blip_for_coord $icon_golf = create_icon_marker_without_sphere icon_golf at $golf_x $golf_y $golf_z
     create_clothes_pickup $clothes_pickup_3 = create_clothes_pickup 4 at -240.0 -311.3 10.0
-    $clothes_pickup_3_available = 0
+    $clothes_pickup_3_available = 1
     start_new_script @CLOTH3
 end
 if
@@ -10501,7 +10501,7 @@ then
         if
             $cm_barrel <> -1
         then
-            mark_object_as_no_longer_needed $cm_barrel
+            delete_object $cm_barrel
         end
         request_model #BARREL4
         while not has_model_loaded #BARREL4
