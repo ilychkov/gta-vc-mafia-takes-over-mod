@@ -3563,13 +3563,13 @@ while 10000 > TIMERA
     if
         6@ > police_chase_min_spawn_distance
     then
-        if or
+        if or // outside of Leaf Links
             -300.0 > 0@
             0@ > 300.0
             -250.0 > 1@
             1@ > 650.0
         then
-            break // don't spawn in Leaf Links
+            break
         end
     end
     wait $default_wait_time
@@ -9172,8 +9172,8 @@ if
     $slomo == 0
 goto_if_false @GOLF_1
 play_mission_passed_tune 1
-print_with_number_big 'M_PASS' number 100 time 5000 style 1 // MISSION PASSED! $~1~
-add_score $player_char money += 100
+print_with_number_big 'M_PASS' number 1000 time 5000 style 1 // MISSION PASSED! $~1~
+add_score $player_char money += 1000
 if
     $passed_golf == 0
 then
