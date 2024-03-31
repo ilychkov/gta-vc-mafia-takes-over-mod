@@ -4165,7 +4165,7 @@ then
         2@ = 1
     end
 end
-pc_step += 4
+pc_step += 1
 
 :POLICE_CHASES_LOOP_VICTORY
 if or
