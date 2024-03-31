@@ -9271,39 +9271,43 @@ terminate_this_script
 
 :POLICE_1_START
 $onmission = 1
+set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'POLICE1'
-wait 0
 set_player_control $player_char can_move 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
-set_fading_colour 0 0 0
-switch_widescreen 1
 request_model #BOBCAT
 request_model #POLICE
-request_model #COP
+request_model #VICE5
+fade 0 500
+wait 500
 
 :POLICE_1_LOAD
 wait 0
 if and
     has_model_loaded #BOBCAT
     has_model_loaded #POLICE
-    has_model_loaded #COP
+    has_model_loaded #VICE5
 goto_if_false @POLICE_1_LOAD
-clear_area 0 at 333.704 -501.9003 9.7059 range 5.0
-create_car $objective_car = create_car #BOBCAT at 333.704 -501.9003 9.7059
-set_car_heading $objective_car z_angle_to 138.7416
+clear_area 0 at 333.704 -501.9003 9.7059 range 50.0
+set_car_density_multiplier 0.0
+set_ped_density_multiplier 0.0
+create_car $objective_car = create_car #BOBCAT at 332.4361 -512.1122 8.9081
+set_car_heading $objective_car z_angle_to 96.6302
 clear_area 0 at 359.5053 -514.6687 11.961 range 5.0
 create_car 0@ = create_car #POLICE at 359.5053 -514.6687 11.961
 set_car_heading 0@ z_angle_to 322.4988
-create_char_inside_car 1@ = create_actor 4 #COP in_car 0@
+create_char_inside_car 1@ = create_actor 4 #VICE5 in_car 0@
 car_set_idle 0@
 set_car_only_damaged_by_player 0@ immune_to_nonplayer 1
 set_car_temp_action 0@ action 2 time 1700
+switch_widescreen 1
 set_fixed_camera_position 364.6485 -526.3016 13.954 rotation 0.0 0.0 0.0
 point_camera_at_point 354.3607 -523.9194 10.0632 switchstyle 2
 set_player_coordinates $player_char at 348.0225 -524.783 8.9363
 set_player_heading $player_char z_angle_to 237.081
+fade 1 500
 wait 1700
 set_interpolation_parameters 0.0 1500
 set_fixed_camera_position 345.452 -527.0284 9.0841 rotation 0.0 0.0 0.0
@@ -9323,7 +9327,6 @@ while is_char_in_any_car 1@
 end
 turn_char_to_face_char $player_actor look_at_actor 1@
 turn_char_to_face_char 1@ look_at_actor $player_actor
-wait 500
 set_char_wait_state 1@ anim 19 wait_state_time 10000
 print_now 'INTRO1' time 3000 2
 TIMERA = 0
@@ -9352,7 +9355,7 @@ then
     $scene_step++
     print_now 'INTRO3' time 3000 2
     set_interpolation_parameters 0.0 4000
-    set_fixed_camera_position 330.9225 -525.593 10.8841 rotation 0.0 0.0 0.0
+    set_fixed_camera_position 328.5136 -520.5809 10.055 rotation 0.0 0.0 0.0
     point_camera_at_car $objective_car mode 15 switchstyle 1
 end
 
@@ -9378,10 +9381,12 @@ clear_prints
 delete_car 0@
 delete_char 1@
 mark_model_as_no_longer_needed #POLICE
-mark_model_as_no_longer_needed #COP
+mark_model_as_no_longer_needed #VICE5
 set_player_control $player_char can_move 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_car_density_multiplier 1.0
+set_ped_density_multiplier 1.0
 switch_widescreen 0
 restore_camera_jumpcut
 set_camera_behind_player
