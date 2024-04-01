@@ -8227,6 +8227,8 @@ create_car_generator $tommy_car_spawn_4 = init_car_generator #SQUALO -1 -1 force
 switch_car_generator $tommy_car_spawn_4 cars_to_generate_to 0
 create_car_generator $car_spawn_1 = init_car_generator #SPEEDER -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -799.9042 -334.4113 6.1757 angle 0.452
 switch_car_generator $car_spawn_1 cars_to_generate_to 101
+create_car_generator $car_spawn_2 = init_car_generator #CADDY -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 64.6244 -130.449 10.7467 angle 251.8817
+switch_car_generator $car_spawn_2 cars_to_generate_to 101
 
 create_pickup $2035 = create_pickup #BAT type 2 at 30.0 -1330.9 13.0
 create_pickup $1999 = create_pickup #BAT type 2 at 206.7 -1254.4 12.0
