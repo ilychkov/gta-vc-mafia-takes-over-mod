@@ -9676,6 +9676,14 @@ add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
 print_now 'CATCH' time 5000 2
 0@ = 0
 1@ = 0
+if
+    $mission_debug == 1
+then
+    set_car_coordinates $objective_car at -824.6 -890.7 10.0
+    set_car_heading $objective_car z_angle_to 180.0
+    set_car_coordinates $mission_car at -824.6 -885.7 10.0
+    set_car_heading $mission_car z_angle_to 180.0
+end
 
 :POLICE_1_CHASE
 wait 0
@@ -9778,9 +9786,9 @@ fade 0 500
 wait 500
 set_car_coordinates $objective_car at -823.3806 -892.7518 9.7753
 set_car_heading $objective_car z_angle_to 170.081
-set_car_coordinates $mission_car at -820.9627 -884.8602 10.6969
+set_car_coordinates $mission_car at -820.9627 -884.8602 9.6969
 set_car_heading $mission_car z_angle_to 203.0539
-set_car_coordinates $mission_car_2 at -797.4353 -897.4156 10.9078
+set_car_coordinates $mission_car_2 at -797.4353 -897.4156 9.9078
 set_car_heading $mission_car_2 z_angle_to 358.8944
 switch_widescreen 1
 set_fixed_camera_position -813.3096 -898.5632 11.0903 rotation 0.0 0.0 0.0
@@ -9790,10 +9798,10 @@ delete_object $mission_obj_2
 delete_object $mission_obj_3
 delete_object $mission_obj_4
 delete_object $mission_obj_5
-create_object $mission_obj_1 = create_object #GUNBOX at -824.9583 -887.8648 10.1002
+create_object $mission_obj_1 = create_object #CARDBOARDBOX2 at -824.9583 -887.8648 10.1002
 create_object $mission_obj_2 = create_object #CARDBOARDBOX2 at -826.6628 -890.5682 10.1015
 create_object $mission_obj_3 = create_object #CARDBOARDBOX2 at -825.9723 -896.3 10.1006
-create_object $mission_obj_4 = create_object #GUNBOX at -820.9484 -890.097 9.9272
+create_object $mission_obj_4 = create_object #CARDBOARDBOX2 at -820.9484 -890.097 9.9272
 create_object $mission_obj_5 = create_object #CARDBOARDBOX2 at -823.7512 -896.5778 9.9291
 set_object_heading $mission_obj_1 z_angle_to 10.0
 set_object_heading $mission_obj_2 z_angle_to 120.0
@@ -9808,6 +9816,150 @@ set_police_ignore_player $player_char ignored_by_cops_state_to 0
 switch_widescreen 0
 restore_camera_jumpcut
 set_camera_behind_player
+add_blip_for_object $mission_obj_1_marker = create_marker_above_object $mission_obj_1
+add_blip_for_object $mission_obj_2_marker = create_marker_above_object $mission_obj_2
+add_blip_for_object $mission_obj_3_marker = create_marker_above_object $mission_obj_3
+add_blip_for_object $mission_obj_4_marker = create_marker_above_object $mission_obj_4
+add_blip_for_object $mission_obj_5_marker = create_marker_above_object $mission_obj_5
+0@ = 0
+1@ = 0
+2@ = 0
+3@ = 0
+4@ = 0
+print_now 'COLLECT' time 5000 2
+
+:POLICE_1_COLLECT
+wait 0
+if
+    not is_car_dead $objective_car
+goto_if_false @POLICE_1_WRECKED
+get_offset_from_car_in_world_coords 13@ 14@ 15@ from_car $objective_car offset 0.0 -0.8 0.0
+draw_corona 2.0 type 6 lensflares 0 with_color 255 137 205 at 13@ 14@ 15@
+if
+    0@ == 0
+then
+    if or
+        locate_object_3d $mission_obj_1 near_point 13@ 14@ 15@ radius 2.0 2.0 2.0 flag 0
+        has_object_been_damaged $mission_obj_1
+    then
+        0@ = 1
+        delete_object $mission_obj_1
+        create_object $mission_obj_1 = create_object #GUNBOX at 0.0 0.0 0.0
+        set_object_collision $mission_obj_1 collision_detection 0
+        set_object_dynamic $mission_obj_1 toggle_in_moving_list 0
+        add_one_off_sound 1 at 0.0 0.0 0.0
+        remove_blip $mission_obj_1_marker
+    end
+end
+if
+    1@ == 0
+then
+    if or
+        locate_object_3d $mission_obj_2 near_point 13@ 14@ 15@ radius 2.0 2.0 2.0 flag 0
+        has_object_been_damaged $mission_obj_2
+    then
+        1@ = 1
+        delete_object $mission_obj_2
+        create_object $mission_obj_2 = create_object #CARDBOARDBOX2 at 0.0 0.0 0.0
+        set_object_collision $mission_obj_2 collision_detection 0
+        set_object_dynamic $mission_obj_2 toggle_in_moving_list 0
+        add_one_off_sound 1 at 0.0 0.0 0.0
+        remove_blip $mission_obj_2_marker
+    end
+end
+if
+    2@ == 0
+then
+    if or
+        locate_object_3d $mission_obj_3 near_point 13@ 14@ 15@ radius 2.0 2.0 2.0 flag 0
+        has_object_been_damaged $mission_obj_3
+    then
+        2@ = 1
+        delete_object $mission_obj_3
+        create_object $mission_obj_3 = create_object #CARDBOARDBOX2 at 0.0 0.0 0.0
+        set_object_collision $mission_obj_3 collision_detection 0
+        set_object_dynamic $mission_obj_3 toggle_in_moving_list 0
+        add_one_off_sound 1 at 0.0 0.0 0.0
+        remove_blip $mission_obj_3_marker
+    end
+end
+if
+    3@ == 0
+then
+    if or
+        locate_object_3d $mission_obj_4 near_point 13@ 14@ 15@ radius 2.0 2.0 2.0 flag 0
+        has_object_been_damaged $mission_obj_4
+    then
+        3@ = 1
+        delete_object $mission_obj_4
+        create_object $mission_obj_4 = create_object #GUNBOX at 0.0 0.0 0.0
+        set_object_collision $mission_obj_4 collision_detection 0
+        set_object_dynamic $mission_obj_4 toggle_in_moving_list 0
+        add_one_off_sound 1 at 0.0 0.0 0.0
+        remove_blip $mission_obj_4_marker
+    end
+end
+if
+    4@ == 0
+then
+    if or
+        locate_object_3d $mission_obj_5 near_point 13@ 14@ 15@ radius 2.0 2.0 2.0 flag 0
+        has_object_been_damaged $mission_obj_5
+    then
+        4@ = 1
+        delete_object $mission_obj_5
+        create_object $mission_obj_5 = create_object #CARDBOARDBOX2 at 0.0 0.0 0.0
+        set_object_collision $mission_obj_5 collision_detection 0
+        set_object_dynamic $mission_obj_5 toggle_in_moving_list 0
+        add_one_off_sound 1 at 0.0 0.0 0.0
+        remove_blip $mission_obj_5_marker
+    end
+end
+if
+    0@ == 1
+then
+    place_object_relative_to_car $mission_obj_1 relative_to_car $objective_car offset -0.45 -0.85 0.25
+end
+if
+    1@ == 1
+then
+    place_object_relative_to_car $mission_obj_2 relative_to_car $objective_car offset 0.4 -0.95 0.2
+end
+if
+    2@ == 1
+then
+    place_object_relative_to_car $mission_obj_3 relative_to_car $objective_car offset -0.35 -1.65 0.15
+end
+if
+    3@ == 1
+then
+    place_object_relative_to_car $mission_obj_4 relative_to_car $objective_car offset 0.45 -1.85 0.3
+end
+if
+    4@ == 1
+then
+    if
+        1@ == 0
+    then
+        place_object_relative_to_car $mission_obj_5 relative_to_car $objective_car offset 0.4 -0.95 0.2
+    else
+        if
+            2@ == 0
+        then
+            place_object_relative_to_car $mission_obj_5 relative_to_car $objective_car offset -0.35 -1.65 0.15
+        else
+            place_object_relative_to_car $mission_obj_5 relative_to_car $objective_car offset 0.0 -1.1 0.9
+        end
+    end
+end
+if and
+    0@ == 1
+    1@ == 1
+    2@ == 1
+    3@ == 1
+    4@ == 1
+goto_if_false @POLICE_1_COLLECT
+print_now 'GOBACK' time 5000 2
 wait 5000
 goto @POLICE_1_PASS
 return
@@ -9856,6 +10008,11 @@ delete_object $mission_obj_9
 delete_object $mission_obj_10
 remove_blip $objective_car_marker
 remove_blip $objective_point_marker
+remove_blip $mission_obj_1_marker
+remove_blip $mission_obj_2_marker
+remove_blip $mission_obj_3_marker
+remove_blip $mission_obj_4_marker
+remove_blip $mission_obj_5_marker
 mark_model_as_no_longer_needed #BOBCAT
 mark_model_as_no_longer_needed #WALTON
 mark_model_as_no_longer_needed #POLICE
