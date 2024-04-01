@@ -1901,7 +1901,7 @@ if
     $npc_diaz_interacted == 0
 then
     if
-        locate_char_any_means_char_3d $player_actor near_actor $npc_diaz radius 3.0 3.0 3.0 sphere 0
+        locate_char_any_means_char_3d $player_actor near_actor $npc_diaz radius 5.0 5.0 5.0 sphere 0
     then
         clear_mission_audio 1
         load_mission_audio 'CUB4_16' as 1
@@ -2002,7 +2002,7 @@ request_model #GUNBOX
 request_model #WOODENBOX
 request_model #BARREL2
 request_model #BARREL4
-request_model #TRAFFICCONE
+request_model #CARDBOARDBOX2
 
 :NPCS_WORKERS_INIT_LOAD
 wait 0
@@ -2023,7 +2023,7 @@ if and
     has_model_loaded #WOODENBOX
     has_model_loaded #BARREL2
     has_model_loaded #BARREL4
-    has_model_loaded #TRAFFICCONE
+    has_model_loaded #CARDBOARDBOX2
 goto_if_false @NPCS_WORKERS_INIT_LOAD
 create_car $npc_workers_car = create_car #BENSON at -729.67 -1169.09 9.63
 set_car_heading $npc_workers_car z_angle_to 111.15
@@ -2062,7 +2062,7 @@ mark_model_as_no_longer_needed #GUNBOX
 mark_model_as_no_longer_needed #WOODENBOX
 mark_model_as_no_longer_needed #BARREL2
 mark_model_as_no_longer_needed #BARREL4
-mark_model_as_no_longer_needed #TRAFFICCONE
+mark_model_as_no_longer_needed #CARDBOARDBOX2
 $npcs_workers_state = 0
 return
 
@@ -2145,7 +2145,7 @@ then
     if
         13@ > 0.8
     then
-        14@ = #TRAFFICCONE
+        14@ = #CARDBOARDBOX2
     end
     request_model 14@
     while not has_model_loaded 14@
@@ -2341,7 +2341,7 @@ if
     $npcs_viceport_garage_interacted == 0
 then
     if
-        locate_char_any_means_char_3d $player_actor near_actor $npc_lance radius 3.0 3.0 3.0 sphere 0
+        locate_char_any_means_char_3d $player_actor near_actor $npc_lance radius 5.0 5.0 5.0 sphere 0
     then
         set_mission_audio_position 1 location -835.6341 -1491.0969 11.1087
         play_mission_audio 1
