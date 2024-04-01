@@ -138,6 +138,9 @@ add_short_range_sprite_blip_for_coord $music_marker = create_icon_marker_without
 $music_found = 0
 
 set_garage $681 = create_garage_type 5 door -914.129 -1263.54 10.706 to -906.3 -1266.9 14.421 depth -907.137 -1246.626
+set_garage $682 = create_garage_type 15 door -1014.341 -857.732 6.325 to -1014.341 -841.532 10.885 depth -1001.315 -857.732
+set_rotating_garage_door $682
+open_garage $682
 set_garage $683 = create_garage_type 5 door -886.157 -115.158 9.992 to -876.7 -119.83 15.58 depth -882.699 -108.312
 set_garage $684 = create_garage_type 5 door 323.9 427.4 10.0 to 313.9 430.53 15.7 depth 326.3 434.5
 set_garage $685 = create_garage_type 5 door -7.55 -1253.77 9.322 to 2.64 -1253.7 14.4 depth -7.55 -1261.2
@@ -4404,9 +4407,6 @@ goto @POLICE_CHASES_WAIT
 :REPAINT
 script_name 'REPAINT'
 set_deatharrest_state 0
-set_garage $682 = create_garage_type 15 door -1014.341 -857.732 6.325 to -1014.341 -841.532 10.885 depth -1001.315 -857.732
-set_rotating_garage_door $682
-open_garage $682
 const repaint_cost = -200
 const repaint_cost_minus_one = 199
 
