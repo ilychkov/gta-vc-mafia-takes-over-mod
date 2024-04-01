@@ -96,4 +96,6 @@ TRAVEL  = ~g~Get to the restaurant.
 GETBACK = ~g~Get back into the car!
 SCENE1  = It's for a friend.
 CATCH   = Don't let him get away!!
+CATCHF  = He got away!
+CATCHW  = Well done! Collect the boxes back into the car.
 

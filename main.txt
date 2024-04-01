@@ -25,6 +25,7 @@ $start_x = -256.4567
 $start_y = -375.562
 $start_z = 10.4109
 $skip_intro = 0
+$mission_debug = 0
 {$I incl.debug.txt}
 
 request_collision $start_x $start_y
@@ -1901,7 +1902,7 @@ if
     $npc_diaz_interacted == 0
 then
     if
-        locate_char_any_means_char_3d $player_actor near_actor $npc_diaz radius 5.0 5.0 5.0 sphere 0
+        locate_char_any_means_char_3d $player_actor near_actor $npc_diaz radius 3.0 3.0 3.0 sphere 0
     then
         clear_mission_audio 1
         load_mission_audio 'CUB4_16' as 1
@@ -2002,7 +2003,7 @@ request_model #GUNBOX
 request_model #WOODENBOX
 request_model #BARREL2
 request_model #BARREL4
-request_model #CARDBOARDBOX2
+request_model #TRAFFICCONE
 
 :NPCS_WORKERS_INIT_LOAD
 wait 0
@@ -2023,7 +2024,7 @@ if and
     has_model_loaded #WOODENBOX
     has_model_loaded #BARREL2
     has_model_loaded #BARREL4
-    has_model_loaded #CARDBOARDBOX2
+    has_model_loaded #TRAFFICCONE
 goto_if_false @NPCS_WORKERS_INIT_LOAD
 create_car $npc_workers_car = create_car #BENSON at -729.67 -1169.09 9.63
 set_car_heading $npc_workers_car z_angle_to 111.15
@@ -2062,7 +2063,7 @@ mark_model_as_no_longer_needed #GUNBOX
 mark_model_as_no_longer_needed #WOODENBOX
 mark_model_as_no_longer_needed #BARREL2
 mark_model_as_no_longer_needed #BARREL4
-mark_model_as_no_longer_needed #CARDBOARDBOX2
+mark_model_as_no_longer_needed #TRAFFICCONE
 $npcs_workers_state = 0
 return
 
@@ -2145,7 +2146,7 @@ then
     if
         13@ > 0.8
     then
-        14@ = #CARDBOARDBOX2
+        14@ = #TRAFFICCONE
     end
     request_model 14@
     while not has_model_loaded 14@
@@ -2341,7 +2342,7 @@ if
     $npcs_viceport_garage_interacted == 0
 then
     if
-        locate_char_any_means_char_3d $player_actor near_actor $npc_lance radius 5.0 5.0 5.0 sphere 0
+        locate_char_any_means_char_3d $player_actor near_actor $npc_lance radius 3.0 3.0 3.0 sphere 0
     then
         set_mission_audio_position 1 location -835.6341 -1491.0969 11.1087
         play_mission_audio 1
@@ -8227,8 +8228,6 @@ create_car_generator $tommy_car_spawn_4 = init_car_generator #SQUALO -1 -1 force
 switch_car_generator $tommy_car_spawn_4 cars_to_generate_to 0
 create_car_generator $car_spawn_1 = init_car_generator #SPEEDER -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -799.9042 -334.4113 6.1757 angle 0.452
 switch_car_generator $car_spawn_1 cars_to_generate_to 101
-create_car_generator $car_spawn_2 = init_car_generator #CADDY -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 64.6244 -130.449 10.7467 angle 251.8817
-switch_car_generator $car_spawn_2 cars_to_generate_to 101
 
 create_pickup $2035 = create_pickup #BAT type 2 at 30.0 -1330.9 13.0
 create_pickup $1999 = create_pickup #BAT type 2 at 206.7 -1254.4 12.0
@@ -9297,6 +9296,7 @@ set_car_density_multiplier 0.0
 set_ped_density_multiplier 0.0
 create_car $objective_car = create_car #BOBCAT at 332.4361 -512.1122 8.9081
 set_car_heading $objective_car z_angle_to 96.6302
+set_can_burst_car_tyres $objective_car tires_vulnerable 0
 create_car 0@ = create_car #POLICE at 359.5053 -514.6687 11.961
 set_car_heading 0@ z_angle_to 322.4988
 create_char_inside_car 1@ = create_actor 4 #VICE3 in_car 0@
@@ -9309,7 +9309,11 @@ point_camera_at_point 354.3607 -523.9194 10.0632 switchstyle 2
 set_player_coordinates $player_char at 348.0225 -524.783 8.9363
 set_player_heading $player_char z_angle_to 237.081
 fade 1 500
-wait 1700
+if
+    $mission_debug == 0
+then
+    wait 1700
+end
 set_interpolation_parameters 0.0 1500
 set_fixed_camera_position 345.452 -527.0284 9.0841 rotation 0.0 0.0 0.0
 point_camera_at_point 350.2682 -525.0466 9.9611 switchstyle 1
@@ -9332,6 +9336,9 @@ set_char_wait_state 1@ anim 19 wait_state_time 20000
 print_now 'INTRO1' time 5000 2
 TIMERA = 0
 $scene_step = 0
+if
+    $mission_debug == 0
+goto_if_false @POLICE_1_INTRO_END
 
 :POLICE_1_INTRO_LOOP
 wait 0
@@ -9399,6 +9406,13 @@ add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
 fade 1 1000
 wait 1000
 print_now 'GETIN' time 5000 2
+if
+    $mission_debug == 1
+then
+    warp_char_into_car $player_actor in_car $objective_car
+    set_car_coordinates $objective_car at -841.9927 -632.9435 10.8985
+    wait 2000
+end
 
 :POLICE_1_WAITING_CAR
 wait 0
@@ -9435,16 +9449,21 @@ set_player_control $player_char can_move 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
 clear_prints
-fade 0 500
-wait 500
+remove_blip $objective_point_marker
+request_model #POLICE
 request_model #WMYPI
+request_model #COP
 request_model #GUNBOX
 request_model #CARDBOARDBOX2
 load_special_character 2 'S_KEEP'
+fade 0 500
+wait 500
 while true
     wait 0
     if and
+        has_model_loaded #POLICE
         has_model_loaded #WMYPI
+        has_model_loaded #COP
         has_model_loaded #GUNBOX
         has_model_loaded #CARDBOARDBOX2
         has_special_character_loaded 2
@@ -9490,10 +9509,21 @@ unload_special_character 2
 create_char $mission_actor_2 = create_actor_pedtype 4 model #WMYPI at -846.0 -635.0 16.0
 set_char_heading $mission_actor_2 z_angle_to 270.0
 clear_char_threat_search $mission_actor_2
+set_char_proofs $mission_actor_2 immunities BP 1 FP 1 EP 1 CP 1 MP 1
 mark_model_as_no_longer_needed #WMYPI
+create_car $mission_car_2 = create_car #POLICE at -749.8191 -923.2279 9.5498
+set_car_heading $mission_car_2 z_angle_to 86.5488
+switch_car_siren $mission_car_2 siren = 1
+create_char_inside_car $mission_actor_3 = create_actor 4 #COP in_car $mission_car_2
+freeze_car_position $mission_car_2 in_current_position 1
+mark_model_as_no_longer_needed #POLICE
+mark_model_as_no_longer_needed #COP
 fade 1 500
 0@ = 0
 TIMERA = 0
+if
+    $mission_debug == 0
+goto_if_false @POLICE_1_SCENE_1_SKIP
 
 :POLICE_1_SCENE_1
 wait 0
@@ -9633,7 +9663,152 @@ set_camera_behind_player
 set_player_control $player_char can_move 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
-wait 2000
+set_car_proofs $objective_car immunities 1 1 1 1 1
+set_car_heavy $objective_car very_heavy 1
+set_car_cruise_speed $objective_car max_speed_to 100.0
+set_car_driving_style $objective_car traffic_behavior_to 3
+set_car_coordinates $objective_car at -835.6672 -635.2399 9.6925
+set_car_heading $objective_car z_angle_to 190.6025
+set_car_forward_speed $objective_car speed_instantly 10.0
+set_car_traction $objective_car improve_handling 2.0
+car_goto_coordinates_accurate $objective_car drive_to_point -824.6089 -895.7141 11.0995
+add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
+print_now 'CATCH' time 5000 2
+0@ = 0
+1@ = 0
+
+:POLICE_1_CHASE
+wait 0
+if
+    not is_car_dead $objective_car
+goto_if_false @POLICE_1_WRECKED
+if
+    not locate_player_any_means_car_2d $player_char near_car $objective_car radius 100.0 100.0 0
+then
+    print_now 'CATCHF' time 5000 2
+    goto @POLICE_1_FAIL
+end
+if
+    0@ <> 10
+then
+    place_object_relative_to_car $mission_obj_1 relative_to_car $objective_car offset -0.45 -0.85 0.25
+    place_object_relative_to_car $mission_obj_2 relative_to_car $objective_car offset 0.4 -0.95 0.2
+    place_object_relative_to_car $mission_obj_3 relative_to_car $objective_car offset -0.35 -1.65 0.15
+    place_object_relative_to_car $mission_obj_4 relative_to_car $objective_car offset 0.45 -1.85 0.3
+    place_object_relative_to_car $mission_obj_5 relative_to_car $objective_car offset 0.0 -1.1 0.9
+end
+if
+    0@ == 0
+then
+    if
+        locate_player_any_means_car_2d $player_char near_car $objective_car radius 20.0 20.0 0
+    then
+        set_car_cruise_speed $objective_car max_speed_to 100.0
+    else
+        set_car_cruise_speed $objective_car max_speed_to 25.0
+    end
+end
+if and
+    0@ == 0
+    locate_car_2d $objective_car sphere 0 near_point -824.6089 -895.7141 radius 100.0 100.0
+then
+    freeze_car_position $mission_car_2 in_current_position 0
+    set_car_forward_speed $mission_car_2 speed_instantly 20.0
+    set_car_cruise_speed $mission_car_2 max_speed_to 100.0
+    set_car_driving_style $mission_car_2 traffic_behavior_to 3
+    car_goto_coordinates_accurate $mission_car_2 drive_to_point -824.6089 -895.7141 11.0995
+    set_car_cruise_speed $objective_car max_speed_to 100.0
+    0@ = 1
+end
+if and
+    0@ == 1
+    locate_car_2d $objective_car sphere 0 near_point -824.6089 -895.7141 radius 10.0 10.0
+then
+    set_car_proofs $objective_car immunities 0 0 0 0 0
+    set_car_heavy $objective_car very_heavy 0
+    get_car_health 1@ = car $objective_car
+    1@--
+    0@ = 2
+end
+if and
+    not is_car_health_greater $objective_car health > 1@
+    0@ > 0
+    10 > 0@
+then
+    set_char_obj_flee_player_on_foot_always $mission_actor_2 avoid_player $player_char
+    car_goto_coordinates_accurate $mission_car_2 drive_to_point 0.0 0.0 0.0
+    set_car_density_multiplier 1.0
+    set_ped_density_multiplier 1.0
+    delete_object $mission_obj_1
+    delete_object $mission_obj_2
+    delete_object $mission_obj_3
+    delete_object $mission_obj_4
+    delete_object $mission_obj_5
+    create_object $mission_obj_1 = create_object #GUNBOX at 0.0 0.0 0.0
+    create_object $mission_obj_2 = create_object #CARDBOARDBOX2 at 0.0 0.0 0.0
+    create_object $mission_obj_3 = create_object #CARDBOARDBOX2 at 0.0 0.0 0.0
+    create_object $mission_obj_4 = create_object #GUNBOX at 0.0 0.0 0.0
+    create_object $mission_obj_5 = create_object #CARDBOARDBOX2 at 0.0 0.0 0.0
+    place_object_relative_to_car $mission_obj_1 relative_to_car $objective_car offset -0.7 -0.8 0.5
+    place_object_relative_to_car $mission_obj_2 relative_to_car $objective_car offset 0.7 -0.8 0.5
+    place_object_relative_to_car $mission_obj_3 relative_to_car $objective_car offset -0.7 -1.8 0.5
+    place_object_relative_to_car $mission_obj_4 relative_to_car $objective_car offset 0.7 -1.8 0.5
+    place_object_relative_to_car $mission_obj_5 relative_to_car $objective_car offset 0.0 -1.1 1.0
+    set_object_velocity $mission_obj_1 distance -5.0 0.0 10.0
+    set_object_velocity $mission_obj_2 distance 5.0 0.0 10.0
+    set_object_velocity $mission_obj_3 distance 0.0 -5.0 10.0
+    set_object_velocity $mission_obj_4 distance -5.0 5.0 10.0
+    set_object_velocity $mission_obj_5 distance 5.0 5.0 10.0
+    burst_car_tyre $objective_car deflate_tire 1
+    burst_car_tyre $objective_car deflate_tire 2
+    set_car_traction $objective_car improve_handling 1.0
+    lock_car_doors $objective_car door_status_to 1
+    0@ = 10
+    TIMERA = 0
+end
+if and
+    0@ == 10
+    TIMERA > 2000
+goto_if_false @POLICE_1_CHASE
+set_player_control $player_char can_move 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+remove_blip $objective_car_marker
+fade 0 500
+wait 500
+set_car_coordinates $objective_car at -823.3806 -892.7518 9.7753
+set_car_heading $objective_car z_angle_to 170.081
+set_car_coordinates $mission_car at -820.9627 -884.8602 10.6969
+set_car_heading $mission_car z_angle_to 203.0539
+set_car_coordinates $mission_car_2 at -797.4353 -897.4156 10.9078
+set_car_heading $mission_car_2 z_angle_to 358.8944
+switch_widescreen 1
+set_fixed_camera_position -813.3096 -898.5632 11.0903 rotation 0.0 0.0 0.0
+point_camera_at_car $objective_car mode 15 switchstyle 2
+delete_object $mission_obj_1
+delete_object $mission_obj_2
+delete_object $mission_obj_3
+delete_object $mission_obj_4
+delete_object $mission_obj_5
+create_object $mission_obj_1 = create_object #GUNBOX at -824.9583 -887.8648 10.1002
+create_object $mission_obj_2 = create_object #CARDBOARDBOX2 at -826.6628 -890.5682 10.1015
+create_object $mission_obj_3 = create_object #CARDBOARDBOX2 at -825.9723 -896.3 10.1006
+create_object $mission_obj_4 = create_object #GUNBOX at -820.9484 -890.097 9.9272
+create_object $mission_obj_5 = create_object #CARDBOARDBOX2 at -823.7512 -896.5778 9.9291
+set_object_heading $mission_obj_1 z_angle_to 10.0
+set_object_heading $mission_obj_2 z_angle_to 120.0
+set_object_heading $mission_obj_3 z_angle_to 40.0
+set_object_heading $mission_obj_4 z_angle_to 330.0
+set_object_heading $mission_obj_5 z_angle_to 300.0
+fade 1 500
+wait 3000
+set_player_control $player_char can_move 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+wait 5000
 goto @POLICE_1_PASS
 return
 
@@ -9665,18 +9840,27 @@ return
 $onmission = 0
 mark_car_as_no_longer_needed $objective_car
 mark_car_as_no_longer_needed $mission_car
+mark_car_as_no_longer_needed $mission_car_2
 mark_char_as_no_longer_needed $mission_actor_1
 mark_char_as_no_longer_needed $mission_actor_2
-mark_object_as_no_longer_needed $mission_obj_1
-mark_object_as_no_longer_needed $mission_obj_2
-mark_object_as_no_longer_needed $mission_obj_3
-mark_object_as_no_longer_needed $mission_obj_4
-mark_object_as_no_longer_needed $mission_obj_5
+mark_char_as_no_longer_needed $mission_actor_3
+delete_object $mission_obj_1
+delete_object $mission_obj_2
+delete_object $mission_obj_3
+delete_object $mission_obj_4
+delete_object $mission_obj_5
+delete_object $mission_obj_6
+delete_object $mission_obj_7
+delete_object $mission_obj_8
+delete_object $mission_obj_9
+delete_object $mission_obj_10
 remove_blip $objective_car_marker
 remove_blip $objective_point_marker
 mark_model_as_no_longer_needed #BOBCAT
 mark_model_as_no_longer_needed #WALTON
+mark_model_as_no_longer_needed #POLICE
 mark_model_as_no_longer_needed #WMYPI
+mark_model_as_no_longer_needed #COP
 mark_model_as_no_longer_needed #GUNBOX
 mark_model_as_no_longer_needed #CARDBOARDBOX2
 set_car_density_multiplier 1.0
