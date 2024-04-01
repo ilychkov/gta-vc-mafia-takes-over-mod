@@ -9326,8 +9326,8 @@ while is_char_in_any_car 1@
 end
 turn_char_to_face_char $player_actor look_at_actor 1@
 turn_char_to_face_char 1@ look_at_actor $player_actor
-set_char_wait_state 1@ anim 19 wait_state_time 10000
-print_now 'INTRO1' time 3000 2
+set_char_wait_state 1@ anim 19 wait_state_time 20000
+print_now 'INTRO1' time 5000 2
 TIMERA = 0
 $scene_step = 0
 
@@ -9341,18 +9341,20 @@ end
 
 if and
     $scene_step == 0
-    TIMERA >= 3000
+    TIMERA >= 5000
 then
     $scene_step++
-    print_now 'INTRO2' time 3000 2
+    TIMERA = 0
+    print_now 'INTRO2' time 4000 2
 end
 
 if and
     $scene_step == 1
-    TIMERA >= 6000
+    TIMERA >= 4000
 then
     $scene_step++
-    print_now 'INTRO3' time 3000 2
+    TIMERA = 0
+    print_now 'INTRO3' time 6000 2
     set_interpolation_parameters 0.0 4000
     set_fixed_camera_position 328.5136 -520.5809 10.055 rotation 0.0 0.0 0.0
     point_camera_at_car $objective_car mode 15 switchstyle 1
@@ -9360,14 +9362,7 @@ end
 
 if and
     $scene_step == 2
-    TIMERA >= 9000
-then
-    $scene_step++
-    print_now 'INTRO4' time 4000 2
-end
-if and
-    $scene_step == 3
-    TIMERA >= 13000
+    TIMERA >= 6000
 then
     goto @POLICE_1_INTRO_END
 end
