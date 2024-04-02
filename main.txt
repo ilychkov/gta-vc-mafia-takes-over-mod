@@ -9389,11 +9389,8 @@ request_model #WALTON
 while not has_model_loaded #WALTON
     wait 0
 end
-create_car $mission_car = create_car #WALTON at -842.0252 -623.7845 9.8526
+create_car $mission_car = create_car #WALTON at -842.0252 -623.7845 10.1005
 set_car_heading $mission_car z_angle_to 184.3139
-freeze_car_position $mission_car in_current_position 1
-set_car_proofs $mission_car immunities 1 1 1 1 1
-set_can_burst_car_tyres $mission_car tires_vulnerable 0
 set_player_control $player_char can_move 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
@@ -9482,6 +9479,8 @@ turn_char_to_face_coord $player_actor to_look_at_spot -843.4048 -634.9933 9.9503
 set_car_coordinates $objective_car at -843.4048 -634.9933 9.9503
 set_car_heading $objective_car z_angle_to 188.753
 boat_stop $objective_car
+set_car_coordinates $mission_car at -842.0252 -623.7845 10.1005
+set_car_heading $mission_car z_angle_to 184.3139
 create_object $mission_obj_1 = create_object #GUNBOX at 0.0 0.0 0.0
 create_object $mission_obj_2 = create_object #CARDBOARDBOX2 at 0.0 0.0 0.0
 create_object $mission_obj_3 = create_object #CARDBOARDBOX2 at 0.0 0.0 0.0
@@ -9511,8 +9510,8 @@ set_char_heading $mission_actor_2 z_angle_to 270.0
 clear_char_threat_search $mission_actor_2
 set_char_proofs $mission_actor_2 immunities BP 1 FP 1 EP 1 CP 1 MP 1
 mark_model_as_no_longer_needed #WMYPI
-create_car $mission_car_2 = create_car #POLICE at -749.8191 -923.2279 9.5498
-set_car_heading $mission_car_2 z_angle_to 86.5488
+create_car $mission_car_2 = create_car #POLICE at -781.5236 -920.9225 9.0674
+set_car_heading $mission_car_2 z_angle_to 70.2566
 switch_car_siren $mission_car_2 siren = 1
 create_char_inside_car $mission_actor_3 = create_actor 4 #COP in_car $mission_car_2
 freeze_car_position $mission_car_2 in_current_position 1
@@ -9718,13 +9717,14 @@ then
 end
 if and
     0@ == 0
-    locate_car_2d $objective_car sphere 0 near_point -824.6089 -895.7141 radius 100.0 100.0
+    locate_car_2d $objective_car sphere 0 near_point -824.6089 -895.7141 radius 50.0 50.0
 then
     freeze_car_position $mission_car_2 in_current_position 0
     set_car_forward_speed $mission_car_2 speed_instantly 20.0
     set_car_cruise_speed $mission_car_2 max_speed_to 100.0
     set_car_driving_style $mission_car_2 traffic_behavior_to 3
-    car_goto_coordinates_accurate $mission_car_2 drive_to_point -824.6089 -895.7141 11.0995
+    set_car_straight_line_distance $mission_car_2 abandon_path_radius 255
+    car_goto_coordinates_accurate $mission_car_2 drive_to_point -820.8316 -896.5915 10.9268
     set_car_cruise_speed $objective_car max_speed_to 100.0
     0@ = 1
 end
@@ -9744,6 +9744,7 @@ if and
     10 > 0@
 then
     set_char_obj_flee_player_on_foot_always $mission_actor_2 avoid_player $player_char
+    set_car_straight_line_distance $mission_car_2 abandon_path_radius 3
     car_goto_coordinates_accurate $mission_car_2 drive_to_point 0.0 0.0 0.0
     set_car_density_multiplier 1.0
     set_ped_density_multiplier 1.0
@@ -9767,10 +9768,12 @@ then
     set_object_velocity $mission_obj_3 distance 0.0 -5.0 10.0
     set_object_velocity $mission_obj_4 distance -5.0 5.0 10.0
     set_object_velocity $mission_obj_5 distance 5.0 5.0 10.0
+    set_can_burst_car_tyres $objective_car tires_vulnerable 1
     burst_car_tyre $objective_car deflate_tire 1
     burst_car_tyre $objective_car deflate_tire 2
     set_car_traction $objective_car improve_handling 1.0
     lock_car_doors $objective_car door_status_to 1
+    set_car_health $objective_car health_to 400
     0@ = 10
     TIMERA = 0
 end
@@ -9826,7 +9829,16 @@ add_blip_for_object $mission_obj_5_marker = create_marker_above_object $mission_
 2@ = 0
 3@ = 0
 4@ = 0
-print_now 'COLLECT' time 5000 2
+print_now 'CATCHW' time 5000 2
+if
+    $mission_debug == 1
+then
+    set_object_coordinates $mission_obj_1 at -823.3806 -892.7518 10.0
+    set_object_coordinates $mission_obj_2 at -823.3806 -892.7518 10.5
+    set_object_coordinates $mission_obj_3 at -823.3806 -892.7518 11.0
+    set_object_coordinates $mission_obj_4 at -823.3806 -892.7518 11.5
+    set_object_coordinates $mission_obj_5 at -823.3806 -892.7518 12.0
+end
 
 :POLICE_1_COLLECT
 wait 0
@@ -9959,10 +9971,185 @@ if and
     3@ == 1
     4@ == 1
 goto_if_false @POLICE_1_COLLECT
-print_now 'GOBACK' time 5000 2
-wait 5000
+add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
+print_now 'GETIN2' time 5000 2
+mark_car_as_no_longer_needed $mission_car_2
+mark_char_as_no_longer_needed $mission_actor_3
+if
+    $mission_debug == 1
+then
+    warp_char_into_car $player_actor in_car $objective_car
+    set_car_coordinates $objective_car at 389.8 -455.5 8.9
+    wait 2000
+end
+0@ = 0
+
+:POLICE_1_TRAVEL_2
+wait 0
+if
+    not is_car_dead $objective_car
+goto_if_false @POLICE_1_WRECKED
+place_object_relative_to_car $mission_obj_1 relative_to_car $objective_car offset -0.45 -0.85 0.25
+place_object_relative_to_car $mission_obj_2 relative_to_car $objective_car offset 0.4 -0.95 0.2
+place_object_relative_to_car $mission_obj_3 relative_to_car $objective_car offset -0.35 -1.65 0.15
+place_object_relative_to_car $mission_obj_4 relative_to_car $objective_car offset 0.45 -1.85 0.3
+place_object_relative_to_car $mission_obj_5 relative_to_car $objective_car offset 0.0 -1.1 0.9
+if
+    0@ == 0
+then
+    if
+        locate_player_any_means_car_2d $player_char near_car $objective_car radius 35.0 35.0 0
+    goto_if_false @POLICE_1_ABANDONED
+    if
+        is_player_in_car $player_char in_car $objective_car
+    goto_if_false @POLICE_1_TRAVEL_2
+    remove_blip $objective_car_marker
+    add_blip_for_coord $objective_point_marker = create_checkpoint_at 389.8 -455.5 8.9
+    print_now 'GOBACK' time 5000 2
+    0@ = 1
+else
+    if
+        not is_player_in_car $player_char in_car $objective_car
+    then
+        print_now 'GETBACK' time 5000 2
+        remove_blip $objective_point_marker
+        add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
+        0@ = 0
+        jump @POLICE_1_TRAVEL_2
+    end
+    if
+        not locate_stopped_player_in_car_3d $player_char stopped 1 389.8 -455.5 8.9 radius 4.0 4.0 3.0
+    goto_if_false @POLICE_1_TRAVEL_2_END
+end
+jump @POLICE_1_TRAVEL_2
+
+:POLICE_1_TRAVEL_2_END
+remove_blip $objective_point_marker
+clear_prints
+set_player_control $player_char can_move 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+fade 0 500
+wait 500
+request_model #COP
+request_model #FBI
+request_model #VICE2
+request_model #VICE5
+request_animation 'RIOT'
+load_all_models_now
+while not has_animation_loaded 'RIOT'
+    wait 0
+end
+clear_area 0 at 389.8 -455.5 8.9 range 30.0
+set_car_density_multiplier 0.0
+set_ped_density_multiplier 0.0
+set_car_coordinates $objective_car at 389.8 -455.5 8.9
+set_car_heading $objective_car 232.0
+warp_char_into_car $player_actor $objective_car
+set_car_straight_line_distance $objective_car abandon_path_radius 255
+set_car_cruise_speed $objective_car max_speed_to 3.0
+set_car_driving_style $objective_car traffic_behavior_to 3
+car_goto_coordinates_accurate $objective_car drive_to_point 401.5435 -464.4524 10.1069
+create_char 0@ 4 #COP 394.8045 -453.7945 9.0785
+create_char 1@ 4 #FBI 396.5866 -455.367 9.0823
+create_char 2@ 4 #COP 398.1663 -456.2742 9.0853
+create_char 3@ 4 #COP 401.0253 -458.0074 9.7004
+create_char 4@ 4 #VICE5 397.5574 -452.1361 9.0804
+create_char 5@ 4 #COP 389.8523 -459.2638 9.0701
+create_char 6@ 4 #COP 391.8646 -460.7691 9.0722
+create_char 7@ 4 #FBI 395.664 -462.9369 9.0873
+create_char 8@ 4 #COP 399.7286 -455.7134 9.0867
+create_char 9@ 4 #COP 399.2711 -459.1353 9.0886
+create_char 10@ 4 #COP 397.0416 -464.4148 10.035
+create_char 11@ 4 #VICE2 401.8019 -459.0072 9.0958
+create_char 12@ 4 #FBI 397.8559 -454.5869 9.0832
+create_char 13@ 4 #FBI 400.7441 -460.2719 9.0961
+set_char_wait_state 0@ anim 29 wait_state_time 99999999
+set_char_wait_state 1@ anim 29 wait_state_time 99999999
+set_char_wait_state 2@ anim 29 wait_state_time 99999999
+set_char_wait_state 3@ anim 29 wait_state_time 99999999
+set_char_wait_state 4@ anim 29 wait_state_time 99999999
+set_char_wait_state 5@ anim 29 wait_state_time 99999999
+set_char_wait_state 6@ anim 29 wait_state_time 99999999
+set_char_wait_state 7@ anim 29 wait_state_time 99999999
+set_char_wait_state 8@ anim 29 wait_state_time 99999999
+set_char_wait_state 9@ anim 29 wait_state_time 99999999
+set_char_wait_state 10@ anim 29 wait_state_time 99999999
+set_char_wait_state 11@ anim 29 wait_state_time 99999999
+set_char_wait_state 12@ anim 29 wait_state_time 99999999
+set_char_wait_state 13@ anim 29 wait_state_time 99999999
+switch_widescreen 1
+set_fixed_camera_position 396.1246 -469.6724 13.7534 0.0 0.0 0.0
+point_camera_at_car $objective_car 15 2
+fade 1 1000
+15@ = 0
+TIMERA = 0
+
+:POLICE_1_OUTRO
+wait 0
+place_object_relative_to_car $mission_obj_1 relative_to_car $objective_car offset -0.45 -0.85 0.25
+place_object_relative_to_car $mission_obj_2 relative_to_car $objective_car offset 0.4 -0.95 0.2
+place_object_relative_to_car $mission_obj_3 relative_to_car $objective_car offset -0.35 -1.65 0.15
+place_object_relative_to_car $mission_obj_4 relative_to_car $objective_car offset 0.45 -1.85 0.3
+place_object_relative_to_car $mission_obj_5 relative_to_car $objective_car offset 0.0 -1.1 0.9
+turn_char_to_face_char 0@ $player_actor
+turn_char_to_face_char 1@ $player_actor
+turn_char_to_face_char 2@ $player_actor
+turn_char_to_face_char 3@ $player_actor
+turn_char_to_face_char 4@ $player_actor
+turn_char_to_face_char 5@ $player_actor
+turn_char_to_face_char 6@ $player_actor
+turn_char_to_face_char 7@ $player_actor
+turn_char_to_face_char 8@ $player_actor
+turn_char_to_face_char 9@ $player_actor
+turn_char_to_face_char 10@ $player_actor
+turn_char_to_face_char 11@ $player_actor
+turn_char_to_face_char 12@ $player_actor
+turn_char_to_face_char 13@ $player_actor
+if and
+    15@ == 0
+    TIMERA > 5500
+then
+    fade 0 500
+    15@++
+    TIMERA = 0
+end
+if and
+    15@ == 1
+    TIMERA > 500
+goto_if_false @POLICE_1_OUTRO
+delete_char 0@
+delete_char 1@
+delete_char 2@
+delete_char 3@
+delete_char 4@
+delete_char 5@
+delete_char 6@
+delete_char 7@
+delete_char 8@
+delete_char 9@
+delete_char 10@
+delete_char 11@
+delete_char 12@
+delete_char 13@
+mark_model_as_no_longer_needed #COP
+mark_model_as_no_longer_needed #FBI
+mark_model_as_no_longer_needed #VICE2
+mark_model_as_no_longer_needed #VICE5
+remove_animation 'RIOT'
+warp_player_from_car_to_coord $player_char at 383.5782 -451.2743 10.0626
+set_player_heading $player_char z_angle_to 57.7999
+delete_car $objective_car
+set_car_density_multiplier 0.0
+set_ped_density_multiplier 0.0
+restore_camera_jumpcut
+set_camera_behind_player
+set_player_control $player_char can_move 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+switch_widescreen 0
+fade 1 1000
 goto @POLICE_1_PASS
-return
 
 :POLICE_1_WRECKED
 print_now 'CARF' time 5000 2
