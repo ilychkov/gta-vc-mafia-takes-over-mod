@@ -9283,6 +9283,7 @@ terminate_this_script
 
 :POLICE_1_START
 $onmission = 1
+$allow_police_chases = 0
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'POLICE1'
@@ -9862,6 +9863,8 @@ add_blip_for_object $mission_obj_5_marker = create_marker_above_object $mission_
 4@ = 0
 print_now 'CATCHW' time 5000 2
 mark_car_as_no_longer_needed $mission_car
+mark_car_as_no_longer_needed $mission_car_2
+mark_char_as_no_longer_needed $mission_actor_3
 if
     $mission_debug == 1
 then
@@ -10005,8 +10008,6 @@ if and
 goto_if_false @POLICE_1_COLLECT
 add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
 print_now 'GETIN2' time 5000 2
-mark_car_as_no_longer_needed $mission_car_2
-mark_char_as_no_longer_needed $mission_actor_3
 if
     $mission_debug == 1
 then
@@ -10227,6 +10228,7 @@ return
 
 :POLICE_1_CLEANUP
 $onmission = 0
+$allow_police_chases = 1
 mark_car_as_no_longer_needed $objective_car
 mark_car_as_no_longer_needed $mission_car
 mark_car_as_no_longer_needed $mission_car_2
