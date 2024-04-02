@@ -9530,6 +9530,7 @@ mark_model_as_no_longer_needed #POLICE
 mark_model_as_no_longer_needed #COP
 fade 1 500
 0@ = 0
+1@ = 0
 TIMERA = 0
 if
     $mission_debug == 0
@@ -9537,6 +9538,11 @@ goto_if_false @POLICE_1_SCENE_1_SKIP
 
 :POLICE_1_SCENE_1
 wait 0
+place_object_relative_to_car $mission_obj_1 relative_to_car $objective_car offset -0.45 -0.85 0.25
+place_object_relative_to_car $mission_obj_2 relative_to_car $objective_car offset 0.4 -0.95 0.2
+place_object_relative_to_car $mission_obj_3 relative_to_car $objective_car offset -0.35 -1.65 0.15
+place_object_relative_to_car $mission_obj_4 relative_to_car $objective_car offset 0.45 -1.85 0.3
+place_object_relative_to_car $mission_obj_5 relative_to_car $objective_car offset 0.0 -1.1 0.9
 if and
     0@ == 0
     TIMERA >= 2000
@@ -9596,6 +9602,8 @@ then
         is_char_objective_passed $mission_actor_2
     then
         set_char_obj_enter_car_as_driver $mission_actor_2 go_to_and_drive_car $objective_car
+        set_interpolation_parameters 0.0 3000
+        set_fixed_camera_position -841.4791 -640.2056 12.1239 rotation 0.0 0.0 0.0
         point_camera_at_char $player_actor mode 15 switchstyle 1
         0@++
         TIMERA = 0
@@ -9646,6 +9654,14 @@ then
     then
         goto @POLICE_1_SCENE_1_SKIP
     end
+end
+if and
+    is_char_in_car $mission_actor_2 in_car $objective_car
+    1@ == 0
+then
+    set_car_cruise_speed $objective_car max_speed_to 100.0
+    car_goto_coordinates_accurate $objective_car drive_to_point -832.6553 -667.8333 10.934
+    1@ = 1
 end
 if
     0@ == 9
@@ -9842,6 +9858,7 @@ add_blip_for_object $mission_obj_5_marker = create_marker_above_object $mission_
 3@ = 0
 4@ = 0
 print_now 'CATCHW' time 5000 2
+mark_car_as_no_longer_needed $mission_car
 if
     $mission_debug == 1
 then
@@ -10218,11 +10235,6 @@ delete_object $mission_obj_2
 delete_object $mission_obj_3
 delete_object $mission_obj_4
 delete_object $mission_obj_5
-delete_object $mission_obj_6
-delete_object $mission_obj_7
-delete_object $mission_obj_8
-delete_object $mission_obj_9
-delete_object $mission_obj_10
 remove_blip $objective_car_marker
 remove_blip $objective_point_marker
 remove_blip $mission_obj_1_marker
