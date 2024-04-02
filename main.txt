@@ -9307,6 +9307,8 @@ set_car_density_multiplier 0.0
 set_ped_density_multiplier 0.0
 create_car $objective_car = create_car #BOBCAT at 332.4361 -512.1122 8.9081
 set_car_heading $objective_car z_angle_to 96.6302
+change_car_colour $objective_car color_to 67 8
+mark_model_as_no_longer_needed #BOBCAT
 set_can_burst_car_tyres $objective_car tires_vulnerable 0
 create_car 0@ = create_car #POLICE at 359.5053 -514.6687 11.961
 set_car_heading 0@ z_angle_to 322.4988
@@ -9402,6 +9404,7 @@ while not has_model_loaded #WALTON
 end
 create_car $mission_car = create_car #WALTON at -842.0252 -623.7845 10.1005
 set_car_heading $mission_car z_angle_to 184.3139
+mark_model_as_no_longer_needed #WALTON
 set_player_control $player_char can_move 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
@@ -9622,8 +9625,8 @@ then
     then
         clear_all_char_anims $player_actor
         clear_all_char_anims $mission_actor_1
+        turn_char_to_face_char $mission_actor_1 look_at_actor $mission_actor_2
         char_look_at_char_always $mission_actor_1 to_look_at_actor $mission_actor_2
-        //char_look_at_char_always $player_actor to_look_at_actor $mission_actor_2
         turn_char_to_face_char $player_actor look_at_actor $mission_actor_2
         0@++
         TIMERA = 0
