@@ -139,9 +139,8 @@ add_short_range_sprite_blip_for_coord $music_marker = create_icon_marker_without
 $music_found = 0
 
 set_garage $681 = create_garage_type 5 door -914.129 -1263.54 10.706 to -906.3 -1266.9 14.421 depth -907.137 -1246.626
-set_garage $682 = create_garage_type 15 door -1014.341 -857.732 6.325 to -1014.341 -841.532 10.885 depth -1001.315 -857.732
+set_garage $682 = create_garage_type 19 door -1014.341 -857.732 6.325 to -1014.341 -841.532 10.885 depth -1001.315 -857.732
 set_rotating_garage_door $682
-open_garage $682
 set_garage $683 = create_garage_type 5 door -886.157 -115.158 9.992 to -876.7 -119.83 15.58 depth -882.699 -108.312
 set_garage $684 = create_garage_type 5 door 323.9 427.4 10.0 to 313.9 430.53 15.7 depth 326.3 434.5
 set_garage $685 = create_garage_type 5 door -7.55 -1253.77 9.322 to 2.64 -1253.7 14.4 depth -7.55 -1261.2
@@ -4418,6 +4417,7 @@ goto @POLICE_CHASES_WAIT
 :REPAINT
 script_name 'REPAINT'
 set_deatharrest_state 0
+$repaint_garage_open = 0
 const repaint_cost = -200
 const repaint_cost_minus_one = 199
 
@@ -4430,6 +4430,23 @@ if and
     is_player_in_zone $player_char in_zone 'HAVANA' // Little Havana
     $onmission == 0
 goto_if_false @REPAINT_WAIT
+if
+    $repaint_garage_open == 0
+then
+    if
+        locate_player_any_means_2d $player_char 0 -1009.0 -837.0 radius 15.0 15.0
+    then
+        open_garage $682
+        $repaint_garage_open = 1
+    end
+else
+    if
+        not locate_player_any_means_2d $player_char 0 -1009.0 -837.0 radius 15.0 15.0
+    then
+        close_garage $682
+        $repaint_garage_open = 0
+    end
+end
 if and
     is_player_stopped_in_area_in_car_3d $player_char 0 -1014.341 -857.732 6.325 -1001.315 -841.532 10.885
     can_player_start_mission $player_char
