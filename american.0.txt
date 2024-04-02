@@ -103,3 +103,16 @@ CATCHW  = ~g~Well done! Collect the boxes back into the car.
 GOBACK  = ~g~Drive back to the police department.
 SUCCESS = Donuts!!!
 
+[POLICE2]
+NOTICE  = Notice:
+SPOTTED = ~g~You've been spotted!
+DISTR   = ~g~The car is locked.
+DISTR2  = ~g~You need to find a way to distract the guards before proceeding.
+DISTR3  = ~g~Maybe there's something helpful in one of the hangars?
+DISTR4  = ~g~Ah! This is quite delightful, isn't it?
+DISTR5  = ~g~Run!!!!
+DISTR6  = ~g~Well, that sure was something.
+GETIN   = ~g~Get into the car.
+CARF    = ~r~The car is destroyed!
+WHY     = ~g~You needed this truck!
+

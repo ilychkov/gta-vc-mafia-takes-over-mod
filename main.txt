@@ -1,9 +1,10 @@
-DEFINE MISSIONS 5
+DEFINE MISSIONS 6
 DEFINE MISSION 0 AT @INITIAL           // Initial
 DEFINE MISSION 1 AT @INTRO             // Intro
 DEFINE MISSION 2 AT @GOLF              // A Little Game of Golf
 DEFINE MISSION 3 AT @POLICE_1          // Special Delivery
 DEFINE MISSION 4 AT @CAR_MECHANIC      // Car Mechanic
+DEFINE MISSION 5 AT @POLICE_2          // WIP
 
 //-------------MAIN---------------
 thread 'MAIN'
@@ -186,6 +187,7 @@ end
 wait 0
 wait 0
 
+clear_extra_colours 0
 if
     $skip_intro == 0
 then
@@ -225,6 +227,9 @@ launch_mission @USJ
 launch_mission @INTERIO
 launch_mission @CARGEN
 launch_mission @AUDIO
+
+wait 1000
+start_mission POLICE_2
 
 :MAIN
 wait 1000 ms
@@ -906,6 +911,7 @@ remove_pickup $info_pickup_14
 remove_pickup $info_pickup_15
 remove_pickup $info_pickup_16
 remove_pickup $music_pickup
+remove_blip $music_marker
 $info_pickups_active = 0
 goto @INFOPICS_LOOP
 
@@ -994,6 +1000,7 @@ if
     $music_found == 0
 then
     create_pickup $music_pickup = create_pickup #PICKUPMUSIC type 3 at 8.8767 1061.8584 12.3126
+    add_short_range_sprite_blip_for_coord $music_marker = create_icon_marker_without_sphere 31 at 8.8767 1061.8584 12.3126
 end
 $info_pickups_active = 1
 $info_7_moved = 0
@@ -8049,10 +8056,6 @@ create_car_generator $1948 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 d
 switch_car_generator $1948 cars_to_generate_to 101
 create_car_generator $1980 = init_car_generator -1 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at 309.2 1204.4 16.2 angle 91.0
 switch_car_generator $1980 cars_to_generate_to 101
-create_car_generator $1870 = init_car_generator #PACKER -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -101.6 1011.5 11.5 angle 270.3
-switch_car_generator $1870 cars_to_generate_to 101
-create_car_generator $1872 = init_car_generator #PATRIOT -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -36.8 874.0 11.1 angle 194.2
-switch_car_generator $1872 cars_to_generate_to 101
 create_car_generator $1871 = init_car_generator #PCJ600 -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -6.4 957.1 9.4 angle 355.1
 switch_car_generator $1871 cars_to_generate_to 101
 create_car_generator $1929 = init_car_generator #SKIMMER -1 -1 force_spawn 1 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -141.1 1030.4 5.5 angle 180.0
@@ -11857,5 +11860,523 @@ mark_model_as_no_longer_needed #HAMMER
 mark_model_as_no_longer_needed #BARREL4
 clear_onscreen_timer $mission_timer
 clear_onscreen_counter $cm_repair_meter_value
+mission_has_finished
+return
+
+//-------------Mission 5---------------
+// WIP
+
+:POLICE_2
+script_name 'POLICE2'
+gosub @POLICE_2_START
+if
+    has_deatharrest_been_executed
+then
+    POLICE_2_FAIL()
+end
+POLICE_2_CLEANUP()
+terminate_this_script
+
+:POLICE_2_START
+$onmission = 1
+$npcs_north_island_allowed = 0
+set_fading_colour 0 0 0
+register_mission_given
+load_mission_text 'POLICE2'
+delete_object $1811
+request_model #POLICE
+request_model #PACKER
+request_model #WALTON
+request_model #WMYRI
+request_model #HMYRI
+request_model #COLT45
+request_model #UZI
+request_model #BARREL4
+load_all_models_now
+create_car $objective_car #POLICE -47.1663 907.5852 9.9403
+set_car_heading $objective_car 268.5784
+change_car_colour $objective_car 48 1
+set_car_strong $objective_car strong 1
+set_car_traction $objective_car improve_handling 2.0
+lock_car_doors $objective_car door_status_to 2
+add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
+change_blip_display $objective_car_marker display 1
+create_car $mission_car_1 #PACKER 8.9861 989.7764 9.9287
+set_car_heading $mission_car_1 167.5026
+create_car $mission_car_2 #WALTON -80.3626 931.5965 9.6507
+set_car_heading $mission_car_2 17.0121
+mark_model_as_no_longer_needed #POLICE
+mark_model_as_no_longer_needed #PACKER
+mark_model_as_no_longer_needed #WALTON
+create_char $mission_actor_1 4 #WMYRI -114.8196 987.0668 10.9403
+set_char_heading $mission_actor_1 330.0335
+create_char $mission_actor_2 4 #HMYRI -56.1954 993.7791 10.9403
+create_char $mission_actor_3 4 #WMYRI -75.7297 1038.1019 11.17
+set_char_heading $mission_actor_3 188.0948
+create_char $mission_actor_4 4 #HMYRI -47.8925 949.0961 9.9403
+create_char $mission_actor_5 4 #HMYRI -22.2307 902.8266 9.9402
+set_char_heading $mission_actor_5 339.7291
+create_char $mission_actor_6 4 #WMYRI -61.8865 914.3615 9.9401
+set_char_obj_goto_coord_on_foot $mission_actor_2 -35.2149 987.3121
+set_char_obj_goto_coord_on_foot $mission_actor_4 -34.2525 948.209
+set_char_obj_goto_coord_on_foot $mission_actor_6 -61.6784 884.4504
+clear_char_threat_search $mission_actor_1
+clear_char_threat_search $mission_actor_2
+clear_char_threat_search $mission_actor_3
+clear_char_threat_search $mission_actor_4
+clear_char_threat_search $mission_actor_5
+clear_char_threat_search $mission_actor_6
+set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_2 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_3 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_4 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_5 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_6 dismemberment_possible 0
+give_weapon_to_char $mission_actor_1 weapon 23 ammo 9999
+give_weapon_to_char $mission_actor_2 weapon 23 ammo 9999
+give_weapon_to_char $mission_actor_3 weapon 23 ammo 9999
+give_weapon_to_char $mission_actor_4 weapon 23 ammo 9999
+give_weapon_to_char $mission_actor_5 weapon 23 ammo 9999
+give_weapon_to_char $mission_actor_6 weapon 23 ammo 9999
+mark_model_as_no_longer_needed #COLT45
+add_blip_for_char $mission_actor_1_marker = create_marker_above_actor $mission_actor_1
+add_blip_for_char $mission_actor_2_marker = create_marker_above_actor $mission_actor_2
+add_blip_for_char $mission_actor_3_marker = create_marker_above_actor $mission_actor_3
+add_blip_for_char $mission_actor_4_marker = create_marker_above_actor $mission_actor_4
+add_blip_for_char $mission_actor_5_marker = create_marker_above_actor $mission_actor_5
+add_blip_for_char $mission_actor_6_marker = create_marker_above_actor $mission_actor_6
+change_blip_colour $mission_actor_1_marker color_to 2
+change_blip_colour $mission_actor_2_marker color_to 2
+change_blip_colour $mission_actor_3_marker color_to 2
+change_blip_colour $mission_actor_4_marker color_to 2
+change_blip_colour $mission_actor_5_marker color_to 2
+change_blip_colour $mission_actor_6_marker color_to 2
+$mission_actor_1_flag = 0
+$mission_actor_2_flag = 0
+$mission_actor_3_flag = 0
+$mission_actor_4_flag = 0
+$mission_actor_5_flag = 0
+$mission_actor_6_flag = 0
+mark_model_as_no_longer_needed #WMYRI
+mark_model_as_no_longer_needed #HMYRI
+create_object $mission_obj_1 #BARREL4 -79.3874 928.3461 9.8907
+create_object $mission_obj_2 #BARREL4 -80.0469 930.5392 11.3423
+create_object $mission_obj_3 #BARREL4 -78.7668 929.7559 11.3612
+create_object $mission_obj_4 #BARREL4 -81.2422 934.4525 9.8818
+set_object_dynamic $mission_obj_1 toggle_in_moving_list 0
+set_object_dynamic $mission_obj_2 toggle_in_moving_list 0
+set_object_dynamic $mission_obj_3 toggle_in_moving_list 0
+set_object_dynamic $mission_obj_4 toggle_in_moving_list 0
+mark_model_as_no_longer_needed #BARREL4
+create_pickup_with_ammo $mission_weapon_pickup_1 = create_weapon_pickup #COLT45 3 ammo 17 at -76.7108 922.1033 10.9036
+mark_model_as_no_longer_needed #COLT45
+add_blip_for_coord $objective_point_marker = create_checkpoint_at -47.0126 909.8334 10.9403
+$notice_counter = 0
+display_nth_onscreen_counter_with_string $notice_counter 1 line 1 'NOTICE' // Notice:
+const notice_min_distance = 20.0
+const notice_max_distance = 30.0
+const notice_distance_diff = 10.0
+set_player_is_in_stadium 1
+set_extra_colours 11 fade 0
+$mission_step = 0
+
+:POLICE_2_GUARD
+wait 0
+if
+    not is_car_dead $objective_car
+goto_if_false @POLICE_2_WRECKED
+if and
+    not is_char_dead $mission_actor_1
+    not is_char_dead $mission_actor_2
+    not is_char_dead $mission_actor_3
+    not is_char_dead $mission_actor_4
+    not is_char_dead $mission_actor_5
+    not is_char_dead $mission_actor_6
+goto_if_false @POLICE_2_SPOTTED
+if and
+    not has_object_been_damaged $mission_obj_1
+    not has_object_been_damaged $mission_obj_2
+    not has_object_been_damaged $mission_obj_3
+    not has_object_been_damaged $mission_obj_4
+goto_if_false @POLICE_2_SPOTTED
+if
+    not is_car_dead $mission_car_1
+goto_if_false @POLICE_2_WHY
+get_char_coordinates $player_actor position_to 0@ 1@ 2@
+//------------------Guard 1-----------------------
+get_char_coordinates $mission_actor_1 position_to 2@ 3@ 10@
+get_distance_between_coords_2d 4@ = distance_between_point 0@ 1@ and_point 2@ 3@
+if
+    notice_max_distance > 4@
+then
+    if
+        $mission_actor_1_flag == 0
+    then
+        change_blip_colour $mission_actor_1_marker color_to 6
+        $mission_actor_1_flag = 1
+    end
+else
+    if
+        $mission_actor_1_flag == 1
+    then
+        change_blip_colour $mission_actor_1_marker color_to 2
+        $mission_actor_1_flag = 0
+    end
+end
+//------------------Guard 2-----------------------
+get_char_coordinates $mission_actor_2 position_to 2@ 3@ 10@
+get_distance_between_coords_2d 5@ = distance_between_point 0@ 1@ and_point 2@ 3@
+if
+    notice_max_distance > 5@
+then
+    if
+        $mission_actor_2_flag == 0
+    then
+        change_blip_colour $mission_actor_2_marker color_to 6
+        $mission_actor_2_flag = 1
+    end
+else
+    if
+        $mission_actor_2_flag == 1
+    then
+        change_blip_colour $mission_actor_2_marker color_to 2
+        $mission_actor_2_flag = 0
+    end
+end
+if
+    is_float_lvar_greater_than_float_lvar 4@ > 5@
+then
+    set_lvar_float_to_lvar_float 4@ = 5@
+end
+//------------------Guard 3-----------------------
+get_char_coordinates $mission_actor_3 position_to 2@ 3@ 10@
+get_distance_between_coords_2d 5@ = distance_between_point 0@ 1@ and_point 2@ 3@
+if
+    notice_max_distance > 5@
+then
+    if
+        $mission_actor_3_flag == 0
+    then
+        change_blip_colour $mission_actor_3_marker color_to 6
+        $mission_actor_3_flag = 1
+    end
+else
+    if
+        $mission_actor_3_flag == 1
+    then
+        change_blip_colour $mission_actor_3_marker color_to 2
+        $mission_actor_3_flag = 0
+    end
+end
+if
+    is_float_lvar_greater_than_float_lvar 4@ > 5@
+then
+    set_lvar_float_to_lvar_float 4@ = 5@
+end
+//------------------Guard 4-----------------------
+get_char_coordinates $mission_actor_4 position_to 2@ 3@ 10@
+get_distance_between_coords_2d 5@ = distance_between_point 0@ 1@ and_point 2@ 3@
+if
+    notice_max_distance > 5@
+then
+    if
+        $mission_actor_4_flag == 0
+    then
+        change_blip_colour $mission_actor_4_marker color_to 6
+        $mission_actor_4_flag = 1
+    end
+else
+    if
+        $mission_actor_4_flag == 1
+    then
+        change_blip_colour $mission_actor_4_marker color_to 2
+        $mission_actor_4_flag = 0
+    end
+end
+if
+    is_float_lvar_greater_than_float_lvar 4@ > 5@
+then
+    set_lvar_float_to_lvar_float 4@ = 5@
+end
+//------------------Guard 5-----------------------
+get_char_coordinates $mission_actor_5 position_to 2@ 3@ 10@
+get_distance_between_coords_2d 5@ = distance_between_point 0@ 1@ and_point 2@ 3@
+if
+    notice_max_distance > 5@
+then
+    if
+        $mission_actor_5_flag == 0
+    then
+        change_blip_colour $mission_actor_5_marker color_to 6
+        $mission_actor_5_flag = 1
+    end
+else
+    if
+        $mission_actor_5_flag == 1
+    then
+        change_blip_colour $mission_actor_5_marker color_to 2
+        $mission_actor_5_flag = 0
+    end
+end
+if
+    is_float_lvar_greater_than_float_lvar 4@ > 5@
+then
+    set_lvar_float_to_lvar_float 4@ = 5@
+end
+//------------------Guard 6-----------------------
+get_char_coordinates $mission_actor_6 position_to 2@ 3@ 10@
+get_distance_between_coords_2d 5@ = distance_between_point 0@ 1@ and_point 2@ 3@
+if
+    notice_max_distance > 5@
+then
+    if
+        $mission_actor_6_flag == 0
+    then
+        change_blip_colour $mission_actor_6_marker color_to 6
+        $mission_actor_6_flag = 1
+    end
+else
+    if
+        $mission_actor_6_flag == 1
+    then
+        change_blip_colour $mission_actor_6_marker color_to 2
+        $mission_actor_6_flag = 0
+    end
+end
+if
+    is_float_lvar_greater_than_float_lvar 4@ > 5@
+then
+    set_lvar_float_to_lvar_float 4@ = 5@
+end
+//-----------------------------------------------
+if or
+    is_player_in_area_2d $player_char 0 -97.0 951.0 -64.0 982.5
+    is_player_in_area_2d $player_char 0 -94.0 922.0 -69.0 944.0
+then
+    $notice_counter = 0
+else
+    if or
+        4@ > notice_min_distance
+        $mission_debug == 1
+    goto_if_false @POLICE_2_SPOTTED
+    if
+        notice_max_distance > 4@
+    then
+        5@ = notice_max_distance
+        sub_float_lvar_from_float_lvar 5@ -= 4@
+        5@ /= notice_distance_diff
+        5@ *= 100.0
+        cset_var_int_to_lvar_float $notice_counter = 5@
+    else
+        $notice_counter = 0
+    end
+end
+if
+    is_char_objective_passed $mission_actor_2
+then
+    if
+        locate_char_on_foot_2d $mission_actor_2 0 -35.2149 987.3121 2.0 2.0
+    then
+        set_char_obj_goto_coord_on_foot $mission_actor_2 -56.1954 993.7791
+    else
+        set_char_obj_goto_coord_on_foot $mission_actor_2 -35.2149 987.3121
+    end
+end
+if
+    is_char_objective_passed $mission_actor_4
+then
+    if
+        locate_char_on_foot_2d $mission_actor_4 0 -34.2525 948.209 2.0 2.0
+    then
+        set_char_obj_goto_coord_on_foot $mission_actor_4 -47.8925 949.0961
+    else
+        set_char_obj_goto_coord_on_foot $mission_actor_4 -34.2525 948.209
+    end
+end
+if
+    is_char_objective_passed $mission_actor_6
+then
+    if
+        locate_char_on_foot_2d $mission_actor_6 0 -61.6784 884.4504 2.0 2.0
+    then
+        set_char_obj_goto_coord_on_foot $mission_actor_6 -61.8865 914.3615
+    else
+        set_char_obj_goto_coord_on_foot $mission_actor_6 -61.6784 884.4504
+    end
+end
+if
+    $mission_step == 0
+then
+    if
+        not is_car_dead $mission_car_2
+    goto_if_false @POLICE_2_SPOTTED
+    if
+        locate_player_on_foot_2d $player_char 1 -47.0126 909.8334 radius 1.5 1.5
+    then
+        remove_blip $objective_point_marker
+        set_char_coordinates $mission_actor_6 -90.9206 885.8517 9.9402
+        set_char_obj_no_obj $mission_actor_6
+        $mission_step = 1
+        print_now 'DISTR' time 2000 1
+        set_player_control $player_char 0
+        switch_widescreen 1
+        set_fixed_camera_position -42.2928 904.449 14.9402 0.0 0.0 0.0
+        point_camera_at_car $objective_car 15 2
+        TIMERA = 0
+        15@ = 0
+        while 10000 > TIMERA
+            wait 0
+            if and
+                15@ == 0
+                TIMERA > 2000
+            then
+                15@++
+                print_now 'DISTR2' time 5000 1
+                set_fixed_camera_position -18.1019 900.7247 10.4402 0.0 0.0 0.0
+                point_camera_at_char $mission_actor_5 15 2
+            end
+            if and
+                15@ == 1
+                TIMERA > 6000
+            then
+                15@++
+                print_now 'DISTR3' time 5000 1
+                set_fixed_camera_position -56.4019 903.343 11.9402 0.0 0.0 0.0
+                point_camera_at_point -66.9739 945.0996 11.9401 2
+            end
+            if
+                is_button_pressed 0 pressed_button 16
+            then
+                break
+            end
+        end
+        set_player_control $player_char 1
+        switch_widescreen 0
+        restore_camera_jumpcut
+        set_camera_behind_player
+        add_blip_for_coord $objective_point_marker = create_checkpoint_at -71.8546 932.6585 10.9269
+        remove_blip $objective_car_marker
+    end
+end
+if
+    $mission_step == 1
+then
+    if
+        locate_player_on_foot_3d $player_char 1 -71.8546 932.6585 10.9269 radius 1.5 1.5 1.5
+    then
+        remove_blip $objective_point_marker
+        $mission_step = 2
+        print_now 'DISTR4' time 4000 1
+        set_player_control $player_char 0
+        switch_widescreen 1
+        set_fixed_camera_position -71.3411 931.1442 12.9294 0.0 0.0 0.0
+        point_camera_at_car $mission_car_2 15 2
+        TIMERA = 0
+        while 4000 > TIMERA
+            wait 0
+            if
+                is_button_pressed 0 pressed_button 16
+            then
+                break
+            end
+        end
+        set_player_control $player_char 1
+        switch_widescreen 0
+        restore_camera_jumpcut
+        set_camera_behind_player
+        add_blip_for_object $mission_obj_1_marker = create_marker_above_object $mission_obj_1
+        add_blip_for_object $mission_obj_2_marker = create_marker_above_object $mission_obj_2
+        add_blip_for_object $mission_obj_3_marker = create_marker_above_object $mission_obj_3
+        add_blip_for_object $mission_obj_4_marker = create_marker_above_object $mission_obj_4
+    end
+end
+if
+    $mission_step == 1
+then
+    if or
+        is_car_dead $mission_car_2
+        has_object_been_damaged $mission_obj_1
+        has_object_been_damaged $mission_obj_2
+        has_object_been_damaged $mission_obj_3
+        has_object_been_damaged $mission_obj_4
+    then
+        remove_blip $mission_obj_1_marker
+        remove_blip $mission_obj_2_marker
+        remove_blip $mission_obj_3_marker
+        remove_blip $mission_obj_4_marker
+        $mission_step = 2
+        print_now 'DISTR5' time 5000 1
+        shake_cam 2500
+        add_explosion_no_sound -79.3874 928.3461 9.8907 type 2
+        add_explosion_no_sound -79.3874 928.3461 9.8907 type 11
+        add_explosion 1 at -79.3874 928.3461 9.8907
+        add_explosion_no_sound -79.3874 928.3461 9.8907 type 6
+        add_explosion_no_sound -80.0469 930.5392 11.3423 type 2
+        add_explosion_no_sound -80.0469 930.5392 11.3423 type 11
+        add_explosion_no_sound -80.0469 930.5392 11.3423 type 6
+        add_explosion_no_sound -78.7668 929.7559 11.3612 type 2
+        add_explosion_no_sound -78.7668 929.7559 11.3612 type 11
+        add_explosion_no_sound -78.7668 929.7559 11.3612 type 1
+        add_explosion_no_sound -78.7668 929.7559 11.3612 type 6
+        add_explosion 2 at -81.2422 934.4525 9.8818
+        add_explosion_no_sound -81.2422 934.4525 9.8818 type 11
+        add_explosion_no_sound -81.2422 934.4525 9.8818 type 1
+        add_explosion_no_sound -81.2422 934.4525 9.8818 type 6
+        add_blip_for_coord $objective_point_marker = create_checkpoint_at -71.8546 932.6585 10.9269
+    end
+end
+goto @POLICE_2_GUARD
+
+:POLICE_2_SPOTTED
+print_now 'SPOTTED' time 5000 1
+POLICE_2_FAIL()
+return
+
+:POLICE_2_WRECKED
+print_now 'CARF' time 5000 2
+POLICE_2_FAIL()
+return
+
+:POLICE_2_WHY
+print_now 'WHY' time 5000 1
+POLICE_2_FAIL()
+return
+
+:POLICE_2_FAIL
+print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
+return
+
+:POLICE_2_CLEANUP
+$onmission = 0
+$npcs_north_island_allowed = 1
+mark_car_as_no_longer_needed $objective_car
+mark_car_as_no_longer_needed $mission_car_1
+mark_car_as_no_longer_needed $mission_car_2
+remove_char_elegantly $mission_actor_1
+remove_char_elegantly $mission_actor_2
+remove_char_elegantly $mission_actor_3
+remove_char_elegantly $mission_actor_4
+remove_char_elegantly $mission_actor_5
+remove_char_elegantly $mission_actor_6
+remove_blip $mission_actor_1_marker
+remove_blip $mission_actor_2_marker
+remove_blip $mission_actor_3_marker
+remove_blip $mission_actor_4_marker
+remove_blip $mission_actor_5_marker
+remove_blip $mission_actor_6_marker
+remove_blip $objective_car_marker
+remove_blip $objective_point_marker
+remove_blip $mission_obj_1_marker
+remove_blip $mission_obj_2_marker
+remove_blip $mission_obj_3_marker
+remove_blip $mission_obj_4_marker
+delete_object $mission_obj_1
+delete_object $mission_obj_2
+delete_object $mission_obj_3
+delete_object $mission_obj_4
+remove_pickup $mission_weapon_pickup_1
+clear_onscreen_counter $notice_counter
+set_player_is_in_stadium 0
+clear_extra_colours 0
 mission_has_finished
 return
