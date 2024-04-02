@@ -9800,6 +9800,7 @@ fade 0 500
 wait 500
 set_car_coordinates $objective_car at -823.3806 -892.7518 9.7753
 set_car_heading $objective_car z_angle_to 170.081
+set_car_health $objective_car health_to 400
 set_car_coordinates $mission_car at -820.9627 -884.8602 9.6969
 set_car_heading $mission_car z_angle_to 203.0539
 set_car_coordinates $mission_car_2 at -797.4353 -897.4156 9.9078
@@ -10005,6 +10006,10 @@ place_object_relative_to_car $mission_obj_2 relative_to_car $objective_car offse
 place_object_relative_to_car $mission_obj_3 relative_to_car $objective_car offset -0.35 -1.65 0.15
 place_object_relative_to_car $mission_obj_4 relative_to_car $objective_car offset 0.45 -1.85 0.3
 place_object_relative_to_car $mission_obj_5 relative_to_car $objective_car offset 0.0 -1.1 0.9
+get_car_health $objective_car_health = car $objective_car
+$objective_car_health -= 250
+$objective_car_health *= 100
+$objective_car_health /= 750
 if
     0@ == 0
 then
@@ -10017,6 +10022,7 @@ then
     remove_blip $objective_car_marker
     add_blip_for_coord $objective_point_marker = create_checkpoint_at 389.8 -455.5 8.9
     print_now 'GOBACK' time 5000 2
+    display_onscreen_counter_with_string $objective_car_health 1 'CARHLTH' // Car health:
     0@ = 1
 else
     if
@@ -10025,6 +10031,7 @@ else
         print_now 'GETBACK' time 5000 2
         remove_blip $objective_point_marker
         add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
+        clear_onscreen_counter $objective_car_health
         0@ = 0
         jump @POLICE_1_TRAVEL_2
     end
@@ -10119,16 +10126,28 @@ turn_char_to_face_char 12@ $player_actor
 turn_char_to_face_char 13@ $player_actor
 if and
     15@ == 0
-    TIMERA > 5500
+    TIMERA > 1000
 then
-    fade 0 500
+    print_now 'SUCCESS' time 4000 2
     15@++
-    TIMERA = 0
+end
+if
+    15@ == 1
+then
+    if or
+        is_car_stopped $objective_car
+        TIMERA > 10000
+    then
+        fade 0 500
+        15@++
+        TIMERA = 0
+    end
 end
 if and
-    15@ == 1
+    15@ == 2
     TIMERA > 500
 goto_if_false @POLICE_1_OUTRO
+clear_prints
 delete_char 0@
 delete_char 1@
 delete_char 2@
@@ -10211,6 +10230,7 @@ remove_blip $mission_obj_2_marker
 remove_blip $mission_obj_3_marker
 remove_blip $mission_obj_4_marker
 remove_blip $mission_obj_5_marker
+clear_onscreen_counter $objective_car_health
 mark_model_as_no_longer_needed #BOBCAT
 mark_model_as_no_longer_needed #WALTON
 mark_model_as_no_longer_needed #POLICE

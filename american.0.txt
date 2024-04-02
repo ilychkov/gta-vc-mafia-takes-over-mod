@@ -60,6 +60,7 @@ PAINTNO = ~g~Not enough money! The cost is $~1~
 PAINTYE = Enjoy the new color!
 CARMHNT = Press the ~h~~k~~TOGGLE_SUBMISSIONS~ ~w~button to toggle Car Mechanic missions on or off.
 CARMECH = 'CAR MECHANIC'
+CARHLTH = Car health:
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!
@@ -96,9 +97,9 @@ CARF    = ~r~The car is destroyed!
 TRAVEL  = ~g~Get to the restaurant.
 GETBACK = ~g~Get back into the car!
 SCENE1  = It's for a friend.
-CATCH   = Don't let him get away!!
-CATCHF  = He got away!
-CATCHW  = Well done! Collect the boxes back into the car.
-GOBACK  = Drive back to the police department.
+CATCH   = ~g~Don't let him get away!!
+CATCHF  = ~r~He got away!
+CATCHW  = ~g~Well done! Collect the boxes back into the car.
+GOBACK  = ~g~Drive back to the police department.
 SUCCESS = Donuts!!!
 
