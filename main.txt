@@ -870,6 +870,8 @@ INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
 
 :INFOPICS_17
+
+:INFOPICS_MUSIC
 if
     $music_found == 0
 goto_if_false @INFOPICS_LOOP
@@ -904,6 +906,7 @@ remove_pickup $info_pickup_13
 remove_pickup $info_pickup_14
 remove_pickup $info_pickup_15
 remove_pickup $info_pickup_16
+remove_pickup $music_pickup
 $info_pickups_active = 0
 goto @INFOPICS_LOOP
 
@@ -987,6 +990,11 @@ if
     $info_16_picked_up == 0
 then
     create_pickup $info_pickup_16 = create_pickup #INFO type 3 at $info_pickup_16_x $info_pickup_16_y $info_pickup_16_z
+end
+if
+    $music_found == 0
+then
+    create_pickup $music_pickup = create_pickup #PICKUPMUSIC type 3 at 8.8767 1061.8584 12.3126
 end
 $info_pickups_active = 1
 $info_7_moved = 0
@@ -1761,6 +1769,7 @@ end
 if and
     is_player_playing $player_char
     $game_saving == 0
+    $npcs_north_island_allowed == 1
 goto_if_false @NPCS_8B
 if
     is_player_in_area_2d $player_char 0 -270.0 750.0 250.0 1300.0
@@ -1783,6 +1792,7 @@ end
 if and
     is_player_playing $player_char
     $game_saving == 0
+    $npcs_north_island_allowed == 1
 goto_if_false @NPCS_8_2B
 if
     is_player_in_zone $player_char in_zone 'PORNI' // Prawn Island
@@ -7394,6 +7404,7 @@ const icon_golf = 13
 const icon_police = 10
 $allow_police_chases = 0
 $police_chases_bonus = 1000
+$npcs_north_island_allowed = 1
 $last_help_printing_time = 0
 $game_completed = 0
 $restart_overriden = 0
