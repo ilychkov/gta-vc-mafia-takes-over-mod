@@ -12046,8 +12046,8 @@ set_player_control $player_char 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 switch_widescreen 0
-set_car_density_multiplier 0.0
-set_ped_density_multiplier 0.0
+set_car_density_multiplier 1.0
+set_ped_density_multiplier 1.0
 
 set_extra_colours 11 fade 0
 request_model #SPEEDER
