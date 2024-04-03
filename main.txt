@@ -11880,6 +11880,8 @@ terminate_this_script
 :POLICE_2_START
 $onmission = 1
 $npcs_north_island_allowed = 0
+override_next_restart 493.5 703.1 11.1 angle 90.0
+$restart_overriden = 1
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'POLICE2'
@@ -11903,8 +11905,8 @@ add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
 change_blip_display $objective_car_marker display 1
 create_car $mission_car_1 #PACKER 8.9861 989.7764 9.9287
 set_car_heading $mission_car_1 167.5026
-create_car $mission_car_2 #WALTON -80.3626 931.5965 9.6507
-set_car_heading $mission_car_2 17.0121
+create_car $mission_car_2 #WALTON -80.261 931.7101 9.6537
+set_car_heading $mission_car_2 17.1388
 mark_model_as_no_longer_needed #POLICE
 mark_model_as_no_longer_needed #PACKER
 mark_model_as_no_longer_needed #WALTON
@@ -11938,7 +11940,6 @@ give_weapon_to_char $mission_actor_3 weapon 23 ammo 9999
 give_weapon_to_char $mission_actor_4 weapon 23 ammo 9999
 give_weapon_to_char $mission_actor_5 weapon 23 ammo 9999
 give_weapon_to_char $mission_actor_6 weapon 23 ammo 9999
-mark_model_as_no_longer_needed #COLT45
 add_blip_for_char $mission_actor_1_marker = create_marker_above_actor $mission_actor_1
 add_blip_for_char $mission_actor_2_marker = create_marker_above_actor $mission_actor_2
 add_blip_for_char $mission_actor_3_marker = create_marker_above_actor $mission_actor_3
@@ -11957,8 +11958,6 @@ $mission_actor_3_flag = 0
 $mission_actor_4_flag = 0
 $mission_actor_5_flag = 0
 $mission_actor_6_flag = 0
-mark_model_as_no_longer_needed #WMYRI
-mark_model_as_no_longer_needed #HMYRI
 create_object $mission_obj_1 #BARREL4 -79.3874 928.3461 9.8907
 create_object $mission_obj_2 #BARREL4 -80.0469 930.5392 11.3423
 create_object $mission_obj_3 #BARREL4 -78.7668 929.7559 11.3612
@@ -11969,7 +11968,6 @@ set_object_dynamic $mission_obj_3 toggle_in_moving_list 0
 set_object_dynamic $mission_obj_4 toggle_in_moving_list 0
 mark_model_as_no_longer_needed #BARREL4
 create_pickup_with_ammo $mission_weapon_pickup_1 = create_weapon_pickup #COLT45 3 ammo 17 at -76.7108 922.1033 10.9036
-mark_model_as_no_longer_needed #COLT45
 add_blip_for_coord $objective_point_marker = create_checkpoint_at -47.0126 909.8334 10.9403
 $notice_counter = 0
 display_nth_onscreen_counter_with_string $notice_counter 1 line 1 'NOTICE' // Notice:
@@ -11993,12 +11991,16 @@ if and
     not is_char_dead $mission_actor_5
     not is_char_dead $mission_actor_6
 goto_if_false @POLICE_2_SPOTTED
-if and
-    not has_object_been_damaged $mission_obj_1
-    not has_object_been_damaged $mission_obj_2
-    not has_object_been_damaged $mission_obj_3
-    not has_object_been_damaged $mission_obj_4
-goto_if_false @POLICE_2_SPOTTED
+if
+    2 > $mission_step
+then
+    if and
+        not has_object_been_damaged $mission_obj_1
+        not has_object_been_damaged $mission_obj_2
+        not has_object_been_damaged $mission_obj_3
+        not has_object_been_damaged $mission_obj_4
+    goto_if_false @POLICE_2_SPOTTED
+end
 if
     not is_car_dead $mission_car_1
 goto_if_false @POLICE_2_WHY
@@ -12223,6 +12225,7 @@ then
         set_fixed_camera_position -42.2928 904.449 14.9402 0.0 0.0 0.0
         point_camera_at_car $objective_car 15 2
         TIMERA = 0
+        14@ = 0
         15@ = 0
         while 10000 > TIMERA
             wait 0
@@ -12231,7 +12234,7 @@ then
                 TIMERA > 2000
             then
                 15@++
-                print_now 'DISTR2' time 5000 1
+                print_now 'DISTR2' time 4000 1
                 set_fixed_camera_position -18.1019 900.7247 10.4402 0.0 0.0 0.0
                 point_camera_at_char $mission_actor_5 15 2
             end
@@ -12240,11 +12243,17 @@ then
                 TIMERA > 6000
             then
                 15@++
-                print_now 'DISTR3' time 5000 1
-                set_fixed_camera_position -56.4019 903.343 11.9402 0.0 0.0 0.0
-                point_camera_at_point -66.9739 945.0996 11.9401 2
+                print_now 'DISTR3' time 4000 1
+                set_fixed_camera_position -56.4019 903.343 13.4402 0.0 0.0 0.0
+                point_camera_at_point -66.9739 945.0996 13.9401 2
             end
             if
+                not is_button_pressed 0 pressed_button 16
+            then
+                14@ = 1
+            end
+            if and
+                14@ == 1
                 is_button_pressed 0 pressed_button 16
             then
                 break
@@ -12272,9 +12281,16 @@ then
         set_fixed_camera_position -71.3411 931.1442 12.9294 0.0 0.0 0.0
         point_camera_at_car $mission_car_2 15 2
         TIMERA = 0
+        14@ = 0
         while 4000 > TIMERA
             wait 0
             if
+                not is_button_pressed 0 pressed_button 16
+            then
+                14@ = 1
+            end
+            if and
+                14@ == 1
                 is_button_pressed 0 pressed_button 16
             then
                 break
@@ -12291,7 +12307,7 @@ then
     end
 end
 if
-    $mission_step == 1
+    $mission_step == 2
 then
     if or
         is_car_dead $mission_car_2
@@ -12306,7 +12322,7 @@ then
         remove_blip $mission_obj_4_marker
         $mission_step = 2
         print_now 'DISTR5' time 5000 1
-        shake_cam 2500
+        shake_cam 1500
         add_explosion_no_sound -79.3874 928.3461 9.8907 type 2
         add_explosion_no_sound -79.3874 928.3461 9.8907 type 11
         add_explosion 1 at -79.3874 928.3461 9.8907
@@ -12322,10 +12338,212 @@ then
         add_explosion_no_sound -81.2422 934.4525 9.8818 type 11
         add_explosion_no_sound -81.2422 934.4525 9.8818 type 1
         add_explosion_no_sound -81.2422 934.4525 9.8818 type 6
-        add_blip_for_coord $objective_point_marker = create_checkpoint_at -71.8546 932.6585 10.9269
+        delete_char $mission_actor_1
+        delete_char $mission_actor_2
+        delete_char $mission_actor_3
+        delete_char $mission_actor_4
+        delete_char $mission_actor_5
+        delete_char $mission_actor_6
+        remove_blip $mission_actor_1_marker
+        remove_blip $mission_actor_2_marker
+        remove_blip $mission_actor_3_marker
+        remove_blip $mission_actor_4_marker
+        remove_blip $mission_actor_5_marker
+        remove_blip $mission_actor_6_marker
+        start_script_fire $mission_fire_1 = create_fire_at -74.2621 932.9135 10.9153
+        start_script_fire $mission_fire_2 = create_fire_at -71.5421 934.9539 10.9284
+        start_script_fire $mission_fire_3 = create_fire_at -73.9383 931.0214 10.9169
+        start_script_fire $mission_fire_4 = create_fire_at -78.3976 929.368 10.8955
+        add_blip_for_coord $objective_point_marker = create_checkpoint_at -60.6042 982.7059 10.9403
+        $mission_step = 0
+        goto @POLICE_2_ESCAPE
     end
 end
 goto @POLICE_2_GUARD
+
+:POLICE_2_ESCAPE
+wait 0
+if
+    not is_car_dead $objective_car
+goto_if_false @POLICE_2_WRECKED
+if
+    not is_car_dead $mission_car_1
+goto_if_false @POLICE_2_WHY
+if
+    $mission_step > 0
+then
+    if
+        TIMERB > 3100
+    then
+        TIMERB = 0
+        set_char_wait_state $mission_actor_1 anim 2 wait_state_time -1
+        set_char_wait_state $mission_actor_3 anim 8 wait_state_time -1
+        set_char_wait_state $mission_actor_5 anim 2 wait_state_time -1
+    end
+    if
+        TIMERB > 1500
+    then
+        set_char_wait_state $mission_actor_2 anim 8 wait_state_time -1
+        set_char_wait_state $mission_actor_4 anim 2 wait_state_time -1
+        set_char_wait_state $mission_actor_6 anim 8 wait_state_time -1
+    end
+end
+if
+    $mission_step == 0
+then
+    if
+        locate_player_on_foot_2d $player_char 1 -60.6042 982.7059 radius 10.0 10.0
+    then
+        $mission_step = 1
+        print_now 'DISTR6' time 5000 1
+        freeze_char_position $player_actor in_current_position 1
+        switch_widescreen 1
+        set_fixed_camera_position -56.8524 931.6771 15.9401 0.0 0.0 0.0
+        point_camera_at_point -80.261 931.7101 9.6537 2
+        request_model #WMYRI
+        request_model #HMYRI
+        request_model #COLT45
+        load_all_models_now
+        create_char $mission_actor_1 4 #WMYRI -59.2133 927.3563 9.9401
+        create_char $mission_actor_2 4 #HMYRI -58.316 929.4002 9.9401
+        create_char $mission_actor_3 4 #WMYRI -58.1431 931.3418 9.9401
+        create_char $mission_actor_4 4 #HMYRI -58.417 934.0034 9.9401
+        create_char $mission_actor_5 4 #HMYRI -59.3156 937.4147 9.9401
+        create_char $mission_actor_6 4 #WMYRI -62.0339 939.8083 9.9401
+        set_char_heading $mission_actor_1 90.0
+        set_char_heading $mission_actor_2 90.0
+        set_char_heading $mission_actor_3 90.0
+        set_char_heading $mission_actor_4 90.0
+        set_char_heading $mission_actor_5 90.0
+        set_char_heading $mission_actor_6 90.0
+        set_char_obj_run_to_coord $mission_actor_1 -66.5552 930.2499
+        set_char_obj_run_to_coord $mission_actor_2 -65.6892 929.507
+        set_char_obj_run_to_coord $mission_actor_3 -65.31 931.2769
+        set_char_obj_run_to_coord $mission_actor_4 -65.1446 932.8597
+        set_char_obj_run_to_coord $mission_actor_5 -66.0438 933.9544
+        set_char_obj_run_to_coord $mission_actor_6 -67.5148 934.7393
+        clear_char_threat_search $mission_actor_1
+        clear_char_threat_search $mission_actor_2
+        clear_char_threat_search $mission_actor_3
+        clear_char_threat_search $mission_actor_4
+        clear_char_threat_search $mission_actor_5
+        clear_char_threat_search $mission_actor_6
+        set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_2 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_3 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_4 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_5 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_6 dismemberment_possible 0
+        give_weapon_to_char $mission_actor_1 weapon 23 ammo 9999
+        give_weapon_to_char $mission_actor_2 weapon 23 ammo 9999
+        give_weapon_to_char $mission_actor_3 weapon 23 ammo 9999
+        give_weapon_to_char $mission_actor_4 weapon 23 ammo 9999
+        give_weapon_to_char $mission_actor_5 weapon 23 ammo 9999
+        give_weapon_to_char $mission_actor_6 weapon 23 ammo 9999
+        set_char_proofs $mission_actor_1 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_2 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_3 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_4 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_5 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_6 immunities 1 1 1 1 1
+        TIMERA = 0
+        14@ = 0
+        while 5000 > TIMERA
+            wait 0
+            if
+                not is_button_pressed 0 pressed_button 16
+            then
+                14@ = 1
+            end
+            if and
+                14@ == 1
+                is_button_pressed 0 pressed_button 16
+            then
+                break
+            end
+        end
+        freeze_char_position $player_actor in_current_position 0
+        switch_widescreen 0
+        restore_camera_jumpcut
+        set_camera_behind_player
+        set_char_coordinates $mission_actor_1 -66.5552 930.2499 9.9401
+        set_char_coordinates $mission_actor_2 -65.6892 929.507 9.9401
+        set_char_coordinates $mission_actor_3 -65.31 931.2769 9.9401
+        set_char_coordinates $mission_actor_4 -65.1446 932.8597 9.9401
+        set_char_coordinates $mission_actor_5 -66.0438 933.9544 9.9401
+        set_char_coordinates $mission_actor_6 -67.5148 934.7393 9.9401
+        set_char_obj_no_obj $mission_actor_1
+        set_char_obj_no_obj $mission_actor_2
+        set_char_obj_no_obj $mission_actor_3
+        set_char_obj_no_obj $mission_actor_4
+        set_char_obj_no_obj $mission_actor_5
+        set_char_obj_no_obj $mission_actor_6
+        turn_char_to_face_coord $mission_actor_1 to_look_at_spot -80.261 931.7101 9.6537
+        turn_char_to_face_coord $mission_actor_2 to_look_at_spot -80.261 931.7101 9.6537
+        turn_char_to_face_coord $mission_actor_3 to_look_at_spot -80.261 931.7101 9.6537
+        turn_char_to_face_coord $mission_actor_4 to_look_at_spot -80.261 931.7101 9.6537
+        turn_char_to_face_coord $mission_actor_5 to_look_at_spot -80.261 931.7101 9.6537
+        turn_char_to_face_coord $mission_actor_6 to_look_at_spot -80.261 931.7101 9.6537
+        TIMERB = 0
+        remove_blip $objective_point_marker
+        add_blip_for_coord $objective_point_marker = create_checkpoint_at 4.2194 963.9736 10.9402
+        clear_onscreen_counter $notice_counter
+    end
+end
+if
+    $mission_step == 1
+then
+    if
+        locate_player_any_means_2d $player_char 1 4.2194 963.9736 radius 15.0 15.0
+    then
+        $mission_step = 2
+        remove_blip $objective_point_marker
+        add_blip_for_car $mission_car_1_marker = create_marker_above_car $mission_car_1
+        print_now 'HAMS1' time 4000 1
+        set_player_control $player_char 0
+        switch_widescreen 1
+        set_fixed_camera_position 1.2139 967.3941 12.9402 0.0 0.0 0.0
+        point_camera_at_point 10.2127 963.924 11.9402 2
+        TIMERA = 0
+        14@ = 0
+        15@ = 0
+        while 12000 > TIMERA
+            wait 0
+            if and
+                15@ == 0
+                TIMERA > 4000
+            then
+                15@++
+                print_now 'HAMS2' time 5000 1
+                set_interpolation_parameters 0.0 2500
+                point_camera_at_car $mission_car_1 15 1
+            end
+            if and
+                15@ == 1
+                TIMERA > 9000
+            then
+                15@++
+                print_now 'HAMS3' time 3000 1
+            end
+            if
+                not is_button_pressed 0 pressed_button 16
+            then
+                14@ = 1
+            end
+            if and
+                14@ == 1
+                is_button_pressed 0 pressed_button 16
+            then
+                break
+            end
+        end
+        set_player_control $player_char 1
+        switch_widescreen 0
+        restore_camera_jumpcut
+        set_camera_behind_player
+    end
+end
+goto @POLICE_2_ESCAPE
 
 :POLICE_2_SPOTTED
 print_now 'SPOTTED' time 5000 1
@@ -12375,6 +12593,14 @@ delete_object $mission_obj_2
 delete_object $mission_obj_3
 delete_object $mission_obj_4
 remove_pickup $mission_weapon_pickup_1
+mark_model_as_no_longer_needed #POLICE
+mark_model_as_no_longer_needed #PACKER
+mark_model_as_no_longer_needed #WALTON
+mark_model_as_no_longer_needed #WMYRI
+mark_model_as_no_longer_needed #HMYRI
+mark_model_as_no_longer_needed #COLT45
+mark_model_as_no_longer_needed #UZI
+mark_model_as_no_longer_needed #BARREL4
 clear_onscreen_counter $notice_counter
 set_player_is_in_stadium 0
 clear_extra_colours 0

@@ -106,8 +106,8 @@ SUCCESS = Donuts!!!
 [POLICE2]
 NOTICE  = Notice:
 SPOTTED = ~g~You've been spotted!
-DISTR   = ~g~The car is locked.
-DISTR2  = ~g~You need to find a way to distract the guards before proceeding.
+DISTR   = ~g~The car seems fine.
+DISTR2  = ~g~You need to find a way to distract the guards before escaping.
 DISTR3  = ~g~Maybe there's something helpful in one of the hangars?
 DISTR4  = ~g~Ah! This is quite delightful, isn't it?
 DISTR5  = ~g~Run!!!!
@@ -115,4 +115,8 @@ DISTR6  = ~g~Well, that sure was something.
 GETIN   = ~g~Get into the car.
 CARF    = ~r~The car is destroyed!
 WHY     = ~g~You needed this truck!
+HAMS1   = ~g~Oh, egads! The gates are locked!
+HAMS2   = ~g~But what if... you were to get that truck and use it as a ramp to jump over?
+HAMS3   = ~g~Hohohohoho, delightfully devilish, Player!
+TRUCK   = ~g~Drive the truck to the gate, then get into the police car and ~y~jump over~g~ to escape.
 
