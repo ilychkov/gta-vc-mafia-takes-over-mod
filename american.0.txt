@@ -61,6 +61,9 @@ PAINTYE = Enjoy the new color!
 CARMHNT = Press the ~h~~k~~TOGGLE_SUBMISSIONS~ ~w~button to toggle Car Mechanic missions on or off.
 CARMECH = 'CAR MECHANIC'
 CARHLTH = Car health:
+UNCALL1 = Hey Tommy! I hope you haven't forgotten your dear old uncle?
+UNCALL2 = It's been a while. Why don't you come pay me a visit?
+UNCALL3 = I'll be waiting nearby the Printworks.
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!
@@ -104,6 +107,18 @@ GOBACK  = ~g~Drive back to the police department.
 SUCCESS = Donuts!!!
 
 [POLICE2]
+INTRO1  = Mr. Vercetti, nice to see you.
+INTRO2  = I've got a more important task for you this time.
+INTRO3  = A secret prototype police car has been stolen by the Sunglasses gang.
+INTRO4  = If the secret gets leaked, that's big trouble.
+INTRO5  = We're hesitating to dispatch police forces
+INTRO6  = as it would draw more attention to the situation and make it worse.
+INTRO7  = Our only hope is an uninvolved professional like you to ask of to restore the car.
+INTRO8  = They're keeping it on the ~x~North Island~w~. You have to sneak in unnoticed. Good luck!
+START1  = Use the boat to get to the ~x~North Island~w~. The mission needs to be completed before the sunrise.
+START2  = Find the entrance.
+START3  = Find the car.
+SUNRISE = Sunrise:
 NOTICE  = Notice:
 SPOTTED = ~g~You've been spotted!
 DISTR   = ~g~The car seems fine.
@@ -117,6 +132,12 @@ CARF    = ~r~The car is destroyed!
 WHY     = ~g~You needed this truck!
 HAMS1   = ~g~Oh, egads! The gates are locked!
 HAMS2   = ~g~But what if... you were to get that truck and use it as a ramp to jump over?
-HAMS3   = ~g~Hohohohoho, delightfully devilish, Player!
+HAMS3   = ~g~Ho ho ho ho ho, delightfully devilish, Player!
 TRUCK   = ~g~Drive the truck to the gate, then get into the police car and ~y~jump over~g~ to escape.
+FREEDOM = ~g~Great! Now drive the car to the police department in Vice Point.
+GETBACK = ~g~Get back into the car!
+OUTRO1  = Mr. Vercetti, the city truly owes you.
+OUTRO2  = I forgot to introduce myself, how silly!
+OUTRO3  = My name is Rick Wrenson.
+OUTRO4  = Give me a call if you ever need something. Goodbye!
 

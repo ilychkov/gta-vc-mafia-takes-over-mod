@@ -8259,6 +8259,8 @@ create_car_generator $tommy_car_spawn_4 = init_car_generator #SQUALO -1 -1 force
 switch_car_generator $tommy_car_spawn_4 cars_to_generate_to 0
 create_car_generator $car_spawn_1 = init_car_generator #SPEEDER -1 -1 force_spawn 0 alarm 0 door_lock 0 min_delay 0 max_delay 10000 at -799.9042 -334.4113 6.1757 angle 0.452
 switch_car_generator $car_spawn_1 cars_to_generate_to 101
+create_car_generator $police_car_spawn = init_car_generator #POLICE 48 1 force_spawn 0 alarm 0 door_lock 30 min_delay 0 max_delay 10000 at 502.5375 502.7857 9.9967 angle 180.5382
+switch_car_generator $police_car_spawn cars_to_generate_to 0
 
 create_pickup $2035 = create_pickup #BAT type 2 at 30.0 -1330.9 13.0
 create_pickup $1999 = create_pickup #BAT type 2 at 206.7 -1254.4 12.0
@@ -11999,6 +12001,7 @@ then
         not has_object_been_damaged $mission_obj_2
         not has_object_been_damaged $mission_obj_3
         not has_object_been_damaged $mission_obj_4
+        not is_char_shooting $player_actor
     goto_if_false @POLICE_2_SPOTTED
 end
 if
@@ -12356,6 +12359,8 @@ then
         start_script_fire $mission_fire_4 = create_fire_at -78.3976 929.368 10.8955
         add_blip_for_coord $objective_point_marker = create_checkpoint_at -60.6042 982.7059 10.9403
         $mission_step = 0
+        0@ = 1
+        1@ = 1
         goto @POLICE_2_ESCAPE
     end
 end
@@ -12488,17 +12493,21 @@ then
         remove_blip $objective_point_marker
         add_blip_for_coord $objective_point_marker = create_checkpoint_at 4.2194 963.9736 10.9402
         clear_onscreen_counter $notice_counter
+        set_player_is_in_stadium 0
+        lock_car_doors $objective_car door_status_to 1
     end
 end
 if
     $mission_step == 1
 then
     if
-        locate_player_any_means_2d $player_char 1 4.2194 963.9736 radius 15.0 15.0
+        locate_player_any_means_2d $player_char 1 4.2194 963.9736 radius 10.0 10.0
     then
         $mission_step = 2
         remove_blip $objective_point_marker
         add_blip_for_car $mission_car_1_marker = create_marker_above_car $mission_car_1
+        add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
+        add_blip_for_coord $objective_point_marker = create_checkpoint_at 16.4823 962.6206 10.954
         print_now 'HAMS1' time 4000 1
         set_player_control $player_char 0
         switch_widescreen 1
@@ -12543,7 +12552,174 @@ then
         set_camera_behind_player
     end
 end
+if
+    $mission_step == 2
+then
+    draw_corona 2.5 type 6 lensflares 0 with_color 255 137 205 at 12.0997 963.1759 15.954
+    if
+        is_player_in_car $player_char $objective_car
+    then
+        if
+            0@ == 1
+        then
+            remove_blip $objective_car_marker
+        end
+        if
+            locate_player_in_car_2d $player_char 1 16.4823 962.6206 radius 3.0 3.0
+        then
+            jump @POLICE_2_ESCAPED
+        end
+    else
+        if
+            0@ == 0
+        then
+            add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
+        end
+    end
+    if and
+        1@ == 1
+        is_player_in_car $player_char $mission_car_1
+    then
+        remove_blip $mission_car_1_marker
+    end
+end
 goto @POLICE_2_ESCAPE
+
+:POLICE_2_ESCAPED
+mark_car_as_no_longer_needed $mission_car_1
+mark_car_as_no_longer_needed $mission_car_2
+remove_char_elegantly $mission_actor_1
+remove_char_elegantly $mission_actor_2
+remove_char_elegantly $mission_actor_3
+remove_char_elegantly $mission_actor_4
+remove_char_elegantly $mission_actor_5
+remove_char_elegantly $mission_actor_6
+remove_blip $mission_car_1_marker
+remove_blip $objective_car_marker
+remove_blip $objective_point_marker
+add_blip_for_coord $objective_point_marker = create_checkpoint_at 502.5375 502.7857 10.9967
+print_now 'FREEDOM' time 5000 2
+0@ = 1
+
+:POLICE_2_TRAVEL_2
+wait 0
+if
+    not is_car_dead $objective_car
+goto_if_false @POLICE_2_WRECKED
+if
+    0@ == 0
+then
+    if
+        is_player_in_car $player_char in_car $objective_car
+    goto_if_false @POLICE_2_TRAVEL_2
+    remove_blip $objective_car_marker
+    add_blip_for_coord $objective_point_marker = create_checkpoint_at 502.5375 502.7857 10.9967
+    0@ = 1
+else
+    if
+        not is_player_in_car $player_char in_car $objective_car
+    then
+        print_now 'GETBACK' time 5000 2
+        remove_blip $objective_point_marker
+        add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
+        0@ = 0
+        jump @POLICE_2_TRAVEL_2
+    end
+    if
+        not locate_stopped_player_in_car_2d $player_char stopped 1 502.5375 502.7857 radius 4.0 4.0
+    goto_if_false @POLICE_2_TRAVEL_2_END
+end
+jump @POLICE_2_TRAVEL_2
+
+:POLICE_2_TRAVEL_2_END
+remove_blip $objective_point_marker
+clear_prints
+set_player_control $player_char 0
+fade 0 500
+wait 1000
+switch_widescreen 1
+set_fixed_camera_position 507.5866 508.2696 11.8487 0.0 0.0 0.0
+point_camera_at_point 504.4974 505.9874 11.3646 2
+set_car_coordinates $objective_car 502.5375 502.7857 9.9967
+set_car_heading $objective_car 180.5382
+warp_player_from_car_to_coord $player_char 505.3627 505.3947 10.3479
+set_char_heading $player_actor 99.4804
+request_model #VICE3
+load_all_models_now
+create_char $mission_actor_1 4 #VICE3 496.7986 505.9915 10.3995
+set_char_heading $mission_actor_1 270.0
+set_char_obj_run_to_coord $mission_actor_1 501.7986 505.9915
+fade 1 1000
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if
+        15@ == 0
+    then
+        if or
+            is_char_objective_passed $mission_actor_1
+            TIMERA > 5000
+        then
+            15@++
+            TIMERA = 0
+            print_now 'OUTRO1' time 3000 1
+        end
+    end
+    if and
+        15@ == 1
+        TIMERA > 3000
+    then
+        15@++
+        TIMERA = 0
+        print_now 'OUTRO2' time 3000 1
+    end
+    if and
+        15@ == 2
+        TIMERA > 3000
+    then
+        15@++
+        TIMERA = 0
+        set_fixed_camera_position 504.7986 506.9915 12.3995 0.0 0.0 0.0
+        point_camera_at_point 501.7986 505.9915 11.8995 2
+        print_now 'OUTRO3' time 2500 1
+    end
+    if and
+        15@ == 3
+        TIMERA > 2500
+    then
+        15@++
+        TIMERA = 0
+        print_now 'OUTRO4' time 4000 1
+    end
+    if and
+        15@ == 4
+        TIMERA > 4000
+    then
+        break
+    end
+    if
+        not is_button_pressed 0 pressed_button 16
+    then
+        14@ = 1
+    end
+    if and
+        14@ == 1
+        is_button_pressed 0 pressed_button 16
+    then
+        break
+    end
+end
+fade 0 1000
+wait 1000
+delete_car $objective_car
+delete_char $mission_actor_1
+fade 1 1000
+set_player_control $player_char 1
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+goto @POLICE_2_PASS
 
 :POLICE_2_SPOTTED
 print_now 'SPOTTED' time 5000 1
@@ -12564,6 +12740,17 @@ return
 print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
 return
 
+:POLICE_2_PASS
+play_mission_passed_tune 1
+print_with_number_big 'M_PASS' number 1000 time 5000 style 1 // MISSION PASSED! $~1~
+add_score $player_char money += 1000
+register_mission_passed 'POLIC2S'
+player_made_progress 1
+$passed_police_2 = 1
+remove_blip $icon_police
+switch_car_generator $police_car_spawn cars_to_generate_to 101
+return
+
 :POLICE_2_CLEANUP
 $onmission = 0
 $npcs_north_island_allowed = 1
@@ -12582,6 +12769,7 @@ remove_blip $mission_actor_3_marker
 remove_blip $mission_actor_4_marker
 remove_blip $mission_actor_5_marker
 remove_blip $mission_actor_6_marker
+remove_blip $mission_car_1_marker
 remove_blip $objective_car_marker
 remove_blip $objective_point_marker
 remove_blip $mission_obj_1_marker
