@@ -228,9 +228,6 @@ launch_mission @INTERIO
 launch_mission @CARGEN
 launch_mission @AUDIO
 
-wait 1000
-start_mission POLICE_2
-
 :MAIN
 wait 1000 ms
 if
@@ -4735,26 +4732,35 @@ script_name 'POL1M'
 
 :POLICE_1_MARKER_LOOP
 wait $default_wait_time
-if
+if and
     $passed_police_1 == 1
+    $passed_police_2 == 1
 then
     terminate_this_script
 end
 if
     is_player_playing $player_char
-goto_if_false @POLICE_1_MARKER_LOOP_END
+goto_if_false @POLICE_1_MARKER_LOOP
 if and
     $onmission == 0
     is_player_in_zone $player_char in_zone 'BEACH2' // Washington Beach
-goto_if_false @POLICE_1_MARKER_LOOP_END
+goto_if_false @POLICE_1_MARKER_LOOP
 if and
     can_player_start_mission $player_char
     locate_player_on_foot_3d $player_char 0 $police_x $police_y $police_z radius 1.2 1.2 2.0
-goto_if_false @POLICE_1_MARKER_LOOP_END
-print_big 'POLICE1' 15000 ms 2
-start_mission POLICE_1
-
-:POLICE_1_MARKER_LOOP_END
+goto_if_false @POLICE_1_MARKER_LOOP
+if
+    $passed_police_1 == 0
+then
+    print_big 'POLICE1' 15000 ms 2
+    start_mission POLICE_1
+end
+if
+    $passed_police_2 == 0
+then
+    print_big 'POLICE2' 15000 ms 2
+    start_mission POLICE_2
+end
 goto @POLICE_1_MARKER_LOOP
 
 //-------------Insane stunts script---------------
@@ -7432,7 +7438,8 @@ $npcs_north_island_allowed = 1
 $last_help_printing_time = 0
 $game_completed = 0
 $restart_overriden = 0
-$passed_police_1 = 0
+$passed_police_1 = 1//todo
+$passed_police_2 = 0
 $passed_car_mechanic_count = 0
 
 add_short_range_sprite_blip_for_coord $icon_vercetti = create_icon_marker_without_sphere 29 at -246.0713 -324.6199 10.2586
@@ -10245,7 +10252,6 @@ add_score $player_char money += 100
 register_mission_passed 'POLIC1S'
 player_made_progress 1
 $passed_police_1 = 1
-remove_blip $icon_police
 return
 
 :POLICE_1_CLEANUP
@@ -11882,19 +11888,167 @@ terminate_this_script
 :POLICE_2_START
 $onmission = 1
 $npcs_north_island_allowed = 0
+$allow_police_chases = 0
+delete_object $1811 // restore later? doesn't matter really
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'POLICE2'
-delete_object $1811 // restore later? doesn't matter really
-set_extra_colours 11 fade 0
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 fade 0 500
 wait 500
+switch_widescreen 1
+clear_area 0 at 352.6562 -528.4199 8.9133 range 20.0
+set_car_density_multiplier 0.0
+set_ped_density_multiplier 0.0
+set_char_coordinates $player_actor 344.7186 -528.6737 8.8841
+set_char_heading $player_actor 245.1014
+set_fixed_camera_position 342.1291 -522.722 15.0717 0.0 0.0 0.0
+point_camera_at_point 348.1 -528.4 9.5 2
+request_model #POLICE
+request_model #VICE3
+load_all_models_now
+create_car $mission_car_1 #POLICE 345.1639 -550.8792 9.1269
+set_car_heading $mission_car_1 337.9356
+create_char_inside_car $mission_actor_1 = create_actor 4 #VICE3 in_car $mission_car_1
+clear_char_threat_search $mission_actor_1
+car_goto_coordinates_accurate $mission_car_1 348.9272 -527.6115 9.8841
+set_car_cruise_speed $mission_car_1 max_speed_to 100.0
+set_car_driving_style $mission_car_1 traffic_behavior_to 3
+set_car_straight_line_distance $mission_car_1 abandon_path_radius 255
+set_car_forward_speed $mission_car_1 speed_instantly 30.0
+fade 1 1000
+0@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if
+        0@ == 0
+    then
+        if or
+            locate_car_2d $mission_car_1 sphere 0 near_point 348.9272 -527.6115 radius 12.0 12.0
+            TIMERA > 5000
+        then
+            0@++
+            TIMERA = 0
+            set_car_temp_action $mission_car_1 action 3 time 9999
+            set_char_obj_leave_car $mission_actor_1 leave_car $mission_car_1
+        end
+    end
+    if
+        0@ == 1
+    then
+        if or
+            is_char_on_foot $mission_actor_1
+            TIMERA > 2000
+        then
+            0@++
+            TIMERA = 0
+        end
+    end
+    if and
+        0@ == 2
+        TIMERA > 200
+    then
+        0@++
+        TIMERA = 0
+        set_fixed_camera_position 354.8237 -535.3906 10.0538 0.0 0.0 0.0
+        point_camera_at_car $mission_car_1 15 2
+        turn_char_to_face_char $player_actor $mission_actor_1
+        turn_char_to_face_char $mission_actor_1 $player_actor
+        set_char_wait_state $mission_actor_1 anim 19 wait_state_time 20000
+        print_now 'INTRO1' time 3000 1
+    end
+    if and
+        0@ == 3
+        TIMERA > 3000
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO2' time 3500 1
+    end
+    if and
+        0@ == 4
+        TIMERA > 3500
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO3' time 5000 1
+        set_fixed_camera_position 350.806 -528.3649 11.0521 1.0 1.0 1.0
+        point_camera_at_char $mission_actor_1 15 2
+    end
+    if and
+        0@ == 5
+        TIMERA > 5000
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO4' time 3500 1
+    end
+    if and
+        0@ == 6
+        TIMERA > 3500
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO5' time 3000 1
+    end
+    if and
+        0@ == 7
+        TIMERA > 3000
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO6' time 4500 1
+    end
+    if and
+        0@ == 8
+        TIMERA > 4500
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO7' time 5500 1
+    end
+    if and
+        0@ == 9
+        TIMERA > 5500
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO8' time 5500 1
+    end
+    if and
+        0@ == 10
+        TIMERA > 5500
+    then
+        break
+    end
+    if or
+        {$I incl.anykey.txt}
+    then
+        break
+    end
+end
+return
+fade 0 1000
+wait 1000
+delete_car $mission_car_1
+delete_char $mission_actor_1
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+switch_widescreen 0
+set_car_density_multiplier 0.0
+set_ped_density_multiplier 0.0
+
+set_extra_colours 11 fade 0
 request_model #SPEEDER
 load_all_models_now
-create_car $mission_car #SPEEDER 231.4022 -130.4045 5.2138
-set_car_heading $mission_car 333.5717
+create_car $mission_car_1 #SPEEDER 231.4022 -130.4045 5.2138
+set_car_heading $mission_car_1 333.5717
 mark_model_as_no_longer_needed #SPEEDER
-warp_player_into_car $player_char $mission_car
+warp_player_into_car $player_char $mission_car_1
 set_radio_channel 9 -1
 restore_camera_jumpcut
 set_camera_behind_player
@@ -11908,7 +12062,7 @@ print_now 'START1' time 5000 1
 if
     $mission_debug == 1
 then
-    set_car_coordinates $mission_car -86.8647 861.5096 9.0687
+    set_car_coordinates $mission_car_1 -86.8647 861.5096 9.0687
 end
 
 :POLICE_2_TRAVEL
@@ -11925,7 +12079,7 @@ then
         override_next_restart 493.5 703.1 11.1 angle 90.0
         $restart_overriden = 1
         remove_blip $objective_point_marker
-        mark_car_as_no_longer_needed $mission_car
+        mark_car_as_no_longer_needed $mission_car_1
         add_blip_for_coord $objective_point_marker = create_checkpoint_at -117.8015 1027.7056 10.0265
         create_object $mission_obj_1 #WOODENBOX -117.732 1030.0739 9.9134
         set_object_heading $mission_obj_1 274.5784
@@ -11967,6 +12121,7 @@ wait 0
 set_interpolation_parameters 0.0 3000
 set_fixed_camera_position -110.4972 1026.5283 10.9402 0.0 0.0 0.0
 point_camera_at_point -117.8015 1027.7056 11.0265 1
+14@ = 0
 15@ = 0
 TIMERA = 0
 while True
@@ -12017,6 +12172,17 @@ while True
     if and
         15@ == 4
         TIMERA > 1500
+    then
+        break
+    end
+    if
+        not is_button_pressed 0 pressed_button 16
+    then
+        14@ = 1
+    end
+    if and
+        14@ == 1
+        is_button_pressed 0 pressed_button 16
     then
         break
     end
@@ -12932,6 +13098,7 @@ return
 :POLICE_2_CLEANUP
 $onmission = 0
 $npcs_north_island_allowed = 1
+$allow_police_chases = 1
 flash_hud_object -1
 mark_car_as_no_longer_needed $objective_car
 mark_car_as_no_longer_needed $mission_car_1
@@ -12963,6 +13130,7 @@ remove_pickup $mission_weapon_pickup_1
 mark_model_as_no_longer_needed #POLICE
 mark_model_as_no_longer_needed #PACKER
 mark_model_as_no_longer_needed #WALTON
+mark_model_as_no_longer_needed #VICE3
 mark_model_as_no_longer_needed #WMYRI
 mark_model_as_no_longer_needed #HMYRI
 mark_model_as_no_longer_needed #COLT45
