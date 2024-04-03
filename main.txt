@@ -11882,12 +11882,154 @@ terminate_this_script
 :POLICE_2_START
 $onmission = 1
 $npcs_north_island_allowed = 0
-override_next_restart 493.5 703.1 11.1 angle 90.0
-$restart_overriden = 1
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'POLICE2'
-delete_object $1811
+delete_object $1811 // restore later? doesn't matter really
+set_extra_colours 11 fade 0
+fade 0 500
+wait 500
+request_model #SPEEDER
+load_all_models_now
+create_car $mission_car #SPEEDER 231.4022 -130.4045 5.2138
+set_car_heading $mission_car 333.5717
+mark_model_as_no_longer_needed #SPEEDER
+warp_player_into_car $player_char $mission_car
+set_radio_channel 9 -1
+restore_camera_jumpcut
+set_camera_behind_player
+add_blip_for_coord $objective_point_marker = create_checkpoint_at -84.8288 865.179 10.9451
+set_time_of_day 21 0
+$mission_timer = 420000
+display_onscreen_timer_with_string $mission_timer type 1 text 'SUNRISE' // Sunrise:
+fade 1 500
+print_now 'START1' time 5000 1
+0@ = 0
+if
+    $mission_debug == 1
+then
+    set_car_coordinates $mission_car -86.8647 861.5096 9.0687
+end
+
+:POLICE_2_TRAVEL
+wait 0
+if
+    $mission_timer > 0
+goto_if_false @POLICE_2_TIMEOUT
+if
+    0@ == 0
+then
+    if
+        locate_player_on_foot_3d $player_char 1 -84.8288 865.179 9.9451 radius 2.0 2.0 2.0
+    then
+        override_next_restart 493.5 703.1 11.1 angle 90.0
+        $restart_overriden = 1
+        remove_blip $objective_point_marker
+        mark_car_as_no_longer_needed $mission_car
+        add_blip_for_coord $objective_point_marker = create_checkpoint_at -117.8015 1027.7056 10.0265
+        create_object $mission_obj_1 #WOODENBOX -117.732 1030.0739 9.9134
+        set_object_heading $mission_obj_1 274.5784
+        print_now 'START2' time 5000 1
+        0@ = 1
+    end
+end
+if
+    0@ == 1
+then
+    if
+        not locate_stopped_player_on_foot_3d $player_char 1 -117.8015 1027.7056 10.0265 radius 1.0 1.0 1.0
+    goto_if_false @POLICE_2_TRAVEL_END
+end
+goto @POLICE_2_TRAVEL
+
+:POLICE_2_TRAVEL_END
+remove_blip $objective_point_marker
+set_player_control $player_char 0
+fade 0 500
+wait 500
+delete_object $mission_obj_1
+request_model #WMYRI
+request_model #UZI
+request_model #WOODENBOX
+load_all_models_now
+set_char_coordinates $player_actor -118.8116 1027.7404 10.0265
+set_char_heading $player_actor 267.9984
+switch_widescreen 1
+set_fixed_camera_position -112.9059 1026.9806 10.9402 0.0 0.0 0.0
+point_camera_at_point -117.8015 1027.7056 11.0265 2
+create_char $mission_actor_1 4 #WMYRI -112.0 1024.5 9.9
+set_char_obj_goto_coord_on_foot $mission_actor_1 -112.0 1027.15
+clear_char_threat_search $mission_actor_1
+give_weapon_to_char $mission_actor_1 weapon 23 ammo 9999
+set_near_clip 0.1
+fade 1 500
+wait 0
+set_interpolation_parameters 0.0 3000
+set_fixed_camera_position -110.4972 1026.5283 10.9402 0.0 0.0 0.0
+point_camera_at_point -117.8015 1027.7056 11.0265 1
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if
+        15@ == 0
+    then
+        if
+            TIMERA > 10000
+        then
+            break
+        end
+        if
+            is_char_objective_passed $mission_actor_1
+        then
+            15@++
+            TIMERA = 0
+            set_char_heading $mission_actor_1 90.3
+        end
+    end
+    if and
+        15@ == 1
+        TIMERA > 1000
+    then
+        15@++
+        TIMERA = 0
+        set_char_wait_state $mission_actor_1 anim 8 wait_state_time 2000
+        set_char_crouch $player_actor crouch 1 9999999
+        create_object $mission_obj_1 #WOODENBOX -117.8015 1027.7056 10.0265
+        set_object_heading $mission_obj_1 267.9984
+    end
+    if and
+        15@ == 2
+        TIMERA > 2000
+    then
+        15@++
+        TIMERA = 0
+        set_char_obj_goto_coord_on_foot $mission_actor_1 -112.0 1030.0
+    end
+    if and
+        15@ == 3
+        TIMERA > 2000
+    then
+        15@++
+        TIMERA = 0
+        set_char_crouch $player_actor crouch 0 9999999
+    end
+    if and
+        15@ == 4
+        TIMERA > 1500
+    then
+        break
+    end
+end
+set_near_clip 0.9
+set_char_crouch $player_actor crouch 0 9999999
+mark_object_as_no_longer_needed $mission_obj_1
+delete_char $mission_actor_1
+set_player_control $player_char 1
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+print_now 'START3' time 5000 1
 request_model #POLICE
 request_model #PACKER
 request_model #WALTON
@@ -11912,8 +12054,7 @@ set_car_heading $mission_car_2 17.1388
 mark_model_as_no_longer_needed #POLICE
 mark_model_as_no_longer_needed #PACKER
 mark_model_as_no_longer_needed #WALTON
-create_char $mission_actor_1 4 #WMYRI -114.8196 987.0668 10.9403
-set_char_heading $mission_actor_1 330.0335
+create_char $mission_actor_1 4 #WMYRI -114.5712 994.8188 9.9393
 create_char $mission_actor_2 4 #HMYRI -56.1954 993.7791 10.9403
 create_char $mission_actor_3 4 #WMYRI -75.7297 1038.1019 11.17
 set_char_heading $mission_actor_3 188.0948
@@ -11921,6 +12062,7 @@ create_char $mission_actor_4 4 #HMYRI -47.8925 949.0961 9.9403
 create_char $mission_actor_5 4 #HMYRI -22.2307 902.8266 9.9402
 set_char_heading $mission_actor_5 339.7291
 create_char $mission_actor_6 4 #WMYRI -61.8865 914.3615 9.9401
+set_char_obj_goto_coord_on_foot $mission_actor_1 -114.4708 1002.7998
 set_char_obj_goto_coord_on_foot $mission_actor_2 -35.2149 987.3121
 set_char_obj_goto_coord_on_foot $mission_actor_4 -34.2525 948.209
 set_char_obj_goto_coord_on_foot $mission_actor_6 -61.6784 884.4504
@@ -11977,11 +12119,16 @@ const notice_min_distance = 20.0
 const notice_max_distance = 30.0
 const notice_distance_diff = 10.0
 set_player_is_in_stadium 1
-set_extra_colours 11 fade 0
+flash_hud_object 8
+9@ = 0
+TIMERA = 0
 $mission_step = 0
 
 :POLICE_2_GUARD
 wait 0
+if
+    $mission_timer > 0
+goto_if_false @POLICE_2_TIMEOUT
 if
     not is_car_dead $objective_car
 goto_if_false @POLICE_2_WRECKED
@@ -11993,6 +12140,13 @@ if and
     not is_char_dead $mission_actor_5
     not is_char_dead $mission_actor_6
 goto_if_false @POLICE_2_SPOTTED
+if and
+    9@ == 0
+    TIMERA > 3000
+then
+    9@ = 1
+    flash_hud_object -1
+end
 if
     2 > $mission_step
 then
@@ -12177,6 +12331,22 @@ else
     end
 end
 if
+    $notice_counter > 60
+then
+    print 'CAREFUL' time 50 1
+end
+if
+    is_char_objective_passed $mission_actor_1
+then
+    if
+        locate_char_on_foot_2d $mission_actor_1 0 -114.4708 1002.7998 2.0 2.0
+    then
+        set_char_obj_goto_coord_on_foot $mission_actor_1 -114.5712 994.8188
+    else
+        set_char_obj_goto_coord_on_foot $mission_actor_1 -114.4708 1002.7998
+    end
+end
+if
     is_char_objective_passed $mission_actor_2
 then
     if
@@ -12357,7 +12527,6 @@ then
         start_script_fire $mission_fire_2 = create_fire_at -71.5421 934.9539 10.9284
         start_script_fire $mission_fire_3 = create_fire_at -73.9383 931.0214 10.9169
         start_script_fire $mission_fire_4 = create_fire_at -78.3976 929.368 10.8955
-        add_blip_for_coord $objective_point_marker = create_checkpoint_at -60.6042 982.7059 10.9403
         $mission_step = 0
         0@ = 1
         1@ = 1
@@ -12368,6 +12537,9 @@ goto @POLICE_2_GUARD
 
 :POLICE_2_ESCAPE
 wait 0
+if
+    $mission_timer > 0
+goto_if_false @POLICE_2_TIMEOUT
 if
     not is_car_dead $objective_car
 goto_if_false @POLICE_2_WRECKED
@@ -12397,7 +12569,7 @@ if
     $mission_step == 0
 then
     if
-        locate_player_on_foot_2d $player_char 1 -60.6042 982.7059 radius 10.0 10.0
+        not locate_player_any_means_2d $player_char 1 -80.261 931.7101 radius 30.0 30.0
     then
         $mission_step = 1
         print_now 'DISTR6' time 5000 1
@@ -12407,7 +12579,7 @@ then
         point_camera_at_point -80.261 931.7101 9.6537 2
         request_model #WMYRI
         request_model #HMYRI
-        request_model #COLT45
+        request_model #UZI
         load_all_models_now
         create_char $mission_actor_1 4 #WMYRI -59.2133 927.3563 9.9401
         create_char $mission_actor_2 4 #HMYRI -58.316 929.4002 9.9401
@@ -12637,6 +12809,7 @@ clear_prints
 set_player_control $player_char 0
 fade 0 500
 wait 1000
+clear_extra_colours 0
 switch_widescreen 1
 set_fixed_camera_position 507.5866 508.2696 11.8487 0.0 0.0 0.0
 point_camera_at_point 504.4974 505.9874 11.3646 2
@@ -12721,6 +12894,11 @@ restore_camera_jumpcut
 set_camera_behind_player
 goto @POLICE_2_PASS
 
+:POLICE_2_TIMEOUT
+print_now 'TIMEOUT' time 5000 1
+POLICE_2_FAIL()
+return
+
 :POLICE_2_SPOTTED
 print_now 'SPOTTED' time 5000 1
 POLICE_2_FAIL()
@@ -12754,6 +12932,7 @@ return
 :POLICE_2_CLEANUP
 $onmission = 0
 $npcs_north_island_allowed = 1
+flash_hud_object -1
 mark_car_as_no_longer_needed $objective_car
 mark_car_as_no_longer_needed $mission_car_1
 mark_car_as_no_longer_needed $mission_car_2
