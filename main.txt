@@ -4,7 +4,7 @@ DEFINE MISSION 1 AT @INTRO             // Intro
 DEFINE MISSION 2 AT @GOLF              // A Little Game of Golf
 DEFINE MISSION 3 AT @POLICE_1          // Special Delivery
 DEFINE MISSION 4 AT @CAR_MECHANIC      // Car Mechanic
-DEFINE MISSION 5 AT @POLICE_2          // WIP
+DEFINE MISSION 5 AT @POLICE_2          // Midnight Car Escape
 
 //-------------MAIN---------------
 thread 'MAIN'
@@ -11874,7 +11874,7 @@ mission_has_finished
 return
 
 //-------------Mission 5---------------
-// WIP
+// Midnight Car Escape
 
 :POLICE_2
 script_name 'POLICE2'
@@ -12483,27 +12483,34 @@ then
     set_lvar_float_to_lvar_float 4@ = 5@
 end
 //-----------------------------------------------
+6@ = 0
 if or
     is_player_in_area_2d $player_char 0 -97.0 951.0 -64.0 982.5
     is_player_in_area_2d $player_char 0 -94.0 922.0 -69.0 944.0
 then
-    $notice_counter = 0
+    6@ = 1
+end
+if or
+    4@ > notice_min_distance
+    6@ == 1
+    $mission_debug == 1
+goto_if_false @POLICE_2_SPOTTED
+if
+    notice_max_distance > 4@
+then
+    5@ = notice_max_distance
+    sub_float_lvar_from_float_lvar 5@ -= 4@
+    5@ /= notice_distance_diff
+    5@ *= 100.0
+    cset_var_int_to_lvar_float $notice_counter = 5@
 else
-    if or
-        4@ > notice_min_distance
-        $mission_debug == 1
-    goto_if_false @POLICE_2_SPOTTED
-    if
-        notice_max_distance > 4@
-    then
-        5@ = notice_max_distance
-        sub_float_lvar_from_float_lvar 5@ -= 4@
-        5@ /= notice_distance_diff
-        5@ *= 100.0
-        cset_var_int_to_lvar_float $notice_counter = 5@
-    else
-        $notice_counter = 0
-    end
+    $notice_counter = 0
+end
+if and
+    $notice_counter > 95
+    6@ == 1
+then
+    $notice_counter = 95
 end
 if
     $notice_counter > 60
