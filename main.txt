@@ -12752,6 +12752,16 @@ then
     end
 end
 if
+    2 > $mission_step
+then
+    get_random_car_of_type_in_area_no_save 10@ = get_random_car_with_actors #FIRETRUK in_area -100.0 850.0 100.0 1100.0
+    if
+        10@ <> -1
+    then
+        delete_car 10@
+    end
+end
+if
     $mission_step == 0
 then
     if
@@ -13152,6 +13162,10 @@ delete_object $mission_obj_2
 delete_object $mission_obj_3
 delete_object $mission_obj_4
 remove_pickup $mission_weapon_pickup_1
+remove_script_fire $mission_fire_1
+remove_script_fire $mission_fire_2
+remove_script_fire $mission_fire_3
+remove_script_fire $mission_fire_4
 mark_model_as_no_longer_needed #POLICE
 mark_model_as_no_longer_needed #PACKER
 mark_model_as_no_longer_needed #WALTON
