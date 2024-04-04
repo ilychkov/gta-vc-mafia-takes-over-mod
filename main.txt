@@ -13850,6 +13850,7 @@ then
             change_blip_display $mission_obj_1_marker display 2
             change_blip_scale $mission_obj_1_marker size 2
             change_blip_colour $mission_obj_1_marker color_to 3
+            dim_blip $mission_obj_1_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_2
@@ -13862,6 +13863,7 @@ then
             change_blip_display $mission_obj_2_marker display 2
             change_blip_scale $mission_obj_2_marker size 2
             change_blip_colour $mission_obj_2_marker color_to 3
+            dim_blip $mission_obj_2_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_3
@@ -13874,6 +13876,7 @@ then
             change_blip_display $mission_obj_3_marker display 2
             change_blip_scale $mission_obj_3_marker size 2
             change_blip_colour $mission_obj_3_marker color_to 3
+            dim_blip $mission_obj_3_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_4
@@ -13886,6 +13889,7 @@ then
             change_blip_display $mission_obj_4_marker display 2
             change_blip_scale $mission_obj_4_marker size 2
             change_blip_colour $mission_obj_4_marker color_to 3
+            dim_blip $mission_obj_4_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_5
@@ -13898,6 +13902,7 @@ then
             change_blip_display $mission_obj_5_marker display 2
             change_blip_scale $mission_obj_5_marker size 2
             change_blip_colour $mission_obj_5_marker color_to 3
+            dim_blip $mission_obj_5_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_6
@@ -13910,6 +13915,7 @@ then
             change_blip_display $mission_obj_6_marker display 2
             change_blip_scale $mission_obj_6_marker size 2
             change_blip_colour $mission_obj_6_marker color_to 3
+            dim_blip $mission_obj_6_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_7
@@ -13922,6 +13928,7 @@ then
             change_blip_display $mission_obj_7_marker display 2
             change_blip_scale $mission_obj_7_marker size 2
             change_blip_colour $mission_obj_7_marker color_to 3
+            dim_blip $mission_obj_7_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_8
@@ -13934,6 +13941,7 @@ then
             change_blip_display $mission_obj_8_marker display 2
             change_blip_scale $mission_obj_8_marker size 2
             change_blip_colour $mission_obj_8_marker color_to 3
+            dim_blip $mission_obj_8_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_9
@@ -13946,6 +13954,7 @@ then
             change_blip_display $mission_obj_9_marker display 2
             change_blip_scale $mission_obj_9_marker size 2
             change_blip_colour $mission_obj_9_marker color_to 3
+            dim_blip $mission_obj_9_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_10
@@ -13958,6 +13967,7 @@ then
             change_blip_display $mission_obj_10_marker display 2
             change_blip_scale $mission_obj_10_marker size 2
             change_blip_colour $mission_obj_10_marker color_to 3
+            dim_blip $mission_obj_10_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_11
@@ -13970,6 +13980,7 @@ then
             change_blip_display $mission_obj_11_marker display 2
             change_blip_scale $mission_obj_11_marker size 2
             change_blip_colour $mission_obj_11_marker color_to 3
+            dim_blip $mission_obj_11_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_12
@@ -13982,6 +13993,7 @@ then
             change_blip_display $mission_obj_12_marker display 2
             change_blip_scale $mission_obj_12_marker size 2
             change_blip_colour $mission_obj_12_marker color_to 3
+            dim_blip $mission_obj_12_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_13
@@ -13994,6 +14006,7 @@ then
             change_blip_display $mission_obj_13_marker display 2
             change_blip_scale $mission_obj_13_marker size 2
             change_blip_colour $mission_obj_13_marker color_to 3
+            dim_blip $mission_obj_13_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_14
@@ -14006,6 +14019,7 @@ then
             change_blip_display $mission_obj_14_marker display 2
             change_blip_scale $mission_obj_14_marker size 2
             change_blip_colour $mission_obj_14_marker color_to 3
+            dim_blip $mission_obj_14_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_15
@@ -14018,6 +14032,7 @@ then
             change_blip_display $mission_obj_15_marker display 2
             change_blip_scale $mission_obj_15_marker size 2
             change_blip_colour $mission_obj_15_marker color_to 3
+            dim_blip $mission_obj_15_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_16
@@ -14030,6 +14045,7 @@ then
             change_blip_display $mission_obj_16_marker display 2
             change_blip_scale $mission_obj_16_marker size 2
             change_blip_colour $mission_obj_16_marker color_to 3
+            dim_blip $mission_obj_16_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_17
@@ -14042,6 +14058,7 @@ then
             change_blip_display $mission_obj_17_marker display 2
             change_blip_scale $mission_obj_17_marker size 2
             change_blip_colour $mission_obj_17_marker color_to 3
+            dim_blip $mission_obj_17_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_18
@@ -14054,6 +14071,7 @@ then
             change_blip_display $mission_obj_18_marker display 2
             change_blip_scale $mission_obj_18_marker size 2
             change_blip_colour $mission_obj_18_marker color_to 3
+            dim_blip $mission_obj_18_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_19
@@ -14066,6 +14084,7 @@ then
             change_blip_display $mission_obj_19_marker display 2
             change_blip_scale $mission_obj_19_marker size 2
             change_blip_colour $mission_obj_19_marker color_to 3
+            dim_blip $mission_obj_19_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_20
@@ -14078,6 +14097,7 @@ then
             change_blip_display $mission_obj_20_marker display 2
             change_blip_scale $mission_obj_20_marker size 2
             change_blip_colour $mission_obj_20_marker color_to 3
+            dim_blip $mission_obj_20_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_21
@@ -14090,6 +14110,7 @@ then
             change_blip_display $mission_obj_21_marker display 2
             change_blip_scale $mission_obj_21_marker size 2
             change_blip_colour $mission_obj_21_marker color_to 3
+            dim_blip $mission_obj_21_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_22
@@ -14102,6 +14123,7 @@ then
             change_blip_display $mission_obj_22_marker display 2
             change_blip_scale $mission_obj_22_marker size 2
             change_blip_colour $mission_obj_22_marker color_to 3
+            dim_blip $mission_obj_22_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_23
@@ -14114,6 +14136,7 @@ then
             change_blip_display $mission_obj_23_marker display 2
             change_blip_scale $mission_obj_23_marker size 2
             change_blip_colour $mission_obj_23_marker color_to 3
+            dim_blip $mission_obj_23_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_24
@@ -14126,6 +14149,7 @@ then
             change_blip_display $mission_obj_24_marker display 2
             change_blip_scale $mission_obj_24_marker size 2
             change_blip_colour $mission_obj_24_marker color_to 3
+            dim_blip $mission_obj_24_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_25
@@ -14138,6 +14162,7 @@ then
             change_blip_display $mission_obj_25_marker display 2
             change_blip_scale $mission_obj_25_marker size 2
             change_blip_colour $mission_obj_25_marker color_to 3
+            dim_blip $mission_obj_25_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_26
@@ -14150,6 +14175,7 @@ then
             change_blip_display $mission_obj_26_marker display 2
             change_blip_scale $mission_obj_26_marker size 2
             change_blip_colour $mission_obj_26_marker color_to 3
+            dim_blip $mission_obj_26_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_27
@@ -14162,6 +14188,7 @@ then
             change_blip_display $mission_obj_27_marker display 2
             change_blip_scale $mission_obj_27_marker size 2
             change_blip_colour $mission_obj_27_marker color_to 3
+            dim_blip $mission_obj_27_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_28
@@ -14174,6 +14201,7 @@ then
             change_blip_display $mission_obj_28_marker display 2
             change_blip_scale $mission_obj_28_marker size 2
             change_blip_colour $mission_obj_28_marker color_to 3
+            dim_blip $mission_obj_28_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_29
@@ -14186,6 +14214,7 @@ then
             change_blip_display $mission_obj_29_marker display 2
             change_blip_scale $mission_obj_29_marker size 2
             change_blip_colour $mission_obj_29_marker color_to 3
+            dim_blip $mission_obj_29_marker brightness_to 1
         end
         if
             has_object_been_damaged $mission_obj_30
@@ -14198,6 +14227,7 @@ then
             change_blip_display $mission_obj_30_marker display 2
             change_blip_scale $mission_obj_30_marker size 2
             change_blip_colour $mission_obj_30_marker color_to 3
+            dim_blip $mission_obj_30_marker brightness_to 1
         end
         if
             15@ == 30
