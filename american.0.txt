@@ -99,6 +99,7 @@ GETIN   = ~g~Get into the car.
 GETIN2  = ~g~Get into the car. (again)
 GONEAWY = ~r~Where did you go???
 CARF    = ~r~The car is destroyed!
+WHY     = ~r~Why?
 TRAVEL  = ~g~Get to the restaurant.
 GETBACK = ~g~Get back into the car!
 SCENE1  = It's for a friend.

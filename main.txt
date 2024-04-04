@@ -9441,9 +9441,13 @@ request_model #WALTON
 while not has_model_loaded #WALTON
     wait 0
 end
-create_car $mission_car = create_car #WALTON at -842.0252 -623.7845 10.1005
+create_car $mission_car = create_car #WALTON at -842.0252 -623.7845 10.0005
 set_car_heading $mission_car z_angle_to 184.3139
 mark_model_as_no_longer_needed #WALTON
+freeze_car_position $mission_car in_current_position 1
+1@ = 0
+set_player_coordinates $player_char 343.2275 -527.6896 9.0558
+set_player_heading $player_char 30.5183
 set_player_control $player_char can_move 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
@@ -9463,21 +9467,7 @@ then
     set_car_coordinates $objective_car at -841.9927 -632.9435 10.8985
     wait 2000
 end
-
-:POLICE_1_WAITING_CAR
-wait 0
-if
-    not is_car_dead $objective_car
-goto_if_false @POLICE_1_WRECKED
-if
-    locate_player_any_means_car_2d $player_char near_car $objective_car radius 35.0 35.0 0
-goto_if_false @POLICE_1_ABANDONED
-if
-    is_player_in_car $player_char in_car $objective_car
-goto_if_false @POLICE_1_WAITING_CAR
-remove_blip $objective_car_marker
-add_blip_for_coord $objective_point_marker = create_checkpoint_at -842.6732 -632.8707 10.9397
-print_now 'TRAVEL' time 5000 2
+0@ = 0
 
 :POLICE_1_TRAVEL
 wait 0
@@ -9485,16 +9475,49 @@ if
     not is_car_dead $objective_car
 goto_if_false @POLICE_1_WRECKED
 if
-    not is_player_in_car $player_char in_car $objective_car
+    not is_car_dead $mission_car
+goto_if_false @POLICE_1_WHY
+if
+    1@ == 0
 then
-    print_now 'GETBACK' time 5000 2
-    remove_blip $objective_point_marker
-    add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
-    goto @POLICE_1_WAITING_CAR
+    if
+        locate_player_any_means_car_2d $player_char near_car $mission_car radius 50.0 50.0 0
+    then
+        freeze_car_position $mission_car in_current_position 0
+        1@ = 1
+    end
 end
 if
-    locate_stopped_player_in_car_3d $player_char stopped 1 -842.6732 -632.8707 10.9397 radius 4.0 4.0 3.0
-goto_if_false @POLICE_1_TRAVEL
+    0@ == 0
+then
+    if
+        locate_player_any_means_car_2d $player_char near_car $objective_car radius 35.0 35.0 0
+    goto_if_false @POLICE_1_ABANDONED
+    if
+        is_player_in_car $player_char in_car $objective_car
+    then
+        remove_blip $objective_car_marker
+        add_blip_for_coord $objective_point_marker = create_checkpoint_at -842.6732 -632.8707 10.9397
+        print_now 'TRAVEL' time 5000 2
+        0@ = 1
+    end
+else
+    if
+        not is_player_in_car $player_char in_car $objective_car
+    then
+        print_now 'GETBACK' time 5000 2
+        remove_blip $objective_point_marker
+        add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
+        0@ = 0
+    else
+        if
+            not locate_stopped_player_in_car_3d $player_char stopped 1 -842.6732 -632.8707 10.9397 radius 4.0 4.0 3.0
+        goto_if_false @POLICE_1_TRAVEL_END
+    end
+end
+goto @POLICE_1_TRAVEL
+
+:POLICE_1_TRAVEL_END
 set_player_control $player_char can_move 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
@@ -10242,6 +10265,11 @@ goto @POLICE_1_PASS
 
 :POLICE_1_WRECKED
 print_now 'CARF' time 5000 2
+POLICE_1_FAIL()
+return
+
+:POLICE_1_WHY
+print_now 'WHY' time 5000 2
 POLICE_1_FAIL()
 return
 
