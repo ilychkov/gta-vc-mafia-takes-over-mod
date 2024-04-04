@@ -136,7 +136,8 @@ $clothes_pickup_4_available = 0
 $clothes_pickup_5_available = 0
 
 create_pickup $music_pickup = create_pickup #PICKUPMUSIC type 3 at 8.8767 1061.8584 12.3126
-add_short_range_sprite_blip_for_coord $music_marker = create_icon_marker_without_sphere 31 at 8.8767 1061.8584 12.3126
+add_short_range_sprite_blip_for_contact_point $music_marker = create_asset_radar_marker_with_icon 31 at 8.8767 1061.8584 12.3126
+change_blip_display $music_marker display 2
 $music_found = 0
 
 set_garage $681 = create_garage_type 5 door -914.129 -1263.54 10.706 to -906.3 -1266.9 14.421 depth -907.137 -1246.626
@@ -833,7 +834,8 @@ $info_14_picked_up = 1
 INFOPICS_FOUND()
 print_help 'INFO14'
 UPDATE_LAST_HELP_PRINTING_TIME()
-add_short_range_sprite_blip_for_coord $icon_hotel = create_icon_marker_without_sphere 19 at 219.8 -1273.5 11.0
+add_short_range_sprite_blip_for_contact_point $icon_hotel = create_asset_radar_marker_with_icon 19 at 219.8 -1273.5 11.0
+change_blip_display $icon_hotel display 2
 wait 1000
 INFOPICS_PRINT_COUNT()
 goto @INFOPICS_LOOP
@@ -908,7 +910,6 @@ remove_pickup $info_pickup_14
 remove_pickup $info_pickup_15
 remove_pickup $info_pickup_16
 remove_pickup $music_pickup
-remove_blip $music_marker
 $info_pickups_active = 0
 goto @INFOPICS_LOOP
 
@@ -997,7 +998,6 @@ if
     $music_found == 0
 then
     create_pickup $music_pickup = create_pickup #PICKUPMUSIC type 3 at 8.8767 1061.8584 12.3126
-    add_short_range_sprite_blip_for_coord $music_marker = create_icon_marker_without_sphere 31 at 8.8767 1061.8584 12.3126
 end
 $info_pickups_active = 1
 $info_7_moved = 0
@@ -7444,18 +7444,24 @@ $passed_police_1 = 0
 $passed_police_2 = 0
 $passed_car_mechanic_count = 0
 
-add_short_range_sprite_blip_for_coord $icon_vercetti = create_icon_marker_without_sphere 29 at -246.0713 -324.6199 10.2586
+add_short_range_sprite_blip_for_contact_point $icon_vercetti = create_asset_radar_marker_with_icon 29 at -246.0713 -324.6199 10.2586
+change_blip_display $icon_vercetti display 2
 add_short_range_sprite_blip_for_coord $439 = create_icon_marker_without_sphere 27 at -3.8 -1265.8 12.0
 add_short_range_sprite_blip_for_coord $440 = create_icon_marker_without_sphere 27 at 319.0 441.3 12.0
 add_short_range_sprite_blip_for_coord $441 = create_icon_marker_without_sphere 27 at -903.0 -1261.1 12.0
 add_short_range_sprite_blip_for_coord $442 = create_icon_marker_without_sphere 27 at -876.2 -105.5 12.0
-add_short_range_sprite_blip_for_coord $repaint_marker = create_icon_marker_without_sphere 26 at -1007.3 -849.6 7.365
+add_short_range_sprite_blip_for_contact_point $repaint_marker = create_asset_radar_marker_with_icon 26 at -1007.3 -849.6 7.365
+change_blip_display $repaint_marker display 2
 add_sprite_blip_for_contact_point $icon_golf = create_icon_marker_and_sphere icon_golf at $golf_x $golf_y $golf_z
 add_sprite_blip_for_contact_point $icon_police = create_icon_marker_and_sphere icon_police at $police_x $police_y $police_z
-add_short_range_sprite_blip_for_coord $icon_car_mechanic_docks = create_icon_marker_without_sphere 18 at -717.2 -1462.2 10.3
-add_short_range_sprite_blip_for_coord $icon_car_mechanic_beach3 = create_icon_marker_without_sphere 18 at 202.7853 -299.401 11.4607
-add_short_range_sprite_blip_for_coord $icon_car_mechanic_beach1 = create_icon_marker_without_sphere 18 at -13.8297 -1325.1516 9.9804
-add_short_range_sprite_blip_for_coord $icon_car_mechanic_haiti = create_icon_marker_without_sphere 18 at -884.6706 -144.2487 10.1472
+add_short_range_sprite_blip_for_contact_point $icon_car_mechanic_docks = create_asset_radar_marker_with_icon 18 at -717.2 -1462.2 10.3
+add_short_range_sprite_blip_for_contact_point $icon_car_mechanic_beach3 = create_asset_radar_marker_with_icon 18 at 202.7853 -299.401 11.4607
+add_short_range_sprite_blip_for_contact_point $icon_car_mechanic_beach1 = create_asset_radar_marker_with_icon 18 at -13.8297 -1325.1516 9.9804
+add_short_range_sprite_blip_for_contact_point $icon_car_mechanic_haiti = create_asset_radar_marker_with_icon 18 at -884.6706 -144.2487 10.1472
+change_blip_display $icon_car_mechanic_docks display 2
+change_blip_display $icon_car_mechanic_beach3 display 2
+change_blip_display $icon_car_mechanic_beach1 display 2
+change_blip_display $icon_car_mechanic_haiti display 2
 
 set_zone_ped_info 'STREET4' 1 13 0 0 0 0 0 0 0 0 0 30
 set_zone_ped_info 'STREET4' 0 10 0 0 0 0 0 0 0 0 0 40
@@ -9241,7 +9247,8 @@ then
     player_made_progress 1
     $passed_golf = 1
     remove_blip $icon_golf
-    add_short_range_sprite_blip_for_coord $icon_golf = create_icon_marker_without_sphere icon_golf at $golf_x $golf_y $golf_z
+    add_short_range_sprite_blip_for_contact_point $icon_golf = create_asset_radar_marker_with_icon icon_golf at $golf_x $golf_y $golf_z
+    change_blip_display $icon_golf display 2
     create_clothes_pickup $clothes_pickup_3 = create_clothes_pickup 4 at -240.0 -311.3 10.0
     $clothes_pickup_3_available = 1
     start_new_script @CLOTH3
