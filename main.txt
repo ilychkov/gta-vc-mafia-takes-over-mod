@@ -12615,6 +12615,7 @@ then
                 break
             end
         end
+        clear_prints
         freeze_onscreen_timer 0
         set_player_control $player_char 1
         switch_widescreen 0
@@ -12654,6 +12655,7 @@ then
                 break
             end
         end
+        clear_prints
         freeze_onscreen_timer 0
         set_player_control $player_char 1
         switch_widescreen 0
@@ -12663,6 +12665,7 @@ then
         add_blip_for_object $mission_obj_2_marker = create_marker_above_object $mission_obj_2
         add_blip_for_object $mission_obj_3_marker = create_marker_above_object $mission_obj_3
         add_blip_for_object $mission_obj_4_marker = create_marker_above_object $mission_obj_4
+        print_now 'DISTR5' time 5000 1
     end
 end
 if
@@ -12680,7 +12683,7 @@ then
         remove_blip $mission_obj_3_marker
         remove_blip $mission_obj_4_marker
         $mission_step = 2
-        print_now 'DISTR5' time 5000 1
+        print_now 'DISTR6' time 5000 1
         shake_cam 1500
         add_explosion_no_sound -79.3874 928.3461 9.8907 type 2
         add_explosion_no_sound -79.3874 928.3461 9.8907 type 11
@@ -12768,7 +12771,7 @@ then
         not locate_player_any_means_2d $player_char 0 -80.261 931.7101 radius 30.0 30.0
     then
         $mission_step = 1
-        print_now 'DISTR6' time 5000 1
+        print_now 'DISTR7' time 5000 1
         freeze_onscreen_timer 1
         freeze_char_position $player_actor in_current_position 1
         switch_widescreen 1
@@ -12836,6 +12839,7 @@ then
                 break
             end
         end
+        clear_prints
         freeze_onscreen_timer 0
         freeze_char_position $player_actor in_current_position 0
         switch_widescreen 0
@@ -12917,6 +12921,7 @@ then
                 break
             end
         end
+        clear_prints
         freeze_onscreen_timer 0
         set_player_control $player_char 1
         switch_widescreen 0
@@ -13086,6 +13091,7 @@ while True
 end
 fade 0 1000
 wait 1000
+clear_prints
 delete_car $objective_car
 delete_char $mission_actor_1
 fade 1 1000
