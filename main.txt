@@ -3235,7 +3235,7 @@ while True
 end
 NPCS_BIKERS_CREATE_GUARD()
 if
-    $biker_1_passed = 1
+    $passed_biker_1 == 1
 then
     create_char $npc_biker_2 = create_actor_pedtype 4 model #BKA at -588.0789 653.3188 10.2545
     create_char $npc_biker_3 = create_actor_pedtype 4 model #BKB at -590.3053 652.8921 10.2675
