@@ -1,10 +1,11 @@
-DEFINE MISSIONS 6
+DEFINE MISSIONS 7
 DEFINE MISSION 0 AT @INITIAL           // Initial
 DEFINE MISSION 1 AT @INTRO             // Intro
 DEFINE MISSION 2 AT @GOLF              // A Little Game of Golf
 DEFINE MISSION 3 AT @POLICE_1          // Special Delivery
 DEFINE MISSION 4 AT @CAR_MECHANIC      // Car Mechanic
 DEFINE MISSION 5 AT @POLICE_2          // Midnight Car Escape
+DEFINE MISSION 6 AT @BIKER_1           // The Clearout
 
 //-------------MAIN---------------
 thread 'MAIN'
@@ -222,6 +223,7 @@ start_new_script @SAFEHOUSE_PICKUPS
 start_new_script @GOLF_MARKER
 start_new_script @POLICE_1_MARKER
 start_new_script @CAR_MECHANIC_ACTIVATE
+start_new_script @BIKER_MARKER
 
 launch_mission @HJ
 launch_mission @USJ
@@ -1862,6 +1864,31 @@ then
 end
 
 :NPCS_10
+if and
+    is_player_playing $player_char
+    $game_saving == 0
+goto_if_false @NPCS_10B
+if
+    is_player_in_zone $player_char in_zone 'DTOWN' // Downtown
+goto_if_false @NPCS_10B
+if
+    locate_player_any_means_2d $player_char 0 -591.4 651.23 radius 100.0 100.0
+goto_if_false @NPCS_10B
+if
+    $npcs_bikers_state == 0
+then
+    NPCS_BIKERS_INIT()
+end
+goto @NPCS_11
+
+:NPCS_10B
+if
+    $npcs_bikers_state == 1
+then
+    NPCS_BIKERS_DESTROY()
+end
+
+:NPCS_11
 goto @NPCS_1
 
 :NPCS_DIAZ_INIT
@@ -3170,6 +3197,70 @@ return
 clear_mission_audio 1
 clear_mission_audio 2
 $npcs_nice_bike_state = 0
+return
+
+:NPCS_BIKERS_INIT
+request_model #BKA
+request_model #BKB
+while True
+    if and
+        has_model_loaded #BKA
+        has_model_loaded #BKB
+    then
+        break
+    end
+    wait 0
+    if or
+        not is_player_playing $player_char
+        not $game_saving == 0
+    then
+        return
+    end
+end
+NPCS_BIKERS_CREATE_GUARD()
+if
+    $biker_1_passed = 1
+then
+    create_char $npc_biker_2 = create_actor_pedtype 4 model #BKA at -588.0789 653.3188 10.2545
+    create_char $npc_biker_3 = create_actor_pedtype 4 model #BKB at -590.3053 652.8921 10.2675
+    mark_model_as_no_longer_needed #BKA
+    mark_model_as_no_longer_needed #BKB
+    set_char_health $npc_biker_2 health_to 150
+    set_char_health $npc_biker_3 health_to 150
+    clear_char_threat_search $npc_biker_2
+    clear_char_threat_search $npc_biker_3
+    set_char_heed_threats $npc_biker_2 heed_threats 1
+    set_char_heed_threats $npc_biker_3 heed_threats 1
+    set_char_personality $npc_biker_2 ped_stats_to 11
+    set_char_personality $npc_biker_3 ped_stats_to 11
+    set_char_suffers_critical_hits $npc_biker_2 dismemberment_possible 0
+    set_char_suffers_critical_hits $npc_biker_3 dismemberment_possible 0
+    set_char_never_targeted $npc_biker_2 untargetable 1
+    set_char_never_targeted $npc_biker_3 untargetable 1
+    turn_char_to_face_char $npc_biker_2 $npc_biker_3
+    turn_char_to_face_char $npc_biker_3 $npc_biker_2
+    set_char_wait_state $npc_biker_2 anim 19 wait_state_time 9999999
+    set_char_wait_state $npc_biker_3 anim 19 wait_state_time 9999999
+end
+$npcs_bikers_state = 1
+return
+
+:NPCS_BIKERS_CREATE_GUARD
+create_char $npc_biker_1 = create_actor_pedtype 4 model #BKB at -600.1636 652.1155 10.1262
+set_char_heading $npc_biker_1 z_angle_to 0.0
+set_char_health $npc_biker_1 health_to 150
+clear_char_threat_search $npc_biker_1
+set_char_heed_threats $npc_biker_1 heed_threats 1
+set_char_personality $npc_biker_1 ped_stats_to 11
+set_char_suffers_critical_hits $npc_biker_1 dismemberment_possible 0
+set_char_never_targeted $npc_biker_1 untargetable 1
+return
+
+:NPCS_BIKERS_DESTROY
+remove_char_elegantly $npc_biker_1
+remove_char_elegantly $npc_biker_2
+remove_char_elegantly $npc_biker_3
+$npcs_bikers_state = 0
 return
 
 //-------------Random interactions---------------
@@ -4764,6 +4855,39 @@ then
     goto @POLICE_1_MARKER_LOOP
 end
 goto @POLICE_1_MARKER_LOOP
+
+//-------------Biker missions marker script---------------
+//
+
+:BIKER_MARKER
+script_name 'BIKMARK'
+
+:BIKER_MARKER_LOOP
+wait $default_wait_time
+if
+    $passed_biker_1 == 1
+then
+    terminate_this_script
+end
+if
+    is_player_playing $player_char
+goto_if_false @BIKER_MARKER_LOOP
+if and
+    $onmission == 0
+    is_player_in_zone $player_char in_zone 'DTOWN' // Downtown
+goto_if_false @BIKER_MARKER_LOOP
+if and
+    can_player_start_mission $player_char
+    locate_player_on_foot_3d $player_char 0 -600.5449 653.8733 10.0721 radius 1.2 1.2 2.0
+goto_if_false @BIKER_MARKER_LOOP
+if
+    $passed_biker_1 == 0
+then
+    print_big 'BIKER1' 15000 ms 2
+    start_mission BIKER_1
+    goto @BIKER_MARKER_LOOP
+end
+goto @BIKER_MARKER_LOOP
 
 //-------------Insane stunts script---------------
 //
@@ -7454,6 +7578,7 @@ add_short_range_sprite_blip_for_contact_point $repaint_marker = create_asset_rad
 change_blip_display $repaint_marker display 2
 add_sprite_blip_for_contact_point $icon_golf = create_icon_marker_and_sphere icon_golf at $golf_x $golf_y $golf_z
 add_sprite_blip_for_contact_point $icon_police = create_icon_marker_and_sphere icon_police at $police_x $police_y $police_z
+add_sprite_blip_for_contact_point $icon_biker = create_icon_marker_and_sphere 5 at -600.5449 653.8733 10.0721
 add_short_range_sprite_blip_for_contact_point $icon_car_mechanic_docks = create_asset_radar_marker_with_icon 18 at -717.2 -1462.2 10.3
 add_short_range_sprite_blip_for_contact_point $icon_car_mechanic_beach3 = create_asset_radar_marker_with_icon 18 at 202.7853 -299.401 11.4607
 add_short_range_sprite_blip_for_contact_point $icon_car_mechanic_beach1 = create_asset_radar_marker_with_icon 18 at -13.8297 -1325.1516 9.9804
@@ -13220,5 +13345,176 @@ clear_onscreen_timer $mission_timer
 clear_onscreen_counter $notice_counter
 set_player_is_in_stadium 0
 clear_extra_colours 0
+mission_has_finished
+return
+
+//-------------Mission 6---------------
+// The Clearout
+
+:BIKER_1
+script_name 'BIKER1'
+gosub @BIKER_1_START
+if
+    has_deatharrest_been_executed
+then
+    BIKER_1_FAIL()
+end
+BIKER_1_CLEANUP()
+terminate_this_script
+
+:BIKER_1_START
+$onmission = 1
+set_fading_colour 0 0 0
+register_mission_given
+load_mission_text 'BIKER1'
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+fade 0 500
+wait 500
+switch_widescreen 1
+clear_area 0 at -600.1636 652.1155 10.1262 range 20.0
+set_car_density_multiplier 0.0
+set_ped_density_multiplier 0.0
+set_char_coordinates $player_actor -600.5449 653.8733 10.0721
+set_char_heading $player_actor 180.0
+if
+    is_char_dead $npc_biker_1
+then
+    delete_char $npc_biker_1
+    request_model #BKB
+    load_all_models_now
+    NPCS_BIKERS_CREATE_GUARD()
+    mark_model_as_no_longer_needed #BKB
+end
+set_fixed_camera_position -603.6945 655.5886 12.0735 0.0 0.0 0.0
+point_camera_at_char $npc_biker_1 15 2
+set_char_wait_state $npc_biker_1 anim 19 wait_state_time 1000000
+fade 1 1000
+0@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if and
+        0@ == 0
+        TIMERA > 1000
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO1' time 2500 1
+    end
+    if and
+        0@ == 1
+        TIMERA > 2500
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO2' time 5000 1
+    end
+    if and
+        0@ == 2
+        TIMERA > 5000
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO3' time 7000 1
+    end
+    if and
+        0@ == 3
+        TIMERA > 7000
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO4' time 4500 1
+    end
+    if and
+        0@ == 4
+        TIMERA > 4500
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO5' time 6000 1
+    end
+    if and
+        0@ == 5
+        TIMERA > 6000
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO6' time 6500 1
+    end
+    if and
+        0@ == 6
+        TIMERA > 6500
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO7' time 6500 1
+    end
+    if and
+        0@ == 7
+        TIMERA > 6500
+    then
+        break
+    end
+    if or
+        {$I incl.anykey.txt}
+    then
+        if
+            0@ > 0
+        then
+            break
+        end
+    end
+end
+fade 0 500
+wait 500
+clear_all_char_anims $npc_biker_1
+if
+    $npcs_bikers_state == 0
+then
+    remove_char_elegantly $npc_biker_1
+end
+clear_prints
+set_player_coordinates $player_char -515.7791 686.6896 10.0728
+set_player_heading $player_char 282.0751
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+set_car_density_multiplier 1.0
+set_ped_density_multiplier 1.0
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+fade 1 500
+wait 1000
+return
+
+:BIKER_1_WRECKED
+print_now 'CARF' time 5000 2
+BIKER_1_FAIL()
+return
+
+:BIKER_1_FAIL
+print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
+return
+
+:BIKER_1_PASS
+play_mission_passed_tune 1
+print_with_number_big 'M_PASS' number 250 time 5000 style 1 // MISSION PASSED! $~1~
+add_score $player_char money += 250
+register_mission_passed 'BIKER1S'
+player_made_progress 1
+$passed_biker_1 = 1
+remove_blip $icon_biker
+return
+
+:BIKER_1_CLEANUP
+$onmission = 0
+mark_car_as_no_longer_needed $mission_car_1
+remove_blip $mission_car_1_marker
+remove_blip $objective_point_marker
+remove_blip $mission_obj_1_marker
+delete_object $mission_obj_1
 mission_has_finished
 return

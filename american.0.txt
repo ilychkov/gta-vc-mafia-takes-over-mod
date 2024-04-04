@@ -66,6 +66,8 @@ CARHLTH = Car health:
 UNCALL1 = Hey Tommy! I hope you haven't forgotten your dear old uncle?
 UNCALL2 = It's been a while. Why don't you come pay me a visit?
 UNCALL3 = I'll be waiting nearby the Printworks.
+BIKER1  = The Clearout
+BIKER1S = [US]The Clearout
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!
@@ -146,4 +148,18 @@ OUTRO1  = Mr. Vercetti, the city truly owes you.
 OUTRO2  = I forgot to introduce myself, how silly!
 OUTRO3  = My name is Rick Wrenson.
 OUTRO4  = Give me a call if you ever need something. Goodbye!
+
+[BIKER1]
+INTRO1  = Hey! Are you Tommy Vercetti?
+INTRO2  = Dude, don't know if I may ask you, but... You see, we're in quite a bit of trouble.
+INTRO3  = We had a humongous party yesterday. Woodstock all over again. Everyone got so-o-o wasted, dude!
+INTRO4  = Not me! I was the one who had to drive everyone home, darn it.
+INTRO5  = The problem is - we had left lots of trash lying around on the municipal green area.
+INTRO6  = Baker - our boss, ya know - told me: if we don't deal with it in time, the bar will lose the license.
+INTRO7  = Nobody's woken up yet, and I have to guard the club. Can you help us out? Much obliged, dude!
+CLEAN1  = The bikes are everywhere. Move them to more appropriate places.
+CLEAN2  = Now get the pickup truck and collect all the trash.
+CLEAN3  = Park the pickup truck behind the bar building.
+CLEAN4  = Get out of the truck.
+SUCCESS = Great work!
 
