@@ -158,6 +158,7 @@ INTRO4  = Not me! I was the one who had to drive everyone home, darn it.
 INTRO5  = The problem is - we had left lots of trash lying around on the municipal green area.
 INTRO6  = Baker - our boss, ya know - told me: if we don't deal with it in time, the bar will lose the license.
 INTRO7  = Nobody's woken up yet, and I have to guard the club. Can you help us out? Much obliged, dude!
+OPERA   = This is why I much rather listen to opera.
 CLEAN1  = The bikes are everywhere. Move them to more appropriate places.
 CLEAN2  = Now get the pickup truck and collect all the trash.
 CLEAN3  = Park the pickup truck behind the bar building.

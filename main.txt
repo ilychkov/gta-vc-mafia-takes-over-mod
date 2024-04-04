@@ -13401,6 +13401,9 @@ set_ped_density_multiplier 0.0
 set_char_coordinates $player_actor -600.5449 653.8733 10.0721
 set_char_heading $player_actor 180.0
 if
+    $mission_debug <> 1
+goto_if_false @BIKER_1_INTRO_END
+if
     is_char_dead $npc_biker_1
 then
     delete_char $npc_biker_1
@@ -13489,6 +13492,8 @@ while True
         end
     end
 end
+
+:BIKER_1_INTRO_END
 fade 0 500
 wait 500
 clear_all_char_anims $npc_biker_1
@@ -13499,7 +13504,131 @@ then
 end
 clear_prints
 set_player_coordinates $player_char -515.7791 686.6896 10.0728
-set_player_heading $player_char 282.0751
+set_player_heading $player_char 246.9814
+request_model #ANGEL
+request_model #PIZZABOX
+request_model #CARDBOARDBOX
+request_model #BLACKBAG1
+request_model #BLACKBAG2
+create_car $mission_car_1 #ANGEL -489.6628 684.946 14.0712
+create_car $mission_car_2 #ANGEL -493.7498 672.3331 14.0712
+create_car $mission_car_3 #ANGEL -493.5063 672.3437 14.1567
+create_car $mission_car_4 #ANGEL -482.6252 670.0407 14.0712
+create_car $mission_car_5 #ANGEL -491.4073 686.0388 14.0712
+set_car_heading $mission_car_1 30.0
+set_car_heading $mission_car_2 60.0
+set_car_heading $mission_car_3 120.0
+set_car_heading $mission_car_4 270.0
+set_car_heading $mission_car_5 300.0
+set_car_forward_speed $mission_car_1 speed_instantly 5.0
+set_car_forward_speed $mission_car_2 speed_instantly 5.0
+set_car_forward_speed $mission_car_3 speed_instantly 5.0
+set_car_forward_speed $mission_car_4 speed_instantly 5.0
+set_car_forward_speed $mission_car_5 speed_instantly 5.0
+create_object $mission_obj_1 #PIZZABOX -495.5587 670.0042 10.0712
+create_object $mission_obj_2 #PIZZABOX -491.2117 668.1703 10.0712
+create_object $mission_obj_3 #PIZZABOX -488.4538 671.245 10.0712
+create_object $mission_obj_4 #PIZZABOX -489.2678 680.8871 10.0712
+create_object $mission_obj_5 #PIZZABOX -487.5036 685.971 10.0712
+create_object $mission_obj_6 #PIZZABOX -482.4814 679.3501 10.0712
+create_object $mission_obj_7 #PIZZABOX -482.9516 677.9601 10.0712
+create_object $mission_obj_8 #PIZZABOX -479.2737 674.7327 10.0712
+create_object $mission_obj_9 #PIZZABOX -483.1105 676.0663 10.0712
+create_object $mission_obj_10 #PIZZABOX -487.9243 693.2844 10.0639
+create_object $mission_obj_11 #BLACKBAG1 -485.3101 677.3218 10.0712
+create_object $mission_obj_12 #BLACKBAG2 -488.9624 675.7524 10.0712
+create_object $mission_obj_13 #BLACKBAG2 -485.0252 685.9532 10.0712
+create_object $mission_obj_14 #CARDBOARDBOX -489.9117 682.3734 10.0712
+create_object $mission_obj_15 #CARDBOARDBOX -491.1505 677.3262 10.0712
+create_object $mission_obj_16 #CARDBOARDBOX -481.591 671.6192 10.0712
+create_object $mission_obj_17 #CARDBOARDBOX -484.2636 671.4882 10.0712
+create_object $mission_obj_18 #CARDBOARDBOX -478.8087 680.3972 10.0712
+create_object $mission_obj_19 #CARDBOARDBOX -485.4356 669.5783 10.0712
+create_object $mission_obj_20 #CARDBOARDBOX -483.1527 671.7238 10.0712
+create_object $mission_obj_21 #CARDBOARDBOX -488.1751 674.678 10.0712
+create_object $mission_obj_22 #CARDBOARDBOX -486.4662 677.9125 10.0712
+create_object $mission_obj_23 #CARDBOARDBOX -486.7786 688.2577 10.0712
+create_object $mission_obj_24 #BLACKBAG1 -488.8062 686.8117 10.0712
+create_object $mission_obj_25 #BLACKBAG1 -479.2078 681.8435 10.0712
+create_object $mission_obj_26 #PIZZABOX -482.2778 681.6333 10.0712
+create_object $mission_obj_27 #PIZZABOX -493.5623 674.5219 10.0712
+create_object $mission_obj_28 #PIZZABOX -493.1072 672.0303 10.0712
+create_object $mission_obj_29 #PIZZABOX -488.2764 664.7048 10.0712
+create_object $mission_obj_30 #PIZZABOX -488.2298 664.2488 10.0712
+set_object_heading $mission_obj_1 30.0
+set_object_heading $mission_obj_2 90.0
+set_object_heading $mission_obj_3 300.0
+set_object_heading $mission_obj_4 270.0
+set_object_heading $mission_obj_5 180.0
+set_object_heading $mission_obj_6 150.0
+set_object_heading $mission_obj_7 0.0
+set_object_heading $mission_obj_8 30.0
+set_object_heading $mission_obj_9 90.0
+set_object_heading $mission_obj_10 120.0
+set_object_heading $mission_obj_14 30.0
+set_object_heading $mission_obj_15 60.0
+set_object_heading $mission_obj_16 270.0
+set_object_heading $mission_obj_17 300.0
+set_object_heading $mission_obj_18 30.0
+set_object_heading $mission_obj_19 330.0
+set_object_heading $mission_obj_20 90.0
+set_object_heading $mission_obj_21 30.0
+set_object_heading $mission_obj_22 90.0
+set_object_heading $mission_obj_23 300.0
+set_object_heading $mission_obj_24 270.0
+set_object_heading $mission_obj_25 180.0
+set_object_heading $mission_obj_26 150.0
+set_object_heading $mission_obj_27 0.0
+set_object_heading $mission_obj_28 30.0
+set_object_heading $mission_obj_29 90.0
+set_object_heading $mission_obj_30 120.0
+mark_model_as_no_longer_needed #ANGEL
+mark_model_as_no_longer_needed #PIZZABOX
+mark_model_as_no_longer_needed #CARDBOARDBOX
+mark_model_as_no_longer_needed #BLACKBAG1
+mark_model_as_no_longer_needed #BLACKBAG2
+switch_widescreen 0
+wait 1500
+set_fixed_camera_position -496.0 681.0 12.0 0.0 0.0 0.0
+point_camera_at_point -489.0 678.0 11.0 2
+wait 0
+set_interpolation_parameters 0.0 5000
+set_fixed_camera_position -496.0 681.0 30.0 1.0 1.0 1.0
+point_camera_at_point -489.0 678.0 11.0 1
+switch_rubbish 0
+fade 1 1000
+switch_widescreen 1
+freeze_car_position $mission_car_1 in_current_position 1
+freeze_car_position $mission_car_2 in_current_position 1
+freeze_car_position $mission_car_3 in_current_position 1
+freeze_car_position $mission_car_4 in_current_position 1
+freeze_car_position $mission_car_5 in_current_position 1
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if and
+        15@ == 0
+        TIMERA > 1000
+    then
+        15@++
+        TIMERA = 0
+        print_now 'OPERA' time 5000 1
+    end
+    if and
+        15@ == 1
+        TIMERA > 5000
+    then
+        break
+    end
+end
+fade 0 500
+wait 500
+freeze_car_position $mission_car_1 in_current_position 0
+freeze_car_position $mission_car_2 in_current_position 0
+freeze_car_position $mission_car_3 in_current_position 0
+freeze_car_position $mission_car_4 in_current_position 0
+freeze_car_position $mission_car_5 in_current_position 0
 set_player_control $player_char 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
@@ -13534,9 +13663,81 @@ return
 :BIKER_1_CLEANUP
 $onmission = 0
 mark_car_as_no_longer_needed $mission_car_1
+mark_car_as_no_longer_needed $mission_car_2
+mark_car_as_no_longer_needed $mission_car_3
+mark_car_as_no_longer_needed $mission_car_4
+mark_car_as_no_longer_needed $mission_car_5
+mark_car_as_no_longer_needed $objective_car
 remove_blip $mission_car_1_marker
-remove_blip $objective_point_marker
+remove_blip $mission_car_2_marker
+remove_blip $mission_car_3_marker
+remove_blip $mission_car_4_marker
+remove_blip $mission_car_5_marker
+remove_blip $objective_car_marker
+remove_blip $objective_point_1_marker
+remove_blip $objective_point_2_marker
+remove_blip $objective_point_3_marker
+remove_blip $objective_point_4_marker
 remove_blip $mission_obj_1_marker
+remove_blip $mission_obj_2_marker
+remove_blip $mission_obj_3_marker
+remove_blip $mission_obj_4_marker
+remove_blip $mission_obj_5_marker
+remove_blip $mission_obj_6_marker
+remove_blip $mission_obj_7_marker
+remove_blip $mission_obj_8_marker
+remove_blip $mission_obj_9_marker
+remove_blip $mission_obj_10_marker
+remove_blip $mission_obj_11_marker
+remove_blip $mission_obj_12_marker
+remove_blip $mission_obj_13_marker
+remove_blip $mission_obj_14_marker
+remove_blip $mission_obj_15_marker
+remove_blip $mission_obj_16_marker
+remove_blip $mission_obj_17_marker
+remove_blip $mission_obj_18_marker
+remove_blip $mission_obj_19_marker
+remove_blip $mission_obj_20_marker
+remove_blip $mission_obj_21_marker
+remove_blip $mission_obj_22_marker
+remove_blip $mission_obj_23_marker
+remove_blip $mission_obj_24_marker
+remove_blip $mission_obj_25_marker
+remove_blip $mission_obj_26_marker
+remove_blip $mission_obj_27_marker
+remove_blip $mission_obj_28_marker
+remove_blip $mission_obj_29_marker
+remove_blip $mission_obj_30_marker
 delete_object $mission_obj_1
+delete_object $mission_obj_2
+delete_object $mission_obj_3
+delete_object $mission_obj_4
+delete_object $mission_obj_5
+delete_object $mission_obj_6
+delete_object $mission_obj_7
+delete_object $mission_obj_8
+delete_object $mission_obj_9
+delete_object $mission_obj_10
+delete_object $mission_obj_11
+delete_object $mission_obj_12
+delete_object $mission_obj_13
+delete_object $mission_obj_14
+delete_object $mission_obj_15
+delete_object $mission_obj_16
+delete_object $mission_obj_17
+delete_object $mission_obj_18
+delete_object $mission_obj_19
+delete_object $mission_obj_20
+delete_object $mission_obj_21
+delete_object $mission_obj_22
+delete_object $mission_obj_23
+delete_object $mission_obj_24
+delete_object $mission_obj_25
+delete_object $mission_obj_26
+delete_object $mission_obj_27
+delete_object $mission_obj_28
+delete_object $mission_obj_29
+delete_object $mission_obj_30
+switch_rubbish 1
 mission_has_finished
 return
