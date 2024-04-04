@@ -159,9 +159,11 @@ INTRO5  = The problem is - we had left lots of trash lying around on the municip
 INTRO6  = Baker - our boss, ya know - told me: if we don't deal with it in time, the bar will lose the license.
 INTRO7  = Nobody's woken up yet, and I have to guard the club. Can you help us out? Much obliged, dude!
 OPERA   = This is why I much rather listen to opera.
-CLEAN1  = The bikes are everywhere. Move them to more appropriate places.
-CLEAN2  = Now get the pickup truck and collect all the trash.
-CLEAN3  = Park the pickup truck behind the bar building.
-CLEAN4  = Get out of the truck.
-SUCCESS = Great work!
+CLEAN1  = ~g~The bikes are everywhere. Move them to a more appropriate place.
+CLEAN2  = ~g~Now get the pickup truck and collect all the trash.
+CLEAN3  = ~g~The truck is full. Go empty it in the dumpster.
+CLEAN4  = ~g~Dump the remaining trash.
+WRECKED = ~r~The bike is destroyed!
+WHY     = ~r~Why?
+SUCCESS = ~g~Right on, dude!
 

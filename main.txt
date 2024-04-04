@@ -13494,6 +13494,7 @@ while True
 end
 
 :BIKER_1_INTRO_END
+clear_prints
 fade 0 500
 wait 500
 clear_all_char_anims $npc_biker_1
@@ -13502,14 +13503,15 @@ if
 then
     remove_char_elegantly $npc_biker_1
 end
-clear_prints
 set_player_coordinates $player_char -515.7791 686.6896 10.0728
 set_player_heading $player_char 246.9814
 request_model #ANGEL
+request_model #WALTON
 request_model #PIZZABOX
 request_model #CARDBOARDBOX
 request_model #BLACKBAG1
-request_model #BLACKBAG2
+request_model #DUMP1
+load_all_models_now
 create_car $mission_car_1 #ANGEL -489.6628 684.946 14.0712
 create_car $mission_car_2 #ANGEL -493.7498 672.3331 14.0712
 create_car $mission_car_3 #ANGEL -493.5063 672.3437 14.1567
@@ -13520,6 +13522,10 @@ set_car_heading $mission_car_2 60.0
 set_car_heading $mission_car_3 120.0
 set_car_heading $mission_car_4 270.0
 set_car_heading $mission_car_5 300.0
+mark_model_as_no_longer_needed #ANGEL
+create_car $objective_car #WALTON -467.0437 667.6799 9.6343
+set_car_heading $objective_car 141.1806
+mark_model_as_no_longer_needed #WALTON
 set_car_forward_speed $mission_car_1 speed_instantly 5.0
 set_car_forward_speed $mission_car_2 speed_instantly 5.0
 set_car_forward_speed $mission_car_3 speed_instantly 5.0
@@ -13536,8 +13542,8 @@ create_object $mission_obj_8 #PIZZABOX -479.2737 674.7327 10.0712
 create_object $mission_obj_9 #PIZZABOX -483.1105 676.0663 10.0712
 create_object $mission_obj_10 #PIZZABOX -487.9243 693.2844 10.0639
 create_object $mission_obj_11 #BLACKBAG1 -485.3101 677.3218 10.0712
-create_object $mission_obj_12 #BLACKBAG2 -488.9624 675.7524 10.0712
-create_object $mission_obj_13 #BLACKBAG2 -485.0252 685.9532 10.0712
+create_object $mission_obj_12 #BLACKBAG1 -488.9624 675.7524 10.0712
+create_object $mission_obj_13 #BLACKBAG1 -485.0252 685.9532 10.0712
 create_object $mission_obj_14 #CARDBOARDBOX -489.9117 682.3734 10.0712
 create_object $mission_obj_15 #CARDBOARDBOX -491.1505 677.3262 10.0712
 create_object $mission_obj_16 #CARDBOARDBOX -481.591 671.6192 10.0712
@@ -13582,11 +13588,9 @@ set_object_heading $mission_obj_27 0.0
 set_object_heading $mission_obj_28 30.0
 set_object_heading $mission_obj_29 90.0
 set_object_heading $mission_obj_30 120.0
-mark_model_as_no_longer_needed #ANGEL
-mark_model_as_no_longer_needed #PIZZABOX
-mark_model_as_no_longer_needed #CARDBOARDBOX
-mark_model_as_no_longer_needed #BLACKBAG1
-mark_model_as_no_longer_needed #BLACKBAG2
+create_object $mission_obj_101 #DUMP1 -579.2 636.4 10.0
+set_object_heading $mission_obj_101 90.0
+mark_model_as_no_longer_needed #DUMP1
 switch_widescreen 0
 wait 1500
 set_fixed_camera_position -496.0 681.0 12.0 0.0 0.0 0.0
@@ -13603,21 +13607,31 @@ freeze_car_position $mission_car_2 in_current_position 1
 freeze_car_position $mission_car_3 in_current_position 1
 freeze_car_position $mission_car_4 in_current_position 1
 freeze_car_position $mission_car_5 in_current_position 1
+14@ = 0
 15@ = 0
 TIMERA = 0
 while True
     wait 0
     if and
         15@ == 0
-        TIMERA > 1000
+        TIMERA > 3000
     then
         15@++
-        TIMERA = 0
-        print_now 'OPERA' time 5000 1
+        print_now 'OPERA' time 3000 1
+    end
+    if
+        TIMERA > 6000
+    then
+        break
+    end
+    if
+        not is_button_pressed 0 pressed_button 16
+    then
+        14@ = 1
     end
     if and
-        15@ == 1
-        TIMERA > 5000
+        14@ == 1
+        is_button_pressed 0 pressed_button 16
     then
         break
     end
@@ -13638,11 +13652,1410 @@ switch_widescreen 0
 restore_camera_jumpcut
 set_camera_behind_player
 fade 1 500
-wait 1000
+add_blip_for_coord $objective_point_marker = create_checkpoint_at -515.0813 687.7718 10.0727
+add_blip_for_car $mission_car_1_marker = create_marker_above_car $mission_car_1
+add_blip_for_car $mission_car_2_marker = create_marker_above_car $mission_car_2
+add_blip_for_car $mission_car_3_marker = create_marker_above_car $mission_car_3
+add_blip_for_car $mission_car_4_marker = create_marker_above_car $mission_car_4
+add_blip_for_car $mission_car_5_marker = create_marker_above_car $mission_car_5
+0@ = 1 // bike marker
+1@ = 1 // bike marker
+2@ = 1 // bike marker
+3@ = 1 // bike marker
+4@ = 1 // bike marker
+14@ = 0 // trash in truck currently count
+15@ = 0 // trash collected total count
+$mission_step = 0
+print_now 'CLEAN1' time 5000 1
+if
+    $mission_debug == 1
+then
+    set_car_coordinates $mission_car_1 -515.1 687.8 10.0
+    set_car_coordinates $mission_car_2 -515.1 687.8 10.5
+    set_car_coordinates $mission_car_3 -515.1 687.8 11.0
+    set_car_coordinates $mission_car_4 -515.1 687.8 11.5
+    set_car_coordinates $mission_car_5 -515.1 687.8 12.0
+end
+
+:BIKER_1_LOOP
+wait 0
+if and
+    not is_car_dead $mission_car_1
+    not is_car_dead $mission_car_2
+    not is_car_dead $mission_car_3
+    not is_car_dead $mission_car_4
+    not is_car_dead $mission_car_5
+goto_if_false @BIKER_1_WRECKED
+if
+    not is_car_dead $objective_car
+goto_if_false @BIKER_1_WHY
+if
+    $mission_step == 0
+then
+    draw_sphere -515.0813 687.7718 10.0727 radius 5.0
+    10@ = 1
+    if
+        not locate_car_2d $mission_car_1 sphere 0 near_point -515.0813 687.7718 radius 5.0 5.0
+    then
+        10@ = 0
+        if and
+            is_player_in_car $player_char $mission_car_1
+            0@ == 1
+        then
+            remove_blip $mission_car_1_marker
+            0@ = 0
+        end
+        if and
+            not is_player_in_car $player_char $mission_car_1
+            0@ == 0
+        then
+            add_blip_for_car $mission_car_1_marker = create_marker_above_car $mission_car_1
+            0@ = 1
+        end
+    else
+        if
+            0@ == 1
+        then
+            remove_blip $mission_car_1_marker
+            0@ = 0
+        end
+    end
+    if
+        not locate_car_2d $mission_car_2 sphere 0 near_point -515.0813 687.7718 radius 5.0 5.0
+    then
+        10@ = 0
+        if and
+            is_player_in_car $player_char $mission_car_2
+            1@ == 1
+        then
+            remove_blip $mission_car_2_marker
+            1@ = 0
+        end
+        if and
+            not is_player_in_car $player_char $mission_car_2
+            1@ == 0
+        then
+            add_blip_for_car $mission_car_2_marker = create_marker_above_car $mission_car_2
+            1@ = 1
+        end
+    else
+        if
+            1@ == 1
+        then
+            remove_blip $mission_car_2_marker
+            1@ = 0
+        end
+    end
+    if
+        not locate_car_2d $mission_car_3 sphere 0 near_point -515.0813 687.7718 radius 5.0 5.0
+    then
+        10@ = 0
+        if and
+            is_player_in_car $player_char $mission_car_3
+            2@ == 1
+        then
+            remove_blip $mission_car_3_marker
+            2@ = 0
+        end
+        if and
+            not is_player_in_car $player_char $mission_car_3
+            2@ == 0
+        then
+            add_blip_for_car $mission_car_3_marker = create_marker_above_car $mission_car_3
+            2@ = 1
+        end
+    else
+        if
+            2@ == 1
+        then
+            remove_blip $mission_car_3_marker
+            2@ = 0
+        end
+    end
+    if
+        not locate_car_2d $mission_car_4 sphere 0 near_point -515.0813 687.7718 radius 5.0 5.0
+    then
+        10@ = 0
+        if and
+            is_player_in_car $player_char $mission_car_4
+            3@ == 1
+        then
+            remove_blip $mission_car_4_marker
+            3@ = 0
+        end
+        if and
+            not is_player_in_car $player_char $mission_car_4
+            3@ == 0
+        then
+            add_blip_for_car $mission_car_4_marker = create_marker_above_car $mission_car_4
+            3@ = 1
+        end
+    else
+        if
+            3@ == 1
+        then
+            remove_blip $mission_car_4_marker
+            3@ = 0
+        end
+    end
+    if
+        not locate_car_2d $mission_car_5 sphere 0 near_point -515.0813 687.7718 radius 5.0 5.0
+    then
+        10@ = 0
+        if and
+            is_player_in_car $player_char $mission_car_5
+            4@ == 1
+        then
+            remove_blip $mission_car_5_marker
+            4@ = 0
+        end
+        if and
+            not is_player_in_car $player_char $mission_car_5
+            4@ == 0
+        then
+            add_blip_for_car $mission_car_5_marker = create_marker_above_car $mission_car_5
+            4@ = 1
+        end
+    else
+        if
+            4@ == 1
+        then
+            remove_blip $mission_car_5_marker
+            4@ = 0
+        end
+    end
+    if or
+        is_player_in_car $player_char $mission_car_1
+        is_player_in_car $player_char $mission_car_2
+        is_player_in_car $player_char $mission_car_3
+        is_player_in_car $player_char $mission_car_4
+        is_player_in_car $player_char $mission_car_5
+    then
+        10@ = 0
+    end
+    if
+        10@ == 1
+    then
+        $mission_step = 1
+        print_now 'CLEAN2' time 5000 1
+        remove_blip $objective_point_marker
+        add_blip_for_object $mission_obj_1_marker = create_marker_above_object $mission_obj_1
+        add_blip_for_object $mission_obj_2_marker = create_marker_above_object $mission_obj_2
+        add_blip_for_object $mission_obj_3_marker = create_marker_above_object $mission_obj_3
+        add_blip_for_object $mission_obj_4_marker = create_marker_above_object $mission_obj_4
+        add_blip_for_object $mission_obj_5_marker = create_marker_above_object $mission_obj_5
+        add_blip_for_object $mission_obj_6_marker = create_marker_above_object $mission_obj_6
+        add_blip_for_object $mission_obj_7_marker = create_marker_above_object $mission_obj_7
+        add_blip_for_object $mission_obj_8_marker = create_marker_above_object $mission_obj_8
+        add_blip_for_object $mission_obj_9_marker = create_marker_above_object $mission_obj_9
+        add_blip_for_object $mission_obj_10_marker = create_marker_above_object $mission_obj_10
+        add_blip_for_object $mission_obj_11_marker = create_marker_above_object $mission_obj_11
+        add_blip_for_object $mission_obj_12_marker = create_marker_above_object $mission_obj_12
+        add_blip_for_object $mission_obj_13_marker = create_marker_above_object $mission_obj_13
+        add_blip_for_object $mission_obj_14_marker = create_marker_above_object $mission_obj_14
+        add_blip_for_object $mission_obj_15_marker = create_marker_above_object $mission_obj_15
+        add_blip_for_object $mission_obj_16_marker = create_marker_above_object $mission_obj_16
+        add_blip_for_object $mission_obj_17_marker = create_marker_above_object $mission_obj_17
+        add_blip_for_object $mission_obj_18_marker = create_marker_above_object $mission_obj_18
+        add_blip_for_object $mission_obj_19_marker = create_marker_above_object $mission_obj_19
+        add_blip_for_object $mission_obj_20_marker = create_marker_above_object $mission_obj_20
+        add_blip_for_object $mission_obj_21_marker = create_marker_above_object $mission_obj_21
+        add_blip_for_object $mission_obj_22_marker = create_marker_above_object $mission_obj_22
+        add_blip_for_object $mission_obj_23_marker = create_marker_above_object $mission_obj_23
+        add_blip_for_object $mission_obj_24_marker = create_marker_above_object $mission_obj_24
+        add_blip_for_object $mission_obj_25_marker = create_marker_above_object $mission_obj_25
+        add_blip_for_object $mission_obj_26_marker = create_marker_above_object $mission_obj_26
+        add_blip_for_object $mission_obj_27_marker = create_marker_above_object $mission_obj_27
+        add_blip_for_object $mission_obj_28_marker = create_marker_above_object $mission_obj_28
+        add_blip_for_object $mission_obj_29_marker = create_marker_above_object $mission_obj_29
+        add_blip_for_object $mission_obj_30_marker = create_marker_above_object $mission_obj_30
+        change_blip_display $mission_obj_1_marker display 2
+        change_blip_display $mission_obj_2_marker display 2
+        change_blip_display $mission_obj_3_marker display 2
+        change_blip_display $mission_obj_4_marker display 2
+        change_blip_display $mission_obj_5_marker display 2
+        change_blip_display $mission_obj_6_marker display 2
+        change_blip_display $mission_obj_7_marker display 2
+        change_blip_display $mission_obj_8_marker display 2
+        change_blip_display $mission_obj_9_marker display 2
+        change_blip_display $mission_obj_10_marker display 2
+        change_blip_display $mission_obj_11_marker display 2
+        change_blip_display $mission_obj_12_marker display 2
+        change_blip_display $mission_obj_13_marker display 2
+        change_blip_display $mission_obj_14_marker display 2
+        change_blip_display $mission_obj_15_marker display 2
+        change_blip_display $mission_obj_16_marker display 2
+        change_blip_display $mission_obj_17_marker display 2
+        change_blip_display $mission_obj_18_marker display 2
+        change_blip_display $mission_obj_19_marker display 2
+        change_blip_display $mission_obj_20_marker display 2
+        change_blip_display $mission_obj_21_marker display 2
+        change_blip_display $mission_obj_22_marker display 2
+        change_blip_display $mission_obj_23_marker display 2
+        change_blip_display $mission_obj_24_marker display 2
+        change_blip_display $mission_obj_25_marker display 2
+        change_blip_display $mission_obj_26_marker display 2
+        change_blip_display $mission_obj_27_marker display 2
+        change_blip_display $mission_obj_28_marker display 2
+        change_blip_display $mission_obj_29_marker display 2
+        change_blip_display $mission_obj_30_marker display 2
+        change_blip_scale $mission_obj_1_marker size 2
+        change_blip_scale $mission_obj_2_marker size 2
+        change_blip_scale $mission_obj_3_marker size 2
+        change_blip_scale $mission_obj_4_marker size 2
+        change_blip_scale $mission_obj_5_marker size 2
+        change_blip_scale $mission_obj_6_marker size 2
+        change_blip_scale $mission_obj_7_marker size 2
+        change_blip_scale $mission_obj_8_marker size 2
+        change_blip_scale $mission_obj_9_marker size 2
+        change_blip_scale $mission_obj_10_marker size 2
+        change_blip_scale $mission_obj_11_marker size 2
+        change_blip_scale $mission_obj_12_marker size 2
+        change_blip_scale $mission_obj_13_marker size 2
+        change_blip_scale $mission_obj_14_marker size 2
+        change_blip_scale $mission_obj_15_marker size 2
+        change_blip_scale $mission_obj_16_marker size 2
+        change_blip_scale $mission_obj_17_marker size 2
+        change_blip_scale $mission_obj_18_marker size 2
+        change_blip_scale $mission_obj_19_marker size 2
+        change_blip_scale $mission_obj_20_marker size 2
+        change_blip_scale $mission_obj_21_marker size 2
+        change_blip_scale $mission_obj_22_marker size 2
+        change_blip_scale $mission_obj_23_marker size 2
+        change_blip_scale $mission_obj_24_marker size 2
+        change_blip_scale $mission_obj_25_marker size 2
+        change_blip_scale $mission_obj_26_marker size 2
+        change_blip_scale $mission_obj_27_marker size 2
+        change_blip_scale $mission_obj_28_marker size 2
+        change_blip_scale $mission_obj_29_marker size 2
+        change_blip_scale $mission_obj_30_marker size 2
+        change_blip_colour $mission_obj_1_marker color_to 3
+        change_blip_colour $mission_obj_2_marker color_to 3
+        change_blip_colour $mission_obj_3_marker color_to 3
+        change_blip_colour $mission_obj_4_marker color_to 3
+        change_blip_colour $mission_obj_5_marker color_to 3
+        change_blip_colour $mission_obj_6_marker color_to 3
+        change_blip_colour $mission_obj_7_marker color_to 3
+        change_blip_colour $mission_obj_8_marker color_to 3
+        change_blip_colour $mission_obj_9_marker color_to 3
+        change_blip_colour $mission_obj_10_marker color_to 3
+        change_blip_colour $mission_obj_11_marker color_to 3
+        change_blip_colour $mission_obj_12_marker color_to 3
+        change_blip_colour $mission_obj_13_marker color_to 3
+        change_blip_colour $mission_obj_14_marker color_to 3
+        change_blip_colour $mission_obj_15_marker color_to 3
+        change_blip_colour $mission_obj_16_marker color_to 3
+        change_blip_colour $mission_obj_17_marker color_to 3
+        change_blip_colour $mission_obj_18_marker color_to 3
+        change_blip_colour $mission_obj_19_marker color_to 3
+        change_blip_colour $mission_obj_20_marker color_to 3
+        change_blip_colour $mission_obj_21_marker color_to 3
+        change_blip_colour $mission_obj_22_marker color_to 3
+        change_blip_colour $mission_obj_23_marker color_to 3
+        change_blip_colour $mission_obj_24_marker color_to 3
+        change_blip_colour $mission_obj_25_marker color_to 3
+        change_blip_colour $mission_obj_26_marker color_to 3
+        change_blip_colour $mission_obj_27_marker color_to 3
+        change_blip_colour $mission_obj_28_marker color_to 3
+        change_blip_colour $mission_obj_29_marker color_to 3
+        change_blip_colour $mission_obj_30_marker color_to 3
+        11@ = 0
+    end
+end
+if
+    $mission_step > 0
+then
+    if and
+        11@ == 0
+        not is_player_in_car $player_char $objective_car
+    then
+        11@ = 1
+        add_blip_for_car $objective_car_marker = create_marker_above_car $objective_car
+        if
+            $mission_obj_1 <> -1
+        then
+            set_object_collision $mission_obj_1 collision_detection 1
+        end
+        if
+            $mission_obj_2 <> -1
+        then
+            set_object_collision $mission_obj_2 collision_detection 1
+        end
+        if
+            $mission_obj_3 <> -1
+        then
+            set_object_collision $mission_obj_3 collision_detection 1
+        end
+        if
+            $mission_obj_4 <> -1
+        then
+            set_object_collision $mission_obj_4 collision_detection 1
+        end
+        if
+            $mission_obj_5 <> -1
+        then
+            set_object_collision $mission_obj_5 collision_detection 1
+        end
+        if
+            $mission_obj_6 <> -1
+        then
+            set_object_collision $mission_obj_6 collision_detection 1
+        end
+        if
+            $mission_obj_7 <> -1
+        then
+            set_object_collision $mission_obj_7 collision_detection 1
+        end
+        if
+            $mission_obj_8 <> -1
+        then
+            set_object_collision $mission_obj_8 collision_detection 1
+        end
+        if
+            $mission_obj_9 <> -1
+        then
+            set_object_collision $mission_obj_9 collision_detection 1
+        end
+        if
+            $mission_obj_10 <> -1
+        then
+            set_object_collision $mission_obj_10 collision_detection 1
+        end
+        if
+            $mission_obj_11 <> -1
+        then
+            set_object_collision $mission_obj_11 collision_detection 1
+        end
+        if
+            $mission_obj_12 <> -1
+        then
+            set_object_collision $mission_obj_12 collision_detection 1
+        end
+        if
+            $mission_obj_13 <> -1
+        then
+            set_object_collision $mission_obj_13 collision_detection 1
+        end
+        if
+            $mission_obj_14 <> -1
+        then
+            set_object_collision $mission_obj_14 collision_detection 1
+        end
+        if
+            $mission_obj_15 <> -1
+        then
+            set_object_collision $mission_obj_15 collision_detection 1
+        end
+        if
+            $mission_obj_16 <> -1
+        then
+            set_object_collision $mission_obj_16 collision_detection 1
+        end
+        if
+            $mission_obj_17 <> -1
+        then
+            set_object_collision $mission_obj_17 collision_detection 1
+        end
+        if
+            $mission_obj_18 <> -1
+        then
+            set_object_collision $mission_obj_18 collision_detection 1
+        end
+        if
+            $mission_obj_19 <> -1
+        then
+            set_object_collision $mission_obj_19 collision_detection 1
+        end
+        if
+            $mission_obj_20 <> -1
+        then
+            set_object_collision $mission_obj_20 collision_detection 1
+        end
+        if
+            $mission_obj_21 <> -1
+        then
+            set_object_collision $mission_obj_21 collision_detection 1
+        end
+        if
+            $mission_obj_22 <> -1
+        then
+            set_object_collision $mission_obj_22 collision_detection 1
+        end
+        if
+            $mission_obj_23 <> -1
+        then
+            set_object_collision $mission_obj_23 collision_detection 1
+        end
+        if
+            $mission_obj_24 <> -1
+        then
+            set_object_collision $mission_obj_24 collision_detection 1
+        end
+        if
+            $mission_obj_25 <> -1
+        then
+            set_object_collision $mission_obj_25 collision_detection 1
+        end
+        if
+            $mission_obj_26 <> -1
+        then
+            set_object_collision $mission_obj_26 collision_detection 1
+        end
+        if
+            $mission_obj_27 <> -1
+        then
+            set_object_collision $mission_obj_27 collision_detection 1
+        end
+        if
+            $mission_obj_28 <> -1
+        then
+            set_object_collision $mission_obj_28 collision_detection 1
+        end
+        if
+            $mission_obj_29 <> -1
+        then
+            set_object_collision $mission_obj_29 collision_detection 1
+        end
+        if
+            $mission_obj_30 <> -1
+        then
+            set_object_collision $mission_obj_30 collision_detection 1
+        end
+    end
+    if and
+        11@ == 1
+        is_player_in_car $player_char $objective_car
+    then
+        11@ = 0
+        remove_blip $objective_car_marker
+        if
+            $mission_obj_1 <> -1
+        then
+            set_object_collision $mission_obj_1 collision_detection 0
+        end
+        if
+            $mission_obj_2 <> -1
+        then
+            set_object_collision $mission_obj_2 collision_detection 0
+        end
+        if
+            $mission_obj_3 <> -1
+        then
+            set_object_collision $mission_obj_3 collision_detection 0
+        end
+        if
+            $mission_obj_4 <> -1
+        then
+            set_object_collision $mission_obj_4 collision_detection 0
+        end
+        if
+            $mission_obj_5 <> -1
+        then
+            set_object_collision $mission_obj_5 collision_detection 0
+        end
+        if
+            $mission_obj_6 <> -1
+        then
+            set_object_collision $mission_obj_6 collision_detection 0
+        end
+        if
+            $mission_obj_7 <> -1
+        then
+            set_object_collision $mission_obj_7 collision_detection 0
+        end
+        if
+            $mission_obj_8 <> -1
+        then
+            set_object_collision $mission_obj_8 collision_detection 0
+        end
+        if
+            $mission_obj_9 <> -1
+        then
+            set_object_collision $mission_obj_9 collision_detection 0
+        end
+        if
+            $mission_obj_10 <> -1
+        then
+            set_object_collision $mission_obj_10 collision_detection 0
+        end
+        if
+            $mission_obj_11 <> -1
+        then
+            set_object_collision $mission_obj_11 collision_detection 0
+        end
+        if
+            $mission_obj_12 <> -1
+        then
+            set_object_collision $mission_obj_12 collision_detection 0
+        end
+        if
+            $mission_obj_13 <> -1
+        then
+            set_object_collision $mission_obj_13 collision_detection 0
+        end
+        if
+            $mission_obj_14 <> -1
+        then
+            set_object_collision $mission_obj_14 collision_detection 0
+        end
+        if
+            $mission_obj_15 <> -1
+        then
+            set_object_collision $mission_obj_15 collision_detection 0
+        end
+        if
+            $mission_obj_16 <> -1
+        then
+            set_object_collision $mission_obj_16 collision_detection 0
+        end
+        if
+            $mission_obj_17 <> -1
+        then
+            set_object_collision $mission_obj_17 collision_detection 0
+        end
+        if
+            $mission_obj_18 <> -1
+        then
+            set_object_collision $mission_obj_18 collision_detection 0
+        end
+        if
+            $mission_obj_19 <> -1
+        then
+            set_object_collision $mission_obj_19 collision_detection 0
+        end
+        if
+            $mission_obj_20 <> -1
+        then
+            set_object_collision $mission_obj_20 collision_detection 0
+        end
+        if
+            $mission_obj_21 <> -1
+        then
+            set_object_collision $mission_obj_21 collision_detection 0
+        end
+        if
+            $mission_obj_22 <> -1
+        then
+            set_object_collision $mission_obj_22 collision_detection 0
+        end
+        if
+            $mission_obj_23 <> -1
+        then
+            set_object_collision $mission_obj_23 collision_detection 0
+        end
+        if
+            $mission_obj_24 <> -1
+        then
+            set_object_collision $mission_obj_24 collision_detection 0
+        end
+        if
+            $mission_obj_25 <> -1
+        then
+            set_object_collision $mission_obj_25 collision_detection 0
+        end
+        if
+            $mission_obj_26 <> -1
+        then
+            set_object_collision $mission_obj_26 collision_detection 0
+        end
+        if
+            $mission_obj_27 <> -1
+        then
+            set_object_collision $mission_obj_27 collision_detection 0
+        end
+        if
+            $mission_obj_28 <> -1
+        then
+            set_object_collision $mission_obj_28 collision_detection 0
+        end
+        if
+            $mission_obj_29 <> -1
+        then
+            set_object_collision $mission_obj_29 collision_detection 0
+        end
+        if
+            $mission_obj_30 <> -1
+        then
+            set_object_collision $mission_obj_30 collision_detection 0
+        end
+    end
+    if
+        14@ >= 1
+    then
+        7@ = 0.0
+        if
+            $mission_flag_1 == 1
+        then
+            7@ = 0.2
+        end
+        place_object_relative_to_car $mission_obj_31 relative_to_car $objective_car offset -0.6 -0.8 7@
+    end
+    if
+        14@ >= 2
+    then
+        7@ = 0.0
+        if
+            $mission_flag_2 == 1
+        then
+            7@ = 0.2
+        end
+        place_object_relative_to_car $mission_obj_32 relative_to_car $objective_car offset 0.0 -0.8 7@
+    end
+    if
+        14@ >= 3
+    then
+        7@ = 0.0
+        if
+            $mission_flag_3 == 1
+        then
+            7@ = 0.2
+        end
+        place_object_relative_to_car $mission_obj_33 relative_to_car $objective_car offset 0.6 -0.8 7@
+    end
+    if
+        14@ >= 4
+    then
+        7@ = 0.0
+        if
+            $mission_flag_4 == 1
+        then
+            7@ = 0.2
+        end
+        place_object_relative_to_car $mission_obj_34 relative_to_car $objective_car offset -0.6 -1.5 7@
+    end
+    if
+        14@ >= 5
+    then
+        7@ = 0.0
+        if
+            $mission_flag_5 == 1
+        then
+            7@ = 0.2
+        end
+        place_object_relative_to_car $mission_obj_35 relative_to_car $objective_car offset 0.0 -1.5 7@
+    end
+    if
+        14@ >= 6
+    then
+        7@ = 0.0
+        if
+            $mission_flag_6 == 1
+        then
+            7@ = 0.2
+        end
+        place_object_relative_to_car $mission_obj_36 relative_to_car $objective_car offset 0.6 -1.5 7@
+    end
+    if
+        14@ >= 7
+    then
+        7@ = 0.0
+        if
+            $mission_flag_7 == 1
+        then
+            7@ = 0.2
+        end
+        place_object_relative_to_car $mission_obj_37 relative_to_car $objective_car offset -0.6 -2.2 7@
+    end
+    if
+        14@ >= 8
+    then
+        7@ = 0.0
+        if
+            $mission_flag_8 == 1
+        then
+            7@ = 0.2
+        end
+        place_object_relative_to_car $mission_obj_38 relative_to_car $objective_car offset 0.0 -2.2 7@
+    end
+    if
+        14@ >= 9
+    then
+        7@ = 0.0
+        if
+            $mission_flag_9 == 1
+        then
+            7@ = 0.2
+        end
+        place_object_relative_to_car $mission_obj_39 relative_to_car $objective_car offset 0.6 -2.2 7@
+    end
+end
+if
+    $mission_step == 1
+then
+    if
+        9 > 14@
+    then
+        get_car_coordinates $objective_car position_to 0@ 1@ 2@
+        const collect_radius = 2.5
+        if
+            $mission_obj_1 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_1 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_1
+            then
+                delete_object $mission_obj_1
+                remove_blip $mission_obj_1_marker
+                $mission_obj_1 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_2 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_2 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_2
+            then
+                delete_object $mission_obj_2
+                remove_blip $mission_obj_2_marker
+                $mission_obj_2 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_3 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_3 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_3
+            then
+                delete_object $mission_obj_3
+                remove_blip $mission_obj_3_marker
+                $mission_obj_3 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_4 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_4 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_4
+            then
+                delete_object $mission_obj_4
+                remove_blip $mission_obj_4_marker
+                $mission_obj_4 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_5 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_5 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_5
+            then
+                delete_object $mission_obj_5
+                remove_blip $mission_obj_5_marker
+                $mission_obj_5 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_6 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_6 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_6
+            then
+                delete_object $mission_obj_6
+                remove_blip $mission_obj_6_marker
+                $mission_obj_6 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_7 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_7 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_7
+            then
+                delete_object $mission_obj_7
+                remove_blip $mission_obj_7_marker
+                $mission_obj_7 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_8 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_8 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_8
+            then
+                delete_object $mission_obj_8
+                remove_blip $mission_obj_8_marker
+                $mission_obj_8 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_9 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_9 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_9
+            then
+                delete_object $mission_obj_9
+                remove_blip $mission_obj_9_marker
+                $mission_obj_9 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_10 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_10 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_10
+            then
+                delete_object $mission_obj_10
+                remove_blip $mission_obj_10_marker
+                $mission_obj_10 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_11 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_11 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_11
+            then
+                delete_object $mission_obj_11
+                remove_blip $mission_obj_11_marker
+                $mission_obj_11 = -1
+                14@++
+                15@++
+                10@ = #BLACKBAG1
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_12 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_12 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_12
+            then
+                delete_object $mission_obj_12
+                remove_blip $mission_obj_12_marker
+                $mission_obj_12 = -1
+                14@++
+                15@++
+                10@ = #BLACKBAG1
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_13 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_13 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_13
+            then
+                delete_object $mission_obj_13
+                remove_blip $mission_obj_13_marker
+                $mission_obj_13 = -1
+                14@++
+                15@++
+                10@ = #BLACKBAG1
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_14 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_14 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_14
+            then
+                delete_object $mission_obj_14
+                remove_blip $mission_obj_14_marker
+                $mission_obj_14 = -1
+                14@++
+                15@++
+                10@ = #CARDBOARDBOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_15 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_15 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_15
+            then
+                delete_object $mission_obj_15
+                remove_blip $mission_obj_15_marker
+                $mission_obj_15 = -1
+                14@++
+                15@++
+                10@ = #CARDBOARDBOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_16 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_16 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_16
+            then
+                delete_object $mission_obj_16
+                remove_blip $mission_obj_16_marker
+                $mission_obj_16 = -1
+                14@++
+                15@++
+                10@ = #CARDBOARDBOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_17 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_17 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_17
+            then
+                delete_object $mission_obj_17
+                remove_blip $mission_obj_17_marker
+                $mission_obj_17 = -1
+                14@++
+                15@++
+                10@ = #CARDBOARDBOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_18 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_18 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_18
+            then
+                delete_object $mission_obj_18
+                remove_blip $mission_obj_18_marker
+                $mission_obj_18 = -1
+                14@++
+                15@++
+                10@ = #CARDBOARDBOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_19 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_19 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_19
+            then
+                delete_object $mission_obj_19
+                remove_blip $mission_obj_19_marker
+                $mission_obj_19 = -1
+                14@++
+                15@++
+                10@ = #CARDBOARDBOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_20 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_20 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_20
+            then
+                delete_object $mission_obj_20
+                remove_blip $mission_obj_20_marker
+                $mission_obj_20 = -1
+                14@++
+                15@++
+                10@ = #CARDBOARDBOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_21 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_21 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_21
+            then
+                delete_object $mission_obj_21
+                remove_blip $mission_obj_21_marker
+                $mission_obj_21 = -1
+                14@++
+                15@++
+                10@ = #CARDBOARDBOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_22 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_22 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_22
+            then
+                delete_object $mission_obj_22
+                remove_blip $mission_obj_22_marker
+                $mission_obj_22 = -1
+                14@++
+                15@++
+                10@ = #CARDBOARDBOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_23 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_23 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_23
+            then
+                delete_object $mission_obj_23
+                remove_blip $mission_obj_23_marker
+                $mission_obj_23 = -1
+                14@++
+                15@++
+                10@ = #CARDBOARDBOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_24 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_24 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_24
+            then
+                delete_object $mission_obj_24
+                remove_blip $mission_obj_24_marker
+                $mission_obj_24 = -1
+                14@++
+                15@++
+                10@ = #BLACKBAG1
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_25 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_25 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_25
+            then
+                delete_object $mission_obj_25
+                remove_blip $mission_obj_25_marker
+                $mission_obj_25 = -1
+                14@++
+                15@++
+                10@ = #BLACKBAG1
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_26 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_26 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_26
+            then
+                delete_object $mission_obj_26
+                remove_blip $mission_obj_26_marker
+                $mission_obj_26 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_27 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_27 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_27
+            then
+                delete_object $mission_obj_27
+                remove_blip $mission_obj_27_marker
+                $mission_obj_27 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_28 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_28 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_28
+            then
+                delete_object $mission_obj_28
+                remove_blip $mission_obj_28_marker
+                $mission_obj_28 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_29 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_29 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_29
+            then
+                delete_object $mission_obj_29
+                remove_blip $mission_obj_29_marker
+                $mission_obj_29 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+        if
+            $mission_obj_30 <> -1
+        then
+            if or
+                locate_object_2d $mission_obj_30 near_point 0@ 1@ radius collect_radius collect_radius sphere 0
+                has_object_been_damaged $mission_obj_30
+            then
+                delete_object $mission_obj_30
+                remove_blip $mission_obj_30_marker
+                $mission_obj_30 = -1
+                14@++
+                15@++
+                10@ = #PIZZABOX
+                BIKER_1_ADD_TO_TRUCK()
+            end
+        end
+    end
+    if or
+        14@ >= 9
+        15@ == 30
+    then
+        $mission_step = 2
+        add_blip_for_coord $objective_point_marker = create_checkpoint_at -576.0 636.4 10.0
+        if
+            15@ == 30
+        then
+            print_now 'CLEAN4' time 5000 1
+        else
+            print_now 'CLEAN3' time 5000 1
+        end
+    end
+end
+if
+    $mission_step == 2
+then
+    if and
+        is_player_in_car $player_char $objective_car
+        locate_stopped_player_in_car_2d $player_char stopped 1 -576.0 636.4 radius 2.0 2.0
+    then
+        if
+            15@ == 30
+        then
+            print_now 'SUCCESS' time 3000 1
+            jump @BIKER_1_PASS
+        end
+        $mission_step = 1
+        remove_blip $objective_point_marker
+        delete_object $mission_obj_31
+        delete_object $mission_obj_32
+        delete_object $mission_obj_33
+        delete_object $mission_obj_34
+        delete_object $mission_obj_35
+        delete_object $mission_obj_36
+        delete_object $mission_obj_37
+        delete_object $mission_obj_38
+        delete_object $mission_obj_39
+        get_player_coordinates $player_char position_to 7@ 8@ 9@
+        add_one_off_sound 62 at 7@ 8@ 9@
+        14@ = 0
+    end
+end
+goto @BIKER_1_LOOP
+
+:BIKER_1_ADD_TO_TRUCK
+get_player_coordinates $player_char position_to 7@ 8@ 9@
+add_one_off_sound 61 at 7@ 8@ 9@
+if
+    14@ == 1
+then
+    delete_object $mission_obj_31
+    create_object $mission_obj_31 10@ 0.0 0.0 0.0
+    set_object_collision $mission_obj_31 collision_detection 0
+    set_object_dynamic $mission_obj_31 toggle_in_moving_list 0
+    $mission_flag_1 = 1
+    if
+        10@ == #PIZZABOX
+    then
+        $mission_flag_1 = 0
+    end
+    return
+end
+if
+    14@ == 2
+then
+    delete_object $mission_obj_32
+    create_object $mission_obj_32 10@ 0.0 0.0 0.0
+    set_object_collision $mission_obj_32 collision_detection 0
+    set_object_dynamic $mission_obj_32 toggle_in_moving_list 0
+    $mission_flag_2 = 1
+    if
+        10@ == #PIZZABOX
+    then
+        $mission_flag_2 = 0
+    end
+    return
+end
+if
+    14@ == 3
+then
+    delete_object $mission_obj_33
+    create_object $mission_obj_33 10@ 0.0 0.0 0.0
+    set_object_collision $mission_obj_33 collision_detection 0
+    set_object_dynamic $mission_obj_33 toggle_in_moving_list 0
+    $mission_flag_3 = 1
+    if
+        10@ == #PIZZABOX
+    then
+        $mission_flag_3 = 0
+    end
+    return
+end
+if
+    14@ == 4
+then
+    delete_object $mission_obj_34
+    create_object $mission_obj_34 10@ 0.0 0.0 0.0
+    set_object_collision $mission_obj_34 collision_detection 0
+    set_object_dynamic $mission_obj_34 toggle_in_moving_list 0
+    $mission_flag_4 = 1
+    if
+        10@ == #PIZZABOX
+    then
+        $mission_flag_4 = 0
+    end
+    return
+end
+if
+    14@ == 5
+then
+    delete_object $mission_obj_35
+    create_object $mission_obj_35 10@ 0.0 0.0 0.0
+    set_object_collision $mission_obj_35 collision_detection 0
+    set_object_dynamic $mission_obj_35 toggle_in_moving_list 0
+    $mission_flag_5 = 1
+    if
+        10@ == #PIZZABOX
+    then
+        $mission_flag_5 = 0
+    end
+    return
+end
+if
+    14@ == 6
+then
+    delete_object $mission_obj_36
+    create_object $mission_obj_36 10@ 0.0 0.0 0.0
+    set_object_collision $mission_obj_36 collision_detection 0
+    set_object_dynamic $mission_obj_36 toggle_in_moving_list 0
+    $mission_flag_6 = 1
+    if
+        10@ == #PIZZABOX
+    then
+        $mission_flag_6 = 0
+    end
+    return
+end
+if
+    14@ == 7
+then
+    delete_object $mission_obj_37
+    create_object $mission_obj_37 10@ 0.0 0.0 0.0
+    set_object_collision $mission_obj_37 collision_detection 0
+    set_object_dynamic $mission_obj_37 toggle_in_moving_list 0
+    $mission_flag_7 = 1
+    if
+        10@ == #PIZZABOX
+    then
+        $mission_flag_7 = 0
+    end
+    return
+end
+if
+    14@ == 8
+then
+    delete_object $mission_obj_38
+    create_object $mission_obj_38 10@ 0.0 0.0 0.0
+    set_object_collision $mission_obj_38 collision_detection 0
+    set_object_dynamic $mission_obj_38 toggle_in_moving_list 0
+    $mission_flag_8 = 1
+    if
+        10@ == #PIZZABOX
+    then
+        $mission_flag_8 = 0
+    end
+    return
+end
+delete_object $mission_obj_39
+create_object $mission_obj_39 10@ 0.0 0.0 0.0
+set_object_collision $mission_obj_39 collision_detection 0
+set_object_dynamic $mission_obj_39 toggle_in_moving_list 0
+$mission_flag_9 = 1
+if
+    10@ == #PIZZABOX
+then
+    $mission_flag_9 = 0
+end
 return
 
 :BIKER_1_WRECKED
-print_now 'CARF' time 5000 2
+print_now 'WRECKED' time 5000 2
+BIKER_1_FAIL()
+return
+
+:BIKER_1_WHY
+print_now 'WHY' time 5000 2
 BIKER_1_FAIL()
 return
 
@@ -13674,10 +15087,7 @@ remove_blip $mission_car_3_marker
 remove_blip $mission_car_4_marker
 remove_blip $mission_car_5_marker
 remove_blip $objective_car_marker
-remove_blip $objective_point_1_marker
-remove_blip $objective_point_2_marker
-remove_blip $objective_point_3_marker
-remove_blip $objective_point_4_marker
+remove_blip $objective_point_marker
 remove_blip $mission_obj_1_marker
 remove_blip $mission_obj_2_marker
 remove_blip $mission_obj_3_marker
@@ -13738,6 +15148,19 @@ delete_object $mission_obj_27
 delete_object $mission_obj_28
 delete_object $mission_obj_29
 delete_object $mission_obj_30
+delete_object $mission_obj_31
+delete_object $mission_obj_32
+delete_object $mission_obj_33
+delete_object $mission_obj_34
+delete_object $mission_obj_35
+delete_object $mission_obj_36
+delete_object $mission_obj_37
+delete_object $mission_obj_38
+delete_object $mission_obj_39
+delete_object $mission_obj_101
+mark_model_as_no_longer_needed #PIZZABOX
+mark_model_as_no_longer_needed #CARDBOARDBOX
+mark_model_as_no_longer_needed #BLACKBAG1
 switch_rubbish 1
 mission_has_finished
 return
