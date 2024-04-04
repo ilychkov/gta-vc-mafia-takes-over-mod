@@ -13839,126 +13839,366 @@ then
         $mission_step = 1
         print_now 'CLEAN2' time 5000 1
         remove_blip $objective_point_marker
-        add_blip_for_object $mission_obj_1_marker = create_marker_above_object $mission_obj_1
-        add_blip_for_object $mission_obj_2_marker = create_marker_above_object $mission_obj_2
-        add_blip_for_object $mission_obj_3_marker = create_marker_above_object $mission_obj_3
-        add_blip_for_object $mission_obj_4_marker = create_marker_above_object $mission_obj_4
-        add_blip_for_object $mission_obj_5_marker = create_marker_above_object $mission_obj_5
-        add_blip_for_object $mission_obj_6_marker = create_marker_above_object $mission_obj_6
-        add_blip_for_object $mission_obj_7_marker = create_marker_above_object $mission_obj_7
-        add_blip_for_object $mission_obj_8_marker = create_marker_above_object $mission_obj_8
-        add_blip_for_object $mission_obj_9_marker = create_marker_above_object $mission_obj_9
-        add_blip_for_object $mission_obj_10_marker = create_marker_above_object $mission_obj_10
-        add_blip_for_object $mission_obj_11_marker = create_marker_above_object $mission_obj_11
-        add_blip_for_object $mission_obj_12_marker = create_marker_above_object $mission_obj_12
-        add_blip_for_object $mission_obj_13_marker = create_marker_above_object $mission_obj_13
-        add_blip_for_object $mission_obj_14_marker = create_marker_above_object $mission_obj_14
-        add_blip_for_object $mission_obj_15_marker = create_marker_above_object $mission_obj_15
-        add_blip_for_object $mission_obj_16_marker = create_marker_above_object $mission_obj_16
-        add_blip_for_object $mission_obj_17_marker = create_marker_above_object $mission_obj_17
-        add_blip_for_object $mission_obj_18_marker = create_marker_above_object $mission_obj_18
-        add_blip_for_object $mission_obj_19_marker = create_marker_above_object $mission_obj_19
-        add_blip_for_object $mission_obj_20_marker = create_marker_above_object $mission_obj_20
-        add_blip_for_object $mission_obj_21_marker = create_marker_above_object $mission_obj_21
-        add_blip_for_object $mission_obj_22_marker = create_marker_above_object $mission_obj_22
-        add_blip_for_object $mission_obj_23_marker = create_marker_above_object $mission_obj_23
-        add_blip_for_object $mission_obj_24_marker = create_marker_above_object $mission_obj_24
-        add_blip_for_object $mission_obj_25_marker = create_marker_above_object $mission_obj_25
-        add_blip_for_object $mission_obj_26_marker = create_marker_above_object $mission_obj_26
-        add_blip_for_object $mission_obj_27_marker = create_marker_above_object $mission_obj_27
-        add_blip_for_object $mission_obj_28_marker = create_marker_above_object $mission_obj_28
-        add_blip_for_object $mission_obj_29_marker = create_marker_above_object $mission_obj_29
-        add_blip_for_object $mission_obj_30_marker = create_marker_above_object $mission_obj_30
-        change_blip_display $mission_obj_1_marker display 2
-        change_blip_display $mission_obj_2_marker display 2
-        change_blip_display $mission_obj_3_marker display 2
-        change_blip_display $mission_obj_4_marker display 2
-        change_blip_display $mission_obj_5_marker display 2
-        change_blip_display $mission_obj_6_marker display 2
-        change_blip_display $mission_obj_7_marker display 2
-        change_blip_display $mission_obj_8_marker display 2
-        change_blip_display $mission_obj_9_marker display 2
-        change_blip_display $mission_obj_10_marker display 2
-        change_blip_display $mission_obj_11_marker display 2
-        change_blip_display $mission_obj_12_marker display 2
-        change_blip_display $mission_obj_13_marker display 2
-        change_blip_display $mission_obj_14_marker display 2
-        change_blip_display $mission_obj_15_marker display 2
-        change_blip_display $mission_obj_16_marker display 2
-        change_blip_display $mission_obj_17_marker display 2
-        change_blip_display $mission_obj_18_marker display 2
-        change_blip_display $mission_obj_19_marker display 2
-        change_blip_display $mission_obj_20_marker display 2
-        change_blip_display $mission_obj_21_marker display 2
-        change_blip_display $mission_obj_22_marker display 2
-        change_blip_display $mission_obj_23_marker display 2
-        change_blip_display $mission_obj_24_marker display 2
-        change_blip_display $mission_obj_25_marker display 2
-        change_blip_display $mission_obj_26_marker display 2
-        change_blip_display $mission_obj_27_marker display 2
-        change_blip_display $mission_obj_28_marker display 2
-        change_blip_display $mission_obj_29_marker display 2
-        change_blip_display $mission_obj_30_marker display 2
-        change_blip_scale $mission_obj_1_marker size 2
-        change_blip_scale $mission_obj_2_marker size 2
-        change_blip_scale $mission_obj_3_marker size 2
-        change_blip_scale $mission_obj_4_marker size 2
-        change_blip_scale $mission_obj_5_marker size 2
-        change_blip_scale $mission_obj_6_marker size 2
-        change_blip_scale $mission_obj_7_marker size 2
-        change_blip_scale $mission_obj_8_marker size 2
-        change_blip_scale $mission_obj_9_marker size 2
-        change_blip_scale $mission_obj_10_marker size 2
-        change_blip_scale $mission_obj_11_marker size 2
-        change_blip_scale $mission_obj_12_marker size 2
-        change_blip_scale $mission_obj_13_marker size 2
-        change_blip_scale $mission_obj_14_marker size 2
-        change_blip_scale $mission_obj_15_marker size 2
-        change_blip_scale $mission_obj_16_marker size 2
-        change_blip_scale $mission_obj_17_marker size 2
-        change_blip_scale $mission_obj_18_marker size 2
-        change_blip_scale $mission_obj_19_marker size 2
-        change_blip_scale $mission_obj_20_marker size 2
-        change_blip_scale $mission_obj_21_marker size 2
-        change_blip_scale $mission_obj_22_marker size 2
-        change_blip_scale $mission_obj_23_marker size 2
-        change_blip_scale $mission_obj_24_marker size 2
-        change_blip_scale $mission_obj_25_marker size 2
-        change_blip_scale $mission_obj_26_marker size 2
-        change_blip_scale $mission_obj_27_marker size 2
-        change_blip_scale $mission_obj_28_marker size 2
-        change_blip_scale $mission_obj_29_marker size 2
-        change_blip_scale $mission_obj_30_marker size 2
-        change_blip_colour $mission_obj_1_marker color_to 3
-        change_blip_colour $mission_obj_2_marker color_to 3
-        change_blip_colour $mission_obj_3_marker color_to 3
-        change_blip_colour $mission_obj_4_marker color_to 3
-        change_blip_colour $mission_obj_5_marker color_to 3
-        change_blip_colour $mission_obj_6_marker color_to 3
-        change_blip_colour $mission_obj_7_marker color_to 3
-        change_blip_colour $mission_obj_8_marker color_to 3
-        change_blip_colour $mission_obj_9_marker color_to 3
-        change_blip_colour $mission_obj_10_marker color_to 3
-        change_blip_colour $mission_obj_11_marker color_to 3
-        change_blip_colour $mission_obj_12_marker color_to 3
-        change_blip_colour $mission_obj_13_marker color_to 3
-        change_blip_colour $mission_obj_14_marker color_to 3
-        change_blip_colour $mission_obj_15_marker color_to 3
-        change_blip_colour $mission_obj_16_marker color_to 3
-        change_blip_colour $mission_obj_17_marker color_to 3
-        change_blip_colour $mission_obj_18_marker color_to 3
-        change_blip_colour $mission_obj_19_marker color_to 3
-        change_blip_colour $mission_obj_20_marker color_to 3
-        change_blip_colour $mission_obj_21_marker color_to 3
-        change_blip_colour $mission_obj_22_marker color_to 3
-        change_blip_colour $mission_obj_23_marker color_to 3
-        change_blip_colour $mission_obj_24_marker color_to 3
-        change_blip_colour $mission_obj_25_marker color_to 3
-        change_blip_colour $mission_obj_26_marker color_to 3
-        change_blip_colour $mission_obj_27_marker color_to 3
-        change_blip_colour $mission_obj_28_marker color_to 3
-        change_blip_colour $mission_obj_29_marker color_to 3
-        change_blip_colour $mission_obj_30_marker color_to 3
+        if
+            has_object_been_damaged $mission_obj_1
+        then
+            delete_object $mission_obj_1
+            $mission_obj_1 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_1_marker = create_marker_above_object $mission_obj_1
+            change_blip_display $mission_obj_1_marker display 2
+            change_blip_scale $mission_obj_1_marker size 2
+            change_blip_colour $mission_obj_1_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_2
+        then
+            delete_object $mission_obj_2
+            $mission_obj_2 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_2_marker = create_marker_above_object $mission_obj_2
+            change_blip_display $mission_obj_2_marker display 2
+            change_blip_scale $mission_obj_2_marker size 2
+            change_blip_colour $mission_obj_2_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_3
+        then
+            delete_object $mission_obj_3
+            $mission_obj_3 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_3_marker = create_marker_above_object $mission_obj_3
+            change_blip_display $mission_obj_3_marker display 2
+            change_blip_scale $mission_obj_3_marker size 2
+            change_blip_colour $mission_obj_3_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_4
+        then
+            delete_object $mission_obj_4
+            $mission_obj_4 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_4_marker = create_marker_above_object $mission_obj_4
+            change_blip_display $mission_obj_4_marker display 2
+            change_blip_scale $mission_obj_4_marker size 2
+            change_blip_colour $mission_obj_4_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_5
+        then
+            delete_object $mission_obj_5
+            $mission_obj_5 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_5_marker = create_marker_above_object $mission_obj_5
+            change_blip_display $mission_obj_5_marker display 2
+            change_blip_scale $mission_obj_5_marker size 2
+            change_blip_colour $mission_obj_5_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_6
+        then
+            delete_object $mission_obj_6
+            $mission_obj_6 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_6_marker = create_marker_above_object $mission_obj_6
+            change_blip_display $mission_obj_6_marker display 2
+            change_blip_scale $mission_obj_6_marker size 2
+            change_blip_colour $mission_obj_6_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_7
+        then
+            delete_object $mission_obj_7
+            $mission_obj_7 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_7_marker = create_marker_above_object $mission_obj_7
+            change_blip_display $mission_obj_7_marker display 2
+            change_blip_scale $mission_obj_7_marker size 2
+            change_blip_colour $mission_obj_7_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_8
+        then
+            delete_object $mission_obj_8
+            $mission_obj_8 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_8_marker = create_marker_above_object $mission_obj_8
+            change_blip_display $mission_obj_8_marker display 2
+            change_blip_scale $mission_obj_8_marker size 2
+            change_blip_colour $mission_obj_8_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_9
+        then
+            delete_object $mission_obj_9
+            $mission_obj_9 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_9_marker = create_marker_above_object $mission_obj_9
+            change_blip_display $mission_obj_9_marker display 2
+            change_blip_scale $mission_obj_9_marker size 2
+            change_blip_colour $mission_obj_9_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_10
+        then
+            delete_object $mission_obj_10
+            $mission_obj_10 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_10_marker = create_marker_above_object $mission_obj_10
+            change_blip_display $mission_obj_10_marker display 2
+            change_blip_scale $mission_obj_10_marker size 2
+            change_blip_colour $mission_obj_10_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_11
+        then
+            delete_object $mission_obj_11
+            $mission_obj_11 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_11_marker = create_marker_above_object $mission_obj_11
+            change_blip_display $mission_obj_11_marker display 2
+            change_blip_scale $mission_obj_11_marker size 2
+            change_blip_colour $mission_obj_11_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_12
+        then
+            delete_object $mission_obj_12
+            $mission_obj_12 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_12_marker = create_marker_above_object $mission_obj_12
+            change_blip_display $mission_obj_12_marker display 2
+            change_blip_scale $mission_obj_12_marker size 2
+            change_blip_colour $mission_obj_12_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_13
+        then
+            delete_object $mission_obj_13
+            $mission_obj_13 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_13_marker = create_marker_above_object $mission_obj_13
+            change_blip_display $mission_obj_13_marker display 2
+            change_blip_scale $mission_obj_13_marker size 2
+            change_blip_colour $mission_obj_13_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_14
+        then
+            delete_object $mission_obj_14
+            $mission_obj_14 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_14_marker = create_marker_above_object $mission_obj_14
+            change_blip_display $mission_obj_14_marker display 2
+            change_blip_scale $mission_obj_14_marker size 2
+            change_blip_colour $mission_obj_14_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_15
+        then
+            delete_object $mission_obj_15
+            $mission_obj_15 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_15_marker = create_marker_above_object $mission_obj_15
+            change_blip_display $mission_obj_15_marker display 2
+            change_blip_scale $mission_obj_15_marker size 2
+            change_blip_colour $mission_obj_15_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_16
+        then
+            delete_object $mission_obj_16
+            $mission_obj_16 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_16_marker = create_marker_above_object $mission_obj_16
+            change_blip_display $mission_obj_16_marker display 2
+            change_blip_scale $mission_obj_16_marker size 2
+            change_blip_colour $mission_obj_16_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_17
+        then
+            delete_object $mission_obj_17
+            $mission_obj_17 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_17_marker = create_marker_above_object $mission_obj_17
+            change_blip_display $mission_obj_17_marker display 2
+            change_blip_scale $mission_obj_17_marker size 2
+            change_blip_colour $mission_obj_17_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_18
+        then
+            delete_object $mission_obj_18
+            $mission_obj_18 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_18_marker = create_marker_above_object $mission_obj_18
+            change_blip_display $mission_obj_18_marker display 2
+            change_blip_scale $mission_obj_18_marker size 2
+            change_blip_colour $mission_obj_18_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_19
+        then
+            delete_object $mission_obj_19
+            $mission_obj_19 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_19_marker = create_marker_above_object $mission_obj_19
+            change_blip_display $mission_obj_19_marker display 2
+            change_blip_scale $mission_obj_19_marker size 2
+            change_blip_colour $mission_obj_19_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_20
+        then
+            delete_object $mission_obj_20
+            $mission_obj_20 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_20_marker = create_marker_above_object $mission_obj_20
+            change_blip_display $mission_obj_20_marker display 2
+            change_blip_scale $mission_obj_20_marker size 2
+            change_blip_colour $mission_obj_20_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_21
+        then
+            delete_object $mission_obj_21
+            $mission_obj_21 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_21_marker = create_marker_above_object $mission_obj_21
+            change_blip_display $mission_obj_21_marker display 2
+            change_blip_scale $mission_obj_21_marker size 2
+            change_blip_colour $mission_obj_21_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_22
+        then
+            delete_object $mission_obj_22
+            $mission_obj_22 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_22_marker = create_marker_above_object $mission_obj_22
+            change_blip_display $mission_obj_22_marker display 2
+            change_blip_scale $mission_obj_22_marker size 2
+            change_blip_colour $mission_obj_22_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_23
+        then
+            delete_object $mission_obj_23
+            $mission_obj_23 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_23_marker = create_marker_above_object $mission_obj_23
+            change_blip_display $mission_obj_23_marker display 2
+            change_blip_scale $mission_obj_23_marker size 2
+            change_blip_colour $mission_obj_23_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_24
+        then
+            delete_object $mission_obj_24
+            $mission_obj_24 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_24_marker = create_marker_above_object $mission_obj_24
+            change_blip_display $mission_obj_24_marker display 2
+            change_blip_scale $mission_obj_24_marker size 2
+            change_blip_colour $mission_obj_24_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_25
+        then
+            delete_object $mission_obj_25
+            $mission_obj_25 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_25_marker = create_marker_above_object $mission_obj_25
+            change_blip_display $mission_obj_25_marker display 2
+            change_blip_scale $mission_obj_25_marker size 2
+            change_blip_colour $mission_obj_25_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_26
+        then
+            delete_object $mission_obj_26
+            $mission_obj_26 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_26_marker = create_marker_above_object $mission_obj_26
+            change_blip_display $mission_obj_26_marker display 2
+            change_blip_scale $mission_obj_26_marker size 2
+            change_blip_colour $mission_obj_26_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_27
+        then
+            delete_object $mission_obj_27
+            $mission_obj_27 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_27_marker = create_marker_above_object $mission_obj_27
+            change_blip_display $mission_obj_27_marker display 2
+            change_blip_scale $mission_obj_27_marker size 2
+            change_blip_colour $mission_obj_27_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_28
+        then
+            delete_object $mission_obj_28
+            $mission_obj_28 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_28_marker = create_marker_above_object $mission_obj_28
+            change_blip_display $mission_obj_28_marker display 2
+            change_blip_scale $mission_obj_28_marker size 2
+            change_blip_colour $mission_obj_28_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_29
+        then
+            delete_object $mission_obj_29
+            $mission_obj_29 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_29_marker = create_marker_above_object $mission_obj_29
+            change_blip_display $mission_obj_29_marker display 2
+            change_blip_scale $mission_obj_29_marker size 2
+            change_blip_colour $mission_obj_29_marker color_to 3
+        end
+        if
+            has_object_been_damaged $mission_obj_30
+        then
+            delete_object $mission_obj_30
+            $mission_obj_30 = -1
+            15@++
+        else
+            add_blip_for_object $mission_obj_30_marker = create_marker_above_object $mission_obj_30
+            change_blip_display $mission_obj_30_marker display 2
+            change_blip_scale $mission_obj_30_marker size 2
+            change_blip_colour $mission_obj_30_marker color_to 3
+        end
         11@ = 0
     end
 end
@@ -14907,8 +15147,7 @@ then
         delete_object $mission_obj_37
         delete_object $mission_obj_38
         delete_object $mission_obj_39
-        get_player_coordinates $player_char position_to 7@ 8@ 9@
-        add_one_off_sound 62 at 7@ 8@ 9@
+        add_one_off_sound 62 at -579.2 636.4 10.0
         14@ = 0
     end
 end
