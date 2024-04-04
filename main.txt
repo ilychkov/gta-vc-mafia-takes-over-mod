@@ -406,6 +406,8 @@ goto @PSAVE2_10
 $game_saving = 1
 $onmission = 1
 set_player_control $player_char can_move 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 return
 
 :HELP_4118
@@ -445,6 +447,8 @@ if
     is_player_playing $player_char
 goto_if_false @HELP_4265
 set_player_control $player_char can_move 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 $onmission = 0
 
 :HELP_4265
@@ -476,12 +480,16 @@ goto_if_false @INFOPICS_2
 remove_pickup $info_pickup_1
 $info_1_picked_up = 1
 set_player_control $player_char can_move 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 switch_widescreen 1
 set_interpolation_parameters 0.0 3000
 set_fixed_camera_position -256.1952 -354.6713 20.6009 rotation 0.0 0.0 0.0
 point_camera_at_point -249.0279 -328.2032 12.1777 switchstyle 1 // 10.1777
 wait 4300
 set_player_control $player_char can_move 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 switch_widescreen 0
 restore_camera_jumpcut
 set_camera_behind_player
@@ -504,6 +512,8 @@ goto_if_false @INFOPICS_3
 remove_pickup $info_pickup_2
 $info_2_picked_up = 1
 set_player_control $player_char can_move 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 switch_widescreen 1
 set_fixed_camera_position -263.79 -331.11 16.08 rotation 0.0 0.0 0.0
 point_camera_at_point -256.03 -327.92 14.63 switchstyle 2
@@ -514,6 +524,8 @@ point_camera_at_point -266.65 -314.12 11.3 switchstyle 1
 print_now 'INFO2B' time 4000 1
 wait 4000
 set_player_control $player_char can_move 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 switch_widescreen 0
 restore_camera_jumpcut
 set_camera_behind_player
@@ -596,6 +608,8 @@ goto_if_false @INFOPICS_7
 remove_pickup $info_pickup_6
 $info_6_picked_up = 1
 set_player_control $player_char can_move 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 set_fading_colour 0 0 0
 switch_widescreen 1
 set_interpolation_parameters 0.0 3000
@@ -654,6 +668,8 @@ fade 0 500
 wait 500
 fade 1 1000
 set_player_control $player_char can_move 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 switch_widescreen 0
 restore_camera_jumpcut
 set_camera_behind_player
@@ -4555,6 +4571,8 @@ then
     jump @REPAINT_WAIT
 end
 set_player_control $player_char can_move 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 print_help_forever 'PAINT'
 store_car_player_is_in_no_save 11@ = player $player_char
 get_car_colours 11@ color 12@ 13@
@@ -4708,6 +4726,8 @@ then
     print_big_q 'PAINTYE' time 5000 style 5
 end
 set_player_control $player_char can_move 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 restore_camera_jumpcut
 
 :REPAINT_WAIT_FOR_LEAVE
