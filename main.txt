@@ -12081,7 +12081,7 @@ set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 fade 0 500
 wait 500
 switch_widescreen 1
-clear_area 0 at 352.6562 -528.4199 8.9133 range 20.0
+clear_area 0 at 352.6562 -528.4199 8.9133 range 50.0
 set_car_density_multiplier 0.0
 set_ped_density_multiplier 0.0
 set_char_coordinates $player_actor 344.7186 -528.6737 8.8841
@@ -12244,7 +12244,9 @@ set_time_of_day 22 0
 $mission_timer = 420000
 display_onscreen_timer_with_string $mission_timer type 1 text 'SUNRISE' // Sunrise:
 fade 1 500
-print_now 'START1' time 5000 1
+clear_prints
+print 'START1' time 5000 1
+print 'START1B' time 5000 1
 0@ = 0
 if
     $mission_debug == 1
