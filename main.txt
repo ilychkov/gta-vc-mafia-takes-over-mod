@@ -14199,6 +14199,12 @@ then
             change_blip_scale $mission_obj_30_marker size 2
             change_blip_colour $mission_obj_30_marker color_to 3
         end
+        if
+            15@ == 30
+        then
+            print_now 'WEIRD' time 5000 1
+            jump @BIKER_1_PASS
+        end
         11@ = 0
     end
 end

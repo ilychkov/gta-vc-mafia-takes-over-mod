@@ -166,4 +166,5 @@ CLEAN4  = ~g~Dump the remaining trash.
 WRECKED = ~r~The bike is destroyed!
 WHY     = ~r~Why?
 SUCCESS = ~g~Right on, dude!
+WEIRD   = ~g~This is weird. Are you speedrunning or something?
 
