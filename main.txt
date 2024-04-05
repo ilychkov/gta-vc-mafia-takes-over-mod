@@ -4257,12 +4257,14 @@ then
         not is_char_dead pc_cop_1
     then
         set_char_obj_enter_car_as_driver pc_cop_1 go_to_and_drive_car pc_police_car_1
+        set_char_stay_in_car_when_jacked pc_cop_1 stay_in_car_when_jacked 1
         0@ = 1
     end
     if
         not is_char_dead pc_cop_2
     then
         set_char_obj_enter_car_as_driver pc_cop_2 go_to_and_drive_car pc_police_car_1
+        set_char_stay_in_car_when_jacked pc_cop_2 stay_in_car_when_jacked 1
         0@ = 1
     end
 end
@@ -4280,12 +4282,14 @@ then
         not is_char_dead pc_gang_1
     then
         set_char_obj_enter_car_as_driver pc_gang_1 go_to_and_drive_car pc_gang_car
+        set_char_stay_in_car_when_jacked pc_gang_1 stay_in_car_when_jacked 1
         2@ = 1
     end
     if
         not is_char_dead pc_gang_2
     then
         set_char_obj_enter_car_as_driver pc_gang_2 go_to_and_drive_car pc_gang_car
+        set_char_stay_in_car_when_jacked pc_gang_2 stay_in_car_when_jacked 1
         2@ = 1
     end
 end
@@ -7570,7 +7574,7 @@ $info_7_moved = 0
 $player_knows_about_info_pickups = 0
 $golf_x = -173.0759
 $golf_y = 418.5642
-$golf_z = 8.4777
+$golf_z = 7.4777
 $passed_golf = 0
 $golf_record_seconds = 99999
 $police_x = 349.17
