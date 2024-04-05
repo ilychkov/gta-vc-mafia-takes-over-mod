@@ -68,6 +68,10 @@ UNCALL2 = It's been a while. Why don't you come pay me a visit?
 UNCALL3 = I'll be waiting nearby the Printworks.
 BIKER1  = The Clearout
 BIKER1S = [US]The Clearout
+CUBAN1  = Sea Scouts
+CUBAN1S = [US] Sea Scouts
+CUBAN2  = The Treasure Hunt
+CUBAN2S = [US] The Treasure Hunt
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!
@@ -167,4 +171,13 @@ WRECKED = ~r~The bike is destroyed!
 WHY     = ~r~Why?
 SUCCESS = ~g~Right on, dude!
 WEIRD   = ~g~This is weird. Are you speedrunning or something?
+
+[CUBAN1]
+ITNRO1  = Hey, I'm Rico. I'm filling in for Umberto Robina.
+INTRO2  = You looking for a job? Well, look.
+INTRO3  = We Cubans like boats. We 
+OUTRO1  = Wh-what do you want, man?
+OUTRO2  = You're never going to dump trash in the ocean again - or else.
+OUTRO3  = Y-yes, man, I promise!
+OUTRO4  = Good. Now scram.
 
