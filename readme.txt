@@ -1,26 +1,26 @@
-Vice City: Unheard Story
-Made by: Ivan Lychkov (formerly known as Vayan, author of Vice City Second Wave)
+Vice City: The Other Story
+Made by Ivan Lychkov (formerly known as Vayan, author of Vice City Second Wave)
 
 Features
 - 7 new storyline missions
 - A new safehouse in Starfish Island
-- Police chases in the night
+- Police chases during nighttime
 - Car repaint in Sunshine Autos
-- New collectables
-- New unique jumps
-- Checkpoint race in Leaf Links
+- 16 new collectibles
+- 13 new unique jumps
 - 'Car Mechanic' sub-mission
-- Just a couple of new car and boat spawns
+- A golf cart checkpoint race in Leaf Links
+- Breaking into the golf club
 - Ability to hail any taxi to make a quick trip to the safehouse
-- Gates to the golf club can now be opened by the player
 - In case of getting wasted you get a chance to collect your $100 back
+- Just a couple of new car and boat spawns
 
 NPCs locations:
 - Diaz's mansion
-- Viceport, before the entrance
-- Downtown, near the Love Fist studio
+- East of Viceport, outside of the docks
+- Downtown, near the V-Rock building
 - Leaf Links??? Or Vice Point??? (secret!)
 
-Playing with Frame Limiter on is recommended.
+Playing with Frame Limiter on is recommended for scripted scenes to play as intended.
 
-If you want to reuse parts of my code, please contact me for approval.
+If anyone wants to reuse my work or parts of it, please ask me for permission.
