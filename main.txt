@@ -7624,6 +7624,7 @@ $cuban_1_y = -613.9669
 $cuban_1_z = 10.8292
 const icon_golf = 13
 const icon_police = 10
+const icon_cuban = 6
 $allow_police_chases = 0
 $police_chases_bonus = 1000
 $npcs_north_island_allowed = 1
@@ -7648,7 +7649,7 @@ change_blip_display $repaint_marker display 2
 add_sprite_blip_for_contact_point $icon_golf = create_icon_marker_and_sphere icon_golf at $golf_x $golf_y $golf_z
 add_sprite_blip_for_contact_point $icon_police = create_icon_marker_and_sphere icon_police at $police_x $police_y $police_z
 add_sprite_blip_for_contact_point $icon_biker = create_icon_marker_and_sphere 5 at -600.5449 653.8733 10.0721
-add_sprite_blip_for_contact_point $icon_cuban = create_icon_marker_and_sphere 6 at $cuban_1_x $cuban_1_y $cuban_1_z
+add_sprite_blip_for_contact_point $icon_cuban = create_icon_marker_and_sphere icon_cuban at $cuban_1_x $cuban_1_y $cuban_1_z
 add_short_range_sprite_blip_for_contact_point $icon_car_mechanic_docks = create_asset_radar_marker_with_icon 18 at -717.2 -1462.2 10.3
 add_short_range_sprite_blip_for_contact_point $icon_car_mechanic_beach3 = create_asset_radar_marker_with_icon 18 at 202.7853 -299.401 11.4607
 add_short_range_sprite_blip_for_contact_point $icon_car_mechanic_beach1 = create_asset_radar_marker_with_icon 18 at -13.8297 -1325.1516 9.9804
@@ -15509,32 +15510,412 @@ $onmission = 1
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'CUBAN1'
+set_player_coordinates $player_char -810.3617 -93.3006 22.732
+goto @CUBAN_1_WAITING
+create_pickup_with_ammo $mission_weapon_pickup_1 = create_weapon_pickup #UZI 3 ammo 120 at -801.8044 -98.1957 11.0712
+request_model #CUBAN
+request_model #CBA
+request_model #CBB
+//add_blip_for_coord $objective_point_marker = create_checkpoint_at -810.3617 -93.3006 22.732
+add_blip_for_coord $objective_point_marker = create_checkpoint_at -837.0384 -342.0493 10.0732
+create_car $mission_car_2 #CUBAN -836.8206 -337.1967 9.6361
+set_car_heading $mission_car_2 186.7687
+create_car $mission_car_3 #CUBAN -834.0204 -332.8143 9.6688
+set_car_heading $mission_car_3 44.7923
+create_char $mission_actor_2 #CBA 4 -835.6068 -338.2841 10.0722
+set_char_heading $mission_actor_2 305.6352
+clear_char_threat_search $mission_actor_2
+set_char_never_targeted $mission_actor_2 untargetable 1
+create_char_inside_car $mission_actor_3 = create_actor 4 #CBB in_car $mission_car_3
+clear_char_threat_search $mission_actor_3
+create_char_as_passenger $mission_actor_4 = create_actor_pedtype 4 model #CBA in_car $mission_car_3 passenger_seat 0
+clear_char_threat_search $mission_actor_4
+car_set_idle $mission_car_2
+0@ = 1
 
-request_model #BOBCAT
-request_model #HMYRI
-load_all_models_now
-create_car $mission_car_1 #BOBCAT -1189.0502 -592.2864 10.461
-create_char_inside_car $mission_actor_1 = create_actor 4 #HMYRI in_car $mission_car_1
-clear_char_threat_search $mission_actor_1
-car_set_idle $mission_car_1
-
-:CUBAN_1_BUSTED
+:CUBAN_1_TRAVEL_1
 wait 0
 if
-    locate_player_any_means_car_3d $player_char near_car $mission_car_1 radius 8.0 8.0 3.0 unknown 0
-goto_if_false @CUBAN_1_BUSTED
+    locate_stopped_player_any_means_3d $player_char stopped 1 -837.0384 -342.0493 10.0732 radius 2.5 2.5 3.0
+then
+end
+
+:CUBAN_1_TRAVEL_2
+wait 0
+if
+    locate_stopped_player_on_foot_3d $player_char 1 -810.3617 -93.3006 22.732 radius 1.0 1.0 1.5
+then
+end
+return
+
+:CUBAN_1_WAITING
+TIMERA = 0
+$mission_step = 0
+if
+    $mission_debug == 1
+then
+    TIMERA = 5000
+end
+
+:CUBAN_1_WAITING_LOOP
+wait 0
+if and
+    $mission_step == 0
+    TIMERA > 5000
+then
+    request_model #IDAHO
+    request_model #HMYRI
+    while True
+        if and
+            has_model_loaded #IDAHO
+            has_model_loaded #HMYRI
+        then
+            break
+        end
+        wait 0
+    end
+    create_car $mission_car_1 #IDAHO -744.1942 144.7133 9.4862
+    set_car_heading $mission_car_1 169.3959
+    if
+        $mission_debug == 1
+    then
+        set_car_coordinates $mission_car_1 -825.2538 -71.9767 9.9237
+        set_car_heading $mission_car_1 180.0
+    end
+    create_char_inside_car $mission_actor_1 = create_actor 4 #HMYRI in_car $mission_car_1
+    clear_char_threat_search $mission_actor_1
+    set_car_driving_style $mission_car_1 2
+    set_car_cruise_speed $mission_car_1 max_speed_to 30.0
+    car_goto_coordinates_accurate $mission_car_1 drive_to_point -810.9879 -115.3264 10.0712
+    mark_model_as_no_longer_needed #IDAHO
+    mark_model_as_no_longer_needed #HMYRI
+    $mission_step = 1
+end
+if
+    $mission_step == 1
+then
+    if
+        locate_car_2d $mission_car_1 0 -810.9879 -115.3264 15.0 15.0
+    then
+        set_car_cruise_speed $mission_car_1 max_speed_to 15.0
+        print_now 'WAIT2' time 5000 1
+        add_blip_for_char $mission_actor_1_marker = create_marker_above_actor $mission_actor_1
+        $mission_step = 2
+    end
+end
+if
+    $mission_step == 2
+then
+    if
+        locate_car_2d $mission_car_1 0 -810.9879 -115.3264 3.0 3.0
+    then
+        car_goto_coordinates_accurate $mission_car_1 drive_to_point -797.8136 -112.6472 10.0712
+        $mission_step = 3
+    end
+end
+if
+    $mission_step == 3
+then
+    if
+        locate_stopped_car_2d $mission_car_1 0 -797.8136 -112.6472 3.0 3.0
+    then
+        set_char_obj_leave_any_car $mission_actor_1
+        $mission_step = 4
+    end
+end
+if
+    $mission_step == 4
+then
+    if
+        locate_stopped_car_2d $mission_car_1 0 -797.8136 -112.6472 3.0 3.0
+    then
+        get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car_1 offset 0.0 -4.0 0.0
+        set_char_obj_goto_coord_on_foot $mission_actor_1 0@ 1@
+        $mission_step = 5
+    end
+end
+if
+    $mission_step == 5
+then
+    if
+        locate_stopped_char_on_foot_2d $mission_actor_1 stopped 0 0@ 1@ radius 2.0 2.0
+    then
+        get_car_coordinates $mission_car_1 0@ 1@ 2@
+        turn_char_to_face_coord $mission_actor_1 0@ 1@ 2@
+        pop_car_boot_using_physics $mission_car_1
+        print_now 'WAIT3' time 5000 1
+        print_help_forever 'CALL'
+        $mission_step = 6
+        TIMERA = 0
+        request_model #BARREL2
+    end
+end
+if
+    $mission_step == 6
+then
+    if
+        TIMERA > 1500
+    then
+        get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car_1 offset 0.0 -3.0 0.0
+        mark_object_as_no_longer_needed $mission_obj_1
+        create_object $mission_obj_1 #BARREL2 0@ 1@ 2@
+        set_object_collision $mission_obj_1 collision_detection 1
+        set_object_dynamic $mission_obj_1 toggle_in_moving_list 1
+        add_to_object_velocity $mission_obj_1 scatter 7.0 -3.0 5.0
+        set_char_wait_state $mission_actor_1 anim 31 wait_state_time 1000
+        TIMERA = 0
+    end
+end
+if
+    $mission_step > 0
+then
+    if and
+        not is_car_dead $mission_car_1
+        not is_char_dead $mission_actor_1
+        not is_char_shooting $player_actor
+    goto_if_false @CUBAN_1_NOTICED
+    if
+        not locate_player_any_means_char_3d $player_char 0 $mission_actor_1 radius 10.0 10.0 5.0
+    goto_if_false @CUBAN_1_NOTICED
+    if
+        locate_player_any_means_char_3d $player_char 0 $mission_actor_1 radius 15.0 15.0 10.0
+    then
+        print_now 'CLOSE' time 50 1
+    end
+end
+if and
+    $mission_step == 6
+    is_button_pressed 0 pressed_button 4
+then
+    jump @CUBAN_1_SCENE
+end
+jump @CUBAN_1_WAITING_LOOP
+
+:CUBAN_1_SCENE
+clear_help
+clear_prints
+switch_widescreen 1
+get_offset_from_char_in_world_coords 0@ 1@ 2@ from_actor $player_actor offset 2.0 1.0 0.0
+set_fixed_camera_position 0@ 1@ 2@ 0.0 0.0 0.0
+point_camera_at_char $player_actor 15 2
 set_player_control $player_char 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
-fade 0 500
-wait 500
-fade 1 500
+request_model #CELLPHONE
+load_all_models_now
+set_char_answering_mobile $player_actor hold_cellphone 1
+wait 2000
+set_char_answering_mobile $player_actor hold_cellphone 0
+mark_model_as_no_longer_needed #CELLPHONE
+request_model #CUBAN
+request_model #CBA
+request_model #CBB
+request_model #TEARGAS
+load_all_models_now
+//clear_area 0 at -800.9758 -106.7309 9.5282 range 50.0
+//set_car_density_multiplier 0.0
+//set_ped_density_multiplier 0.0
+set_car_coordinates $mission_car_1 -800.9758 -106.7309 9.9282
+set_car_heading $mission_car_1 14.3384
+clear_all_char_anims $mission_actor_1
+set_char_coordinates $mission_actor_1 -800.9135 -110.0636 10.0712
+turn_char_to_face_coord $mission_actor_1 -802.2003 -107.3233 11.0712
+set_char_obj_goto_coord_on_foot $mission_actor_1 -802.2003 -107.3233
+set_fixed_camera_position -794.4382 -109.4034 13.0712 0.0 0.0 0.0
+point_camera_at_car $mission_car_1 15 2
+create_car $mission_car_2 #CUBAN -823.3668 -118.1851 10.0727
+set_car_heading $mission_car_2 304.2747
+create_car $mission_car_3 #CUBAN -808.3172 -85.154 10.0739
+set_car_heading $mission_car_3 155.7534
+set_car_can_be_damaged $mission_car_2 apply_damage_rules 0
+set_car_can_be_damaged $mission_car_3 apply_damage_rules 0
+create_char_inside_car $mission_actor_2 = create_actor 4 #CBA in_car $mission_car_2
+create_char_inside_car $mission_actor_3 = create_actor 4 #CBB in_car $mission_car_3
+create_char_as_passenger $mission_actor_4 = create_actor_pedtype 4 model #CBA in_car $mission_car_3 passenger_seat 0
+clear_char_threat_search $mission_actor_2
+clear_char_threat_search $mission_actor_3
+clear_char_threat_search $mission_actor_4
+set_char_proofs $mission_actor_2 immunities BP 1 FP 1 EP 1 CP 1 MP 1
+set_char_proofs $mission_actor_3 immunities BP 1 FP 1 EP 1 CP 1 MP 1
+set_char_proofs $mission_actor_4 immunities BP 1 FP 1 EP 1 CP 1 MP 1
+set_car_driving_style $mission_car_2 3
+set_car_driving_style $mission_car_3 3
+set_car_cruise_speed $mission_car_2 max_speed_to 10.0
+set_car_cruise_speed $mission_car_3 max_speed_to 10.0
+car_goto_coordinates_accurate $mission_car_2 drive_to_point -806.7421 -107.5122 11.0712
+car_goto_coordinates_accurate $mission_car_3 drive_to_point -804.317 -102.8408 11.0712
+0@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if
+        0@ == 0
+    then
+        if
+            TIMERA > 5000
+        then
+            break
+        end
+        if and
+            locate_stopped_car_2d $mission_car_2 stopped 0 -806.7421 -107.5122 radius 7.0 7.0
+            locate_stopped_car_2d $mission_car_3 stopped 0 -804.317 -102.8408 radius 7.0 7.0
+        then
+            set_char_obj_leave_any_car $mission_actor_2
+            set_char_obj_leave_any_car $mission_actor_3
+            set_char_obj_leave_any_car $mission_actor_4
+            turn_char_to_face_char $mission_actor_1 $mission_actor_2
+            0@++
+            TIMERA = 0
+        end
+    end
+    if
+        0@ == 1
+    then
+        if
+            TIMERA > 5000
+        then
+            break
+        end
+        if and
+            not is_char_in_any_car $mission_actor_2
+            not is_char_in_any_car $mission_actor_3
+            not is_char_in_any_car $mission_actor_4
+        then
+            set_char_obj_goto_char_on_foot $mission_actor_2 $mission_actor_1
+            set_char_obj_goto_char_on_foot $mission_actor_3 $mission_actor_1
+            set_char_obj_goto_char_on_foot $mission_actor_4 $mission_actor_1
+            set_char_wait_state $mission_actor_1 anim 15 wait_state_time 2000
+            0@++
+            TIMERA = 0
+        end
+    end
+    if and
+        0@ == 2
+        TIMERA > 2000
+    then
+        clear_all_char_anims $mission_actor_1
+        give_weapon_to_char $mission_actor_1 weapon 14 ammo 1
+        set_char_stay_in_same_place $mission_actor_1 maintain_position_when_attacked 1
+        set_char_obj_kill_char_on_foot $mission_actor_1 $mission_actor_4
+        set_char_obj_no_obj $mission_actor_2
+        set_char_obj_no_obj $mission_actor_3
+        set_char_obj_no_obj $mission_actor_4
+        0@++
+        TIMERA = 0
+    end
+    if and
+        0@ == 3
+        TIMERA > 1000
+    then
+        set_char_obj_no_obj $mission_actor_1
+        set_char_obj_enter_car_as_driver $mission_actor_1 go_to_and_drive_car $mission_car_1
+        set_char_running $mission_actor_1 running 1
+        set_char_wait_state $mission_actor_2 anim 15 wait_state_time 1500
+        set_char_wait_state $mission_actor_3 anim 15 wait_state_time 1500
+        set_char_wait_state $mission_actor_4 anim 15 wait_state_time 1500
+        0@++
+        TIMERA = 0
+    end
+    if and
+        0@ == 4
+        TIMERA > 1500
+    then
+        set_char_wait_state $mission_actor_2 anim 12 wait_state_time 300000
+        set_char_wait_state $mission_actor_3 anim 12 wait_state_time 300000
+        set_char_wait_state $mission_actor_4 anim 12 wait_state_time 300000
+        0@++
+        TIMERA = 0
+    end
+    if
+        0@ == 5
+    then
+        if
+            TIMERA > 5000
+        then
+            break
+        end
+        if
+            is_char_in_car $mission_actor_1 $mission_car_1
+        then
+            car_wander_randomly $mission_car_1
+            set_car_cruise_speed $mission_car_1 max_speed_to 30.0
+            0@++
+            TIMERA = 0
+        end
+    end
+    if and
+        0@ == 6
+        TIMERA > 1000
+    then
+        break
+    end
+end
+mark_model_as_no_longer_needed #TEARGAS
+set_current_char_weapon $mission_actor_1 armed_weapon_to 0
+set_char_obj_no_obj $mission_actor_1
+set_char_stay_in_same_place $mission_actor_1 maintain_position_when_attacked 1
+warp_char_into_car $mission_actor_1 in_car $mission_car_1
+car_wander_randomly $mission_car_1
+set_car_cruise_speed $mission_car_1 max_speed_to 30.0
+set_char_cant_be_dragged_out $mission_actor_1 locked_while_in_vehicle 1
+//set_car_density_multiplier 1.0
+//set_ped_density_multiplier 1.0
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+display_onscreen_counter_with_string $objective_car_health 1 'CARHLTH' // Car health:
+print_now 'GOCHASE' time 5000 1
+$mission_step = 0
+
+:CUBAN_1_CHASE
+wait 0
+if
+    not is_char_dead $mission_actor_1
+goto_if_false @CUBAN_1_KILLED
+if
+    $mission_step == 0
+then
+    get_car_health $objective_car_health = car $mission_car_1
+    if or
+        400 > $objective_car_health
+        not is_char_in_any_car $mission_actor_1
+    then
+        $mission_step = 1
+        boat_stop $mission_car_1
+        burst_car_tyre $mission_car_1 deflate_tire 2
+        clear_onscreen_counter $objective_car_health
+    end
+    $objective_car_health -= 400
+    $objective_car_health *= 100
+    $objective_car_health /= 600
+end
+if
+    $mission_step == 1
+then
+    if and
+        is_char_in_any_car $mission_actor_1
+        not locate_player_any_means_car_3d $player_char near_car $mission_car_1 radius 8.0 8.0 3.0 unknown 0
+    goto_if_false @CUBAN_1_BUSTED
+end
+goto @CUBAN_1_CHASE
+
+:CUBAN_1_BUSTED
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+//fade 0 500
+//wait 500
+//fade 1 500
 switch_widescreen 1
 get_car_coordinates $mission_car_1 position_to 1@ 2@ 3@
 clear_area 0 at 1@ 2@ 3@ range 50.0
 set_car_density_multiplier 0.0
 set_ped_density_multiplier 0.0
 set_char_obj_leave_any_car $player_actor
+request_model #COLT45
 0@ = 0
 TIMERA = 0
 while True
@@ -15576,6 +15957,7 @@ while True
             not is_char_in_any_car $mission_actor_1
         then
             turn_char_to_face_char $mission_actor_1 $player_actor
+            set_current_char_weapon $player_actor armed_weapon_to 17
             set_char_obj_aim_gun_at_char $player_actor aim_gun_at_actor $mission_actor_1
             set_char_wait_state $mission_actor_1 anim 17 wait_state_time 300000
             0@++
@@ -15667,6 +16049,7 @@ while True
         set_fixed_camera_position 1@ 2@ 3@ 0.1 0.1 0.1
         point_camera_at_car $mission_car_1 15 2
         clear_all_char_anims $mission_actor_1
+        set_char_stay_in_same_place $mission_actor_1 maintain_position_when_attacked 0
         set_char_obj_flee_player_on_foot_always $mission_actor_1 avoid_player $player_char
         0@++
         TIMERA = 0
@@ -15686,9 +16069,9 @@ while True
         break
     end
 end
-fade 0 500
-wait 500
-fade 1 500
+//fade 0 500
+//wait 500
+//fade 1 500
 set_player_control $player_char 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
@@ -15697,10 +16080,20 @@ set_ped_density_multiplier 1.0
 switch_widescreen 0
 restore_camera_jumpcut
 set_camera_behind_player
+goto @CUBAN_1_PASS
+
+:CUBAN_1_NOTICED
+print_now 'NOTICED' time 5000 2
+CUBAN_1_FAIL()
 return
 
-:CUBAN_1_WRECKED
-print_now 'CARF' time 5000 2
+:CUBAN_1_KILLED
+print_now 'KILLED' time 5000 2
+CUBAN_1_FAIL()
+return
+
+:CUBAN_1_GOTAWAY
+print_now 'GOTAWAY' time 5000 2
 CUBAN_1_FAIL()
 return
 
@@ -15716,15 +16109,28 @@ register_mission_passed 'CUBAN1S'
 player_made_progress 1
 $passed_cuban_1 = 1
 remove_blip $icon_cuban
+add_sprite_blip_for_contact_point $icon_cuban = create_icon_marker_and_sphere icon_cuban at $cuban_2_x $cuban_2_y $cuban_2_z
 return
 
 :CUBAN_1_CLEANUP
 $onmission = 0
 mark_car_as_no_longer_needed $mission_car_1
+mark_car_as_no_longer_needed $mission_car_2
+mark_car_as_no_longer_needed $mission_car_3
+mark_char_as_no_longer_needed $mission_actor_1
+mark_char_as_no_longer_needed $mission_actor_2
+mark_char_as_no_longer_needed $mission_actor_3
+mark_char_as_no_longer_needed $mission_actor_4
 remove_blip $mission_car_1_marker
+remove_blip $mission_actor_1_marker
 remove_blip $objective_point_marker
-remove_blip $mission_obj_1_marker
 delete_object $mission_obj_1
-mark_model_as_no_longer_needed #POLICE
+remove_pickup $mission_weapon_pickup_1
+mark_model_as_no_longer_needed #CUBAN
+mark_model_as_no_longer_needed #CBA
+mark_model_as_no_longer_needed #CBB
+mark_model_as_no_longer_needed #BARREL2
+clear_help
+clear_onscreen_counter $objective_car_health
 mission_has_finished
 return

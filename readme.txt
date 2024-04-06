@@ -1,5 +1,7 @@
 Vice City: The Other Story
-Made by Ivan Lychkov (formerly known as Vayan, author of Vice City Second Wave)
+Chapter 2. The Mafian Takeover
+Made by Ivan Lychkov
+(formerly Vayan, author of Vice City Second Wave)
 
 Features
 - 7 new storyline missions
