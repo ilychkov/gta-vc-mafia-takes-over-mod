@@ -1,5 +1,5 @@
 [MAIN]
-ITBEG   = [US]In the beginning...
+ITBEG   = *In the beginning...
 INTSKIP = You get a ~b~wanted star~w~ as a ~r~punishment~w~ for skipping the beautiful intro
 INTSKI2 = jk you're good
 INFOCNT = Found ~1~ out of ~1~ info pickups
@@ -37,14 +37,14 @@ CLOTH3  = Country Club outfit delivered to the Safehouse.
 CLOTH4  = Soiree outfit delivered to the Safehouse.
 CLOTH5  = Policeman outfit delivered to the Safehouse.
 GOLFMIS = 'A Little Game of Golf'
-GLFMISS = [US]'A Little Game of Golf'
+GLFMISS = *'A Little Game of Golf'
 GOLFNO  = You need a ~g~golf cart~w~ to start this mission.
 NEW_REC = ~g~New Record Set!!!!! ~w~~1~ minutes ~g~and ~w~~1~ seconds.
 STFT_17 = Fastest time on 'A Little Game of Golf'
 POLICE1 = Special Delivery
-POLIC1S = [US]Special Delivery
+POLIC1S = *Special Delivery
 POLICE2 = Midnight Car Escape
-POLIC2S = [US]Midnight Car Escape
+POLIC2S = *Midnight Car Escape
 NPCCOP1 = Sorry, sir, no entry. We are investigating a murder.
 NPCCOP2 = Okay, now you're gonna get it!
 NPCCOP3 = Oh no... you were not supposed to see how glitchy this is.
@@ -67,11 +67,11 @@ UNCALL1 = Hey Tommy! I hope you haven't forgotten your dear old uncle?
 UNCALL2 = It's been a while. Why don't you come pay me a visit?
 UNCALL3 = I'll be waiting nearby the Printworks.
 BIKER1  = The Clearout
-BIKER1S = [US]The Clearout
+BIKER1S = *The Clearout
 CUBAN1  = Sea Scouts
-CUBAN1S = [US]Sea Scouts
+CUBAN1S = *Sea Scouts
 CUBAN2  = A Treasure Hunt
-CUBAN2S = [US]A Treasure Hunt
+CUBAN2S = *A Treasure Hunt
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!
@@ -194,4 +194,31 @@ OUTRO1  = Wh-what do you want, man?
 OUTRO2  = You're never going to dump trash in the ocean again - or else.
 OUTRO3  = Y-yes, man, I promise!
 OUTRO4  = Good. Now scram.
+
+[CUBAN2]
+INTRO1  = Hey Tommy, you did really well busting that skunk, amigo!
+INTRO2  = There's another job to do. First, let me introduce you to my pal.
+INTRO3  = Bonjou! Oscar's my name.
+INTRO4  = Sure, us and Haitians have a bit of history between us. But we had to forget about it for now.
+INTRO5  = Oscar is good at gadgets, and he will help you with the job.
+INTRO6  = A corrupt gang left stashes of drugs in secret locations.
+INTRO7  = We need to find and destroy the drugs.
+INTRO8  = Oscar will help you locate the stashes with his radar device. Good luck!
+BOAT1   = ~g~Get into the boat.
+BOAT2   = ~g~Return to the boat.
+OBJ1    = ~g~Find the drug stashes. Watch the ~x~signal meter~g~ to track the location.
+OBJ2    = ~g~Here it is! Let's go grab it.
+OBJ3    = ~g~~1~ stashes left.
+OBJ4    = ~g~That was all! Drive the boat to the meeting point.
+SIGNAL  = Signal:
+LEFT    = Stashes left:
+TALK1   = Hey, I see the golf club!
+TALK2   = They have a pizzeria around here...
+TALK3   = That's a nice yacht.
+TALK4   = There's a real good donut bakery around here.
+TALK5   = A lot of villas on that island.
+WRECKED = ~r~The boat is destroyed!
+WHY     = ~r~Why?
+OUTRO1  = That was some grand work! You guys got real big cojones!
+OUTRO2  = Cheers, amigos!
 

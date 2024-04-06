@@ -1,4 +1,4 @@
-DEFINE MISSIONS 8
+DEFINE MISSIONS 9
 DEFINE MISSION 0 AT @INITIAL           // Initial
 DEFINE MISSION 1 AT @INTRO             // Intro
 DEFINE MISSION 2 AT @GOLF              // A Little Game of Golf
@@ -7,6 +7,7 @@ DEFINE MISSION 4 AT @CAR_MECHANIC      // Car Mechanic
 DEFINE MISSION 5 AT @POLICE_2          // Midnight Car Escape
 DEFINE MISSION 6 AT @BIKER_1           // The Clearout
 DEFINE MISSION 7 AT @CUBAN_1           // Sea Scouts
+DEFINE MISSION 8 AT @CUBAN_2           // A Treasure Hunt
 
 //-------------MAIN---------------
 thread 'MAIN'
@@ -4945,11 +4946,17 @@ end
 :CUBAN_MARKER_LOOP_2
 if
     $passed_cuban_2 == 0
-goto_if_false @CUBAN_MARKER_LOOP_3
-//todo
+goto_if_false @CUBAN_MARKER_LOOP_END
+if
+    locate_player_on_foot_3d $player_char 0 $cuban_2_x $cuban_2_y $cuban_2_z radius 1.2 1.2 2.0
+then
+    print_big 'CUBAN2' 15000 ms 2
+    start_mission CUBAN_2
+    goto @CUBAN_MARKER_LOOP
+end
 goto @CUBAN_MARKER_LOOP
 
-:CUBAN_MARKER_LOOP_3
+:CUBAN_MARKER_LOOP_END
 terminate_this_script
 
 //-------------Insane stunts script---------------
@@ -16298,5 +16305,79 @@ mark_model_as_no_longer_needed #CBB
 mark_model_as_no_longer_needed #BARREL2
 clear_help
 clear_onscreen_counter $objective_car_health
+mission_has_finished
+return
+
+//-------------Mission 8---------------
+// A Treasure Hunt
+
+:CUBAN_2
+script_name 'CUBAN2'
+gosub @CUBAN_2_START
+if
+    has_deatharrest_been_executed
+then
+    CUBAN_2_FAIL()
+end
+CUBAN_2_CLEANUP()
+terminate_this_script
+
+:CUBAN_2_START
+$onmission = 1
+set_fading_colour 0 0 0
+register_mission_given
+load_mission_text 'CUBAN2'
+return
+
+:CUBAN_2_WRECKED
+print_now 'WRECKED' time 5000 2
+CUBAN_2_FAIL()
+return
+
+:CUBAN_2_WHY
+print_now 'WHY' time 5000 2
+CUBAN_2_FAIL()
+return
+
+:CUBAN_2_FAIL
+print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
+return
+
+:CUBAN_2_PASS
+play_mission_passed_tune 1
+print_with_number_big 'M_PASS' number 250 time 5000 style 1 // MISSION PASSED! $~1~
+add_score $player_char money += 250
+register_mission_passed 'CUBAN2S'
+player_made_progress 1
+$passed_cuban_2 = 1
+remove_blip $icon_cuban
+set_zone_ped_info 'GHETTO1' 1 13 60 100 0 0 0 0 0 0 0 20
+set_zone_ped_info 'GHETTO1' 0 10 80 100 0 0 0 0 0 0 0 10
+set_zone_car_info 'GHETTO1' 1 12 60 100 0 0 0 0 0 0 0 10
+set_zone_car_info 'GHETTO1' 0 10 80 100 0 0 0 0 0 0 0 10
+set_zone_ped_info 'GHETTO2' 1 13 100 60 0 0 0 0 0 0 0 20
+set_zone_ped_info 'GHETTO2' 0 10 100 80 0 0 0 0 0 0 0 10
+set_zone_car_info 'GHETTO2' 1 12 100 60 0 0 0 0 0 0 0 10
+set_zone_car_info 'GHETTO2' 0 10 100 80 0 0 0 0 0 0 0 10
+clear_threat_for_ped_type 7 remove_threat 256
+clear_threat_for_ped_type 8 remove_threat 128
+return
+
+:CUBAN_2_CLEANUP
+$onmission = 0
+mark_car_as_no_longer_needed $mission_car_1
+remove_char_elegantly $mission_actor_1
+remove_blip $mission_car_1_marker
+remove_blip $mission_obj_1_marker
+delete_object $mission_obj_1
+delete_object $mission_obj_2
+delete_object $mission_obj_3
+delete_object $mission_obj_4
+delete_object $mission_obj_5
+delete_object $mission_obj_6
+delete_object $mission_obj_7
+delete_object $mission_obj_8
+clear_onscreen_counter $mission_meter
+clear_onscreen_counter $mission_counter
 mission_has_finished
 return
