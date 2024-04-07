@@ -1412,6 +1412,24 @@ print_help 'CLOTH5'
 get_game_timer $last_help_printing_time
 terminate_this_script
 
+:PARKCAR1
+script_name 'PARKCA1'
+TIMERA = 0
+
+:PARKCAR1_LOOP
+wait $default_wait_time
+if
+    is_player_playing $player_char
+goto_if_false @PARKCAR1_LOOP
+get_game_timer $now
+if and
+    TIMERA > 5000
+    is_int_var_greater_than_int_var $now > $last_help_printing_time
+goto_if_false @PARKCAR1_LOOP
+print_help 'PARKCA1'
+get_game_timer $last_help_printing_time
+terminate_this_script
+
 
 //-------------Hail a taxi---------------
 //
@@ -13377,6 +13395,9 @@ player_made_progress 1
 $passed_police_2 = 1
 remove_blip $icon_police
 switch_car_generator $police_car_spawn cars_to_generate_to 101
+create_clothes_pickup $clothes_pickup_5 = create_clothes_pickup 6 at -236.0 -309.1 10.0
+$clothes_pickup_5_available = 1
+start_new_script @CLOTH5
 return
 
 :POLICE_2_CLEANUP
@@ -15407,6 +15428,9 @@ register_mission_passed 'BIKER1S'
 player_made_progress 1
 $passed_biker_1 = 1
 remove_blip $icon_biker
+create_clothes_pickup $clothes_pickup_2 = create_clothes_pickup 8 at -242.3 -310.6 10.0
+$clothes_pickup_2_available = 1
+start_new_script @CLOTH2
 return
 
 :BIKER_1_CLEANUP
@@ -16491,6 +16515,8 @@ set_zone_car_info 'GHETTO2' 1 12 100 60 0 0 0 0 0 0 0 10
 set_zone_car_info 'GHETTO2' 0 10 100 80 0 0 0 0 0 0 0 10
 clear_threat_for_ped_type 7 remove_threat 256
 clear_threat_for_ped_type 8 remove_threat 128
+switch_car_generator $tommy_car_spawn_4 cars_to_generate_to 101
+start_new_script @PARKCAR1
 return
 
 :CUBAN_2_CLEANUP
