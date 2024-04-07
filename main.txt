@@ -15524,10 +15524,10 @@ fade 0 500
 wait 500
 fade 1 500
 set_time_of_day 23 30
-request_model #CBA
+request_model #CBB
 load_all_models_now
 set_char_coordinates $player_actor -1170.3206 -613.9669 10.8292
-create_char $mission_actor_2 4 #CBA -1167.6013 -613.6048 10.8296
+create_char $mission_actor_2 4 #CBB -1167.6013 -613.6048 10.8296
 set_fixed_camera_position -1165.7633 -619.4436 12.8279 0.0 0.0 0.0
 point_camera_at_point -1168.2349 -614.6775 12.7837 2
 turn_char_to_face_char $mission_actor_2 $player_actor
@@ -15660,10 +15660,10 @@ then
         set_car_heading $mission_car_2 186.7687
         create_car $mission_car_3 #CUBAN -834.0204 -332.8143 9.6688
         set_car_heading $mission_car_3 44.7923
-        create_char $mission_actor_2 4 #CBA -835.6068 -338.2841 10.0722
+        create_char $mission_actor_2 4 #CBB -835.6068 -338.2841 10.0722
         set_char_heading $mission_actor_2 305.6352
-        create_char_inside_car $mission_actor_3 = create_actor 4 #CBB in_car $mission_car_3
-        create_char_as_passenger $mission_actor_4 = create_actor_pedtype 4 model #CBA in_car $mission_car_3 passenger_seat 0
+        create_char_inside_car $mission_actor_3 = create_actor 4 #CBA in_car $mission_car_3
+        create_char_as_passenger $mission_actor_4 = create_actor_pedtype 4 model #CBB in_car $mission_car_3 passenger_seat 0
         clear_char_threat_search $mission_actor_2
         clear_char_threat_search $mission_actor_3
         clear_char_threat_search $mission_actor_4
@@ -15897,9 +15897,9 @@ create_car $mission_car_3 #CUBAN -808.3172 -85.154 10.0739
 set_car_heading $mission_car_3 155.7534
 set_car_can_be_damaged $mission_car_2 apply_damage_rules 0
 set_car_can_be_damaged $mission_car_3 apply_damage_rules 0
-create_char_inside_car $mission_actor_2 = create_actor 4 #CBA in_car $mission_car_2
-create_char_inside_car $mission_actor_3 = create_actor 4 #CBB in_car $mission_car_3
-create_char_as_passenger $mission_actor_4 = create_actor_pedtype 4 model #CBA in_car $mission_car_3 passenger_seat 0
+create_char_inside_car $mission_actor_2 = create_actor 4 #CBB in_car $mission_car_2
+create_char_inside_car $mission_actor_3 = create_actor 4 #CBA in_car $mission_car_3
+create_char_as_passenger $mission_actor_4 = create_actor_pedtype 4 model #CBB in_car $mission_car_3 passenger_seat 0
 clear_char_threat_search $mission_actor_2
 clear_char_threat_search $mission_actor_3
 clear_char_threat_search $mission_actor_4
