@@ -7629,6 +7629,9 @@ $police_z = 9.8841
 $cuban_1_x = -1170.3206
 $cuban_1_y = -613.9669
 $cuban_1_z = 10.8292
+$cuban_2_x = -803.1602
+$cuban_2_y = -347.4698
+$cuban_2_z = 7.29
 const icon_golf = 13
 const icon_police = 10
 const icon_cuban = 6
@@ -7642,7 +7645,7 @@ $passed_police_1 = 0
 $passed_police_2 = 0
 $passed_car_mechanic_count = 0
 $passed_biker_1 = 0
-$passed_cuban_1 = 0
+$passed_cuban_1 = 1//todo
 $passed_cuban_2 = 0
 
 add_short_range_sprite_blip_for_contact_point $icon_vercetti = create_asset_radar_marker_with_icon 29 at -246.0713 -324.6199 10.2586
@@ -16327,7 +16330,134 @@ $onmission = 1
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'CUBAN2'
-return
+
+:CUBAN_2_OUTRO
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+fade 0 500
+wait 500
+fade 1 500
+switch_widescreen 1
+set_fixed_camera_position -778.0 -1086.0 12.0 0.0 0.0 0.0
+point_camera_at_point -768.0 -1089.0 10.0 2
+set_time_of_day 22 30
+request_model #HNA
+request_model #CBB
+load_all_models_now
+set_char_coordinates $player_actor -765.8668 -1078.0874 10.0712
+create_char $mission_actor_1 4 #HNA -765.1267 -1081.5958 10.0712
+create_char $mission_actor_2 4 #CBB -770.6099 -1080.1556 10.0712
+clear_char_threat_search $mission_actor_1
+clear_char_threat_search $mission_actor_2
+turn_char_to_face_char $player_actor $mission_actor_2
+turn_char_to_face_char $mission_actor_1 $mission_actor_2
+turn_char_to_face_coord $mission_actor_2 -765.0 -1080.0 10.0
+create_object $mission_obj_1 #DRUG_YELLOW -768.0 -1089.0 9.85
+set_object_heading $mission_obj_1 50.0
+create_object $mission_obj_2 #DRUG_ORANGE -768.0 -1088.5 9.85
+set_object_heading $mission_obj_2 80.0
+create_object $mission_obj_3 #DRUG_BLUE -768.5 -1089.5 9.85
+set_object_heading $mission_obj_3 100.0
+create_object $mission_obj_4 #DRUG_ORANGE -768.2 -1089.2 10.0
+set_object_heading $mission_obj_4 20.0
+create_object $mission_obj_5 #DRUG_RED -768.2 -1088.7 10.0
+set_object_heading $mission_obj_5 50.0
+create_object $mission_obj_6 #DRUG_YELLOW -768.9 -1089.7 10.0
+set_object_heading $mission_obj_6 70.0
+create_object $mission_obj_7 #DRUG_GREEN -768.4 -1089.0 10.15
+set_object_heading $mission_obj_7 20.0
+create_object $mission_obj_8 #DRUG_BLUE -768.4 -1088.3 10.15
+set_object_heading $mission_obj_8 50.0
+create_object $mission_obj_9 #DRUG_RED -768.3 -1088.8 10.3
+set_object_heading $mission_obj_9 100.0
+create_object $mission_obj_10 #DRUG_ORANGE -768.3 -1089.0 10.3
+set_object_heading $mission_obj_10 30.0
+create_object $mission_obj_11 #DRUG_ORANGE -768.3 -1088.5 10.15
+set_object_heading $mission_obj_11 70.0
+create_object $mission_obj_12 #DRUG_GREEN -768.3 -1088.2 9.85
+set_object_heading $mission_obj_12 30.0
+create_object $mission_obj_13 #DRUG_GREEN -768.3 -1089.2 10.3
+set_object_heading $mission_obj_13 70.0
+create_object $mission_obj_14 #DRUG_YELLOW -768.5 -1089.5 10.15
+set_object_heading $mission_obj_14 10.0
+start_script_fire $mission_fire_1 = create_fire_at -768.2 -1089.2 10.1
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if and
+        15@ == 0
+        TIMERA > 3000
+    then
+        set_interpolation_parameters 0.0 2500
+        //set_fixed_camera_position -775.0917 -1080.0514 12.0712 0.0 0.0 0.0
+        point_camera_at_point -765.0 -1080.0 10.0 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 1
+        TIMERA > 1500
+    then
+        set_char_wait_state $mission_actor_2 anim 19 wait_state_time 6500
+        print_now 'OUTRO1' time 4500 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 2
+        TIMERA > 4500
+    then
+        print_now 'OUTRO2' time 2000 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 3
+        TIMERA > 2000
+    then
+        set_char_obj_goto_coord_on_foot $mission_actor_2 -770.6099 -1070.1556
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 4
+        TIMERA > 2000
+    then
+        char_look_at_char_always $player_actor $mission_actor_1
+        char_look_at_char_always $mission_actor_1 $player_actor
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 5
+        TIMERA > 2000
+    then
+        break
+    end
+end
+fade 0 500
+wait 500
+fade 1 500
+stop_char_looking $player_actor
+delete_char $mission_actor_1
+delete_char $mission_actor_2
+delete_object $mission_obj_9
+delete_object $mission_obj_10
+delete_object $mission_obj_11
+delete_object $mission_obj_12
+delete_object $mission_obj_13
+delete_object $mission_obj_14
+remove_script_fire $mission_fire_1
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+return//todo
+goto @CUBAN_2_PASS
 
 :CUBAN_2_WRECKED
 print_now 'WRECKED' time 5000 2
