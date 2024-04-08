@@ -1,5 +1,5 @@
 [MAIN]
-ITBEG   = *In the beginning...
+ITBEG   = [os]In the beginning...
 INTSKIP = You get a ~b~wanted star~w~ as a ~r~punishment~w~ for skipping the beautiful intro
 INTSKI2 = jk you're good
 INFOCNT = Found ~1~ out of ~1~ info pickups
@@ -38,14 +38,14 @@ CLOTH4  = Soiree outfit delivered to the Safehouse.
 CLOTH5  = Policeman outfit delivered to the Safehouse.
 PARKCA1 = A speed boat has been delivered to the Safehouse.
 GOLFMIS = 'A Little Game of Golf'
-GLFMISS = *'A Little Game of Golf'
+GLFMISS = [os]'A Little Game of Golf'
 GOLFNO  = You need a ~g~golf cart~w~ to start this mission.
 NEW_REC = ~g~New Record Set!!!!! ~w~~1~ minutes ~g~and ~w~~1~ seconds.
 STFT_17 = Fastest time on 'A Little Game of Golf'
 POLICE1 = Special Delivery
-POLIC1S = *Special Delivery
+POLIC1S = [os]Special Delivery
 POLICE2 = Midnight Car Escape
-POLIC2S = *Midnight Car Escape
+POLIC2S = [os]Midnight Car Escape
 NPCCOP1 = Sorry, sir, no entry. We are investigating a murder.
 NPCCOP2 = Okay, now you're gonna get it!
 NPCCOP3 = Oh no... you were not supposed to see how glitchy this is.
@@ -68,11 +68,11 @@ UNCALL1 = Hey Tommy! I hope you haven't forgotten your dear old uncle?
 UNCALL2 = It's been a while. Why don't you come pay me a visit?
 UNCALL3 = I'll be waiting nearby the Printworks.
 BIKER1  = The Clearout
-BIKER1S = *The Clearout
+BIKER1S = [os]The Clearout
 CUBAN1  = Sea Scouts
-CUBAN1S = *Sea Scouts
+CUBAN1S = [os]Sea Scouts
 CUBAN2  = A Treasure Hunt
-CUBAN2S = *A Treasure Hunt
+CUBAN2S = [os]A Treasure Hunt
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!
