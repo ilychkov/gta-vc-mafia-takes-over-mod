@@ -15781,6 +15781,7 @@ then
     end
     create_char_inside_car $mission_actor_1 = create_actor 4 #HMYRI in_car $mission_car_1
     clear_char_threat_search $mission_actor_1
+    set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
     set_car_driving_style $mission_car_1 2
     set_car_cruise_speed $mission_car_1 max_speed_to 30.0
     car_goto_coordinates_accurate $mission_car_1 drive_to_point -810.9879 -115.3264 10.0712
@@ -16054,6 +16055,7 @@ load_all_models_now
 create_char_inside_car $mission_actor_1 = create_actor 4 #HMYRI in_car $mission_car_1
 mark_model_as_no_longer_needed #HMYRI
 clear_char_threat_search $mission_actor_1
+set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
 add_blip_for_char $mission_actor_1_marker = create_marker_above_actor $mission_actor_1
 car_wander_randomly $mission_car_1
 set_car_cruise_speed $mission_car_1 max_speed_to 30.0
