@@ -15555,6 +15555,7 @@ request_model #CBB
 load_all_models_now
 set_char_coordinates $player_actor -1170.3206 -613.9669 10.8292
 create_char $mission_actor_2 4 #CBB -1167.6013 -613.6048 10.8296
+clear_char_threat_search $mission_actor_2
 set_fixed_camera_position -1165.7633 -619.4436 12.8279 0.0 0.0 0.0
 point_camera_at_point -1168.2349 -614.6775 12.7837 2
 turn_char_to_face_char $mission_actor_2 $player_actor
