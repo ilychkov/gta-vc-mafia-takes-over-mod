@@ -4958,8 +4958,8 @@ if
 then
     print_big 'CUBAN1' 15000 ms 2
     start_mission CUBAN_1
-    goto @CUBAN_MARKER_LOOP
 end
+goto @CUBAN_MARKER_LOOP
 
 :CUBAN_MARKER_LOOP_2
 if
