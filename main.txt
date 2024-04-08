@@ -15541,6 +15541,7 @@ terminate_this_script
 
 :CUBAN_1_START
 $onmission = 1
+$allow_police_chases = 0
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'CUBAN1'
@@ -15784,7 +15785,6 @@ then
     set_car_cruise_speed $mission_car_1 max_speed_to 30.0
     car_goto_coordinates_accurate $mission_car_1 drive_to_point -810.9879 -115.3264 10.0712
     mark_model_as_no_longer_needed #IDAHO
-    mark_model_as_no_longer_needed #HMYRI
     $mission_step = 1
 end
 if
@@ -16047,10 +16047,14 @@ while True
     end
 end
 mark_model_as_no_longer_needed #TEARGAS
-set_current_char_weapon $mission_actor_1 armed_weapon_to 0
-set_char_obj_no_obj $mission_actor_1
-set_char_stay_in_same_place $mission_actor_1 maintain_position_when_attacked 1
-warp_char_into_car $mission_actor_1 in_car $mission_car_1
+remove_blip $mission_actor_1_marker
+delete_char $mission_actor_1
+request_model #HMYRI
+load_all_models_now
+create_char_inside_car $mission_actor_1 = create_actor 4 #HMYRI in_car $mission_car_1
+mark_model_as_no_longer_needed #HMYRI
+clear_char_threat_search $mission_actor_1
+add_blip_for_char $mission_actor_1_marker = create_marker_above_actor $mission_actor_1
 car_wander_randomly $mission_car_1
 set_car_cruise_speed $mission_car_1 max_speed_to 30.0
 set_char_cant_be_dragged_out $mission_actor_1 locked_while_in_vehicle 1
@@ -16315,6 +16319,7 @@ return
 
 :CUBAN_1_CLEANUP
 $onmission = 0
+$allow_police_chases = 1
 mark_car_as_no_longer_needed $mission_car_1
 mark_car_as_no_longer_needed $mission_car_2
 mark_car_as_no_longer_needed $mission_car_3
@@ -16330,6 +16335,7 @@ remove_pickup $mission_weapon_pickup_1
 mark_model_as_no_longer_needed #CUBAN
 mark_model_as_no_longer_needed #CBA
 mark_model_as_no_longer_needed #CBB
+mark_model_as_no_longer_needed #HMYRI
 mark_model_as_no_longer_needed #BARREL2
 clear_help
 clear_onscreen_counter $objective_car_health
