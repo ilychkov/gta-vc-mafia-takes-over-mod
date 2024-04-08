@@ -16,10 +16,10 @@ fade 0 (in) 0 ms
 set_total_number_of_missions 0 // not used in VC
 // 16 info pickups
 // 13 unique stunts
-// 1 story mission
+// 7 story missions
 // 2 side missions
 // 1 music pickup
-set_progress_total 33 //todo
+set_progress_total 39
 set_max_wanted_level 2
 set_collectable1_total 0
 set_deatharrest_state 0
@@ -244,7 +244,7 @@ if
     0@ >= 100.0
 goto_if_false @MAIN
 increase_player_max_health $player_char max_health += 100
-increase_player_max_armour $player_char max_armour += 100
+increase_player_max_armour $player_char max_armour += 50
 add_armour_to_player $player_char armour_to 200
 set_player_health $player_char health_to 200
 $game_completed = 1
@@ -16705,7 +16705,7 @@ if
     $mission_flag_a_1 == 0
 then
     if
-        locate_player_any_means_2d $player_char 0 -114.5973 534.8925 radius 300.0 300.0
+        is_player_in_area_2d $player_char 0 -300.0 150.0 30.0 370.0
     then
         clear_all_char_anims $mission_actor_1
         set_char_wait_state $mission_actor_1 anim 19 wait_state_time 3000
@@ -16719,7 +16719,7 @@ if
     $mission_flag_a_2 == 0
 then
     if
-        locate_player_any_means_2d $player_char 0 399.6248 -0.9563 radius 100.0 100.0
+        is_player_in_area_2d $player_char 0 -720.0 -800.0 -180.0 -100.0
     then
         clear_all_char_anims $mission_actor_1
         set_char_wait_state $mission_actor_1 anim 19 wait_state_time 3000
