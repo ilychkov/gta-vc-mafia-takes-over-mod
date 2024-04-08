@@ -16705,7 +16705,7 @@ if
     $mission_flag_a_1 == 0
 then
     if
-        locate_player_any_means_2d $player_char 0 -340.9337 234.8415 radius 100.0 100.0
+        locate_player_any_means_2d $player_char 0 -114.5973 534.8925 radius 300.0 300.0
     then
         clear_all_char_anims $mission_actor_1
         set_char_wait_state $mission_actor_1 anim 19 wait_state_time 3000
