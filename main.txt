@@ -7663,7 +7663,7 @@ $passed_police_1 = 0
 $passed_police_2 = 0
 $passed_car_mechanic_count = 0
 $passed_biker_1 = 0
-$passed_cuban_1 = 1//todo
+$passed_cuban_1 = 0
 $passed_cuban_2 = 0
 
 add_short_range_sprite_blip_for_contact_point $icon_vercetti = create_asset_radar_marker_with_icon 29 at -246.0713 -324.6199 10.2586
@@ -10963,7 +10963,7 @@ $cm_barrel = -1
 $cm_repair_meter_shown = 0
 $cm_repair_meter_value = 0
 $cm_repair_meter_total = 0
-$cm_hint_shown = 0
+$mission_hint_shown = 0
 TIMERA = 0
 $cm_cancel_button_pressed = 0
 const cm_spawn_distance = 125.0
@@ -10999,11 +10999,11 @@ then
     goto @CAR_MECHANIC_FAIL
 end
 if and
-    $cm_hint_shown == 0
+    $mission_hint_shown == 0
     TIMERA > 10000
 then
     print_help 'CMHINT'
-    $cm_hint_shown = 1
+    $mission_hint_shown = 1
 end
 $near_any_mission_car = 0
 if
@@ -16354,6 +16354,547 @@ $onmission = 1
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'CUBAN2'
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+fade 0 500
+wait 500
+fade 1 500
+request_model #SPEEDER
+request_model #CBB
+request_model #HNA
+request_model #BOMB
+load_all_models_now
+clear_area 0 at -798.6 -353.2 5.2 range 20.0
+create_car $mission_car_1 #SPEEDER -799.4 -353.2 5.2 // -798.6 -353.2 5.2
+anchor_boat $mission_car_1 anchor 1
+set_char_coordinates $player_actor -803.103 -360.9032 7.29
+set_char_heading $player_actor 342.8389
+create_char $mission_actor_1 4 #HNA -808.8501 -358.4773 7.29
+set_char_heading $mission_actor_1 275.1582
+create_char $mission_actor_2 4 #CBB -804.2525 -354.4236 7.29
+set_char_heading $mission_actor_2 173.3239
+mark_model_as_no_longer_needed #SPEEDER
+mark_model_as_no_longer_needed #CBB
+mark_model_as_no_longer_needed #HNA
+clear_char_threat_search $mission_actor_1
+clear_char_threat_search $mission_actor_2
+switch_widescreen 1
+set_fixed_camera_position -778.6 -353.2 15.2 0.0 0.0 0.0
+point_camera_at_point -808.6 -353.2 15.2 2
+wait 0
+set_interpolation_parameters 0.0 5000
+set_fixed_camera_position -788.6 -358.5 10.2 0.0 0.0 0.0
+point_camera_at_point -808.6 -358.5 7.2 1
+wait 1000
+0@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if and
+        0@ == 0
+        TIMERA > 4000
+    then
+        0@++
+        TIMERA = 0
+        //set_fixed_camera_position -798.9 -353.5 9.3 0.0 0.0 0.0
+        //point_camera_at_point -808.9 -360.5 7.3 2
+        set_fixed_camera_position -806.6745 -351.8117 9.8862 0.0 0.0 0.0
+        point_camera_at_char $player_actor 15 2
+        turn_char_to_face_char $player_actor $mission_actor_2
+    end
+    if and
+        0@ == 1
+        TIMERA > 250
+    then
+        0@++
+        TIMERA = 0
+        set_char_wait_state $mission_actor_2 anim 19 wait_state_time 7000
+        print_now 'INTRO1' time 4000 2
+    end
+    if and
+        0@ == 2
+        TIMERA > 4000
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO2' time 3000 2
+    end
+    if and
+        0@ == 3
+        TIMERA > 3000
+    then
+        0@++
+        TIMERA = 0
+        set_fixed_camera_position -804.9 -359.5 7.8 0.0 0.0 0.0
+        point_camera_at_char $mission_actor_1 15 2
+    end
+    if and
+        0@ == 4
+        TIMERA > 100
+    then
+        0@++
+        TIMERA = 0
+        set_char_wait_state $mission_actor_1 anim 19 wait_state_time 2500
+        print_now 'INTRO3' time 2500 2
+    end
+    if and
+        0@ == 5
+        TIMERA > 2500
+    then
+        0@++
+        TIMERA = 0
+        set_interpolation_parameters 0.0 2000
+        point_camera_at_char $mission_actor_2 15 1
+        set_char_wait_state $mission_actor_2 anim 19 wait_state_time 9999999
+        print_now 'INTRO4' time 5000 2
+    end
+    if and
+        0@ == 6
+        TIMERA > 5000
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO5' time 3500 2
+    end
+    if and
+        0@ == 7
+        TIMERA > 3500
+    then
+        0@++
+        TIMERA = 0
+        set_fixed_camera_position -808.4005 -366.1797 8.5046 0.0 0.0 0.0
+        point_camera_at_point -804.1254 -360.4206 8.29 2
+        print_now 'INTRO6' time 3500 2
+    end
+    if and
+        0@ == 8
+        TIMERA > 3500
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO7' time 3000 2
+    end
+    if and
+        0@ == 9
+        TIMERA > 3000
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO8' time 4500 2
+    end
+    if and
+        0@ == 10
+        TIMERA > 3500
+    then
+        break
+    end
+    if or
+        {$I incl.anykey.txt}
+    then
+        break
+    end
+end
+clear_prints
+fade 0 500
+wait 500
+set_char_heading $player_actor 342.8389
+delete_char $mission_actor_2
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+set_car_density_multiplier 1.0
+set_ped_density_multiplier 1.0
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+fade 1 500
+attach_char_to_car $mission_actor_1 into_turret_on_car $mission_car_1 at_car_offset 0.0 1.8 1.2 position 0 angle 360.0 with_weapon 13
+mark_model_as_no_longer_needed #BOMB
+turn_char_to_face_char $mission_actor_1 look_at_actor $player_actor
+add_blip_for_car $mission_car_1_marker = create_marker_above_car $mission_car_1
+print_now 'BOAT1' time 5000 1
+$mission_flag_1 = 0 // player in the boat
+$mission_flag_2 = 0 // stash located
+$mission_flag_3 = 0 // Oscar is talking
+$mission_flag_4 = 0 // all stashes found
+$mission_flag_5 = 0 // introduction was printed
+$mission_flag_a_1 = 0 // voice line 1 spoken
+$mission_flag_a_2 = 0 // voice line 2 spoken
+$mission_flag_a_3 = 0 // voice line 3 spoken
+$mission_flag_a_4 = 0 // voice line 4 spoken
+$mission_flag_a_5 = 0 // voice line 5 spoken
+$mission_meter = 0
+$mission_counter = 4
+$mission_step = 0
+$mission_hint_shown = 0
+14@ = 1
+15@ = 0
+display_onscreen_counter_with_string $mission_counter 0 'LEFT' // Stashes left:
+display_nth_onscreen_counter_with_string $mission_meter 1 line 2 'SIGNAL' // Signal:
+CUBAN_2_CREATE_STASH()
+
+:CUBAN_2_LOOP
+wait 0
+if
+    not is_car_dead $mission_car_1
+goto_if_false @CUBAN_2_WRECKED
+if
+    not is_char_dead $mission_actor_1
+goto_if_false @CUBAN_2_WHY
+if
+    $mission_flag_1 == 0
+then
+    if
+        is_player_in_car $player_char $mission_car_1
+    then
+        remove_blip $mission_car_1_marker
+        clear_this_print 'BOAT2'
+        if and
+            $mission_flag_2 == 0
+            $mission_flag_4 == 0
+        then
+            set_char_wait_state $mission_actor_1 anim 25 wait_state_time 9999999
+        end
+        if
+            $mission_flag_5 == 0
+        then
+            print_now 'OBJ1' time 5000 1
+            print 'OBJ1B' time 5000 1
+            anchor_boat $mission_car_1 anchor 0
+            $mission_flag_5 = 1
+        end
+        if
+            1 >= $mission_step
+        then
+            $mission_hint_shown = 0
+            if
+                $mission_step == 0
+            then
+                TIMERA = -10000 // radar sounds hint timer
+            else
+                TIMERA = 0 // radar sounds hint timer
+            end
+        end
+        TIMERB = -3000
+        $mission_flag_1 = 1
+    end
+else
+    if
+        not is_player_in_car $player_char $mission_car_1
+    then
+        if
+            $mission_flag_2 == 0
+        then
+            add_blip_for_car $mission_car_1_marker = create_marker_above_car $mission_car_1
+            clear_all_char_anims $mission_actor_1
+            print_now 'BOAT2' time 5000 1
+        end
+        $mission_flag_1 = 0
+    end
+    if
+        $mission_flag_4 == 1
+    then
+        if
+            not locate_player_any_means_3d $player_char 1 -736.0084 -1129.5914 5.4317 radius 20.0 30.0 6.0
+        goto_if_false @CUBAN_2_OUTRO
+    end
+end
+if
+    $mission_flag_1 == 0
+then
+    turn_char_to_face_char $mission_actor_1 $player_actor
+else
+    get_car_heading 3@ = car $mission_car_1
+    3@ -= 180.0
+    set_char_heading $mission_actor_1 z_angle_to 3@ 
+end
+if
+    $mission_flag_4 == 0
+then
+    if
+        $mission_flag_2 == 0
+    then
+        if
+            $mission_flag_1 == 1
+        then
+            get_car_coordinates $mission_car_1 0@ 1@ 2@
+            get_distance_between_coords_2d 3@ = distance_between_point 0@ 1@ and_point $mission_stash_x $mission_stash_y
+            if
+                40.0 > 3@
+            then
+                add_blip_for_object $mission_obj_1_marker = create_marker_above_object $mission_obj_1
+                print_now 'OBJ2' time 5000 1
+                clear_all_char_anims $mission_actor_1
+                $mission_flag_2 = 1
+            else
+                3@ -= 40.0
+                if
+                    100.0 > 3@
+                then
+                    3@ /= 5.0
+                else
+                    3@ /= 15.0
+                    3@ += 13.3
+                end
+                cset_lvar_int_to_lvar_float 3@ = 3@
+                $mission_meter = 100
+                sub_int_lvar_from_int_var $mission_meter -= 3@
+                if
+                    0 > $mission_meter
+                then
+                    $mission_meter = 0
+                end
+            end
+            if
+                14@ == 1
+            then
+                if
+                    TIMERB > 0
+                then
+                    add_one_off_sound 35 at 0@ 1@ 2@
+                    TIMERB = -3000
+                    set_lvar_int_to_var_int 3@ = $mission_meter
+                    3@ *= 25
+                    add_int_lvar_to_int_lvar TIMERB += 3@
+                end
+            end
+        end
+    else
+        $mission_meter = 0
+        if
+            locate_player_on_foot_2d $player_char 0 $mission_stash_x $mission_stash_y radius 1.0 1.0
+        then
+            add_one_off_sound 1 at 0.0 0.0 0.0
+            remove_blip $mission_obj_1_marker
+            delete_object $mission_obj_1
+            delete_object $mission_obj_2
+            delete_object $mission_obj_3
+            delete_object $mission_obj_4
+            delete_object $mission_obj_5
+            delete_object $mission_obj_6
+            delete_object $mission_obj_7
+            delete_object $mission_obj_8
+            add_blip_for_car $mission_car_1_marker = create_marker_above_car $mission_car_1
+            $mission_counter--
+            $mission_step++
+            $mission_flag_2 = 0
+            if
+                $mission_step < 4
+            then
+                CUBAN_2_CREATE_STASH()
+                if
+                    $mission_counter > 1
+                then
+                    print_with_number_now 'OBJ3' $mission_counter time 3000 1
+                else
+                    print_now 'OBJ3B' time 3000 1
+                end
+                print 'BOAT2' time 3000 1
+            else
+                clear_onscreen_counter $mission_meter
+                clear_onscreen_counter $mission_counter
+                add_blip_for_coord $objective_point_marker = create_checkpoint_at -736.0084 -1129.5914 5.4317
+                print_now 'OBJ4' time 5000 1
+                $mission_flag_4 = 1
+            end
+        end
+    end
+end
+if
+    $mission_flag_a_1 == 0
+then
+    if
+        locate_player_any_means_2d $player_char 0 -340.9337 234.8415 radius 100.0 100.0
+    then
+        clear_all_char_anims $mission_actor_1
+        set_char_wait_state $mission_actor_1 anim 19 wait_state_time 3000
+        print 'TALK1' time 3000 1
+        TIMERA = -3000
+        $mission_flag_a_1 = 1
+        $mission_flag_3 = 1
+    end
+end
+if
+    $mission_flag_a_2 == 0
+then
+    if
+        locate_player_any_means_2d $player_char 0 399.6248 -0.9563 radius 100.0 100.0
+    then
+        clear_all_char_anims $mission_actor_1
+        set_char_wait_state $mission_actor_1 anim 19 wait_state_time 3000
+        print 'TALK2' time 3000 1
+        TIMERA = -3000
+        $mission_flag_a_2 = 1
+        $mission_flag_3 = 1
+    end
+end
+if
+    $mission_flag_a_3 == 0
+then
+    if
+        locate_player_any_means_2d $player_char 0 -402.6876 -1317.0334 radius 100.0 100.0
+    then
+        clear_all_char_anims $mission_actor_1
+        set_char_wait_state $mission_actor_1 anim 19 wait_state_time 3000
+        print 'TALK3' time 3000 1
+        TIMERA = -3000
+        $mission_flag_a_3 = 1
+        $mission_flag_3 = 1
+    end
+end
+if
+    $mission_flag_a_4 == 0
+then
+    if
+        locate_player_any_means_2d $player_char 0 -764.2798 -628.8246 radius 100.0 100.0
+    then
+        clear_all_char_anims $mission_actor_1
+        set_char_wait_state $mission_actor_1 anim 19 wait_state_time 4000
+        print 'TALK4' time 4000 1
+        TIMERA = -4000
+        $mission_flag_a_4 = 1
+        $mission_flag_3 = 1
+    end
+end
+if
+    $mission_flag_a_5 == 0
+then
+    if
+        locate_player_any_means_2d $player_char 0 -335.053 -179.4434 radius 100.0 100.0
+    then
+        clear_all_char_anims $mission_actor_1
+        set_char_wait_state $mission_actor_1 anim 19 wait_state_time 3000
+        print 'TALK5' time 3000 1
+        TIMERA = -3000
+        $mission_flag_a_5 = 1
+        $mission_flag_3 = 1
+    end
+end
+if and
+    $mission_flag_3 == 1
+    TIMERA > 0
+then
+    if and
+        $mission_flag_2 == 0
+        $mission_flag_4 == 0
+    then
+        clear_all_char_anims $mission_actor_1
+        set_char_wait_state $mission_actor_1 anim 25 wait_state_time 9999999
+    end
+    $mission_flag_3 = 0
+end
+if and
+    $mission_flag_1 == 1
+    $mission_hint_shown == 0
+    TIMERA > 0
+then
+    print_help 'HINT'
+    $mission_hint_shown = 1
+end
+if
+    is_button_pressed 0 pressed_button 19
+then
+    15@ = 1
+end
+if and
+    15@ == 1
+    not is_button_pressed 0 pressed_button 19
+then
+    if
+        14@ == 0
+    then
+        14@ = 1
+    else
+        14@ = 0
+    end
+    15@ = 0
+    add_one_off_sound 13 at 0.0 0.0 0.0
+end
+goto @CUBAN_2_LOOP
+
+:CUBAN_2_CREATE_STASH
+if
+    $mission_step == 0
+then
+    // golf club
+    $mission_stash_x = -114.5973
+    $mission_stash_y = 534.8925
+    $mission_stash_z = 6.3265
+end
+if
+    $mission_step == 1
+then
+    // washington beach bush
+    // notice from 407.0963 -175.8486 6.4619 - radius 33.5
+    $mission_stash_x = 378.4776
+    $mission_stash_y = -191.969
+    $mission_stash_z = 9.0366
+end
+if
+    $mission_step == 2
+then
+    // pier near Cortez's yacht
+    $mission_stash_x = -258.5315
+    $mission_stash_y = -1145.4856
+    $mission_stash_z = 7.6805
+end
+if
+    $mission_step == 3
+then
+    // water house
+    $mission_stash_x = -300.5153
+    $mission_stash_y = -1728.4144
+    $mission_stash_z = 10.3876
+end
+set_lvar_float_to_var_float 0@ = $mission_stash_x
+set_lvar_float_to_var_float 1@ = $mission_stash_y
+set_lvar_float_to_var_float 2@ = $mission_stash_z
+if or
+    $mission_step == 1
+    $mission_step == 3
+then
+    0@ -= 0.25
+    1@ += 0.25
+    create_object $mission_obj_5 #DRUG_RED 0@ 1@ 2@
+    0@ += 0.5
+    create_object $mission_obj_6 #DRUG_BLUE 0@ 1@ 2@
+    0@ -= 0.5
+    1@ -= 0.5
+    create_object $mission_obj_7 #DRUG_GREEN 0@ 1@ 2@
+    0@ += 0.5
+    create_object $mission_obj_8 #DRUG_YELLOW 0@ 1@ 2@
+    set_object_heading $mission_obj_5 45.0
+    set_object_heading $mission_obj_6 -45.0
+    set_object_heading $mission_obj_7 -45.0
+    set_object_heading $mission_obj_8 45.0
+    set_object_collision $mission_obj_5 collision_detection 0
+    set_object_collision $mission_obj_6 collision_detection 0
+    set_object_collision $mission_obj_7 collision_detection 0
+    set_object_collision $mission_obj_8 collision_detection 0
+    0@ -= 0.25
+    1@ += 0.25
+    2@ += 0.15
+end
+1@ += 0.2
+create_object $mission_obj_2 #DRUG_ORANGE 0@ 1@ 2@
+1@ -= 0.35
+0@ -= 0.2
+create_object $mission_obj_3 #DRUG_YELLOW 0@ 1@ 2@
+0@ += 0.4
+create_object $mission_obj_4 #DRUG_GREEN 0@ 1@ 2@
+0@ -= 0.2
+1@ += 0.15
+2@ += 0.15
+create_object $mission_obj_1 #DRUG_BLUE 0@ 1@ 2@
+set_object_heading $mission_obj_1 -20.0
+set_object_heading $mission_obj_3 -45.0
+set_object_heading $mission_obj_4 45.0
+set_object_collision $mission_obj_1 collision_detection 0
+set_object_collision $mission_obj_2 collision_detection 0
+set_object_collision $mission_obj_3 collision_detection 0
+set_object_collision $mission_obj_4 collision_detection 0
+return
 
 :CUBAN_2_OUTRO
 set_player_control $player_char 0
@@ -16369,9 +16910,13 @@ set_time_of_day 22 30
 request_model #HNA
 request_model #CBB
 load_all_models_now
-set_char_coordinates $player_actor -765.8668 -1078.0874 10.0712
+warp_player_from_car_to_coord $player_char at -765.8668 -1078.0874 10.0712
+delete_car $mission_car_1
+delete_char $mission_actor_1
 create_char $mission_actor_1 4 #HNA -765.1267 -1081.5958 10.0712
 create_char $mission_actor_2 4 #CBB -770.6099 -1080.1556 10.0712
+mark_model_as_no_longer_needed #CBB
+mark_model_as_no_longer_needed #HNA
 clear_char_threat_search $mission_actor_1
 clear_char_threat_search $mission_actor_2
 turn_char_to_face_char $player_actor $mission_actor_2
@@ -16480,7 +17025,6 @@ set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 switch_widescreen 0
 restore_camera_jumpcut
 set_camera_behind_player
-return//todo
 goto @CUBAN_2_PASS
 
 :CUBAN_2_WRECKED
@@ -16525,6 +17069,7 @@ mark_car_as_no_longer_needed $mission_car_1
 remove_char_elegantly $mission_actor_1
 remove_blip $mission_car_1_marker
 remove_blip $mission_obj_1_marker
+remove_blip $objective_point_marker
 delete_object $mission_obj_1
 delete_object $mission_obj_2
 delete_object $mission_obj_3
