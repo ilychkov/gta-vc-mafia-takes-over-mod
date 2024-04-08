@@ -16719,7 +16719,7 @@ if
     $mission_flag_a_2 == 0
 then
     if
-        is_player_in_area_2d $player_char 0 -720.0 -800.0 -180.0 -100.0
+        locate_player_any_means_2d $player_char 0 399.6248 -0.9563 radius 100.0 100.0
     then
         clear_all_char_anims $mission_actor_1
         set_char_wait_state $mission_actor_1 anim 19 wait_state_time 3000
@@ -16761,7 +16761,7 @@ if
     $mission_flag_a_5 == 0
 then
     if
-        locate_player_any_means_2d $player_char 0 -335.053 -179.4434 radius 100.0 100.0
+        is_player_in_area_2d $player_char 0 -720.0 -800.0 -180.0 -100.0
     then
         clear_all_char_anims $mission_actor_1
         set_char_wait_state $mission_actor_1 anim 19 wait_state_time 3000
