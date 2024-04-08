@@ -221,8 +221,8 @@ TALK2   = They have a nice pizzeria around here...
 TALK3   = That's a nice yacht.
 TALK4   = There's a real good donut bakery around here.
 TALK5   = A lot of villas on that island.
-WRECKED = ~r~The boat is destroyed!
-WHY     = ~r~Why?
+WRECKED = ~r~Bruh
+WHY     = ~r~Bruh
 OUTRO1  = That was some grand work! You guys got real big cojones!
 OUTRO2  = Cheers, amigos!
 
