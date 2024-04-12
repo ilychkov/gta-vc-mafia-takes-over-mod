@@ -73,6 +73,8 @@ CUBAN1  = Sea Scouts
 CUBAN1S = [os]Sea Scouts
 CUBAN2  = A Treasure Hunt
 CUBAN2S = [os]A Treasure Hunt
+CORTEZ1 = Sobre El Mar
+CORTZ1S = [os]Sobre El Mar
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!
@@ -225,4 +227,13 @@ WRECKED = ~r~Bruh
 WHY     = ~r~Bruh
 OUTRO1  = That was some grand work! You guys got real big cojones!
 OUTRO2  = Cheers, amigos!
+
+[CORTEZ1]
+ROWBOX  = Press the ~h~~k~~PED_SPRINT~ ~w~button to row.
+OUTRO1  = Thomas, you have helped me greatly today.
+OUTRO2  = I hope to see more of you in the future versions of the mod.
+OUTRO3  = But for now, adios, my friend!
+BOXGONE = ~r~The box is destroyed!
+WRECKED = ~r~Bruh
+WHY     = ~r~Bruh
 

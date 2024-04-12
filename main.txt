@@ -1,4 +1,4 @@
-DEFINE MISSIONS 9
+DEFINE MISSIONS 10
 DEFINE MISSION 0 AT @INITIAL           // Initial
 DEFINE MISSION 1 AT @INTRO             // Intro
 DEFINE MISSION 2 AT @GOLF              // A Little Game of Golf
@@ -8,6 +8,7 @@ DEFINE MISSION 5 AT @POLICE_2          // Midnight Car Escape
 DEFINE MISSION 6 AT @BIKER_1           // The Clearout
 DEFINE MISSION 7 AT @CUBAN_1           // Sea Scouts
 DEFINE MISSION 8 AT @CUBAN_2           // A Treasure Hunt
+DEFINE MISSION 9 AT @CORTEZ_1          // Sobre El Mar
 
 //-------------MAIN---------------
 thread 'MAIN'
@@ -227,12 +228,16 @@ start_new_script @POLICE_1_MARKER
 start_new_script @CAR_MECHANIC_ACTIVATE
 start_new_script @BIKER_MARKER
 start_new_script @CUBAN_MARKER
+start_new_script @CORTEZ_MARKER
 
 launch_mission @HJ
 launch_mission @USJ
 launch_mission @INTERIO
 launch_mission @CARGEN
 launch_mission @AUDIO
+
+//todo
+start_mission CORTEZ_1
 
 :MAIN
 wait 1000 ms
@@ -4977,6 +4982,39 @@ goto @CUBAN_MARKER_LOOP
 :CUBAN_MARKER_LOOP_END
 terminate_this_script
 
+//-------------Cortez missions marker script---------------
+//
+
+:CORTEZ_MARKER
+script_name 'CORTEZM'
+
+:CORTEZ_MARKER_LOOP
+wait $default_wait_time
+if
+    is_player_playing $player_char
+goto_if_false @CORTEZ_MARKER_LOOP
+if and
+    $onmission == 0
+    can_player_start_mission $player_char
+    is_player_in_zone $player_char in_zone 'BEACH1' // Ocean Beach
+goto_if_false @CORTEZ_MARKER_LOOP
+if
+    $passed_cortez_1 == 0
+goto_if_false @CORTEZ_MARKER_LOOP_2
+if
+    locate_player_on_foot_3d $player_char 0 $cortez_x $cortez_y $cortez_z radius 1.2 1.2 2.0
+then
+    print_big 'CORTEZ1' 15000 ms 2
+    start_mission CORTEZ_1
+end
+goto @CORTEZ_MARKER_LOOP
+
+:CORTEZ_MARKER_LOOP_2
+goto @CORTEZ_MARKER_LOOP
+
+:CORTEZ_MARKER_LOOP_END
+terminate_this_script
+
 //-------------Insane stunts script---------------
 //
 
@@ -7650,9 +7688,13 @@ $cuban_1_z = 10.8292
 $cuban_2_x = -803.1602
 $cuban_2_y = -347.4698
 $cuban_2_z = 7.29
+$cortez_x = -246.6
+$cortez_y = -1360.5
+$cortez_z = 7.3
 const icon_golf = 13
 const icon_police = 10
 const icon_cuban = 6
+const icon_cortez = 6
 $allow_police_chases = 0
 $police_chases_bonus = 1000
 $npcs_north_island_allowed = 1
@@ -7665,6 +7707,7 @@ $passed_car_mechanic_count = 0
 $passed_biker_1 = 0
 $passed_cuban_1 = 0
 $passed_cuban_2 = 0
+$passed_cortez_1 = 0
 
 add_short_range_sprite_blip_for_contact_point $icon_vercetti = create_asset_radar_marker_with_icon 29 at -246.0713 -324.6199 10.2586
 change_blip_display $icon_vercetti display 2
@@ -7678,6 +7721,7 @@ add_sprite_blip_for_contact_point $icon_golf = create_icon_marker_and_sphere ico
 add_sprite_blip_for_contact_point $icon_police = create_icon_marker_and_sphere icon_police at $police_x $police_y $police_z
 add_sprite_blip_for_contact_point $icon_biker = create_icon_marker_and_sphere 5 at -600.5449 653.8733 10.0721
 add_sprite_blip_for_contact_point $icon_cuban = create_icon_marker_and_sphere icon_cuban at $cuban_1_x $cuban_1_y $cuban_1_z
+add_sprite_blip_for_contact_point $icon_cortez = create_icon_marker_and_sphere icon_cortez at $cortez_x $cortez_y $cortez_z
 add_short_range_sprite_blip_for_contact_point $icon_car_mechanic_docks = create_asset_radar_marker_with_icon 18 at -717.2 -1462.2 10.3
 add_short_range_sprite_blip_for_contact_point $icon_car_mechanic_beach3 = create_asset_radar_marker_with_icon 18 at 202.7853 -299.401 11.4607
 add_short_range_sprite_blip_for_contact_point $icon_car_mechanic_beach1 = create_asset_radar_marker_with_icon 18 at -13.8297 -1325.1516 9.9804
@@ -17089,5 +17133,380 @@ delete_object $mission_obj_7
 delete_object $mission_obj_8
 clear_onscreen_counter $mission_meter
 clear_onscreen_counter $mission_counter
+mission_has_finished
+return
+
+//-------------Mission 9---------------
+// Sobre El Mar
+
+:CORTEZ_1
+script_name 'CORTEZ1'
+gosub @CORTEZ_1_START
+if
+    has_deatharrest_been_executed
+then
+    CORTEZ_1_FAIL()
+end
+CORTEZ_1_CLEANUP()
+terminate_this_script
+
+:CORTEZ_1_START
+$onmission = 1
+set_fading_colour 0 0 0
+register_mission_given
+load_mission_text 'CORTEZ1'
+request_model #SPEEDER
+request_model #BOBCAT
+request_model #WOODENBOX
+load_special_character 1 'IGCOLON'
+load_all_models_now
+while not has_special_character_loaded 1
+    wait 0
+end
+create_car $mission_car_1 #SPEEDER -1362.7983 -1481.5359 5.1965
+set_car_heading $mission_car_1 302.7131
+anchor_boat $mission_car_1 anchor 1
+mark_model_as_no_longer_needed #SPEEDER
+create_char_inside_car $mission_actor_1 = create_actor 4 #SPECIAL01 in_car $mission_car_1
+clear_char_threat_search $mission_actor_1
+set_char_stay_in_car_when_jacked $mission_actor_1 stay_in_car_when_jacked 1
+unload_special_character 1
+//add_blip_for_car $mission_car_1_marker = create_marker_above_car $mission_car_1
+add_blip_for_coord $objective_point_marker = create_checkpoint_at -1362.7983 -1481.5359 5.1965
+
+create_car $mission_car_2 #BOBCAT -1387.574 -1350.0979 7.0094
+set_car_heading $mission_car_2 282.0181
+change_car_colour $mission_car_2 83 13
+mark_model_as_no_longer_needed #BOBCAT
+create_object $mission_obj_1 #WOODENBOX 0.0 0.0 0.0
+set_object_collision $mission_obj_1 collision_detection 0
+set_object_dynamic $mission_obj_1 toggle_in_moving_list 0
+mark_object_as_no_longer_needed #WOODENBOX
+
+set_char_coordinates $player_actor -1390.7795 -1349.8044 7.526
+set_char_heading $player_actor 230.0613
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+request_model #GOLFCLUB
+fade 0 500
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if
+        15@ == 0
+    then
+        place_object_relative_to_car $mission_obj_1 relative_to_car $mission_car_2 offset 0.0 -1.2 0.5
+        if
+            TIMERA > 500
+        then
+            fade 1 500
+            switch_widescreen 1
+            set_fixed_camera_position -1397.3029 -1355.6215 9.2317 0.0 0.0 0.0
+            point_camera_at_car $mission_car_2 15 2
+            15@++
+            TIMERA = 0
+        end
+    end
+    if and
+        15@ == 1
+        TIMERA > 500
+    then
+        pop_car_boot_using_physics $mission_car_2
+        set_object_collision $mission_obj_1 collision_detection 1
+        set_object_dynamic $mission_obj_1 toggle_in_moving_list 1
+        sort_out_object_collision_with_car $mission_obj_1 collision_with_car $mission_car_2
+        set_object_velocity $mission_obj_1 distance 0.0 -7.0 3.0
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 2
+        TIMERA > 1000
+    then
+        set_interpolation_parameters 0.0 1500
+        get_object_coordinates $mission_obj_1 0@ 1@ 2@
+        point_camera_at_point 0@ 1@ 2@ 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 3
+        TIMERA > 500
+    then
+        request_model #GOLFCLUB
+        while not has_model_loaded #GOLFCLUB
+            wait 0
+        end
+        give_weapon_to_player $player_char weapon 3 ammo 9999
+        mark_model_as_no_longer_needed #GOLFCLUB
+        set_char_obj_run_to_coord $player_actor run_to 0@ 1@
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 4
+        TIMERA > 700
+    then
+        set_char_obj_no_obj $player_actor
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 5
+        TIMERA > 300
+    then
+        fade 0 500
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 6
+        TIMERA > 500
+    then
+        break
+    end
+end
+fade 1 500
+set_char_obj_no_obj $player_actor
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+delete_object $mission_obj_1
+create_object $mission_obj_1 #WOODENBOX -1387.6569 -1355.0255 4.9145
+set_object_heading $mission_obj_1 201.2343
+set_object_dynamic $mission_obj_1 toggle_in_moving_list 1
+set_object_velocity $mission_obj_1 distance 0.0 0.0 -0.1
+
+set_player_coordinates $player_char -1387.6569 -1355.0255 5.4145
+
+15@ = 0
+$mission_hint_shown = 0
+TIMERA = 0
+
+:CORTEZ_1_ROWING
+wait 0
+if and
+    not is_car_dead $mission_car_1
+    not is_char_dead $mission_actor_1
+goto_if_false @CORTEZ_1_WHY
+if
+    not has_object_been_damaged $mission_obj_1
+goto_if_false @CORTEZ_1_BOXGONE
+if
+    is_button_pressed 0 pressed_button 16
+then
+    clear_help
+    if
+        15@ == 0
+    then
+        set_current_player_weapon $player_char armed_weapon_to 3
+        set_char_wait_state $player_actor anim 33 wait_state_time -1
+        get_player_heading 3@ $player_char
+        3@ += 45.0
+        sin 4@ = sine 3@
+        cos 5@ = cosine 3@
+        set_lvar_float_to_lvar_float 6@ = 4@
+        set_lvar_float_to_lvar_float 7@ = 5@
+        6@ *= 0.025 // 0.025 for 2.0 speed
+        7@ *= 0.025
+        get_object_coordinates $mission_obj_1 0@ 1@ 2@
+        sub_float_lvar_from_float_lvar 0@ -= 7@
+        sub_float_lvar_from_float_lvar 1@ -= 6@
+        set_object_coordinates $mission_obj_1 0@ 1@ 2@
+        set_lvar_float_to_lvar_float 6@ = 4@
+        set_lvar_float_to_lvar_float 7@ = 5@
+        6@ *= 2.0
+        7@ *= 2.0
+        add_to_object_velocity $mission_obj_1 scatter 7@ 6@ 0.0
+        15@ = 1
+    end
+else
+    15@ = 0
+end
+if and
+    $mission_hint_shown == 0
+    TIMERA > 1000
+then
+    print_help_forever 'ROWBOX' // Press the ~h~~k~~PED_SPRINT~ ~w~button to row.
+    $mission_hint_shown = 1
+end
+get_car_coordinates $mission_car_1 0@ 1@ 2@
+if
+    locate_object_3d $mission_obj_1 near_point 0@ 1@ 2@ radius 5.0 5.0 5.0 sphere 1
+goto_if_false @CORTEZ_1_ROWING
+set_char_wait_state $player_actor anim 0 wait_state_time 100
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+fade 0 500
+wait 1000
+fade 1 1000
+delete_car $mission_car_2
+attach_char_to_car $player_actor into_turret_on_car $mission_car_1 at_car_offset 0.0 0.3 1.5 position 0 angle 0.0 with_weapon 0
+set_char_heading $player_actor 240.2632
+set_char_crouch $player_actor crouch 1 9999999
+set_radio_channel 9 -1
+set_object_collision $mission_obj_1 collision_detection 0
+set_object_dynamic $mission_obj_1 toggle_in_moving_list 0
+switch_widescreen 1
+set_fixed_camera_position -1372.8 -1481.5 8.2 0.0 0.0 0.0
+point_camera_at_point -1362.8 -1481.5 6.2 2
+clear_area 0 at -1362.8 -1481.5 6.2 range 100.0
+set_car_density_multiplier 0.0
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    place_object_relative_to_car $mission_obj_1 relative_to_car $mission_car_1 offset 0.0 1.7 1.0
+    if and
+        15@ == 0
+        TIMERA > 2000
+    then
+        boat_goto_coords $mission_car_1 drive_to -1162.8 -1481.5 6.2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 1
+        TIMERA > 1500
+    then
+        set_fixed_camera_position -1262.8 -1491.5 7.2 0.0 0.0 0.0
+        point_camera_at_car $mission_car_1 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 2
+        TIMERA > 5200
+    then
+        fade 0 500
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 3
+        TIMERA > 500
+    then
+        break
+    end
+end
+set_car_density_multiplier 1.0
+request_collision -323.27 -1342.4
+load_scene -323.27 -1342.4 7.11
+detach_char_from_car $player_actor
+set_char_coordinates $player_actor -323.27 -1334.4 7.11
+warp_char_from_car_to_coord $mission_actor_1 at -323.27 -1338.4 7.11
+set_current_player_weapon $player_char armed_weapon_to 0
+set_char_crouch $player_actor crouch 0 9999999
+set_char_obj_goto_coord_on_foot $mission_actor_1 -323.27 -1342.4
+set_char_obj_goto_coord_on_foot $player_actor -323.27 -1338.4
+delete_object $mission_obj_1
+delete_car $mission_car_1
+//set_fixed_camera_position -317.8084 -1343.0454 9.5349 0.0 0.0 0.0
+set_fixed_camera_position -312.8084 -1343.0454 10.0349 0.0 0.0 0.0
+point_camera_at_point -323.2738 -1340.3956 8.113 2
+switch_widescreen 0
+wait 1000
+switch_widescreen 1
+fade 1 500
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if
+        15@ == 0
+    then
+        if or
+            is_char_objective_passed $mission_actor_1
+            TIMERA > 5000
+        then
+            turn_char_to_face_char $mission_actor_1 $player_actor
+            turn_char_to_face_char $player_actor $mission_actor_1
+            set_char_wait_state $mission_actor_1 anim 19 wait_state_time 10000
+            print_now 'OUTRO1' time 3000 1
+            15@++
+            TIMERA = 0
+        end
+    end
+    if and
+        15@ == 1
+        TIMERA > 3000
+    then
+        print_now 'OUTRO2' time 3500 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 2
+        TIMERA > 3500
+    then
+        print_now 'OUTRO3' time 3000 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 3
+        TIMERA > 3000
+    then
+        break
+    end
+end
+fade 0 500
+wait 500
+fade 1 500
+delete_char $mission_actor_1
+set_player_coordinates $player_char $cortez_x $cortez_y $cortez_z
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+goto @CORTEZ_1_PASS
+
+:CORTEZ_1_WRECKED
+print_now 'WRECKED' time 5000 2
+CORTEZ_1_FAIL()
+return
+
+:CORTEZ_1_WHY
+print_now 'WHY' time 5000 2
+CORTEZ_1_FAIL()
+return
+
+:CORTEZ_1_BOXGONE
+print_now 'BOXGONE' time 5000 2
+CORTEZ_1_FAIL()
+return
+
+:CORTEZ_1_FAIL
+print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
+return
+
+:CORTEZ_1_PASS
+play_mission_passed_tune 1
+print_with_number_big 'M_PASS' number 1000 time 5000 style 1 // MISSION PASSED! $~1~
+add_score $player_char money += 1000
+register_mission_passed 'CORTZ1S'
+player_made_progress 1
+$passed_cortez_1 = 1
+remove_blip $icon_cortez
+return
+
+:CORTEZ_1_CLEANUP
+$onmission = 0
+mark_car_as_no_longer_needed $mission_car_1
+mark_car_as_no_longer_needed $mission_car_2
+remove_char_elegantly $mission_actor_1
+remove_blip $mission_car_1_marker
+remove_blip $mission_car_2_marker
+remove_blip $mission_obj_1_marker
+remove_blip $objective_point_marker
+delete_object $mission_obj_1
 mission_has_finished
 return
