@@ -238,6 +238,7 @@ INTRO6  = Good luck, my friend!
 OBJ1    = ~g~Get to the airport.
 OBJ2    = ~g~They probably can't see where to land. ~y~Fire some weaponry~g~ to draw attention.
 OBJ3    = Man, this is some fog! Victor won't believe when I'll tell him.
+OBJ4    = ~g~Get the box to Cortez's boat.
 ROWBOX  = Press the ~h~~k~~PED_SPRINT~ ~w~button to row.
 GETOUT  = ~g~Get out of the airport.
 GETBACK = ~g~Get back into the car!

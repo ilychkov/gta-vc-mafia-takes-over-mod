@@ -17856,6 +17856,7 @@ set_player_coordinates $player_char -1387.6569 -1355.0255 5.4145
 15@ = 0
 $mission_hint_shown = 0
 TIMERA = 0
+print_now 'OBJ4' time 5000 1
 
 :CORTEZ_1_ROWING
 wait 0
@@ -17925,8 +17926,9 @@ set_object_dynamic $mission_obj_1 toggle_in_moving_list 0
 switch_widescreen 1
 set_fixed_camera_position -1372.8 -1481.5 8.2 0.0 0.0 0.0
 point_camera_at_point -1362.8 -1481.5 6.2 2
-clear_area 0 at -1362.8 -1481.5 6.2 range 100.0
+clear_area 0 at -1362.8 -1481.5 6.2 range 200.0
 set_car_density_multiplier 0.0
+set_ped_density_multiplier 0.0
 15@ = 0
 TIMERA = 0
 while True
@@ -17965,6 +17967,7 @@ while True
     end
 end
 set_car_density_multiplier 1.0
+set_ped_density_multiplier 1.0
 request_collision -323.27 -1342.4
 load_scene -323.27 -1342.4 7.11
 detach_char_from_car $player_actor
