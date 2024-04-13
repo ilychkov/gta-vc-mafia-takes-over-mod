@@ -17156,8 +17156,6 @@ set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'CORTEZ1'
 
-create_pickup_with_ammo $mission_weapon_pickup_1 = create_weapon_pickup #M4 3 ammo 120 at -1795.4687 -1208.7103 14.868
-
 request_model #MAVERICK
 load_special_character 1 'IGBUDDY'
 load_all_models_now
@@ -17175,9 +17173,70 @@ set_char_can_be_shot_in_vehicle $mission_actor_1 can_be_shot_in_a_car 0
 set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
 unload_special_character 1
 
-wait 5000
-freeze_car_position $mission_car_1 in_current_position 0
-heli_goto_coords $mission_car_1 fly_to -1885.177 -1250.9371 90.2648 speed 10
+create_pickup_with_ammo $mission_weapon_pickup_1 = create_weapon_pickup #M4 3 ammo 120 at -1795.4687 -1208.7103 14.868
+add_blip_for_coord $objective_point_marker = create_checkpoint_at -1795.4687 -1203.7103 13.868
+print_now 'OBJ1' time 3000 1
+15@ = 0
+
+:CORTEZ_1_TRAVEL
+wait 0
+if and
+    not is_car_dead $mission_car_1
+    not is_char_dead $mission_actor_1
+goto_if_false @CORTEZ_1_HELI_WRECKED
+if
+    15@ == 0
+then
+    if
+        locate_player_any_means_2d $player_char 0 -1885.177 -1250.9371 radius 150.0 150.0
+    then
+        freeze_car_position $mission_car_1 in_current_position 0
+        heli_goto_coords $mission_car_1 fly_to -1885.177 -1250.9371 90.2648 speed 10
+        15@ = 1
+    end
+end
+if
+    locate_stopped_player_any_means_3d $player_char stopped 1 -1795.4687 -1203.7103 13.868 radius 5.0 5.0 2.0
+goto_if_false @CORTEZ_1_TRAVEL
+
+remove_blip $objective_point_marker
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+switch_widescreen 1
+set_interpolation_parameters 0.0 3000
+set_fixed_camera_position -1795.4687 -1203.7103 16.868 0.0 0.0 0.0
+point_camera_at_car $mission_car_1 15 1
+
+14@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if
+        TIMERA > 3500
+    then
+        break
+    end
+    if
+        not is_button_pressed 0 pressed_button 16
+    then
+        14@ = 1
+    end
+    if and
+        14@ == 1
+        is_button_pressed 0 pressed_button 16
+    then
+        break
+    end
+end
+
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+
 add_blip_for_car $mission_car_1_marker = create_marker_above_car $mission_car_1
 print_now 'OBJ2' time 5000 1
 $mission_point_1_x = -1880.9795
