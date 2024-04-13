@@ -236,9 +236,6 @@ launch_mission @INTERIO
 launch_mission @CARGEN
 launch_mission @AUDIO
 
-//todo
-start_mission CORTEZ_1
-
 :MAIN
 wait 1000 ms
 if
@@ -17156,6 +17153,108 @@ set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'CORTEZ1'
 
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+fade 0 500
+wait 500
+
+force_weather_now 10
+
+load_special_character 1 'IGCOLON'
+load_all_models_now
+while not has_special_character_loaded 1
+    wait 0
+end
+create_char $mission_actor_1 4 #SPECIAL01 -374.43 -1317.36 13.0
+clear_char_threat_search $mission_actor_1
+unload_special_character 1
+create_char $mission_actor_2 4 #NULL -376.43 -1317.36 13.0
+clear_char_threat_search $mission_actor_2
+turn_char_to_face_char $mission_actor_1 $mission_actor_2
+turn_char_to_face_char $mission_actor_2 $mission_actor_1
+
+switch_widescreen 1
+set_fixed_camera_position -375.43 -1321.36 13.5 0.0 0.0 0.0
+point_camera_at_point -375.43 -1317.36 14.0 2
+
+fade 1 1000
+0@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if and
+        0@ == 0
+        TIMERA > 1000
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO1' time 3000 1
+        set_char_wait_state $mission_actor_1 anim 19 wait_state_time 9999999
+    end
+    if and
+        0@ == 1
+        TIMERA > 3000
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO2' time 3000 1
+    end
+    if and
+        0@ == 2
+        TIMERA > 3000
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO3' time 4500 1
+    end
+    if and
+        0@ == 3
+        TIMERA > 4500
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO4' time 4750 1
+    end
+    if and
+        0@ == 4
+        TIMERA > 4750
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO5' time 4500 1
+    end
+    if and
+        0@ == 5
+        TIMERA > 4500
+    then
+        0@++
+        TIMERA = 0
+        print_now 'INTRO6' time 2000 1
+    end
+    if and
+        0@ == 6
+        TIMERA > 2000
+    then
+        break
+    end
+    if or
+        {$I incl.anykey.txt}
+    then
+        if
+            0@ > 0
+        then
+            break
+        end
+    end
+end
+clear_prints
+fade 0 500
+wait 500
+delete_char $mission_actor_1
+delete_char $mission_actor_2
+switch_widescreen 0
+
 request_model #MAVERICK
 load_special_character 1 'IGBUDDY'
 load_all_models_now
@@ -17175,6 +17274,14 @@ unload_special_character 1
 
 create_pickup_with_ammo $mission_weapon_pickup_1 = create_weapon_pickup #M4 3 ammo 120 at -1795.4687 -1208.7103 14.868
 add_blip_for_coord $objective_point_marker = create_checkpoint_at -1795.4687 -1203.7103 13.868
+
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+restore_camera_jumpcut
+set_camera_behind_player
+fade 1 500
+
 print_now 'OBJ1' time 3000 1
 15@ = 0
 
@@ -17983,5 +18090,6 @@ remove_blip $objective_point_marker
 delete_object $mission_obj_1
 remove_pickup $mission_weapon_pickup_1
 mark_object_as_no_longer_needed #WOODENBOX
+release_weather
 mission_has_finished
 return
