@@ -17411,10 +17411,12 @@ fade 0 500
 wait 500
 fade 1 500
 
+clear_area 0 at -1795.4687 -1203.7103 13.868 range 10.0
 set_car_coordinates $mission_car_1 -1795.4687 -1203.7103 13.868
 set_car_heading $mission_car_1 268.7368
 boat_stop $mission_car_1
 
+clear_area 0 at -1795.4687 -1183.7103 14.868 range 10.0
 set_char_coordinates $player_actor -1795.4687 -1183.7103 14.868
 
 switch_widescreen 1
@@ -17474,6 +17476,7 @@ end
 switch_widescreen 1
 fade 1 500
 
+clear_area 0 at -1772.2291 -1223.7402 13.4318 range 10.0
 create_car $mission_car_2 #BOBCAT -1772.2291 -1223.7402 13.4318
 set_car_heading $mission_car_2 245.2063
 change_car_colour $mission_car_2 83 13
