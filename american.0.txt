@@ -64,6 +64,7 @@ PAINTYE = Enjoy the new color!
 CARMHNT = Press the ~h~~k~~TOGGLE_SUBMISSIONS~ ~w~button to toggle Car Mechanic missions on or off.
 CARMECH = 'CAR MECHANIC'
 CARHLTH = Car health:
+MOB_98A = Get to the pay phone in Vice Point.
 UNCALL1 = Hey Tommy! I hope you haven't forgotten your dear old uncle?
 UNCALL2 = It's been a while. Why don't you come pay me a visit?
 UNCALL3 = I'll be waiting nearby the Printworks.
@@ -75,6 +76,8 @@ CUBAN2  = A Treasure Hunt
 CUBAN2S = [os]A Treasure Hunt
 CORTEZ1 = Sobre El Mar
 CORTZ1S = [os]Sobre El Mar
+FINALM  = Last Regards
+FINALMS = [os]Last Regards
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!
