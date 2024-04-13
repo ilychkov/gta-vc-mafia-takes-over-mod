@@ -17156,9 +17156,7 @@ set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'CORTEZ1'
 
-set_player_control $player_char 0
-set_police_ignore_player $player_char ignored_by_cops_state_to 1
-set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+create_pickup_with_ammo $mission_weapon_pickup_1 = create_weapon_pickup #M4 3 ammo 120 at -1795.4687 -1208.7103 14.868
 
 request_model #MAVERICK
 load_special_character 1 'IGBUDDY'
@@ -17166,15 +17164,92 @@ load_all_models_now
 while not has_special_character_loaded 1
     wait 0
 end
-create_car $mission_car_1 #MAVERICK -1795.4687 -1203.7103 13.868
-set_car_heading $mission_car_1 268.7368
+create_car $mission_car_1 #MAVERICK -1885.177 -1250.9371 90.2648
+set_car_heading $mission_car_1 149.7261
 set_car_forward_speed $mission_car_1 speed_instantly 0.1
+freeze_car_position $mission_car_1 in_current_position 1
 mark_model_as_no_longer_needed #MAVERICK
 create_char_inside_car $mission_actor_1 = create_actor 4 #SPECIAL01 in_car $mission_car_1
 clear_char_threat_search $mission_actor_1
+set_char_can_be_shot_in_vehicle $mission_actor_1 can_be_shot_in_a_car 0
+set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
 unload_special_character 1
 
+wait 5000
+freeze_car_position $mission_car_1 in_current_position 0
+heli_goto_coords $mission_car_1 fly_to -1885.177 -1250.9371 90.2648 speed 10
+add_blip_for_car $mission_car_1_marker = create_marker_above_car $mission_car_1
+print_now 'OBJ2' time 5000 1
+$mission_point_1_x = -1880.9795
+$mission_point_1_y = -1254.1387
+$mission_point_1_z = 44.9524
+$mission_point_2_x = -1862.7953
+$mission_point_2_y = -1194.0642
+$mission_point_2_z = 26.717
+$mission_point_3_x = -1795.4687
+$mission_point_3_y = -1203.7103
+$mission_point_3_z = 23.868
+$mission_point_current_x = -1885.177
+$mission_point_current_y = -1250.9371
+$mission_point_current_z = 90.2648
+$mission_step = 0
+
+:CORTEZ_1_GUIDING
+wait 0
+if and
+    not is_car_dead $mission_car_1
+    not is_char_dead $mission_actor_1
+goto_if_false @CORTEZ_1_HELI_WRECKED
+if
+    is_player_shooting $player_char
+then
+    if
+        locate_car_3d $mission_car_1 0 $mission_point_current_x $mission_point_current_y $mission_point_current_z radius 10.0 10.0 10.0
+    then
+        if
+            $mission_step == 0
+        then
+            set_var_float_to_var_float $mission_point_current_x = $mission_point_1_x
+            set_var_float_to_var_float $mission_point_current_y = $mission_point_1_y
+            set_var_float_to_var_float $mission_point_current_z = $mission_point_1_z
+        end
+        if
+            $mission_step == 1
+        then
+            set_var_float_to_var_float $mission_point_current_x = $mission_point_2_x
+            set_var_float_to_var_float $mission_point_current_y = $mission_point_2_y
+            set_var_float_to_var_float $mission_point_current_z = $mission_point_2_z
+        end
+        if
+            $mission_step == 2
+        then
+            set_var_float_to_var_float $mission_point_current_x = $mission_point_3_x
+            set_var_float_to_var_float $mission_point_current_y = $mission_point_3_y
+            set_var_float_to_var_float $mission_point_current_z = $mission_point_3_z
+        end
+        heli_goto_coords $mission_car_1 fly_to $mission_point_current_x $mission_point_current_y $mission_point_current_z speed 30
+        $mission_step++
+    end
+end
+if and
+    $mission_step == 3
+    locate_car_3d $mission_car_1 0 $mission_point_current_x $mission_point_current_y $mission_point_current_z radius 10.0 10.0 10.0
+goto_if_false @CORTEZ_1_GUIDING
+
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+heli_goto_coords $mission_car_1 fly_to -1795.4687 -1203.7103 13.868 speed 10
+wait 2000
+fade 0 500
+wait 500
+fade 1 500
+
+set_car_coordinates $mission_car_1 -1795.4687 -1203.7103 13.868
+set_car_heading $mission_car_1 268.7368
 boat_stop $mission_car_1
+
+set_char_coordinates $player_actor -1795.4687 -1183.7103 14.868
 
 switch_widescreen 1
 get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car_1 offset -2.0 5.0 0.0
@@ -17248,7 +17323,8 @@ freeze_car_position $mission_car_1 in_current_position 1
 mark_model_as_no_longer_needed #SPEEDER
 create_char_inside_car $mission_actor_1 = create_actor 4 #SPECIAL01 in_car $mission_car_1
 clear_char_threat_search $mission_actor_1
-set_char_stay_in_car_when_jacked $mission_actor_1 stay_in_car_when_jacked 1
+set_char_can_be_shot_in_vehicle $mission_actor_1 can_be_shot_in_a_car 0
+set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
 unload_special_character 1
 
 create_car $mission_car_3 #FBICAR -1297.158 -796.7379 13.4307
@@ -17260,10 +17336,12 @@ create_char $mission_actor_2 4 #FBI -1300.7212 -796.1463 13.868
 set_char_heading $mission_actor_2 174.5365
 clear_char_threat_search $mission_actor_2
 set_char_heed_threats $mission_actor_2 heed_threats 1
+set_char_suffers_critical_hits $mission_actor_2 dismemberment_possible 0
 create_char $mission_actor_3 4 #FBI -1229.2495 -1226.3828 13.868
 set_char_heading $mission_actor_3 57.1385
 clear_char_threat_search $mission_actor_3
 set_char_heed_threats $mission_actor_3 heed_threats 1
+set_char_suffers_critical_hits $mission_actor_3 dismemberment_possible 0
 mark_model_as_no_longer_needed #FBI
 
 get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car_2 offset -2.0 3.0 4.0
@@ -17801,6 +17879,11 @@ print_now 'WHY' time 5000 2
 CORTEZ_1_FAIL()
 return
 
+:CORTEZ_1_HELI_WRECKED
+print_now 'HELIWR' time 5000 2
+CORTEZ_1_FAIL()
+return
+
 :CORTEZ_1_BOXGONE
 print_now 'BOXGONE' time 5000 2
 CORTEZ_1_FAIL()
@@ -17839,6 +17922,7 @@ remove_blip $mission_car_2_marker
 remove_blip $mission_obj_1_marker
 remove_blip $objective_point_marker
 delete_object $mission_obj_1
+remove_pickup $mission_weapon_pickup_1
 mark_object_as_no_longer_needed #WOODENBOX
 mission_has_finished
 return
