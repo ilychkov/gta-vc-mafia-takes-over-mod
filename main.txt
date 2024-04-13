@@ -17159,8 +17159,6 @@ set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 fade 0 500
 wait 500
 
-force_weather_now 10
-
 load_special_character 1 'IGCOLON'
 load_all_models_now
 while not has_special_character_loaded 1
@@ -17253,7 +17251,44 @@ fade 0 500
 wait 500
 delete_char $mission_actor_1
 delete_char $mission_actor_2
-switch_widescreen 0
+fade 1 2000
+
+set_fixed_camera_position -226.0 -1338.0 20.0 0.0 0.0 0.0
+point_camera_at_point -236.0 -1338.0 20.0 2
+force_weather_now 10
+
+14@ = 0
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if and
+        15@ == 0
+        TIMERA > 1000
+    then
+        print_now 'WEATHER' time 4000 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 1
+        TIMERA > 4000
+    then
+        break
+    end
+    if
+        not is_button_pressed 0 pressed_button 16
+    then
+        14@ = 1
+    end
+    if and
+        14@ == 1
+        is_button_pressed 0 pressed_button 16
+    then
+        break
+    end
+end
+clear_prints
 
 request_model #MAVERICK
 load_special_character 1 'IGBUDDY'
@@ -17280,7 +17315,7 @@ set_police_ignore_player $player_char ignored_by_cops_state_to 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 restore_camera_jumpcut
 set_camera_behind_player
-fade 1 500
+switch_widescreen 0
 
 print_now 'OBJ1' time 3000 1
 15@ = 0
@@ -17929,6 +17964,7 @@ point_camera_at_point -1362.8 -1481.5 6.2 2
 clear_area 0 at -1362.8 -1481.5 6.2 range 200.0
 set_car_density_multiplier 0.0
 set_ped_density_multiplier 0.0
+release_weather
 15@ = 0
 TIMERA = 0
 while True
