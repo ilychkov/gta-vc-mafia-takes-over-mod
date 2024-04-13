@@ -229,6 +229,15 @@ OUTRO1  = That was some grand work! You guys got real big cojones!
 OUTRO2  = Cheers, amigos!
 
 [CORTEZ1]
+INTRO1  = Mr. Vercetti, I have heard a great deal about you.
+INTRO2  = It's very fortunate for me to see you at this very moment.
+INTRO3  = I'm expecting some extremely important goods to be delivered for me from my home country.
+INTRO4  = However, I was informed that the delivery crew is expecting difficulties due to weather conditions.
+INTRO5  = I need you to get to the airport and see that the transport arrives to the destination safely.
+INTRO6  = Good luck, my friend!
+OBJ1    = ~g~Get to the airport.
+OBJ2    = ~g~They probably don't see where to land. ~y~Fire some weaponry~g~ to draw attention.
+OBJ3    = Man, this is some fog! Victor won't believe when I'll tell him.
 ROWBOX  = Press the ~h~~k~~PED_SPRINT~ ~w~button to row.
 GETOUT  = ~g~Get out of the airport.
 GETBACK = ~g~Get back into the car!
