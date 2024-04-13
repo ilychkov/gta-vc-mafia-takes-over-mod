@@ -230,6 +230,13 @@ OUTRO2  = Cheers, amigos!
 
 [CORTEZ1]
 ROWBOX  = Press the ~h~~k~~PED_SPRINT~ ~w~button to row.
+GETOUT  = ~g~Get out of the airport.
+GETBACK = ~g~Get back into the car!
+FBIHERE = ~g~The FBI is guarding this exit. You have to find another way.
+FBIHER2 = ~g~This exit is also cut off.
+FBIHER3 = Mr. Vercetti, it's Cortez.
+FBIHER4 = Drive over to the North of the airport. I'll be waiting in my boat.
+NOTICED = ~r~You've been noticed by the FBI!
 OUTRO1  = Thomas, you have helped me greatly today.
 OUTRO2  = I hope to see more of you in the future versions of the mod.
 OUTRO3  = But for now, adios, my friend!

@@ -17155,41 +17155,272 @@ $onmission = 1
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'CORTEZ1'
-request_model #SPEEDER
+
 request_model #BOBCAT
+request_model #FBICAR
+request_model #SPEEDER
+request_model #FBI
 request_model #WOODENBOX
 load_special_character 1 'IGCOLON'
 load_all_models_now
 while not has_special_character_loaded 1
     wait 0
 end
+
+create_car $mission_car_2 #BOBCAT -1772.2291 -1223.7402 13.4318
+set_car_heading $mission_car_2 245.2063
+change_car_colour $mission_car_2 83 13
+mark_model_as_no_longer_needed #BOBCAT
+warp_player_into_car $player_char in_car $mission_car_2
+
+create_object $mission_obj_1 #WOODENBOX 0.0 0.0 0.0
+set_object_collision $mission_obj_1 collision_detection 0
+set_object_dynamic $mission_obj_1 toggle_in_moving_list 0
+
 create_car $mission_car_1 #SPEEDER -1362.7983 -1481.5359 5.1965
 set_car_heading $mission_car_1 302.7131
-anchor_boat $mission_car_1 anchor 1
+freeze_car_position $mission_car_1 in_current_position 1
 mark_model_as_no_longer_needed #SPEEDER
 create_char_inside_car $mission_actor_1 = create_actor 4 #SPECIAL01 in_car $mission_car_1
 clear_char_threat_search $mission_actor_1
 set_char_stay_in_car_when_jacked $mission_actor_1 stay_in_car_when_jacked 1
 unload_special_character 1
-//add_blip_for_car $mission_car_1_marker = create_marker_above_car $mission_car_1
-add_blip_for_coord $objective_point_marker = create_checkpoint_at -1362.7983 -1481.5359 5.1965
 
-create_car $mission_car_2 #BOBCAT -1387.574 -1350.0979 7.0094
-set_car_heading $mission_car_2 282.0181
-change_car_colour $mission_car_2 83 13
-mark_model_as_no_longer_needed #BOBCAT
-create_object $mission_obj_1 #WOODENBOX 0.0 0.0 0.0
-set_object_collision $mission_obj_1 collision_detection 0
-set_object_dynamic $mission_obj_1 toggle_in_moving_list 0
-mark_object_as_no_longer_needed #WOODENBOX
+create_car $mission_car_3 #FBICAR -1297.158 -796.7379 13.4307
+set_car_heading $mission_car_3 107.3588
+create_car $mission_car_4 #FBICAR -1232.2351 -1228.8328 13.4306
+set_car_heading $mission_car_4 344.3971
+mark_model_as_no_longer_needed #FBICAR
+create_char $mission_actor_2 4 #FBI -1300.7212 -796.1463 13.868
+set_char_heading $mission_actor_2 174.5365
+clear_char_threat_search $mission_actor_2
+set_char_heed_threats $mission_actor_2 heed_threats 1
+create_char $mission_actor_3 4 #FBI -1229.2495 -1226.3828 13.868
+set_char_heading $mission_actor_3 57.1385
+clear_char_threat_search $mission_actor_3
+set_char_heed_threats $mission_actor_3 heed_threats 1
+mark_model_as_no_longer_needed #FBI
 
-set_char_coordinates $player_actor -1390.7795 -1349.8044 7.526
-set_char_heading $player_actor 230.0613
+print_now 'GETOUT' time 5000 1
+add_blip_for_coord $objective_point_marker = create_checkpoint_at -1314.1387 -797.1824 14.868
+15@ = 0
+$mission_step = 0
+
+:CORTEZ_1_LEAVING
+wait 0
+if
+    not is_car_dead $mission_car_2
+goto_if_false @POLICE_1_WRECKED
+place_object_relative_to_car $mission_obj_1 relative_to_car $mission_car_2 offset 0.0 -1.2 0.5
+if
+    15@ == 1
+then
+    if
+        is_player_in_car $player_char in_car $mission_car_2
+    then
+        clear_this_print 'GETBACK'
+        remove_blip $mission_car_2_marker
+        15@ = 0
+    end
+    goto @CORTEZ_1_LEAVING
+end
+if
+    not is_player_in_car $player_char in_car $mission_car_2
+then
+    print_now 'GETBACK' time 5000 2
+    add_blip_for_car $mission_car_2_marker = create_marker_above_car $mission_car_2
+    15@ = 1
+    goto @CORTEZ_1_LEAVING
+end
+if and
+    not locate_player_any_means_2d $player_char 0 -1314.1387 -797.1824 radius 30.0 30.0
+    not locate_player_any_means_2d $player_char 0 -1228.1449 -1215.22 radius 30.0 30.0
+goto_if_false @CORTEZ_1_NOTICED
+if
+    $mission_step == 0
+goto_if_false @CORTEZ_1_LEAVING_2
+if
+    locate_player_any_means_2d $player_char 0 -1314.1387 -797.1824 radius 70.0 70.0
+goto_if_false @CORTEZ_1_LEAVING
+remove_blip $objective_point_marker
+add_blip_for_coord $objective_point_marker = create_checkpoint_at -1228.1449 -1215.22 14.868
+$mission_step = 1
 set_player_control $player_char 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
-request_model #GOLFCLUB
+switch_widescreen 1
+set_interpolation_parameters 0.0 1500
+set_fixed_camera_position -1297.9253 -807.0679 14.868 0.0 0.0 0.0
+point_camera_at_char $mission_actor_2 15 1
+print_now 'FBIHERE' time 4000 1
+14@ = 0
+TIMERA = 0
+while True
+    wait 0
+    place_object_relative_to_car $mission_obj_1 relative_to_car $mission_car_2 offset 0.0 -1.2 0.5
+    if
+        TIMERA > 4000
+    then
+        break
+    end
+    if
+        not is_button_pressed 0 pressed_button 16
+    then
+        14@ = 1
+    end
+    if and
+        14@ == 1
+        is_button_pressed 0 pressed_button 16
+    then
+        break
+    end
+end
+clear_prints
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+goto @CORTEZ_1_LEAVING
+
+:CORTEZ_1_LEAVING_2
+if
+    $mission_step == 1
+goto_if_false @CORTEZ_1_LEAVING_3
+if
+    locate_player_any_means_2d $player_char 0 -1228.1449 -1215.22 radius 50.0 50.0
+goto_if_false @CORTEZ_1_LEAVING
+remove_blip $objective_point_marker
+add_blip_for_coord $objective_point_marker = create_checkpoint_at -1387.574 -1350.0979 7.0094
+add_blip_for_car $mission_car_1_marker = create_marker_above_car $mission_car_1
+$mission_step = 2
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+switch_widescreen 1
+set_interpolation_parameters 0.0 1500
+set_fixed_camera_position -1247.0912 -1198.4944 17.868 0.0 0.0 0.0
+point_camera_at_point -1228.1449 -1215.22 14.868 1
+print_now 'FBIHER2' time 2500 1
+14@ = 0
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    place_object_relative_to_car $mission_obj_1 relative_to_car $mission_car_2 offset 0.0 -1.2 0.5
+    if and
+        15@ == 0
+        TIMERA > 2500
+    then
+        request_model #CELLPHONE
+        load_mission_audio 'MOBRING' as 1
+        load_all_models_now
+        while not has_mission_audio_loaded 1
+            wait 0
+        end
+        play_mission_audio 1
+        get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car_2 offset -2.5 0.5 0.5
+        set_fixed_camera_position 0@ 1@ 2@ 0.0 0.0 0.0
+        point_camera_at_car $mission_car_2 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 1
+        TIMERA > 1000
+    then
+        clear_mission_audio 1
+        set_char_answering_mobile $player_actor hold_cellphone 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 2
+        TIMERA > 1000
+    then
+        print_now 'FBIHER3' time 1500 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 3
+        TIMERA > 1500
+    then
+        print_now 'FBIHER4' time 3500 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 4
+        TIMERA > 3500
+    then
+        set_char_answering_mobile $player_actor hold_cellphone 0
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 5
+        TIMERA > 700
+    then
+        break
+    end
+    if
+        not is_button_pressed 0 pressed_button 16
+    then
+        14@ = 1
+    end
+    if and
+        14@ == 1
+        is_button_pressed 0 pressed_button 16
+    then
+        break
+    end
+end
+set_char_answering_mobile $player_actor hold_cellphone 0
+warp_player_into_car $player_char $mission_car_2
+clear_mission_audio 1
+clear_prints
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+freeze_car_position $mission_car_1 in_current_position 0
+anchor_boat $mission_car_1 anchor 1
+goto @CORTEZ_1_LEAVING
+
+:CORTEZ_1_LEAVING_3
+if
+    $mission_step == 2
+goto_if_false @CORTEZ_1_LEAVING
+if
+    locate_stopped_player_in_car_3d $player_char stopped 1 -1387.574 -1350.0979 7.0094 radius 4.0 4.0 3.0
+goto_if_false @CORTEZ_1_LEAVING
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
 fade 0 500
+wait 500
+fade 1 500
+delete_car $mission_car_3
+delete_car $mission_car_4
+delete_char $mission_actor_2
+delete_char $mission_actor_3
+remove_blip $objective_point_marker
+remove_blip $mission_car_1_marker
+add_blip_for_coord $objective_point_marker = create_checkpoint_at -1362.7983 -1481.5359 5.1965
+set_car_coordinates $mission_car_2 -1387.574 -1350.0979 7.0094
+set_car_heading $mission_car_2 282.0181
+warp_char_from_car_to_coord $player_actor -1390.7795 -1349.8044 7.526
+set_char_heading $player_actor 230.0613
+
+switch_widescreen 1
+set_fixed_camera_position -1397.3029 -1355.6215 9.2317 0.0 0.0 0.0
+point_camera_at_car $mission_car_2 15 2
+
+request_model #GOLFCLUB
 15@ = 0
 TIMERA = 0
 while True
@@ -17201,10 +17432,6 @@ while True
         if
             TIMERA > 500
         then
-            fade 1 500
-            switch_widescreen 1
-            set_fixed_camera_position -1397.3029 -1355.6215 9.2317 0.0 0.0 0.0
-            point_camera_at_car $mission_car_2 15 2
             15@++
             TIMERA = 0
         end
@@ -17484,6 +17711,12 @@ print_now 'BOXGONE' time 5000 2
 CORTEZ_1_FAIL()
 return
 
+:CORTEZ_1_NOTICED
+print_now 'NOTICED' time 5000 2
+alter_wanted_level_no_drop $player_char minimum_wanted_level_to 5
+CORTEZ_1_FAIL()
+return
+
 :CORTEZ_1_FAIL
 print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
 return
@@ -17502,11 +17735,15 @@ return
 $onmission = 0
 mark_car_as_no_longer_needed $mission_car_1
 mark_car_as_no_longer_needed $mission_car_2
+mark_car_as_no_longer_needed $mission_car_3
+mark_car_as_no_longer_needed $mission_car_4
 remove_char_elegantly $mission_actor_1
+remove_char_elegantly $mission_actor_2
 remove_blip $mission_car_1_marker
 remove_blip $mission_car_2_marker
 remove_blip $mission_obj_1_marker
 remove_blip $objective_point_marker
 delete_object $mission_obj_1
+mark_object_as_no_longer_needed #WOODENBOX
 mission_has_finished
 return
