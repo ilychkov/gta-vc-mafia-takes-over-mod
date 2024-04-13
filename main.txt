@@ -17350,6 +17350,13 @@ set_interpolation_parameters 0.0 3000
 set_fixed_camera_position -1795.4687 -1203.7103 16.868 0.0 0.0 0.0
 point_camera_at_car $mission_car_1 15 1
 
+$skip_scene_button = 16
+if
+    is_player_in_any_car $player_char
+then
+    $skip_scene_button = 18
+end
+
 14@ = 0
 TIMERA = 0
 while True
@@ -17360,13 +17367,13 @@ while True
         break
     end
     if
-        not is_button_pressed 0 pressed_button 16
+        not is_button_pressed 0 pressed_button $skip_scene_button
     then
         14@ = 1
     end
     if and
         14@ == 1
-        is_button_pressed 0 pressed_button 16
+        is_button_pressed 0 pressed_button $skip_scene_button
     then
         break
     end
@@ -17641,13 +17648,13 @@ while True
         break
     end
     if
-        not is_button_pressed 0 pressed_button 16
+        not is_button_pressed 0 pressed_button 18
     then
         14@ = 1
     end
     if and
         14@ == 1
-        is_button_pressed 0 pressed_button 16
+        is_button_pressed 0 pressed_button 18
     then
         break
     end
@@ -17743,13 +17750,13 @@ while True
         break
     end
     if
-        not is_button_pressed 0 pressed_button 16
+        not is_button_pressed 0 pressed_button 18
     then
         14@ = 1
     end
     if and
         14@ == 1
-        is_button_pressed 0 pressed_button 16
+        is_button_pressed 0 pressed_button 18
     then
         break
     end
