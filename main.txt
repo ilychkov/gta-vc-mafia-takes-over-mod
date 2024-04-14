@@ -5030,7 +5030,7 @@ goto @CORTEZ_MARKER_LOOP
 :CORTEZ_MARKER_LOOP_END
 terminate_this_script
 
-//-------------Final mission script---------------
+//-------------Final mission activation script---------------
 //
 
 :FINAL_MISSION
@@ -5102,6 +5102,8 @@ goto @FINAL_MISSION_PHONE_LOOP
     
 :FINAL_MISSION_PHONE_ANSWER
 clear_mission_audio 1
+clear_help
+
 set_player_control $player_char 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
@@ -5110,6 +5112,7 @@ request_model #CELLPHONE
 while not has_model_loaded #CELLPHONE
     wait 0
 end
+
 set_char_answering_mobile $player_actor hold_cellphone 1
 
 15@ = 0
@@ -5136,6 +5139,7 @@ while True
             has_mission_audio_finished 1
             TIMERA > 5000
         then
+            clear_prints
             set_char_answering_mobile $player_actor hold_cellphone 0
             15@++
             TIMERA = 0
@@ -5191,6 +5195,7 @@ goto @FINAL_MISSION_PAYPHONE_LOOP
 remove_blip $icon_final_phone
 turn_phone_off $phone_beach3
 $phone_beach3_active = 0
+
 set_player_control $player_char can_move 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
@@ -5200,6 +5205,8 @@ do_fade 0 1500
 while get_fading_status
     wait 0
 end
+
+force_weather 5
 
 request_model #CELLPHONE
 load_all_models_now
@@ -5236,11 +5243,11 @@ while True
     then
         print_now 'UNCALL3' time 3000 1
         15@++
-        TIMERA = -3500
+        TIMERA = -3000
     end
     if and
         15@ == 2
-        TIMERA > 0
+        TIMERA > 500
     then
         break
     end
@@ -5266,8 +5273,31 @@ end
 set_player_control $player_char can_move 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
-force_weather 5
-//todo
+
+add_sprite_blip_for_contact_point $icon_final = create_icon_marker_and_sphere 9 at $final_x $final_y $final_z
+
+:FINAL_MARKER_LOOP
+wait $default_wait_time
+if
+    is_player_playing $player_char
+goto_if_false @FINAL_MARKER_LOOP
+if and
+    $onmission == 0
+    can_player_start_mission $player_char
+    is_player_in_zone $player_char in_zone 'HAVANA' // Little Havana
+goto_if_false @FINAL_MARKER_LOOP
+if
+    $passed_final == 0
+goto_if_false @FINAL_MARKER_LOOP_END
+if
+    locate_player_on_foot_3d $player_char 0 $final_x $final_y $final_z radius 1.2 1.2 2.0
+then
+    print_big 'FINALM' 15000 ms 2
+    start_mission CORTEZ_1
+end
+goto @FINAL_MARKER_LOOP
+
+:FINAL_MARKER_LOOP_END
 terminate_this_script
 
 
@@ -7947,6 +7977,9 @@ $cuban_2_z = 7.29
 $cortez_x = -246.6
 $cortez_y = -1360.5
 $cortez_z = 7.3
+$final_x = -1009.0912
+$final_y = -270.429
+$final_z = 9.7779
 const icon_golf = 13
 const icon_police = 10
 const icon_cuban = 6
