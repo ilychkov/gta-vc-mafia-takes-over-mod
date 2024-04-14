@@ -1,4 +1,4 @@
-DEFINE MISSIONS 10
+DEFINE MISSIONS 11
 DEFINE MISSION 0 AT @INITIAL           // Initial
 DEFINE MISSION 1 AT @INTRO             // Intro
 DEFINE MISSION 2 AT @GOLF              // A Little Game of Golf
@@ -9,6 +9,7 @@ DEFINE MISSION 6 AT @BIKER_1           // The Clearout
 DEFINE MISSION 7 AT @CUBAN_1           // Sea Scouts
 DEFINE MISSION 8 AT @CUBAN_2           // A Treasure Hunt
 DEFINE MISSION 9 AT @CORTEZ_1          // Sobre El Mar
+DEFINE MISSION 10 AT @FINAL            // Last Regards
 
 //-------------MAIN---------------
 thread 'MAIN'
@@ -5293,7 +5294,7 @@ if
     locate_player_on_foot_3d $player_char 0 $final_x $final_y $final_z radius 1.2 1.2 2.0
 then
     print_big 'FINALM' 15000 ms 2
-    start_mission CORTEZ_1
+    start_mission FINAL
 end
 goto @FINAL_MARKER_LOOP
 
@@ -18433,5 +18434,35 @@ delete_object $mission_obj_1
 remove_pickup $mission_weapon_pickup_1
 mark_object_as_no_longer_needed #WOODENBOX
 release_weather
+mission_has_finished
+return
+
+//-------------Mission 10---------------
+// Last Regards
+
+:FINAL
+script_name 'FINAL'
+gosub @FINAL_START
+if
+    has_deatharrest_been_executed
+then
+    FINAL_FAIL()
+end
+FINAL_CLEANUP()
+terminate_this_script
+
+:FINAL_START
+$onmission = 1
+set_fading_colour 0 0 0
+register_mission_given
+load_mission_text 'FINAL'
+return
+
+:FINAL_FAIL
+print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
+return
+
+:FINAL_CLEANUP
+$onmission = 0
 mission_has_finished
 return
