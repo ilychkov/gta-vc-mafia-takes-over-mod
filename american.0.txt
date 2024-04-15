@@ -157,7 +157,7 @@ FREEDOM = ~g~Great! Now drive the car to the police department in Vice Point.
 GETBACK = ~g~Get back into the car!
 OUTRO1  = Mr. Vercetti, the city truly owes you.
 OUTRO2  = I forgot to introduce myself, how silly!
-OUTRO3  = My name is Rick Wrenson.
+OUTRO3  = My name is Giorgio.
 OUTRO4  = Give me a call if you ever need something. Goodbye!
 
 [BIKER1]

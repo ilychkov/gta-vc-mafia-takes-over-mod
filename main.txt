@@ -239,6 +239,9 @@ launch_mission @INTERIO
 launch_mission @CARGEN
 launch_mission @AUDIO
 
+//todo
+start_mission FINAL
+
 :MAIN
 wait 1000 ms
 if
@@ -18467,6 +18470,188 @@ $onmission = 1
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'FINAL'
+
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+
+fade 0 1500
+while get_fading_status
+    wait 0
+end
+
+clear_area 0 at -1009.0912 -270.429 9.7779 range 200.0
+set_car_density_multiplier 0.0
+set_ped_density_multiplier 0.0
+
+request_model #WASHING
+request_model #VICE3
+load_special_character 1 'IGSONNY'
+load_special_character 2 'MBA'
+load_special_character 3 'MBB'
+load_all_models_now
+while True
+    if and
+        has_special_character_loaded 1
+        has_special_character_loaded 2
+        has_special_character_loaded 3
+    then
+        break
+    end
+    wait 0
+end
+
+create_char $mission_actor_1 4 #VICE3 -1057.3552 -238.1733 10.4464
+set_char_heading $mission_actor_1 265.1551
+clear_char_threat_search $mission_actor_1
+char_look_at_char_always $mission_actor_1 $player_actor
+mark_model_as_no_longer_needed #VICE3
+
+set_char_coordinates $player_actor -1008.9224 -272.327 9.7615
+set_char_heading $player_actor 87.4932
+set_char_obj_goto_coord_on_foot $player_actor -1015.841 -272.0242
+
+create_car $mission_car_1 #WASHING -972.7074 -277.5747 9.6553
+set_car_heading $mission_car_1 88.4196
+change_car_colour $mission_car_1 60 0
+mark_model_as_no_longer_needed #WASHING
+
+create_char_inside_car $mission_actor_2 = create_actor 4 #SPECIAL01 in_car $mission_car_1
+create_char_as_passenger $mission_actor_3 = create_actor_pedtype 4 model #SPECIAL02 in_car $mission_car_1 passenger_seat 1
+create_char_as_passenger $mission_actor_4 = create_actor_pedtype 4 model #SPECIAL03 in_car $mission_car_1 passenger_seat 2
+clear_char_threat_search $mission_actor_2
+clear_char_threat_search $mission_actor_3
+clear_char_threat_search $mission_actor_4
+freeze_car_position $mission_car_1 in_current_position 1
+
+switch_widescreen 1
+//set_fixed_camera_position -1024.0349 -291.5739 10.7752 0.3 0.3 0.3
+//point_camera_at_point -1018.608 -272.1287 10.7812 2
+set_fixed_camera_position -991.6797 -304.8994 12.7612 0.3 0.3 0.3
+point_camera_at_point -1006.5757 -281.6602 10.6064 2
+set_near_clip 0.1
+
+fade 1 1500
+while get_fading_status
+    wait 0
+end
+
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if and
+        15@ == 0
+        TIMERA > 3000
+    then
+        set_fixed_camera_position -1052.0546 -244.4802 11.4464 0.0 0.0 0.0
+        get_char_coordinates $mission_actor_1 0@ 1@ 2@
+        point_camera_at_point 0@ 1@ 2@ 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 1
+        TIMERA > 1000
+    then
+        stop_char_looking $mission_actor_1
+        set_char_obj_run_to_coord $mission_actor_1 run_to -1059.6776 -238.2885
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 2
+        TIMERA > 1000
+    then
+        set_char_obj_no_obj $player_actor
+        set_char_coordinates $player_actor -1019.7242 -261.5358 9.8661
+        set_fixed_camera_position -1007.8009 -270.5568 10.7735 -0.3 -0.3 -0.3
+        point_camera_at_point -1004.481 -271.636 10.7562 2
+        freeze_car_position $mission_car_1 in_current_position 0
+        set_car_cruise_speed $mission_car_1 max_speed_to 15.0
+        set_car_forward_speed $mission_car_1 speed_instantly 15.0
+        set_car_driving_style $mission_car_1 traffic_behavior_to 2
+        car_goto_coordinates_accurate $mission_car_1 drive_to_point -1004.0344 -274.5244 10.7478
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 3
+        TIMERA > 2500
+    then
+        set_fixed_camera_position -1010.41 -272.5 10.26 0.0 0.0 0.0
+        point_camera_at_point -1006.72 -275.23 10.27 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 4
+        TIMERA > 1500
+    then
+        set_char_obj_goto_coord_on_foot $mission_actor_2 -1013.2708 -277.1736
+        set_anim_group_for_char $mission_actor_2 walk_style_to 38
+        get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car_1 offset -3.2 1.1 -0.6
+        set_fixed_camera_position 0@ 1@ 2@ 0.0 0.0 0.0
+        get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car_1 offset -2.0 0.9 -0.8
+        point_camera_at_point 0@ 1@ 2@ 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 5
+        TIMERA > 3500
+    then
+        set_char_coordinates $player_actor -1019.5837 -269.3277 9.8145
+        set_char_heading $player_actor 264.2142
+        set_char_coordinates $mission_actor_2 -1014.3279 -269.8603 9.7964
+        set_char_heading $mission_actor_2 84.2142
+        //set_char_obj_goto_coord_on_foot $mission_actor_2 -1017.8759 -269.5008
+        set_char_obj_goto_char_on_foot $mission_actor_2 $player_actor
+        set_char_running $mission_actor_2 0
+        set_fixed_camera_position -1023.3621 -267.5659 10.9684 0.0 0.0 0.0
+        point_camera_at_point -1018.8888 -269.6289 10.8096 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 6
+        TIMERA > 5000
+    then
+        break
+    end
+    if or
+        {$I incl.anykey.txt}
+    then
+        if
+            15@ > 0
+        then
+            break
+        end
+    end
+end
+clear_prints
+
+fade 0 1500
+while get_fading_status
+    wait 0
+end
+
+delete_car $mission_car_1
+delete_char $mission_actor_1
+delete_char $mission_actor_2
+delete_char $mission_actor_3
+delete_char $mission_actor_4
+set_char_obj_no_obj $player_actor
+
+set_near_clip 0.9
+
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+fade 1 500
 return
 
 :FINAL_FAIL
@@ -18475,5 +18660,7 @@ return
 
 :FINAL_CLEANUP
 $onmission = 0
+set_car_density_multiplier 1.0
+set_ped_density_multiplier 1.0
 mission_has_finished
 return
