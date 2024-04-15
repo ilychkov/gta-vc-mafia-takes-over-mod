@@ -18690,7 +18690,7 @@ while True
         TIMERA > 4250
     then
         print_now 'INTRO5' time 1750 1
-        set_interpolation_parameters 0.0 10000
+        set_interpolation_parameters 0.0 7000
         set_fixed_camera_position -1020.9248 -267.249 10.858 0.0 0.0 0.0
         point_camera_at_char $mission_actor_2 15 1
         15@++
@@ -18722,7 +18722,7 @@ while True
     then
         print_now 'INTRO8' time 2500 1
         //set_fixed_camera_position -1010.7783 -268.9687 10.798 0.0 0.0 0.0
-        set_fixed_camera_position -1018.2169 -262.9976 20.8056 0.0 0.0 0.0
+        set_fixed_camera_position -1025.576 -266.3 21.0922 0.0 0.0 0.0
         point_camera_at_char $mission_actor_2 15 2
         15@++
         TIMERA = 0
@@ -18856,7 +18856,7 @@ while True
         clear_all_char_anims $player_actor
         set_char_wait_state $mission_actor_2 anim 19 wait_state_time 9999999
         print_now 'INTRO18' time 2750 1
-        set_fixed_camera_position -1019.0337 -270.9415 10.2953 0.0 0.0 0.0
+        set_fixed_camera_position -1018.4442 -268.4872 10.3212 0.0 0.0 0.0
         point_camera_at_char $mission_actor_2 15 2
         15@++
         TIMERA = 0
