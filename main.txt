@@ -1955,12 +1955,12 @@ goto @NPCS_1
 :NPCS_DIAZ_INIT
 request_model #GOLFCLUB
 request_model #PIZZABOX
-load_special_character 1 'IGDIAZ'
+load_special_character 21 'IGDIAZ'
 while True
     if and
         has_model_loaded #GOLFCLUB
         has_model_loaded #PIZZABOX
-        has_special_character_loaded 1
+        has_special_character_loaded 21
     then
         break
     end
@@ -1972,7 +1972,7 @@ while True
         return
     end
 end
-create_char $npc_diaz = create_actor_pedtype 4 model #SPECIAL01 at -378.5385 -546.1594 34.5 // -378.4412 -554.1082 39.7731
+create_char $npc_diaz = create_actor_pedtype 4 model #SPECIAL21 at -378.5385 -546.1594 34.5 // -378.4412 -554.1082 39.7731
 set_char_heading $npc_diaz z_angle_to 270.6989
 set_char_suffers_critical_hits $npc_diaz dismemberment_possible 0
 give_weapon_to_char $npc_diaz weapon 3 ammo 3000
@@ -1992,7 +1992,7 @@ delete_object $golf_ball_4
 delete_object $golf_ball_5
 mark_model_as_no_longer_needed #GOLFCLUB
 mark_model_as_no_longer_needed #PIZZABOX
-unload_special_character 1
+unload_special_character 21
 clear_mission_audio 1
 $npc_diaz_interacted = 0
 $npcs_diaz_state = 0
@@ -2395,7 +2395,7 @@ mark_object_as_no_longer_needed $npc_workers_box
 terminate_this_script
 
 :NPCS_VICEPORT_GARAGE_INIT
-load_special_character 1 'IGBUDDY'
+load_special_character 21 'IGBUDDY'
 request_animation 'STRIP'
 clear_mission_audio 1
 clear_mission_audio 2
@@ -2411,12 +2411,12 @@ then
     return
 end
 if and
-    has_special_character_loaded 1
+    has_special_character_loaded 21
     has_animation_loaded 'STRIP'
     has_mission_audio_loaded 1
     has_mission_audio_loaded 2
 goto_if_false @NPCS_VICEPORT_GARAGE_INIT_LOAD
-create_char $npc_lance = create_actor_pedtype 4 model #SPECIAL01 at -835.6341 -1491.0969 11.1087
+create_char $npc_lance = create_actor_pedtype 4 model #SPECIAL21 at -835.6341 -1491.0969 11.1087
 set_char_heading $npc_lance z_angle_to 338.6403
 set_char_suffers_critical_hits $npc_lance dismemberment_possible 0
 clear_char_threat_search $npc_lance
@@ -2430,7 +2430,7 @@ return
 
 :NPCS_VICEPORT_GARAGE_DESTROY
 remove_char_elegantly $npc_lance
-unload_special_character 1
+unload_special_character 21
 remove_animation 'STRIP'
 clear_mission_audio 1
 clear_mission_audio 2
@@ -2665,7 +2665,7 @@ request_model #WFOTR
 request_model #GOLFCLUB
 request_model #BAT
 request_model #HAMMER
-load_special_character 1 'IGDICK'
+load_special_character 21 'IGDICK'
 
 :NPCS_LOVEFIST_INIT_LOAD
 wait 0
@@ -2688,7 +2688,7 @@ if and
     has_model_loaded #GOLFCLUB
     has_model_loaded #BAT
     has_model_loaded #HAMMER
-    has_special_character_loaded 1
+    has_special_character_loaded 21
 goto_if_false @NPCS_LOVEFIST_INIT_LOAD
 create_car $npc_lovefist_car = create_car #LOVEFIST at -865.2949 1158.359 9.8204
 set_car_heading $npc_lovefist_car z_angle_to 2.347
@@ -2698,7 +2698,7 @@ create_char $npc_lovefist_3 = create_actor_pedtype 4 model #BMYPI at -867.3 1158
 create_char $npc_lovefist_4 = create_actor_pedtype 4 model #WMOBU at -867.3 1161.4 9.8
 create_char $npc_lovefist_5 = create_actor_pedtype 5 model #WFORI at -863.3 1156.9 9.8
 create_char $npc_lovefist_6 = create_actor_pedtype 5 model #WFOTR at -863.3 1159.9 9.8
-create_char $npc_lovefist_7 = create_actor_pedtype 4 model #SPECIAL01 at -865.3 1163.4 9.8
+create_char $npc_lovefist_7 = create_actor_pedtype 4 model #SPECIAL21 at -865.3 1163.4 9.8
 set_char_heading $npc_lovefist_1 z_angle_to 0.0
 set_char_heading $npc_lovefist_2 z_angle_to 270.0
 set_char_heading $npc_lovefist_3 z_angle_to 270.0
@@ -2758,7 +2758,7 @@ mark_model_as_no_longer_needed #WFOTR
 mark_model_as_no_longer_needed #GOLFCLUB
 mark_model_as_no_longer_needed #BAT
 mark_model_as_no_longer_needed #HAMMER
-unload_special_character 1
+unload_special_character 21
 $npc_lovefist_interacted = 0
 $npcs_lovefist_state = 1
 return
@@ -10091,7 +10091,7 @@ request_model #WMYPI
 request_model #COP
 request_model #GUNBOX
 request_model #CARDBOARDBOX2
-load_special_character 2 'S_KEEP'
+load_special_character 1 'S_KEEP'
 fade 0 500
 wait 500
 while true
@@ -10102,7 +10102,7 @@ while true
         has_model_loaded #COP
         has_model_loaded #GUNBOX
         has_model_loaded #CARDBOARDBOX2
-        has_special_character_loaded 2
+        has_special_character_loaded 1
     then
         break
     end
@@ -10140,10 +10140,10 @@ place_object_relative_to_car $mission_obj_2 relative_to_car $objective_car offse
 place_object_relative_to_car $mission_obj_3 relative_to_car $objective_car offset -0.35 -1.65 0.15
 place_object_relative_to_car $mission_obj_4 relative_to_car $objective_car offset 0.45 -1.85 0.3
 place_object_relative_to_car $mission_obj_5 relative_to_car $objective_car offset 0.0 -1.1 0.9
-create_char $mission_actor_1 = create_actor_pedtype 4 model #SPECIAL02 at -844.87 -629.8369 10.1341
+create_char $mission_actor_1 = create_actor_pedtype 4 model #SPECIAL01 at -844.87 -629.8369 10.1341
 set_char_heading $mission_actor_1 z_angle_to 208.6404
 clear_char_threat_search $mission_actor_1
-unload_special_character 2
+unload_special_character 1
 create_char $mission_actor_2 = create_actor_pedtype 4 model #WMYPI at -846.0 -635.0 16.0
 set_char_heading $mission_actor_2 z_angle_to 270.0
 clear_char_threat_search $mission_actor_2
@@ -18925,6 +18925,9 @@ return
 
 :FINAL_CLEANUP
 $onmission = 0
+unload_special_character 1
+unload_special_character 2
+unload_special_character 3
 set_car_density_multiplier 1.0
 set_ped_density_multiplier 1.0
 mission_has_finished
