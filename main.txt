@@ -18905,18 +18905,106 @@ delete_char $mission_actor_4
 stop_char_looking $player_actor
 set_char_obj_no_obj $player_actor
 clear_all_char_anims $player_actor
-set_char_coordinates $player_actor -1019.5837 -269.3277 9.8145
-turn_char_to_face_coord $player_actor -1017.8759 -269.5008 10.0
 
 set_near_clip 0.9
+
+request_model #WASHING
+request_model #ADMIRAL
+request_model #UZI
+request_model #MP5LNG
+load_all_models_now
+
+create_car $mission_car_1 #WASHING -1006.7096 -275.2301 9.2709
+set_car_heading $mission_car_1 82.6811
+change_car_colour $mission_car_1 60 0
+mark_model_as_no_longer_needed #WASHING
+
+create_char $mission_actor_1 4 #SPECIAL01 -1010.2638 -276.8648 9.6421
+set_char_heading $mission_actor_1 276.634
+clear_char_threat_search $mission_actor_1
+set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
+
+create_car $mission_car_2 #ADMIRAL -1019.1381 -272.4537 9.3413
+set_car_heading $mission_car_2 96.664
+change_car_colour $mission_car_2 1 0
+mark_model_as_no_longer_needed #ADMIRAL
+
+set_char_coordinates $player_actor -1014.2259 -275.1919 9.6326
+set_char_heading $player_actor 77.0711
+
+set_fixed_camera_position -1020.4601 -290.0922 11.7957 0.0 0.0 0.0
+point_camera_at_point -1013.5859 -274.3953 10.6275 2
+fade 1 500
+
+set_char_running $mission_actor_1 1
+set_char_obj_enter_car_as_driver $mission_actor_1 $mission_car_1
+set_char_obj_enter_car_as_driver $player_actor $mission_car_2
+
+TIMERA = 0
+while True
+    wait 0
+    if and
+        is_char_in_car $mission_actor_1 $mission_car_1
+        is_char_in_car $player_actor $mission_car_2
+    then
+        break
+    end
+    if
+        TIMERA > 10000
+    then
+        warp_char_into_car $mission_actor_1 $mission_car_1
+        warp_char_into_car $player_actor $mission_car_2
+        break
+    end
+end
 
 set_player_control $player_char 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 switch_widescreen 0
-restore_camera_jumpcut
+restore_camera
 set_camera_behind_player
-fade 1 500
+
+create_char $mission_actor_2 4 #SPECIAL02 0.0 0.0 0.0
+create_char $mission_actor_3 4 #SPECIAL03 0.0 0.0 0.0
+attach_char_to_car $mission_actor_2 into_turret_on_car $mission_car_1 at_car_offset -0.5 -0.8 0.8 position 0 angle 360.0 with_weapon 23
+attach_char_to_car $mission_actor_3 into_turret_on_car $mission_car_1 at_car_offset 0.5 -0.8 0.8 position 0 angle 360.0 with_weapon 25
+clear_char_threat_search $mission_actor_2
+clear_char_threat_search $mission_actor_3
+set_char_suffers_critical_hits $mission_actor_2 dismemberment_possible 0
+set_char_suffers_critical_hits $mission_actor_3 dismemberment_possible 0
+mark_model_as_no_longer_needed #UZI
+mark_model_as_no_longer_needed #MP5LNG
+
+set_car_traction $mission_car_1 improve_handling 2.0
+lock_car_doors $mission_car_1 door_status_to 2
+set_car_cruise_speed $mission_car_1 max_speed_to 100.0
+set_car_driving_style $mission_car_1 traffic_behavior_to 3
+set_car_mission $mission_car_1 driver_behaviour_to 2
+
+set_char_obj_kill_player_on_foot $mission_actor_2 $player_char
+set_char_obj_kill_player_on_foot $mission_actor_3 $player_char
+
+set_car_health $mission_car_2 5000
+
+add_blip_for_coord $objective_point_marker = create_checkpoint_at -706.783 -1554.7404 12.5353
+
+print_now 'OBJ1' time 5000 1
+
+:FINAL_CAR_CHASE
+wait 0
+if and
+    not is_car_dead $mission_car_1
+    not is_char_dead $mission_actor_1
+goto_if_false @FINAL_MAFIA_DEAD
+if
+    locate_player_any_means_3d $player_char 1 -706.783 -1554.7404 11.5353 radius 4.0 4.0 4.0
+goto_if_false @FINAL_CAR_CHASE
+return
+
+:FINAL_MAFIA_DEAD
+print_now 'MAFDEAD' time 5000 2
+FINAL_FAIL()
 return
 
 :FINAL_FAIL
@@ -18925,6 +19013,7 @@ return
 
 :FINAL_CLEANUP
 $onmission = 0
+remove_blip $objective_point_marker
 unload_special_character 1
 unload_special_character 2
 unload_special_character 3
