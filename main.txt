@@ -18523,12 +18523,15 @@ clear_char_threat_search $mission_actor_2
 clear_char_threat_search $mission_actor_3
 clear_char_threat_search $mission_actor_4
 freeze_car_position $mission_car_1 in_current_position 1
+boat_stop $mission_car_1
 
 switch_widescreen 1
 //set_fixed_camera_position -1024.0349 -291.5739 10.7752 0.3 0.3 0.3
 //point_camera_at_point -1018.608 -272.1287 10.7812 2
-set_fixed_camera_position -991.6797 -304.8994 12.7612 0.3 0.3 0.3
-point_camera_at_point -1006.5757 -281.6602 10.6064 2
+//set_fixed_camera_position -991.6797 -304.8994 14.7612 0.3 0.3 0.3
+//point_camera_at_point -1006.5757 -281.6602 11.6064 2
+set_fixed_camera_position -1033.6342 -293.7512 10.6107 0.3 0.3 0.3
+point_camera_at_point -1029.262 -287.6547 10.6245 2
 set_near_clip 0.1
 
 fade 1 1500
@@ -18590,9 +18593,9 @@ while True
     then
         set_char_obj_goto_coord_on_foot $mission_actor_2 -1013.2708 -277.1736
         set_anim_group_for_char $mission_actor_2 walk_style_to 38
-        get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car_1 offset -3.2 1.1 -0.6
+        get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car_1 offset -4.0 1.1 -0.2
         set_fixed_camera_position 0@ 1@ 2@ 0.0 0.0 0.0
-        get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car_1 offset -2.0 0.9 -0.8
+        get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car_1 offset -2.0 0.9 -0.5
         point_camera_at_point 0@ 1@ 2@ 2
         15@++
         TIMERA = 0
@@ -18605,17 +18608,55 @@ while True
         set_char_heading $player_actor 264.2142
         set_char_coordinates $mission_actor_2 -1014.3279 -269.8603 9.7964
         set_char_heading $mission_actor_2 84.2142
-        //set_char_obj_goto_coord_on_foot $mission_actor_2 -1017.8759 -269.5008
-        set_char_obj_goto_char_on_foot $mission_actor_2 $player_actor
-        set_char_running $mission_actor_2 0
-        set_fixed_camera_position -1023.3621 -267.5659 10.9684 0.0 0.0 0.0
-        point_camera_at_point -1018.8888 -269.6289 10.8096 2
+        set_char_obj_goto_coord_on_foot $mission_actor_2 -1017.8759 -269.5008
+        set_fixed_camera_position -1023.3621 -267.5659 10.4684 0.0 0.0 0.0
+        point_camera_at_point -1018.8888 -269.6289 8.3096 2
         15@++
         TIMERA = 0
     end
     if and
         15@ == 6
-        TIMERA > 5000
+        TIMERA > 1000
+    then
+        set_interpolation_parameters 0.0 4000
+        set_fixed_camera_position -1023.3621 -267.5659 10.9684 0.0 0.0 0.0
+        point_camera_at_point -1018.8888 -269.6289 10.8096 1
+        15@++
+        TIMERA = 0
+    end
+    if
+        15@ == 7
+    then
+        if or
+            is_char_objective_passed $mission_actor_2
+            TIMERA > 5000
+        then
+            turn_char_to_face_char $mission_actor_2 $player_actor
+            turn_char_to_face_char $player_actor $mission_actor_2
+            15@++
+            TIMERA = 0
+        end
+    end
+    if and
+        15@ == 8
+        TIMERA > 2500
+    then
+        set_fixed_camera_position -1023.1531 -271.9828 10.7827 1.0 1.0 1.0
+        point_camera_at_char $mission_actor_2 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 9
+        TIMERA > 1000
+    then
+        set_char_wait_state $mission_actor_2 anim 19 wait_state_time 2000
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 10
+        TIMERA > 3000
     then
         break
     end
