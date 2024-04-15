@@ -16454,6 +16454,10 @@ set_car_density_multiplier 0.0
 set_ped_density_multiplier 0.0
 set_char_obj_leave_any_car $player_actor
 request_model #COLT45
+load_mission_audio 'LAW3_22' as 1
+while not has_mission_audio_loaded 1
+    wait 0
+end
 0@ = 0
 TIMERA = 0
 while True
@@ -16467,9 +16471,13 @@ while True
             if
                 not has_player_got_weapon $player_char has_weapon 17
             then
-                request_model #COLT45
-                while not has_model_loaded #COLT45
-                    wait 0
+                if
+                    not has_model_loaded #COLT45
+                then
+                    request_model #COLT45
+                    while not has_model_loaded #COLT45
+                        wait 0
+                    end
                 end
                 give_weapon_to_char $player_actor weapon 17 ammo 34
             end
@@ -16587,8 +16595,8 @@ while True
         set_fixed_camera_position 1@ 2@ 3@ 0.1 0.1 0.1
         point_camera_at_car $mission_car_1 15 2
         clear_all_char_anims $mission_actor_1
-        set_char_stay_in_same_place $mission_actor_1 maintain_position_when_attacked 0
         set_char_obj_flee_player_on_foot_always $mission_actor_1 avoid_player $player_char
+        play_mission_audio 1
         0@++
         TIMERA = 0
     end
@@ -16607,6 +16615,8 @@ while True
         break
     end
 end
+mark_model_as_no_longer_needed #COLT45
+clear_mission_audio 1
 //fade 0 500
 //wait 500
 //fade 1 500
