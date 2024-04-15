@@ -18982,6 +18982,9 @@ set_car_cruise_speed $mission_car_1 max_speed_to 100.0
 set_car_driving_style $mission_car_1 traffic_behavior_to 3
 set_car_mission $mission_car_1 driver_behaviour_to 2
 
+add_upsidedown_car_check $mission_car_1
+add_stuck_car_check $mission_car_1 distance 0.5 time 3000
+
 set_char_obj_kill_player_on_foot $mission_actor_2 $player_char
 set_char_obj_kill_player_on_foot $mission_actor_3 $player_char
 
@@ -18997,6 +19000,20 @@ if and
     not is_car_dead $mission_car_1
     not is_char_dead $mission_actor_1
 goto_if_false @FINAL_MAFIA_DEAD
+if or
+    is_car_upsidedown $mission_car_1
+    is_car_stuck $mission_car_1
+then
+    if
+        TIMERB > 3500
+    then
+        get_car_coordinates $mission_car_1 position_to 0@ 1@ 2@
+        get_closest_car_node_with_heading 0@ 1@ 2@ store_nearby_vector_to 0@ 1@ 2@ 3@
+        set_car_coordinates $mission_car_1 0@ 1@ 2@
+        set_car_heading $mission_car_1 3@
+        TIMERB = 0
+    end
+end
 if
     locate_player_any_means_3d $player_char 1 -706.783 -1554.7404 11.5353 radius 4.0 4.0 4.0
 goto_if_false @FINAL_CAR_CHASE
@@ -19014,6 +19031,13 @@ return
 :FINAL_CLEANUP
 $onmission = 0
 remove_blip $objective_point_marker
+remove_stuck_car_check $mission_car_1
+remove_upsidedown_car_check $mission_car_1
+mark_car_as_no_longer_needed $mission_car_1
+mark_car_as_no_longer_needed $mission_car_2
+mark_char_as_no_longer_needed $mission_actor_1
+mark_char_as_no_longer_needed $mission_actor_2
+mark_char_as_no_longer_needed $mission_actor_3
 unload_special_character 1
 unload_special_character 2
 unload_special_character 3
