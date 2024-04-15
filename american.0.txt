@@ -259,3 +259,26 @@ WRECKED = ~r~Bruh
 WHY     = ~r~Bruh
 HELIWR  = ~r~The heli is destroyed!
 
+[FINAL]
+INTRO1  = Tommy!
+INTRO2  = So nice of you to come over. How have you been?
+INTRO3  = Not bad. And you, Sonny?
+INTRO4  = Wonderful, wonderful. I just wish I didn't forget my umbrella.
+INTRO5  = How's the business going?
+INTRO6  = It's going okay. Nothing out of ordinary.
+INTRO7  = Oh, that's very nice to hear.
+INTRO8  = But that's not what I see, Tommy.
+INTRO9  = Tell me, what the heck is going on? What games are you playing?
+INTRO10 = Fighting for environment, cleaning out garbage for some fools...
+INTRO11 = Helping the police?!
+INTRO12 = That's not what I busted you out for.
+INTRO13 = That's not what the family wanted you to do.
+INTRO14 = Sonny... I quit.
+INTRO15 = I knew something was going on with you, Tommy.
+INTRO16 = Yet I gave you a chance to do something for me - and for yourself.
+INTRO17 = Maybe for once it's more important to do what's right, Sonny?
+INTRO18 = Tommy. Listen here. This is business.
+INTRO19 = You're not going by the rules? Then the deal's off.
+INTRO20 = You never understood a thing. But it doesn't matter anymore...
+OBJ1    = ~g~Try to lure the Mafia to ~y~the docks~g~.
+

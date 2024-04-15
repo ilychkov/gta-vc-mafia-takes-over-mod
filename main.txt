@@ -18650,13 +18650,230 @@ while True
         15@ == 9
         TIMERA > 1000
     then
-        set_char_wait_state $mission_actor_2 anim 19 wait_state_time 2000
+        set_char_wait_state $mission_actor_2 anim 19 wait_state_time 9999999
+        print_now 'INTRO1' time 2000 1
         15@++
         TIMERA = 0
     end
     if and
         15@ == 10
+        TIMERA > 2000
+    then
+        print_now 'INTRO2' time 3000 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 11
         TIMERA > 3000
+    then
+        clear_all_char_anims $mission_actor_2
+        set_char_wait_state $player_actor anim 19 wait_state_time 9999999
+        print_now 'INTRO3' time 2500 1
+        set_fixed_camera_position -1020.9248 -267.249 10.858 0.0 0.0 0.0
+        point_camera_at_char $mission_actor_2 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 12
+        TIMERA > 2500
+    then
+        clear_all_char_anims $player_actor
+        set_char_wait_state $mission_actor_2 anim 19 wait_state_time 9999999
+        print_now 'INTRO4' time 4250 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 13
+        TIMERA > 4250
+    then
+        print_now 'INTRO5' time 1750 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 14
+        TIMERA > 1750
+    then
+        clear_all_char_anims $mission_actor_2
+        set_char_wait_state $player_actor anim 19 wait_state_time 9999999
+        print_now 'INTRO6' time 3000 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 15
+        TIMERA > 3000
+    then
+        clear_all_char_anims $player_actor
+        set_char_wait_state $mission_actor_2 anim 19 wait_state_time 9999999
+        print_now 'INTRO7' time 2250 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 16
+        TIMERA > 2250
+    then
+        print_now 'INTRO8' time 2500 1
+        set_fixed_camera_position -1010.7783 -268.9687 10.798 0.0 0.0 0.0
+        point_camera_at_char $mission_actor_2 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 17
+        TIMERA > 2500
+    then
+        print_now 'INTRO9' time 3750 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 18
+        TIMERA > 3750
+    then
+        print_now 'INTRO10' time 4000 1
+        set_fixed_camera_position -1020.2667 -272.6451 11.7793 0.0 0.0 0.0
+        point_camera_at_char $mission_actor_2 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 19
+        TIMERA > 4000
+    then
+        print_now 'INTRO11' time 2000 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 20
+        TIMERA > 2000
+    then
+        print_now 'INTRO12' time 2500 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 21
+        TIMERA > 2500
+    then
+        print_now 'INTRO13' time 2500 1
+        set_interpolation_parameters 0.0 3000
+        point_camera_at_char $player_actor 15 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 22
+        TIMERA > 2500
+    then
+        clear_all_char_anims $mission_actor_2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 23
+        TIMERA > 500
+    then
+        set_char_wait_state $player_actor anim 19 wait_state_time 9999999
+        print_now 'INTRO14' time 2500 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 24
+        TIMERA > 2500
+    then
+        clear_all_char_anims $player_actor
+        set_fixed_camera_position -1018.0286 -275.6851 10.6365 0.0 0.0 0.0
+        point_camera_at_point -1017.9631 -271.8933 10.7823 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 25
+        TIMERA > 1500
+    then
+        set_char_obj_goto_coord_on_foot $mission_actor_2 -1014.3279 -269.8603
+        char_look_at_char_always $player_actor $mission_actor_2
+        set_interpolation_parameters 0.0 2000
+        point_camera_at_char $mission_actor_2 15 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 26
+        TIMERA > 1500
+    then
+        set_char_obj_no_obj $mission_actor_2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 27
+        TIMERA > 1000
+    then
+        turn_char_to_face_char $mission_actor_2 $player_actor
+        stop_char_looking $player_actor
+        set_char_wait_state $mission_actor_2 anim 19 wait_state_time 9999999
+        print_now 'INTRO15' time 2750 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 28
+        TIMERA > 2750
+    then
+        print_now 'INTRO16' time 4000 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 29
+        TIMERA > 4000
+    then
+        clear_all_char_anims $mission_actor_2
+        set_char_wait_state $player_actor anim 19 wait_state_time 9999999
+        print_now 'INTRO17' time 4000 1
+        set_fixed_camera_position -1013.9901 -274.0011 10.6252 0.0 0.0 0.0
+        point_camera_at_char $player_actor 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 30
+        TIMERA > 4000
+    then
+        clear_all_char_anims $player_actor
+        set_char_wait_state $mission_actor_2 anim 19 wait_state_time 9999999
+        print_now 'INTRO18' time 2750 1
+        point_camera_at_char $mission_actor_2 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 31
+        TIMERA > 2750
+    then
+        print_now 'INTRO19' time 3250 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 32
+        TIMERA > 3250
+    then
+        print_now 'INTRO20' time 4000 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 33
+        TIMERA > 4000
     then
         break
     end
@@ -18682,7 +18899,9 @@ delete_char $mission_actor_1
 delete_char $mission_actor_2
 delete_char $mission_actor_3
 delete_char $mission_actor_4
+stop_char_looking $player_actor
 set_char_obj_no_obj $player_actor
+clear_all_char_anims $player_actor
 
 set_near_clip 0.9
 
