@@ -18976,7 +18976,7 @@ set_car_heading $mission_car_1 82.6811
 change_car_colour $mission_car_1 60 0
 mark_model_as_no_longer_needed #WASHING
 
-create_char $mission_actor_1 4 #SPECIAL01 -1008.2638 -276.8648 9.6421
+create_char $mission_actor_1 4 #SPECIAL01 -1008.2638 -277.8648 9.6421
 set_char_heading $mission_actor_1 276.634
 clear_char_threat_search $mission_actor_1
 set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
@@ -18984,7 +18984,7 @@ set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
 create_car $mission_car_2 #ADMIRAL -1019.1381 -272.4537 9.3413
 set_car_heading $mission_car_2 96.664
 change_car_colour $mission_car_2 1 0
-mark_model_as_no_longer_needed #ADMIRAL
+//mark_model_as_no_longer_needed #ADMIRAL
 
 set_char_coordinates $player_actor -1014.2259 -275.1919 9.6326
 set_char_heading $player_actor 77.0711
@@ -19030,8 +19030,8 @@ clear_char_threat_search $mission_actor_2
 clear_char_threat_search $mission_actor_3
 set_char_suffers_critical_hits $mission_actor_2 dismemberment_possible 0
 set_char_suffers_critical_hits $mission_actor_3 dismemberment_possible 0
-mark_model_as_no_longer_needed #UZI
-mark_model_as_no_longer_needed #MP5LNG
+//mark_model_as_no_longer_needed #UZI
+//mark_model_as_no_longer_needed #MP5LNG
 
 set_car_traction $mission_car_1 improve_handling 2.0
 lock_car_doors $mission_car_1 door_status_to 2
@@ -19046,6 +19046,8 @@ add_stuck_car_check $mission_car_1 distance 0.5 time 3000
 
 set_char_obj_kill_player_on_foot $mission_actor_2 $player_char
 set_char_obj_kill_player_on_foot $mission_actor_3 $player_char
+set_char_accuracy $mission_actor_2 50
+set_char_accuracy $mission_actor_3 50
 
 set_car_health $mission_car_1 5000
 set_car_health $mission_car_2 5000
@@ -19053,6 +19055,36 @@ set_car_health $mission_car_2 5000
 add_blip_for_coord $objective_point_marker = create_checkpoint_at -706.783 -1554.7404 12.5353
 
 print_now 'OBJ1' time 5000 1
+
+$mission_car_1_x = -874.4885
+$mission_car_1_y = -310.8844
+$mission_car_1_z = 9.672
+$mission_car_1_angle = 277.6988
+$mission_car_2_x = -1009.2633
+$mission_car_2_y = -495.4985
+$mission_car_2_z = 10.6166
+$mission_car_2_angle = 271.6641
+$mission_car_3_x = -850.2625
+$mission_car_3_y = -613.0328
+$mission_car_3_z = 9.6663
+$mission_car_3_angle = 275.2506
+$mission_car_4_x = -1146.4253
+$mission_car_4_y = -720.847
+$mission_car_4_z = 10.4928
+$mission_car_4_angle = 272.8986
+$mission_car_5_x = -779.3053
+$mission_car_5_y = -1238.4679
+$mission_car_5_z = 9.7366
+$mission_car_5_angle = 282.7268
+$mission_car_6_x = -888.5107
+$mission_car_6_y = -1238.0958
+$mission_car_6_z = 10.3533
+$mission_car_6_angle = 66.141
+0@ = 0
+1@ = 0
+2@ = 0
+const fm_car_spawn_distance = 150.0
+const fm_car_activation_distance = 50.0
 
 :FINAL_CAR_CHASE
 wait 0
@@ -19075,6 +19107,135 @@ then
     end
 end
 if
+    0@ == 0
+then
+    if
+        locate_player_any_means_2d $player_char 0 $mission_car_1_x $mission_car_1_y radius fm_car_spawn_distance fm_car_spawn_distance
+    then
+        request_model #ADMIRAL
+        while not has_model_loaded #ADMIRAL
+            wait 0
+        end
+        create_car $mission_car_3 #ADMIRAL $mission_car_1_x $mission_car_1_y $mission_car_1_z
+        set_car_heading $mission_car_3 $mission_car_1_angle
+        change_car_colour $mission_car_3 0 0
+        0@ = 1
+    else
+        if
+            locate_player_any_means_2d $player_char 0 $mission_car_2_x $mission_car_2_y radius fm_car_spawn_distance fm_car_spawn_distance
+        then
+            request_model #ADMIRAL
+            while not has_model_loaded #ADMIRAL
+                wait 0
+            end
+            create_car $mission_car_3 #ADMIRAL $mission_car_2_x $mission_car_2_y $mission_car_2_z
+            set_car_heading $mission_car_3 $mission_car_2_angle
+            change_car_colour $mission_car_3 0 0
+            0@ = 1
+        end
+    end
+end
+if
+    0@ == 1
+then
+    if or
+        locate_player_any_means_2d $player_char 0 $mission_car_1_x $mission_car_1_y radius fm_car_activation_distance fm_car_activation_distance
+        locate_player_any_means_2d $player_char 0 $mission_car_2_x $mission_car_2_y radius fm_car_activation_distance fm_car_activation_distance
+    then
+        set_lvar_int_to_var_int 3@ = $mission_car_3
+        FINAL_CREATE_MAFIA_CAR()
+        set_var_int_to_lvar_int $mission_actor_4 = 4@
+        set_var_int_to_lvar_int $mission_actor_5 = 5@
+        0@ = 2
+    end
+end
+if
+    1@ == 0
+then
+    if
+        locate_player_any_means_2d $player_char 0 $mission_car_3_x $mission_car_3_y radius fm_car_spawn_distance fm_car_spawn_distance
+    then
+        request_model #REGINA
+        while not has_model_loaded #REGINA
+            wait 0
+        end
+        create_car $mission_car_4 #REGINA $mission_car_3_x $mission_car_3_y $mission_car_3_z
+        set_car_heading $mission_car_4 $mission_car_3_angle
+        change_car_colour $mission_car_4 0 0
+        1@ = 1
+    else
+        if
+            locate_player_any_means_2d $player_char 0 $mission_car_4_x $mission_car_4_y radius fm_car_spawn_distance fm_car_spawn_distance
+        then
+            request_model #REGINA
+            while not has_model_loaded #REGINA
+                wait 0
+            end
+            create_car $mission_car_4 #REGINA $mission_car_4_x $mission_car_4_y $mission_car_4_z
+            set_car_heading $mission_car_4 $mission_car_4_angle
+            change_car_colour $mission_car_4 0 0
+            1@ = 1
+        end
+    end
+end
+if
+    1@ == 1
+then
+    if or
+        locate_player_any_means_2d $player_char 0 $mission_car_3_x $mission_car_3_y radius fm_car_activation_distance fm_car_activation_distance
+        locate_player_any_means_2d $player_char 0 $mission_car_4_x $mission_car_4_y radius fm_car_activation_distance fm_car_activation_distance
+    then
+        set_lvar_int_to_var_int 3@ = $mission_car_4
+        FINAL_CREATE_MAFIA_CAR()
+        set_var_int_to_lvar_int $mission_actor_6 = 4@
+        set_var_int_to_lvar_int $mission_actor_7 = 5@
+        1@ = 2
+    end
+end
+if
+    2@ == 0
+then
+    if
+        locate_player_any_means_2d $player_char 0 $mission_car_5_x $mission_car_5_y radius fm_car_spawn_distance fm_car_spawn_distance
+    then
+        request_model #ADMIRAL
+        while not has_model_loaded #ADMIRAL
+            wait 0
+        end
+        create_car $mission_car_5 #ADMIRAL $mission_car_5_x $mission_car_5_y $mission_car_5_z
+        set_car_heading $mission_car_5 $mission_car_5_angle
+        change_car_colour $mission_car_5 0 0
+        2@ = 1
+    else
+        if
+            locate_player_any_means_2d $player_char 0 $mission_car_6_x $mission_car_6_y radius fm_car_spawn_distance fm_car_spawn_distance
+        then
+            request_model #ADMIRAL
+            while not has_model_loaded #ADMIRAL
+                wait 0
+            end
+            create_car $mission_car_5 #ADMIRAL $mission_car_6_x $mission_car_6_y $mission_car_6_z
+            set_car_heading $mission_car_5 $mission_car_6_angle
+            change_car_colour $mission_car_5 0 0
+            2@ = 1
+        end
+    end
+end
+if
+    2@ == 1
+then
+    if or
+        locate_player_any_means_2d $player_char 0 $mission_car_5_x $mission_car_5_y radius fm_car_activation_distance fm_car_activation_distance
+        locate_player_any_means_2d $player_char 0 $mission_car_6_x $mission_car_6_y radius fm_car_activation_distance fm_car_activation_distance
+    then
+        set_lvar_int_to_var_int 3@ = $mission_car_5
+        FINAL_CREATE_MAFIA_CAR()
+        set_var_int_to_lvar_int $mission_actor_8 = 4@
+        set_var_int_to_lvar_int $mission_actor_9 = 5@
+        2@ = 2
+    end
+end
+if
     locate_player_any_means_3d $player_char 1 -706.783 -1554.7404 11.5353 radius 4.0 4.0 4.0
 goto_if_false @FINAL_CAR_CHASE
 
@@ -19083,8 +19244,24 @@ remove_blip $objective_point_marker
 set_player_control $player_char 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+
 fade 0 500
 wait 500
+
+delete_car $mission_car_1
+delete_car $mission_car_3
+delete_car $mission_car_4
+delete_car $mission_car_5
+delete_char $mission_actor_1
+delete_char $mission_actor_2
+delete_char $mission_actor_3
+delete_char $mission_actor_4
+delete_char $mission_actor_5
+delete_char $mission_actor_6
+delete_char $mission_actor_7
+delete_char $mission_actor_8
+delete_char $mission_actor_9
+
 request_model #WASHING
 request_model #ADMIRAL
 request_model #REGINA
@@ -19656,6 +19833,9 @@ while get_fading_status
     wait 0
 end
 
+delete_char $mission_actor_1
+set_player_coordinates $player_char -701.968 -1577.3588 11.5446
+
 set_player_control $player_char 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
@@ -19669,6 +19849,27 @@ add_explosion_no_sound 5@ 6@ 7@ type 11
 add_explosion 1 at 5@ 6@ 7@
 add_explosion_no_sound 5@ 6@ 7@ type 6
 shake_cam 200
+return
+
+:FINAL_CREATE_MAFIA_CAR
+create_char_inside_car 4@ = create_actor 4 #SPECIAL02 in_car 3@
+create_char 5@ 4 #SPECIAL03 0.0 0.0 0.0
+attach_char_to_car 5@ into_turret_on_car 3@ at_car_offset 0.5 0.0 0.8 position 0 angle 360.0 with_weapon 23
+clear_char_threat_search 4@
+clear_char_threat_search 5@
+set_char_suffers_critical_hits 4@ dismemberment_possible 0
+set_char_suffers_critical_hits 5@ dismemberment_possible 0
+
+set_car_traction 3@ improve_handling 2.0
+lock_car_doors 3@ door_status_to 2
+set_car_cruise_speed 3@ max_speed_to 100.0
+set_car_driving_style 3@ traffic_behavior_to 2
+set_car_mission 3@ driver_behaviour_to 2
+set_car_straight_line_distance 3@ abandon_path_radius 40
+set_car_change_lane 3@ change_lane 0
+
+set_char_obj_kill_player_on_foot 5@ $player_char
+set_char_accuracy 5@ 50
 return
 
 :FINAL_MAFIA_DEAD
@@ -19718,6 +19919,9 @@ mark_char_as_no_longer_needed $mission_actor_8
 mark_char_as_no_longer_needed $mission_actor_9
 mark_char_as_no_longer_needed $mission_actor_10
 mark_char_as_no_longer_needed $mission_actor_11
+mark_model_as_no_longer_needed #WASHING
+mark_model_as_no_longer_needed #ADMIRAL
+mark_model_as_no_longer_needed #REGINA
 mark_model_as_no_longer_needed #UZI
 mark_model_as_no_longer_needed #MP5LNG
 mark_model_as_no_longer_needed #M4
