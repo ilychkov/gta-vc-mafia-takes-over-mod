@@ -8003,6 +8003,7 @@ $passed_cuban_1 = 0
 $passed_cuban_2 = 0
 $passed_cortez_1 = 0
 $passed_final = 0
+$mod_title_seen = 0
 
 add_short_range_sprite_blip_for_contact_point $icon_vercetti = create_asset_radar_marker_with_icon 29 at -246.0713 -324.6199 10.2586
 change_blip_display $icon_vercetti display 2
@@ -18467,6 +18468,7 @@ terminate_this_script
 
 :FINAL_START
 $onmission = 1
+$allow_police_chases = 0
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'FINAL'
@@ -18500,6 +18502,10 @@ while True
     end
     wait 0
 end
+
+if
+    $mod_title_seen == 0
+goto_if_false @FINAL_INTRO
 
 set_char_coordinates $player_actor -1065.099 -300.7289 10.1277
 set_fixed_camera_position -994.8042 -286.3174 12.7658 0.0 0.0 0.0
@@ -18554,7 +18560,9 @@ while True
         break
     end
 end
+$mod_title_seen = 1
 
+:FINAL_INTRO
 create_char $mission_actor_1 4 #VICE3 -1057.3552 -238.1733 10.4464
 set_char_heading $mission_actor_1 265.1551
 clear_char_threat_search $mission_actor_1
@@ -19070,6 +19078,7 @@ if
 goto_if_false @FINAL_CAR_CHASE
 
 :FINAL_MOB
+remove_blip $objective_point_marker
 set_player_control $player_char 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
@@ -19418,6 +19427,11 @@ while True
     end
 end
 
+load_mission_audio 'LAW3_22' as 1
+while not has_mission_audio_loaded 1
+    wait 0
+end
+
 delete_char $tommy
 set_char_coordinates $player_actor -692.6422 -1578.6802 11.5405
 set_char_heading $player_actor 339.1741
@@ -19457,6 +19471,8 @@ set_char_obj_flee_player_on_foot_always $mission_actor_7 avoid_player $player_ch
 set_char_obj_flee_player_on_foot_always $mission_actor_8 avoid_player $player_char
 set_char_obj_flee_player_on_foot_always $mission_actor_9 avoid_player $player_char
 set_char_obj_flee_player_on_foot_always $mission_actor_10 avoid_player $player_char
+
+play_mission_audio 1
 
 delete_char $mission_actor_11
 
@@ -19666,6 +19682,7 @@ return
 
 :FINAL_CLEANUP
 $onmission = 0
+$allow_police_chases = 1
 remove_blip $objective_point_marker
 remove_blip $mission_car_1_marker
 remove_blip $mission_car_2_marker
@@ -19701,6 +19718,7 @@ mark_model_as_no_longer_needed #MINIGUN2
 unload_special_character 1
 unload_special_character 2
 unload_special_character 3
+clear_mission_audio 1
 set_car_density_multiplier 1.0
 set_ped_density_multiplier 1.0
 mission_has_finished
