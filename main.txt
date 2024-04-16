@@ -19561,7 +19561,7 @@ while True
         point_camera_at_point -691.587 -1577.8044 12.5424 2
         set_char_coordinates $player_actor -693.8342 -1581.8142 11.5333
         set_char_heading $player_actor 339.1741
-        give_weapon_to_player $player_char weapon 33 ammo 100
+        give_weapon_to_player $player_char weapon 33 ammo 50
         set_current_player_weapon $player_char armed_weapon_to 33
         15@++
         TIMERA = 0
@@ -19815,7 +19815,7 @@ then
         set_char_obj_kill_player_on_foot $mission_actor_1 $player_char
     end
 end
-get_char_health $mission_actor_1 $mission_actor_1_health
+get_char_health $mission_actor_1_health = actor $mission_actor_1
 $mission_actor_1_health /= 5
 if
     is_char_dead $mission_actor_1
