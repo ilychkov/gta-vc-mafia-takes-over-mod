@@ -19055,13 +19055,12 @@ create_pickup_with_ammo $mission_weapon_pickup_1 = create_weapon_pickup #UZI 3 a
 set_char_coordinates $player_actor -698.0997 -1576.1699 11.5469
 set_char_heading $player_actor 333.1255
 set_char_crouch $player_actor crouch 1 1500
-set_char_obj_run_to_coord $player_actor run_to -696.5488 -1577.6333
-set_char_obj_run_to_coord $player_actor run_to -697.9102 -1580.1475
+wait 300
 //hide: -701.968 -1577.3588 11.5446
 //walk from: -693.1782 -1580.3115 11.5367 330.0871
 // camera while walking from: -684.568 -1577.95 12.5413 to -691.587 -1577.8044 12.5424
 switch_widescreen 1
-set_fixed_camera_position -691.735 -1571.2922 12.5547 0.0 0.0 0.0
+set_fixed_camera_position -698.5293 -1571.0404 12.5548 0.0 0.0 0.0
 point_camera_at_point -698.0997 -1576.1699 11.5469 2
 fade 1 500
 
@@ -19071,7 +19070,7 @@ while True
     wait 0
     if and
         15@ == 0
-        TIMERA > 2000
+        TIMERA > 1500
     then
         set_fixed_camera_position -708.4515 -1559.8823 22.5593 0.0 0.0 0.0
         point_camera_at_point -689.5196 -1566.4757 12.5477 2
@@ -19129,6 +19128,18 @@ while True
         set_char_stay_in_same_place $mission_actor_10 maintain_position_when_attacked 1
         set_char_stay_in_same_place $mission_actor_11 maintain_position_when_attacked 1
 
+        set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_2 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_3 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_4 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_5 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_6 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_7 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_8 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_9 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_10 dismemberment_possible 0
+        set_char_suffers_critical_hits $mission_actor_11 dismemberment_possible 0
+
         give_weapon_to_char $mission_actor_1 weapon 23 ammo 3000
         give_weapon_to_char $mission_actor_2 weapon 23 ammo 3000
         give_weapon_to_char $mission_actor_3 weapon 25 ammo 3000
@@ -19167,7 +19178,8 @@ while True
         set_car_proofs $mission_car_4 immunities 1 1 1 1 1
         set_car_proofs $mission_car_5 immunities 1 1 1 1 1        
 
-        car_goto_coordinates_accurate $mission_car_1 drive_to_point -684.8295 -1562.4559 12.0807
+        //car_goto_coordinates_accurate $mission_car_1 drive_to_point -684.8295 -1562.4559 12.0807
+        car_goto_coordinates_accurate $mission_car_1 drive_to_point -684.8295 -1565.4559 12.0807
         car_goto_coordinates_accurate $mission_car_2 drive_to_point -684.9987 -1558.175 12.0614
         car_goto_coordinates_accurate $mission_car_3 drive_to_point -679.5007 -1570.9125 12.1075
         car_goto_coordinates_accurate $mission_car_4 drive_to_point -696.2837 -1559.1803 12.1551
