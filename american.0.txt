@@ -78,6 +78,7 @@ CORTEZ1 = Sobre El Mar
 CORTZ1S = [os]Sobre El Mar
 FINALM  = Last Regards
 FINALMS = [os]Last Regards
+M_PASS2 = MISSION PASSED!
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!

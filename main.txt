@@ -18470,7 +18470,6 @@ $onmission = 1
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'FINAL'
-goto @FINAL_MOB //todo
 
 set_player_control $player_char 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
@@ -18503,12 +18502,12 @@ while True
 end
 
 set_char_coordinates $player_actor -1065.099 -300.7289 10.1277
-set_fixed_camera_position -998.1198 -297.2706 16.7628 0.0 0.0 0.0
-point_camera_at_point -997.1342 -294.1393 15.7592 2
+set_fixed_camera_position -994.8042 -286.3174 12.7658 0.0 0.0 0.0
+point_camera_at_point -990.7083 -285.8002 11.759 2
 wait 0
 set_interpolation_parameters 0.0 10000
-set_fixed_camera_position -998.1198 -297.2706 11.2628 0.0 0.0 0.0
-point_camera_at_point -997.1342 -294.1393 11.7592 1
+set_fixed_camera_position -994.8042 -286.3174 11.2658 0.0 0.0 0.0
+point_camera_at_point -990.7083 -285.8002 11.259 1
 
 15@ = 0
 TIMERA = 0
@@ -19028,8 +19027,10 @@ mark_model_as_no_longer_needed #MP5LNG
 set_car_traction $mission_car_1 improve_handling 2.0
 lock_car_doors $mission_car_1 door_status_to 2
 set_car_cruise_speed $mission_car_1 max_speed_to 100.0
-set_car_driving_style $mission_car_1 traffic_behavior_to 3
+set_car_driving_style $mission_car_1 traffic_behavior_to 2
 set_car_mission $mission_car_1 driver_behaviour_to 2
+set_car_straight_line_distance $mission_car_1 abandon_path_radius 40
+set_car_change_lane $mission_car_1 change_lane 0
 
 add_upsidedown_car_check $mission_car_1
 add_stuck_car_check $mission_car_1 distance 0.5 time 3000
@@ -19037,6 +19038,7 @@ add_stuck_car_check $mission_car_1 distance 0.5 time 3000
 set_char_obj_kill_player_on_foot $mission_actor_2 $player_char
 set_char_obj_kill_player_on_foot $mission_actor_3 $player_char
 
+set_car_health $mission_car_1 5000
 set_car_health $mission_car_2 5000
 
 add_blip_for_coord $objective_point_marker = create_checkpoint_at -706.783 -1554.7404 12.5353
@@ -19079,27 +19081,20 @@ request_model #REGINA
 request_model #UZI
 request_model #MP5LNG
 request_model #M4
+request_model #SHOTGSPA
 request_model #MINIGUN
 request_model #MINIGUN2
-load_special_character 1 'IGSONNY'
-load_special_character 2 'MBA'
-load_special_character 3 'MBB'
-load_all_models_now
-while True
-    if and
-        has_special_character_loaded 1
-        has_special_character_loaded 2
-        has_special_character_loaded 3
-    then
-        break
-    end
-    wait 0
-end
+
 clear_area 0 at -706.783 -1554.7404 11.5353 range 200.0
 set_car_density_multiplier 0.0
 set_ped_density_multiplier 0.0
 
-set_char_coordinates $player_actor -701.968 -1577.3588 11.5446
+create_pickup_with_ammo $mission_weapon_pickup_1 = create_weapon_pickup #UZI 3 ammo 600 at -691.9859 -1581.9039 13.7854
+
+mark_car_as_no_longer_needed $mission_car_2
+warp_char_from_car_to_coord $player_actor -701.968 -1577.3588 11.5446
+clear_area 0 at -701.968 -1577.3588 11.5446 range 100.0
+
 create_char $tommy 4 #NULL -698.0997 -1576.1699 11.5469
 set_char_heading $tommy 333.1255
 clear_char_threat_search $tommy
@@ -19381,7 +19376,7 @@ while True
         point_camera_at_point -691.587 -1577.8044 12.5424 2
         set_char_coordinates $player_actor -693.8342 -1581.8142 11.5333
         set_char_heading $player_actor 339.1741
-        give_weapon_to_player $player_char weapon 33 ammo 500
+        give_weapon_to_player $player_char weapon 33 ammo 75
         set_current_player_weapon $player_char armed_weapon_to 33
         15@++
         TIMERA = 0
@@ -19532,6 +19527,114 @@ if and
     4@ == 1
 goto_if_false @FINAL_MOB_LOOP
 
+delete_char $mission_actor_1
+delete_char $mission_actor_2
+delete_char $mission_actor_3
+delete_char $mission_actor_4
+delete_char $mission_actor_5
+delete_char $mission_actor_6
+delete_char $mission_actor_7
+delete_char $mission_actor_8
+delete_char $mission_actor_9
+delete_char $mission_actor_10
+
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+
+switch_widescreen 1
+set_fixed_camera_position -683.7825 -1556.6606 13.4652 0.0 0.0 0.0
+point_camera_at_point -692.8977 -1575.3418 12.5483 2
+
+create_char $mission_actor_1 4 #SPECIAL01 -683.616 -1554.0352 11.474
+set_char_heading $mission_actor_1 157.7526
+clear_char_threat_search $mission_actor_1
+set_char_health $mission_actor_1 200
+set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
+give_weapon_to_char $mission_actor_1 weapon 20 ammo 9999
+set_char_obj_goto_coord_on_foot $mission_actor_1 -685.5568 -1558.5228
+
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if
+        15@ == 0
+    then
+        if or
+            is_char_objective_passed $mission_actor_1
+            TIMERA > 5000
+        then
+            15@++
+            TIMERA = 0
+        end
+    end
+    if and
+        15@ == 1
+        TIMERA > 1000
+    then
+        get_offset_from_char_in_world_coords 0@ 1@ 2@ from_actor $mission_actor_1 offset 0.3 2.5 0.0
+        set_fixed_camera_position  0@ 1@ 2@ 1.0 1.0 1.0
+        point_camera_at_char $mission_actor_1 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 2
+        TIMERA > 250
+    then
+        set_char_wait_state $mission_actor_1 anim 19 wait_state_time 3500
+        print_now 'SONNYS3' time 3500 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 3
+        TIMERA > 3750
+    then
+        break
+    end
+end
+
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+
+0@ = 0
+TIMERA = 0
+
+:FINAL_SONNY_FIGHT
+wait 0
+if
+    0@ == 0
+then
+    if
+        TIMERA > 1000
+    then
+        0@ = 1
+        set_char_obj_kill_player_on_foot $mission_actor_1 $player_char
+    end
+end
+if
+    is_char_dead $mission_actor_1
+goto_if_false @FINAL_SONNY_FIGHT
+
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+
+fade 0 1500
+while get_fading_status
+    wait 0
+end
+
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+fade 1 500
 return
 
 :FINAL_MAFIA_CAR_EXPLOSION
@@ -19550,6 +19653,15 @@ return
 
 :FINAL_FAIL
 print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
+return
+
+:FINAL_PASS
+play_mission_passed_tune 1
+print_big 'M_PASS2' time 5000 style 1 // MISSION PASSED!
+register_mission_passed 'FINALMS'
+player_made_progress 1
+$passed_final = 1
+remove_blip $icon_final
 return
 
 :FINAL_CLEANUP
@@ -19579,6 +19691,7 @@ mark_char_as_no_longer_needed $mission_actor_8
 mark_char_as_no_longer_needed $mission_actor_9
 mark_char_as_no_longer_needed $mission_actor_10
 mark_char_as_no_longer_needed $mission_actor_11
+remove_pickup $mission_weapon_pickup_1
 mark_model_as_no_longer_needed #UZI
 mark_model_as_no_longer_needed #MP5LNG
 mark_model_as_no_longer_needed #M4
