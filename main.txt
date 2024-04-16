@@ -19348,7 +19348,7 @@ while True
     end
     if and
         15@ == 7
-        TIMERA > 1500
+        TIMERA > 2500
     then
         set_fixed_camera_position -688.3401 -1576.0485 12.0462 1.0 1.0 1.0
         point_camera_at_char $player_actor 15 2
@@ -19385,9 +19385,53 @@ switch_widescreen 0
 restore_camera_jumpcut
 set_camera_behind_player
 
+print_now 'OBJ2' time 5000 1
+add_blip_for_car $mission_car_1_marker = create_marker_above_car $mission_car_1
+add_blip_for_car $mission_car_2_marker = create_marker_above_car $mission_car_2
+add_blip_for_car $mission_car_3_marker = create_marker_above_car $mission_car_3
+add_blip_for_car $mission_car_4_marker = create_marker_above_car $mission_car_4
+add_blip_for_car $mission_car_5_marker = create_marker_above_car $mission_car_5
+
+set_char_stay_in_same_place $mission_actor_1 maintain_position_when_attacked 0
+set_char_stay_in_same_place $mission_actor_2 maintain_position_when_attacked 0
+set_char_stay_in_same_place $mission_actor_3 maintain_position_when_attacked 0
+set_char_stay_in_same_place $mission_actor_4 maintain_position_when_attacked 0
+set_char_stay_in_same_place $mission_actor_5 maintain_position_when_attacked 0
+set_char_stay_in_same_place $mission_actor_6 maintain_position_when_attacked 0
+set_char_stay_in_same_place $mission_actor_7 maintain_position_when_attacked 0
+set_char_stay_in_same_place $mission_actor_8 maintain_position_when_attacked 0
+set_char_stay_in_same_place $mission_actor_9 maintain_position_when_attacked 0
+set_char_stay_in_same_place $mission_actor_10 maintain_position_when_attacked 0
+
+set_char_obj_flee_player_on_foot_always $mission_actor_1 avoid_player $player_char
+set_char_obj_flee_player_on_foot_always $mission_actor_2 avoid_player $player_char
+set_char_obj_flee_player_on_foot_always $mission_actor_3 avoid_player $player_char
+set_char_obj_flee_player_on_foot_always $mission_actor_4 avoid_player $player_char
+set_char_obj_flee_player_on_foot_always $mission_actor_5 avoid_player $player_char
+set_char_obj_flee_player_on_foot_always $mission_actor_6 avoid_player $player_char
+set_char_obj_flee_player_on_foot_always $mission_actor_7 avoid_player $player_char
+set_char_obj_flee_player_on_foot_always $mission_actor_8 avoid_player $player_char
+set_char_obj_flee_player_on_foot_always $mission_actor_9 avoid_player $player_char
+set_char_obj_flee_player_on_foot_always $mission_actor_10 avoid_player $player_char
+
+delete_char $mission_actor_11
+
+set_car_proofs $mission_car_1 immunities 0 0 0 0 0
+set_car_proofs $mission_car_2 immunities 0 0 0 0 0
+set_car_proofs $mission_car_3 immunities 0 0 0 0 0
+set_car_proofs $mission_car_4 immunities 0 0 0 0 0
+set_car_proofs $mission_car_5 immunities 0 0 0 0 0
+
 :FINAL_MOB_LOOP
 wait 0
-goto @FINAL_MOB_LOOP
+if and
+    is_car_dead $mission_car_1
+    is_car_dead $mission_car_2
+    is_car_dead $mission_car_3
+    is_car_dead $mission_car_4
+    is_car_dead $mission_car_5
+goto_if_false @FINAL_MOB_LOOP
+
 return
 
 :FINAL_MAFIA_DEAD
@@ -19402,6 +19446,12 @@ return
 :FINAL_CLEANUP
 $onmission = 0
 remove_blip $objective_point_marker
+remove_blip $mission_car_1_marker
+remove_blip $mission_car_2_marker
+remove_blip $mission_car_3_marker
+remove_blip $mission_car_4_marker
+remove_blip $mission_car_5_marker
+//todo: check if car exists?
 remove_stuck_car_check $mission_car_1
 remove_upsidedown_car_check $mission_car_1
 mark_car_as_no_longer_needed $mission_car_1
