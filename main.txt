@@ -19032,6 +19032,7 @@ request_model #UZI
 request_model #MP5LNG
 request_model #M4
 request_model #MINIGUN
+request_model #MINIGUN2
 load_special_character 1 'IGSONNY'
 load_special_character 2 'MBA'
 load_special_character 3 'MBB'
@@ -19050,15 +19051,12 @@ clear_area 0 at -706.783 -1554.7404 11.5353 range 200.0
 set_car_density_multiplier 0.0
 set_ped_density_multiplier 0.0
 
-create_pickup_with_ammo $mission_weapon_pickup_1 = create_weapon_pickup #UZI 3 ammo 600 at -691.9859 -1581.9039 13.7854
-
-set_char_coordinates $player_actor -698.0997 -1576.1699 11.5469
-set_char_heading $player_actor 333.1255
-set_char_crouch $player_actor crouch 1 1500
+set_char_coordinates $player_actor -701.968 -1577.3588 11.5446
+create_char $tommy 4 #NULL -698.0997 -1576.1699 11.5469
+set_char_heading $tommy 333.1255
+clear_char_threat_search $tommy
+set_char_crouch $tommy crouch 1 1800
 wait 300
-//hide: -701.968 -1577.3588 11.5446
-//walk from: -693.1782 -1580.3115 11.5367 330.0871
-// camera while walking from: -684.568 -1577.95 12.5413 to -691.587 -1577.8044 12.5424
 switch_widescreen 1
 set_fixed_camera_position -698.5293 -1571.0404 12.5548 0.0 0.0 0.0
 point_camera_at_point -698.0997 -1576.1699 11.5469 2
@@ -19074,6 +19072,10 @@ while True
     then
         set_fixed_camera_position -708.4515 -1559.8823 22.5593 0.0 0.0 0.0
         point_camera_at_point -689.5196 -1566.4757 12.5477 2
+
+        set_char_coordinates $tommy -694.6595 -1579.3417 11.5391
+        set_char_heading $tommy 341.0539
+        set_char_crouch $tommy crouch 1 9999999
 
         create_car $mission_car_1 #ADMIRAL -677.4066 -1550.7887 11.0316
         set_car_heading $mission_car_1 154.0322
@@ -19140,6 +19142,18 @@ while True
         set_char_suffers_critical_hits $mission_actor_10 dismemberment_possible 0
         set_char_suffers_critical_hits $mission_actor_11 dismemberment_possible 0
 
+        set_char_proofs $mission_actor_1 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_2 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_3 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_4 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_5 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_6 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_7 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_8 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_9 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_10 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_11 immunities 1 1 1 1 1
+
         give_weapon_to_char $mission_actor_1 weapon 23 ammo 3000
         give_weapon_to_char $mission_actor_2 weapon 23 ammo 3000
         give_weapon_to_char $mission_actor_3 weapon 25 ammo 3000
@@ -19162,11 +19176,11 @@ while True
         set_car_forward_speed $mission_car_3 speed_instantly 20.0
         set_car_forward_speed $mission_car_4 speed_instantly 20.0
         set_car_forward_speed $mission_car_5 speed_instantly 20.0
-        set_car_driving_style $mission_car_1 traffic_behavior_to 2
-        set_car_driving_style $mission_car_2 traffic_behavior_to 2
-        set_car_driving_style $mission_car_3 traffic_behavior_to 2
-        set_car_driving_style $mission_car_4 traffic_behavior_to 2
-        set_car_driving_style $mission_car_5 traffic_behavior_to 2
+        set_car_driving_style $mission_car_1 traffic_behavior_to 3
+        set_car_driving_style $mission_car_2 traffic_behavior_to 3
+        set_car_driving_style $mission_car_3 traffic_behavior_to 3
+        set_car_driving_style $mission_car_4 traffic_behavior_to 3
+        set_car_driving_style $mission_car_5 traffic_behavior_to 3
         set_car_straight_line_distance $mission_car_1 abandon_path_radius 255
         set_car_straight_line_distance $mission_car_2 abandon_path_radius 255
         set_car_straight_line_distance $mission_car_3 abandon_path_radius 255
@@ -19210,8 +19224,8 @@ while True
                 is_car_stopped $mission_car_1
                 TIMERA > 5000
             then
-                set_char_obj_kill_player_on_foot $mission_actor_1 $player_char
-                set_char_obj_kill_player_on_foot $mission_actor_2 $player_char
+                set_char_obj_kill_char_on_foot $mission_actor_1 $tommy
+                set_char_obj_kill_char_on_foot $mission_actor_2 $tommy
                 10@ = 1
             end
         end
@@ -19222,8 +19236,8 @@ while True
                 is_car_stopped $mission_car_2
                 TIMERA > 5000
             then
-                set_char_obj_kill_player_on_foot $mission_actor_3 $player_char
-                set_char_obj_kill_player_on_foot $mission_actor_4 $player_char
+                set_char_obj_kill_char_on_foot $mission_actor_3 $tommy
+                set_char_obj_kill_char_on_foot $mission_actor_4 $tommy
                 11@ = 1
             end
         end
@@ -19234,8 +19248,8 @@ while True
                 is_car_stopped $mission_car_3
                 TIMERA > 5000
             then
-                set_char_obj_kill_player_on_foot $mission_actor_5 $player_char
-                set_char_obj_kill_player_on_foot $mission_actor_6 $player_char
+                set_char_obj_kill_char_on_foot $mission_actor_5 $tommy
+                set_char_obj_kill_char_on_foot $mission_actor_6 $tommy
                 12@ = 1
             end
         end
@@ -19246,9 +19260,9 @@ while True
                 is_car_stopped $mission_car_4
                 TIMERA > 5000
             then
-                set_char_obj_kill_player_on_foot $mission_actor_9 $player_char
-                set_char_obj_kill_player_on_foot $mission_actor_10 $player_char
-                set_char_obj_kill_player_on_foot $mission_actor_11 $player_char
+                set_char_obj_kill_char_on_foot $mission_actor_9 $tommy
+                set_char_obj_kill_char_on_foot $mission_actor_10 $tommy
+                set_char_obj_kill_char_on_foot $mission_actor_11 $tommy
                 13@ = 1
             end
         end
@@ -19259,8 +19273,8 @@ while True
                 is_car_stopped $mission_car_5
                 TIMERA > 5000
             then
-                set_char_obj_kill_player_on_foot $mission_actor_7 $player_char
-                set_char_obj_kill_player_on_foot $mission_actor_8 $player_char
+                set_char_obj_kill_char_on_foot $mission_actor_7 $tommy
+                set_char_obj_kill_char_on_foot $mission_actor_8 $tommy
                 14@ = 1
             end
         end
@@ -19277,19 +19291,92 @@ while True
     end
     if and
         15@ == 3
-        TIMERA > 500
+        TIMERA > 1000
+    then
+        set_fixed_camera_position -700.7686 -1573.5593 12.5529 0.0 0.0 0.0
+        point_camera_at_car $mission_car_5 15 2
+        wait 0
+        set_interpolation_parameters 0.0 5000
+        set_fixed_camera_position -683.2481 -1583.1925 12.5289 0.0 0.0 0.0
+        point_camera_at_car $mission_car_4 15 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 4
+        TIMERA > 5000
+    then
+        set_char_obj_no_obj $mission_actor_1
+        set_char_obj_no_obj $mission_actor_2
+        set_char_obj_no_obj $mission_actor_3
+        set_char_obj_no_obj $mission_actor_4
+        set_char_obj_no_obj $mission_actor_5
+        set_char_obj_no_obj $mission_actor_6
+        set_char_obj_no_obj $mission_actor_7
+        set_char_obj_no_obj $mission_actor_8
+        set_char_obj_no_obj $mission_actor_9
+        set_char_obj_no_obj $mission_actor_10
+        set_char_obj_no_obj $mission_actor_11
+        set_fixed_camera_position -691.6854 -1567.1063 13.5556 0.0 0.0 0.0
+        point_camera_at_char $mission_actor_11 15 2
+        set_char_wait_state $mission_actor_11 anim 19 wait_state_time 2500
+        print_now 'SONNYS1' time 2500 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 5
+        TIMERA > 2500
+    then
+        delete_char $tommy
+        set_fixed_camera_position -684.568 -1577.95 12.5413 0.0 0.0 0.0
+        point_camera_at_point -691.587 -1577.8044 12.5424 2
+        set_char_coordinates $player_actor -693.8342 -1581.8142 11.5333
+        set_char_heading $player_actor 339.1741
+        give_weapon_to_char $player_actor weapon 33 ammo 500
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 6
+        TIMERA > 200
+    then
+        print_now 'SONNYS2' time 1500 1
+        set_char_obj_goto_coord_on_foot $player_actor -692.6422 -1578.6802
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 7
+        TIMERA > 1500
+    then
+        set_fixed_camera_position -688.3401 -1576.0485 12.0462 1.0 1.0 1.0
+        point_camera_at_char $player_actor 15 2
+        15@++
+        TIMERA = 0
+    end
+    if
+        15@ == 8
+    then
+        if or
+            is_char_objective_passed $player_actor
+            TIMERA > 5000
+        then
+            15@++
+            TIMERA = 0
+        end
+    end
+    if and
+        15@ == 9
+        TIMERA > 1000
     then
         break
     end
 end
 
-//set_char_coordinates $player_actor -691.155 -1576.9478 11.5444
-//set_char_heading $player_actor 332.9072
-//set_char_coordinates $player_actor -694.2887 -1582.1483 11.5325
-//set_char_heading $player_actor 337.6072
-set_char_coordinates $player_actor -694.6595 -1579.3417 11.5391
-set_char_heading $player_actor 341.0539
-set_char_crouch $player_actor crouch 1 9999999
+delete_char $tommy
+set_char_coordinates $player_actor -692.6422 -1578.6802 11.5405
+set_char_heading $player_actor 339.1741
 
 set_player_control $player_char 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
@@ -19322,7 +19409,6 @@ mark_car_as_no_longer_needed $mission_car_2
 mark_char_as_no_longer_needed $mission_actor_1
 mark_char_as_no_longer_needed $mission_actor_2
 mark_char_as_no_longer_needed $mission_actor_3
-remove_pickup $mission_weapon_pickup_1
 unload_special_character 1
 unload_special_character 2
 unload_special_character 3
