@@ -18470,6 +18470,7 @@ $onmission = 1
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'FINAL'
+goto @FINAL_MOB //todo
 
 set_player_control $player_char 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
@@ -19017,6 +19018,277 @@ end
 if
     locate_player_any_means_3d $player_char 1 -706.783 -1554.7404 11.5353 radius 4.0 4.0 4.0
 goto_if_false @FINAL_CAR_CHASE
+
+:FINAL_MOB
+set_player_control $player_char 0
+set_police_ignore_player $player_char ignored_by_cops_state_to 1
+set_everyone_ignore_player $player_char ignored_by_everyone_to 1
+fade 0 500
+wait 500
+request_model #WASHING
+request_model #ADMIRAL
+request_model #REGINA
+request_model #UZI
+request_model #MP5LNG
+request_model #M4
+request_model #MINIGUN
+load_special_character 1 'IGSONNY'
+load_special_character 2 'MBA'
+load_special_character 3 'MBB'
+load_all_models_now
+while True
+    if and
+        has_special_character_loaded 1
+        has_special_character_loaded 2
+        has_special_character_loaded 3
+    then
+        break
+    end
+    wait 0
+end
+clear_area 0 at -706.783 -1554.7404 11.5353 range 200.0
+set_car_density_multiplier 0.0
+set_ped_density_multiplier 0.0
+
+create_pickup_with_ammo $mission_weapon_pickup_1 = create_weapon_pickup #UZI 3 ammo 600 at -691.9859 -1581.9039 13.7854
+
+set_char_coordinates $player_actor -698.0997 -1576.1699 11.5469
+set_char_heading $player_actor 333.1255
+set_char_crouch $player_actor crouch 1 1500
+set_char_obj_run_to_coord $player_actor run_to -696.5488 -1577.6333
+set_char_obj_run_to_coord $player_actor run_to -697.9102 -1580.1475
+//hide: -701.968 -1577.3588 11.5446
+//walk from: -693.1782 -1580.3115 11.5367 330.0871
+// camera while walking from: -684.568 -1577.95 12.5413 to -691.587 -1577.8044 12.5424
+switch_widescreen 1
+set_fixed_camera_position -691.735 -1571.2922 12.5547 0.0 0.0 0.0
+point_camera_at_point -698.0997 -1576.1699 11.5469 2
+fade 1 500
+
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if and
+        15@ == 0
+        TIMERA > 2000
+    then
+        set_fixed_camera_position -708.4515 -1559.8823 22.5593 0.0 0.0 0.0
+        point_camera_at_point -689.5196 -1566.4757 12.5477 2
+
+        create_car $mission_car_1 #ADMIRAL -677.4066 -1550.7887 11.0316
+        set_car_heading $mission_car_1 154.0322
+        create_car $mission_car_2 #REGINA -671.1782 -1543.7946 11.0328
+        set_car_heading $mission_car_2 153.4138
+        create_car $mission_car_3 #ADMIRAL -663.7764 -1556.9324 11.0643
+        set_car_heading $mission_car_3 145.2513
+        create_car $mission_car_4 #WASHING -707.2618 -1546.1329 11.052
+        set_car_heading $mission_car_4 230.5749
+        create_car $mission_car_5 #ADMIRAL -710.9987 -1556.8558 11.1144
+        set_car_heading $mission_car_5 258.3274
+
+        change_car_colour $mission_car_1 0 0
+        change_car_colour $mission_car_2 0 0
+        change_car_colour $mission_car_3 0 0
+        change_car_colour $mission_car_4 60 0
+        change_car_colour $mission_car_5 0 0
+
+        create_char_inside_car $mission_actor_1 = create_actor 4 #SPECIAL02 in_car $mission_car_1
+        create_char_as_passenger $mission_actor_2 = create_actor_pedtype 4 model #SPECIAL03 in_car $mission_car_1 passenger_seat 0
+        create_char_inside_car $mission_actor_3 = create_actor 4 #SPECIAL02 in_car $mission_car_2
+        create_char_as_passenger $mission_actor_4 = create_actor_pedtype 4 model #SPECIAL03 in_car $mission_car_2 passenger_seat 0
+        create_char_inside_car $mission_actor_5 = create_actor 4 #SPECIAL02 in_car $mission_car_3
+        create_char_as_passenger $mission_actor_6 = create_actor_pedtype 4 model #SPECIAL03 in_car $mission_car_3 passenger_seat 0
+        create_char_inside_car $mission_actor_7 = create_actor 4 #SPECIAL02 in_car $mission_car_5
+        create_char_as_passenger $mission_actor_8 = create_actor_pedtype 4 model #SPECIAL03 in_car $mission_car_5 passenger_seat 0
+        create_char_as_passenger $mission_actor_9 = create_actor_pedtype 4 model #SPECIAL02 in_car $mission_car_4 passenger_seat 1
+        create_char_as_passenger $mission_actor_10 = create_actor_pedtype 4 model #SPECIAL03 in_car $mission_car_4 passenger_seat 2
+        create_char_inside_car $mission_actor_11 = create_actor 4 #SPECIAL01 in_car $mission_car_4
+        
+        clear_char_threat_search $mission_actor_1
+        clear_char_threat_search $mission_actor_2
+        clear_char_threat_search $mission_actor_3
+        clear_char_threat_search $mission_actor_4
+        clear_char_threat_search $mission_actor_5
+        clear_char_threat_search $mission_actor_6
+        clear_char_threat_search $mission_actor_7
+        clear_char_threat_search $mission_actor_8
+        clear_char_threat_search $mission_actor_9
+        clear_char_threat_search $mission_actor_10
+        clear_char_threat_search $mission_actor_11
+
+        set_char_stay_in_same_place $mission_actor_1 maintain_position_when_attacked 1
+        set_char_stay_in_same_place $mission_actor_2 maintain_position_when_attacked 1
+        set_char_stay_in_same_place $mission_actor_3 maintain_position_when_attacked 1
+        set_char_stay_in_same_place $mission_actor_4 maintain_position_when_attacked 1
+        set_char_stay_in_same_place $mission_actor_5 maintain_position_when_attacked 1
+        set_char_stay_in_same_place $mission_actor_6 maintain_position_when_attacked 1
+        set_char_stay_in_same_place $mission_actor_7 maintain_position_when_attacked 1
+        set_char_stay_in_same_place $mission_actor_8 maintain_position_when_attacked 1
+        set_char_stay_in_same_place $mission_actor_9 maintain_position_when_attacked 1
+        set_char_stay_in_same_place $mission_actor_10 maintain_position_when_attacked 1
+        set_char_stay_in_same_place $mission_actor_11 maintain_position_when_attacked 1
+
+        give_weapon_to_char $mission_actor_1 weapon 23 ammo 3000
+        give_weapon_to_char $mission_actor_2 weapon 23 ammo 3000
+        give_weapon_to_char $mission_actor_3 weapon 25 ammo 3000
+        give_weapon_to_char $mission_actor_4 weapon 25 ammo 3000
+        give_weapon_to_char $mission_actor_5 weapon 23 ammo 3000
+        give_weapon_to_char $mission_actor_6 weapon 23 ammo 3000
+        give_weapon_to_char $mission_actor_7 weapon 25 ammo 3000
+        give_weapon_to_char $mission_actor_8 weapon 25 ammo 3000
+        give_weapon_to_char $mission_actor_9 weapon 23 ammo 3000
+        give_weapon_to_char $mission_actor_10 weapon 25 ammo 3000
+        give_weapon_to_char $mission_actor_11 weapon 26 ammo 3000
+
+        set_car_cruise_speed $mission_car_1 max_speed_to 20.0
+        set_car_cruise_speed $mission_car_2 max_speed_to 20.0
+        set_car_cruise_speed $mission_car_3 max_speed_to 20.0
+        set_car_cruise_speed $mission_car_4 max_speed_to 20.0
+        set_car_cruise_speed $mission_car_5 max_speed_to 20.0
+        set_car_forward_speed $mission_car_1 speed_instantly 20.0
+        set_car_forward_speed $mission_car_2 speed_instantly 20.0
+        set_car_forward_speed $mission_car_3 speed_instantly 20.0
+        set_car_forward_speed $mission_car_4 speed_instantly 20.0
+        set_car_forward_speed $mission_car_5 speed_instantly 20.0
+        set_car_driving_style $mission_car_1 traffic_behavior_to 2
+        set_car_driving_style $mission_car_2 traffic_behavior_to 2
+        set_car_driving_style $mission_car_3 traffic_behavior_to 2
+        set_car_driving_style $mission_car_4 traffic_behavior_to 2
+        set_car_driving_style $mission_car_5 traffic_behavior_to 2
+        set_car_straight_line_distance $mission_car_1 abandon_path_radius 255
+        set_car_straight_line_distance $mission_car_2 abandon_path_radius 255
+        set_car_straight_line_distance $mission_car_3 abandon_path_radius 255
+        set_car_straight_line_distance $mission_car_4 abandon_path_radius 255
+        set_car_straight_line_distance $mission_car_5 abandon_path_radius 255
+        set_car_proofs $mission_car_1 immunities 1 1 1 1 1
+        set_car_proofs $mission_car_2 immunities 1 1 1 1 1
+        set_car_proofs $mission_car_3 immunities 1 1 1 1 1
+        set_car_proofs $mission_car_4 immunities 1 1 1 1 1
+        set_car_proofs $mission_car_5 immunities 1 1 1 1 1        
+
+        car_goto_coordinates_accurate $mission_car_1 drive_to_point -684.8295 -1562.4559 12.0807
+        car_goto_coordinates_accurate $mission_car_2 drive_to_point -684.9987 -1558.175 12.0614
+        car_goto_coordinates_accurate $mission_car_3 drive_to_point -679.5007 -1570.9125 12.1075
+        car_goto_coordinates_accurate $mission_car_4 drive_to_point -696.2837 -1559.1803 12.1551
+        car_goto_coordinates_accurate $mission_car_5 drive_to_point -699.5391 -1564.8235 12.1207
+
+        10@ = 0
+        11@ = 0
+        12@ = 0
+        13@ = 0
+        14@ = 0
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 1
+        TIMERA > 1000
+    then
+        15@++
+        TIMERA = 0
+    end
+    if
+        15@ == 2
+    then
+        if
+            10@ == 0
+        then
+            if or
+                is_car_stopped $mission_car_1
+                TIMERA > 5000
+            then
+                set_char_obj_kill_player_on_foot $mission_actor_1 $player_char
+                set_char_obj_kill_player_on_foot $mission_actor_2 $player_char
+                10@ = 1
+            end
+        end
+        if
+            11@ == 0
+        then
+            if or
+                is_car_stopped $mission_car_2
+                TIMERA > 5000
+            then
+                set_char_obj_kill_player_on_foot $mission_actor_3 $player_char
+                set_char_obj_kill_player_on_foot $mission_actor_4 $player_char
+                11@ = 1
+            end
+        end
+        if
+            12@ == 0
+        then
+            if or
+                is_car_stopped $mission_car_3
+                TIMERA > 5000
+            then
+                set_char_obj_kill_player_on_foot $mission_actor_5 $player_char
+                set_char_obj_kill_player_on_foot $mission_actor_6 $player_char
+                12@ = 1
+            end
+        end
+        if
+            13@ == 0
+        then
+            if or
+                is_car_stopped $mission_car_4
+                TIMERA > 5000
+            then
+                set_char_obj_kill_player_on_foot $mission_actor_9 $player_char
+                set_char_obj_kill_player_on_foot $mission_actor_10 $player_char
+                set_char_obj_kill_player_on_foot $mission_actor_11 $player_char
+                13@ = 1
+            end
+        end
+        if
+            14@ == 0
+        then
+            if or
+                is_car_stopped $mission_car_5
+                TIMERA > 5000
+            then
+                set_char_obj_kill_player_on_foot $mission_actor_7 $player_char
+                set_char_obj_kill_player_on_foot $mission_actor_8 $player_char
+                14@ = 1
+            end
+        end
+        if and
+            10@ == 1
+            11@ == 1
+            12@ == 1
+            13@ == 1
+            14@ == 1
+        then
+            15@++
+            TIMERA = 0
+        end
+    end
+    if and
+        15@ == 3
+        TIMERA > 500
+    then
+        break
+    end
+end
+
+//set_char_coordinates $player_actor -691.155 -1576.9478 11.5444
+//set_char_heading $player_actor 332.9072
+//set_char_coordinates $player_actor -694.2887 -1582.1483 11.5325
+//set_char_heading $player_actor 337.6072
+set_char_coordinates $player_actor -694.6595 -1579.3417 11.5391
+set_char_heading $player_actor 341.0539
+set_char_crouch $player_actor crouch 1 9999999
+
+set_player_control $player_char 1
+set_police_ignore_player $player_char ignored_by_cops_state_to 0
+set_everyone_ignore_player $player_char ignored_by_everyone_to 0
+switch_widescreen 0
+restore_camera_jumpcut
+set_camera_behind_player
+
+:FINAL_MOB_LOOP
+wait 0
+goto @FINAL_MOB_LOOP
 return
 
 :FINAL_MAFIA_DEAD
@@ -19038,6 +19310,7 @@ mark_car_as_no_longer_needed $mission_car_2
 mark_char_as_no_longer_needed $mission_actor_1
 mark_char_as_no_longer_needed $mission_actor_2
 mark_char_as_no_longer_needed $mission_actor_3
+remove_pickup $mission_weapon_pickup_1
 unload_special_character 1
 unload_special_character 2
 unload_special_character 3

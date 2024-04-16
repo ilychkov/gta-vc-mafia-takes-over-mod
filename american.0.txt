@@ -281,5 +281,9 @@ INTRO18 = Tommy. Listen here. This is business.
 INTRO19 = You're not going by the rules? Then the deal's off.
 INTRO20 = You never understood a thing. But it doesn't matter anymore...
 OBJ1    = ~g~Try to lure the Mafia to ~y~the docks~g~.
+OBJ2    = ~g~Blow up the cars!
+SONNYS1 = Enough fooling around. Farewell, Vercetti.
+SONNYE1 = Okay, guys, now-
+SONNYE2 = Oh Cristo...
 MAFDEAD = ~r~Forelli is dead! You don't want this kind of trouble.
 
