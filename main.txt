@@ -18472,6 +18472,7 @@ $allow_police_chases = 0
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'FINAL'
+goto @FINAL_LAST_SCENE //todo
 
 set_player_control $player_char 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
@@ -18485,6 +18486,8 @@ end
 clear_area 0 at -1009.0912 -270.429 9.7779 range 200.0
 set_car_density_multiplier 0.0
 set_ped_density_multiplier 0.0
+
+set_time_of_day 21 30
 
 request_model #WASHING
 request_model #VICE3
@@ -19824,6 +19827,11 @@ goto_if_false @FINAL_SONNY_FIGHT
 remove_blip $mission_actor_1_marker
 clear_onscreen_counter $mission_actor_1_health
 
+TIMERA = 0
+while 2000 > TIMERA
+    wait 0
+end
+
 set_player_control $player_char 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
@@ -19833,9 +19841,316 @@ while get_fading_status
     wait 0
 end
 
+:FINAL_LAST_SCENE
+fade 0 0
 delete_char $mission_actor_1
-set_player_coordinates $player_char -701.968 -1577.3588 11.5446
+set_player_coordinates $player_char -755.3224 -1503.0618 10.546
 
+set_time_of_day 3 50
+
+load_special_character 1 'IGSONNY'
+load_special_character 2 'MBA'
+load_special_character 3 'MBB'
+while True
+    if and
+        has_special_character_loaded 1
+        has_special_character_loaded 2
+        has_special_character_loaded 3
+    then
+        break
+    end
+    wait 0
+end
+
+request_model #ADMIRAL
+request_model #SHOTGSPA
+load_all_models_now
+
+create_car $mission_car_1 #ADMIRAL -672.2816 -1561.5874 11.3483
+set_car_heading $mission_car_1 113.707
+change_car_colour $mission_car_1 1 0
+mark_model_as_no_longer_needed #ADMIRAL
+
+create_char $mission_actor_1 4 #NULL -674.5859 -1557.5854 11.4723
+set_char_heading $mission_actor_1 157.1953
+clear_char_threat_search $mission_actor_1
+set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
+set_char_proofs $mission_actor_1 immunities 1 1 1 1 1
+set_char_obj_goto_coord_on_foot $mission_actor_1 -674.2281 -1559.7284
+
+create_char $mission_actor_2 4 #SPECIAL01 -679.064 -1575.6349 13.0075
+set_char_heading $mission_actor_2 335.8839
+clear_char_threat_search $mission_actor_2
+give_weapon_to_char $mission_actor_2 weapon 20 ammo 1
+set_char_obj_aim_gun_at_char $mission_actor_2 $mission_actor_1
+
+set_fixed_camera_position -681.4291 -1562.0078 12.5082 0.0 0.0 0.0
+point_camera_at_point -678.8223 -1561.5875 12.5003 2
+
+switch_widescreen 1
+fade 1 1000
+
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if
+        15@ == 0
+    then
+        if or
+            is_char_objective_passed $mission_actor_1
+            TIMERA > 5000
+        then
+            char_look_at_char_always $mission_actor_1 $mission_actor_2
+            set_interpolation_parameters 0.0 1500
+            point_camera_at_char $mission_actor_2 15 1
+            15@++
+            TIMERA = 0
+        end
+    end
+    if and
+        15@ == 1
+        TIMERA > 1000
+    then
+        get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car_1 offset 2.0 0.0 -1.0
+        set_char_coordinates $mission_actor_1 0@ 1@ 2@
+        set_char_heading $mission_actor_1 157.1953
+        char_look_at_char_always $mission_actor_1 $mission_actor_2
+        set_fixed_camera_position -682.348 -1578.8979 15.0079 0.0 0.0 0.0
+        point_camera_at_point -672.2816 -1561.5874 11.0483 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 2
+        TIMERA > 1000
+    then
+        set_char_stay_in_same_place $mission_actor_2 maintain_position_when_attacked 1
+        set_char_obj_destroy_car $mission_actor_2 $mission_car_1
+        15@++
+        TIMERA = 0
+    end
+    if
+        15@ == 3
+    then
+        if or
+            has_car_been_damaged_by_weapon $mission_car_1 hit_by_weapon 20
+            TIMERA > 1000
+        then
+            shake_cam 500
+            add_explosion_no_sound -672.3 -1561.6 11.0 type 2
+            add_explosion_no_sound -672.3 -1561.6 11.0 type 11
+            add_explosion 1 at -672.3 -1561.6 11.0
+            add_explosion_no_sound -672.3 -1561.6 11.0 type 6
+            add_explosion_no_sound -673.0 -1559.4 12.5 type 2
+            add_explosion_no_sound -673.0 -1559.4 12.5 type 11
+            add_explosion_no_sound -673.0 -1559.4 12.5 type 6
+            add_explosion_no_sound -671.7 -1560.2 12.5 type 2
+            add_explosion_no_sound -671.7 -1560.2 12.5 type 11
+            add_explosion_no_sound -671.7 -1560.2 12.5 type 1
+            add_explosion_no_sound -78.7668 929.7559 11.3612 type 6
+            add_explosion 2 at -674.2 -1555.5 11.0
+            add_explosion_no_sound -674.2 -1555.5 11.0 type 11
+            add_explosion_no_sound -674.2 -1555.5 11.0 type 1
+            add_explosion_no_sound -674.2 -1555.5 11.0 type 6
+    
+            set_char_wait_state $mission_actor_1 anim 30 wait_state_time -1
+            freeze_car_position $mission_car_1 in_current_position 1
+
+            set_time_scale 0.3
+            15@++
+            TIMERA = 0
+        end
+    end
+    if and
+        15@ == 4
+        TIMERA > 200
+    then
+        freeze_car_position $mission_car_1 in_current_position 0
+        explode_car $mission_car_1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 5
+        TIMERA > 2000
+    then
+        delete_char $mission_actor_2
+        create_char $mission_actor_2 4 #SPECIAL01 -679.064 -1575.6349 13.0075
+        turn_char_to_face_char $mission_actor_2 $mission_actor_1
+        clear_char_threat_search $mission_actor_2
+        give_weapon_to_char $mission_actor_2 weapon 20 ammo 1
+        set_fixed_camera_position -681.0527 -1571.7163 12.5534 0.0 0.0 0.0
+        point_camera_at_char $mission_actor_2 15 2
+        set_time_scale 1.0
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 6
+        TIMERA > 2000
+    then
+        set_char_obj_no_obj $mission_actor_2
+        set_char_wait_state $mission_actor_2 anim 19 wait_state_time 1500
+        print_now 'SONNYS4' time 1500 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 7
+        TIMERA > 2000
+    then
+        break
+    end
+end
+
+set_time_scale 1.0
+
+fade 0 1500
+while get_fading_status
+    wait 0
+end
+
+delete_char $mission_actor_1
+delete_char $mission_actor_2
+
+switch_widescreen 0
+
+TIMERA = 0
+while 1500 > TIMERA
+    wait 0
+end
+
+request_model #POLICE
+request_model #COP
+request_model #UZI
+load_all_models_now
+
+create_car $mission_car_2 #POLICE -715.3989 -1495.1313 9.9896
+set_car_heading $mission_car_2 275.8362
+create_car $mission_car_3 #POLICE -719.5818 -1494.2765 10.0449
+set_car_heading $mission_car_3 119.6948
+create_car $mission_car_4 #POLICE -730.949 -1497.4388 9.9904
+set_car_heading $mission_car_4 294.2021
+create_car $mission_car_5 #POLICE -728.777 -1494.3057 9.9577
+set_car_heading $mission_car_5 65.8344
+switch_car_siren $mission_car_2 siren = 1
+switch_car_siren $mission_car_3 siren = 1
+switch_car_siren $mission_car_4 siren = 1
+switch_car_siren $mission_car_5 siren = 1
+mark_model_as_no_longer_needed #POLICE
+
+create_char $mission_actor_1 4 #SPECIAL01 -725.121 -1504.5569 10.4688
+set_char_heading $mission_actor_1 356.2959
+clear_char_threat_search $mission_actor_1
+set_char_obj_goto_coord_on_foot $mission_actor_1 -724.9449 -1501.8367
+
+create_char $mission_actor_2 4 #COP -723.5189 -1497.3199 10.4274
+create_char $mission_actor_3 4 #COP -726.6038 -1497.5581 10.4274
+clear_char_threat_search $mission_actor_2
+clear_char_threat_search $mission_actor_3
+give_weapon_to_char $mission_actor_2 weapon 23 ammo 9999
+give_weapon_to_char $mission_actor_3 weapon 23 ammo 9999
+
+create_char $mission_actor_4 4 #COP -720.7603 -1492.5104 10.2577
+create_char $mission_actor_5 4 #SPECIAL02 -723.1405 -1492.9998 10.2577
+clear_char_threat_search $mission_actor_4
+clear_char_threat_search $mission_actor_5
+give_weapon_to_char $mission_actor_4 weapon 23 ammo 9999
+turn_char_to_face_char $mission_actor_5 $mission_actor_4
+set_char_wait_state $mission_actor_5 anim 17 wait_state_time 9999999
+
+create_char $mission_actor_6 4 #COP -727.5563 -1492.6771 10.2577
+create_char $mission_actor_7 4 #SPECIAL03 -725.5892 -1491.6747 10.2577
+clear_char_threat_search $mission_actor_6
+clear_char_threat_search $mission_actor_7
+give_weapon_to_char $mission_actor_6 weapon 23 ammo 9999
+turn_char_to_face_char $mission_actor_7 $mission_actor_6
+set_char_wait_state $mission_actor_7 anim 17 wait_state_time 9999999
+
+create_char $mission_actor_8 4 #COP -725.8811 -1489.5804 10.2577
+create_char $mission_actor_9 4 #SPECIAL03 -723.0294 -1489.7129 10.2577
+clear_char_threat_search $mission_actor_8
+clear_char_threat_search $mission_actor_9
+give_weapon_to_char $mission_actor_8 weapon 23 ammo 9999
+turn_char_to_face_char $mission_actor_9 $mission_actor_8
+set_char_wait_state $mission_actor_9 anim 17 wait_state_time 9999999
+
+set_fixed_camera_position -724.7064 -1499.3519 11.9302 0.0 0.0 0.0
+point_camera_at_point -725.121 -1504.5569 10.4688 2
+
+switch_widescreen 1
+fade 1 1000
+
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if and
+        15@ == 0
+        TIMERA > 1500
+    then
+        print_now 'SONNYE1' time 1500 1
+        15@++
+        TIMERA = 0
+    end
+    if
+        15@ == 1
+    then
+        if or
+            is_char_objective_passed $mission_actor_1
+            TIMERA > 5000
+        then
+            15@++
+            TIMERA = 0
+        end
+    end
+    if and
+        15@ == 2
+        TIMERA > 1000
+    then
+        print_now 'SONNYE2' time 3000 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 3
+        TIMERA > 1000
+    then
+        set_interpolation_parameters 0.0 7000
+        set_fixed_camera_position -728.6699 -1485.7716 21.2577 0.1 0.1 0.1
+        point_camera_at_point -725.3771 -1493.9946 11.4274 1
+        set_char_obj_aim_gun_at_char $mission_actor_2 aim_gun_at_actor $mission_actor_1
+        set_char_obj_aim_gun_at_char $mission_actor_3 aim_gun_at_actor $mission_actor_1
+        set_char_obj_aim_gun_at_char $mission_actor_4 aim_gun_at_actor $mission_actor_5
+        set_char_obj_aim_gun_at_char $mission_actor_6 aim_gun_at_actor $mission_actor_7
+        set_char_obj_aim_gun_at_char $mission_actor_8 aim_gun_at_actor $mission_actor_9
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 4
+        TIMERA > 2000
+    then
+        set_char_wait_state $mission_actor_1 anim 17 wait_state_time 9999999
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 5
+        TIMERA > 7000
+    then
+        break
+    end
+end
+
+fade 0 1500
+while get_fading_status
+    wait 0
+end
+switch_widescreen 0
+
+restore_camera
 set_player_control $player_char 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
@@ -19888,6 +20203,7 @@ register_mission_passed 'FINALMS'
 player_made_progress 1
 $passed_final = 1
 remove_blip $icon_final
+release_weather
 return
 
 :FINAL_CLEANUP
