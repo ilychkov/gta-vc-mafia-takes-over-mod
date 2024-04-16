@@ -18556,13 +18556,14 @@ while True
         15@ == 4
         TIMERA > 2500
     then
-        fade 1 1000
         break
     end
 end
 $mod_title_seen = 1
 
 :FINAL_INTRO
+switch_widescreen 1
+fade 1 1000
 create_char $mission_actor_1 4 #VICE3 -1057.3552 -238.1733 10.4464
 set_char_heading $mission_actor_1 265.1551
 clear_char_threat_search $mission_actor_1
