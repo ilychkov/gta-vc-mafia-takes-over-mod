@@ -18472,7 +18472,6 @@ $allow_police_chases = 0
 set_fading_colour 0 0 0
 register_mission_given
 load_mission_text 'FINAL'
-goto @FINAL_LAST_SCENE //todo
 
 set_player_control $player_char 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
@@ -19847,20 +19846,6 @@ delete_char $mission_actor_1
 set_player_coordinates $player_char -755.3224 -1503.0618 10.546
 
 set_time_of_day 3 50
-
-load_special_character 1 'IGSONNY'
-load_special_character 2 'MBA'
-load_special_character 3 'MBB'
-while True
-    if and
-        has_special_character_loaded 1
-        has_special_character_loaded 2
-        has_special_character_loaded 3
-    then
-        break
-    end
-    wait 0
-end
 
 request_model #ADMIRAL
 request_model #SHOTGSPA
