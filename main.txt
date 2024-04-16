@@ -18502,6 +18502,60 @@ while True
     wait 0
 end
 
+set_char_coordinates $player_actor -1065.099 -300.7289 10.1277
+set_fixed_camera_position -1065.099 -300.7289 21.1277 0.0 0.0 0.0
+point_camera_at_point -1060.0048 -298.2625 21.1819 2
+wait 0
+set_interpolation_parameters 0.0 10000
+set_fixed_camera_position -1065.099 -300.7289 16.1277 0.0 0.0 0.0
+point_camera_at_point -1060.0048 -298.2625 16.1819 1
+
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if and
+        15@ == 0
+        TIMERA > 1000
+    then
+        switch_widescreen 1
+        fade 1 1500
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 1
+        TIMERA > 1000
+    then
+        print_big_q 'TITLE1' time 4000 style 5
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 2
+        TIMERA > 5000
+    then
+        print_big_q 'TITLE2' time 4000 style 5
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 3
+        TIMERA > 5000
+    then
+        fade 0 1500
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 4
+        TIMERA > 2500
+    then
+        fade 1 1000
+        break
+    end
+end
+
 create_char $mission_actor_1 4 #VICE3 -1057.3552 -238.1733 10.4464
 set_char_heading $mission_actor_1 265.1551
 clear_char_threat_search $mission_actor_1
@@ -18526,7 +18580,6 @@ clear_char_threat_search $mission_actor_4
 freeze_car_position $mission_car_1 in_current_position 1
 boat_stop $mission_car_1
 
-switch_widescreen 1
 //set_fixed_camera_position -1024.0349 -291.5739 10.7752 0.3 0.3 0.3
 //point_camera_at_point -1018.608 -272.1287 10.7812 2
 //set_fixed_camera_position -991.6797 -304.8994 14.7612 0.3 0.3 0.3
@@ -18534,11 +18587,6 @@ switch_widescreen 1
 set_fixed_camera_position -1033.6342 -293.7512 10.6107 0.3 0.3 0.3
 point_camera_at_point -1029.262 -287.6547 10.6245 2
 set_near_clip 0.1
-
-fade 1 1500
-while get_fading_status
-    wait 0
-end
 
 15@ = 0
 TIMERA = 0

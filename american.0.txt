@@ -260,6 +260,8 @@ WHY     = ~r~Bruh
 HELIWR  = ~r~The heli is destroyed!
 
 [FINAL]
+TITLE1  = Vice City: The Other Story
+TITLE2  = Chapter 2. The Mafian Takeover
 INTRO1  = Tommy!
 INTRO2  = So nice of you to come over. How have you been?
 INTRO3  = Not bad. And you, Sonny?
