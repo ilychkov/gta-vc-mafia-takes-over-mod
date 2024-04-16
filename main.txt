@@ -19333,7 +19333,8 @@ while True
         point_camera_at_point -691.587 -1577.8044 12.5424 2
         set_char_coordinates $player_actor -693.8342 -1581.8142 11.5333
         set_char_heading $player_actor 339.1741
-        give_weapon_to_char $player_actor weapon 33 ammo 500
+        give_weapon_to_player $player_char weapon 33 ammo 500
+        set_current_player_weapon $player_char armed_weapon_to 33
         15@++
         TIMERA = 0
     end
@@ -19422,16 +19423,76 @@ set_car_proofs $mission_car_3 immunities 0 0 0 0 0
 set_car_proofs $mission_car_4 immunities 0 0 0 0 0
 set_car_proofs $mission_car_5 immunities 0 0 0 0 0
 
+0@ = 0
+1@ = 0
+2@ = 0
+3@ = 0
+4@ = 0
+
 :FINAL_MOB_LOOP
 wait 0
 if and
     is_car_dead $mission_car_1
+    0@ == 0
+then
+    set_lvar_int_to_var_int 5@ = $mission_car_1
+    FINAL_MAFIA_CAR_EXPLOSION()
+    remove_blip $mission_car_1_marker
+    0@ = 1
+end
+if and
     is_car_dead $mission_car_2
+    1@ == 0
+then
+    set_lvar_int_to_var_int 5@ = $mission_car_2
+    FINAL_MAFIA_CAR_EXPLOSION()
+    remove_blip $mission_car_2_marker
+    1@ = 1
+end
+if and
     is_car_dead $mission_car_3
+    2@ == 0
+then
+    set_lvar_int_to_var_int 5@ = $mission_car_3
+    FINAL_MAFIA_CAR_EXPLOSION()
+    remove_blip $mission_car_3_marker
+    2@ = 1
+end
+if and
     is_car_dead $mission_car_4
+    3@ == 0
+then
+    set_lvar_int_to_var_int 5@ = $mission_car_4
+    FINAL_MAFIA_CAR_EXPLOSION()
+    remove_blip $mission_car_4_marker
+    3@ = 1
+end
+if and
     is_car_dead $mission_car_5
+    4@ == 0
+then
+    set_lvar_int_to_var_int 5@ = $mission_car_5
+    FINAL_MAFIA_CAR_EXPLOSION()
+    remove_blip $mission_car_5_marker
+    4@ = 1
+end
+if and
+    0@ == 1
+    1@ == 1
+    2@ == 1
+    3@ == 1
+    4@ == 1
 goto_if_false @FINAL_MOB_LOOP
 
+return
+
+:FINAL_MAFIA_CAR_EXPLOSION
+get_car_coordinates 5@ 5@ 6@ 7@
+add_explosion_no_sound 5@ 6@ 7@ type 2
+add_explosion_no_sound 5@ 6@ 7@ type 11
+add_explosion 1 at 5@ 6@ 7@
+add_explosion_no_sound 5@ 6@ 7@ type 6
+shake_cam 200
 return
 
 :FINAL_MAFIA_DEAD
@@ -19456,9 +19517,26 @@ remove_stuck_car_check $mission_car_1
 remove_upsidedown_car_check $mission_car_1
 mark_car_as_no_longer_needed $mission_car_1
 mark_car_as_no_longer_needed $mission_car_2
+mark_car_as_no_longer_needed $mission_car_3
+mark_car_as_no_longer_needed $mission_car_4
+mark_car_as_no_longer_needed $mission_car_5
 mark_char_as_no_longer_needed $mission_actor_1
 mark_char_as_no_longer_needed $mission_actor_2
 mark_char_as_no_longer_needed $mission_actor_3
+mark_char_as_no_longer_needed $mission_actor_4
+mark_char_as_no_longer_needed $mission_actor_5
+mark_char_as_no_longer_needed $mission_actor_6
+mark_char_as_no_longer_needed $mission_actor_7
+mark_char_as_no_longer_needed $mission_actor_8
+mark_char_as_no_longer_needed $mission_actor_9
+mark_char_as_no_longer_needed $mission_actor_10
+mark_char_as_no_longer_needed $mission_actor_11
+mark_model_as_no_longer_needed #UZI
+mark_model_as_no_longer_needed #MP5LNG
+mark_model_as_no_longer_needed #M4
+mark_model_as_no_longer_needed #SHOTGSPA
+mark_model_as_no_longer_needed #MINIGUN
+mark_model_as_no_longer_needed #MINIGUN2
 unload_special_character 1
 unload_special_character 2
 unload_special_character 3
