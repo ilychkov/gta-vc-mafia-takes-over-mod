@@ -19384,7 +19384,7 @@ while True
         point_camera_at_point -691.587 -1577.8044 12.5424 2
         set_char_coordinates $player_actor -693.8342 -1581.8142 11.5333
         set_char_heading $player_actor 339.1741
-        give_weapon_to_player $player_char weapon 33 ammo 50
+        give_weapon_to_player $player_char weapon 33 ammo 100
         set_current_player_weapon $player_char armed_weapon_to 33
         15@++
         TIMERA = 0
@@ -19564,7 +19564,7 @@ point_camera_at_point -692.8977 -1575.3418 12.5483 2
 create_char $mission_actor_1 4 #SPECIAL01 -683.616 -1554.0352 11.474
 set_char_heading $mission_actor_1 157.7526
 clear_char_threat_search $mission_actor_1
-set_char_health $mission_actor_1 200
+set_char_health $mission_actor_1 500
 set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
 give_weapon_to_char $mission_actor_1 weapon 20 ammo 9999
 set_char_obj_goto_coord_on_foot $mission_actor_1 -685.5568 -1558.5228
@@ -19618,6 +19618,11 @@ switch_widescreen 0
 restore_camera_jumpcut
 set_camera_behind_player
 
+add_blip_for_char $mission_actor_1_marker = create_marker_above_actor $mission_actor_1
+print_now 'OBJ3' time 5000 1
+
+display_onscreen_counter_with_string $mission_actor_1_health 1 'SONNYH' // Sonny's Health:
+
 0@ = 0
 TIMERA = 0
 
@@ -19627,15 +19632,20 @@ if
     0@ == 0
 then
     if
-        TIMERA > 1000
+        TIMERA > 2000
     then
         0@ = 1
         set_char_obj_kill_player_on_foot $mission_actor_1 $player_char
     end
 end
+get_char_health $mission_actor_1 $mission_actor_1_health
+$mission_actor_1_health /= 5
 if
     is_char_dead $mission_actor_1
 goto_if_false @FINAL_SONNY_FIGHT
+
+remove_blip $mission_actor_1_marker
+clear_onscreen_counter $mission_actor_1_health
 
 set_player_control $player_char 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
@@ -19688,6 +19698,7 @@ remove_blip $mission_car_2_marker
 remove_blip $mission_car_3_marker
 remove_blip $mission_car_4_marker
 remove_blip $mission_car_5_marker
+remove_blip $mission_actor_1_marker
 //todo: check if car exists?
 remove_stuck_car_check $mission_car_1
 remove_upsidedown_car_check $mission_car_1
@@ -19717,6 +19728,7 @@ unload_special_character 1
 unload_special_character 2
 unload_special_character 3
 clear_mission_audio 1
+clear_onscreen_counter $mission_actor_1_health
 set_car_density_multiplier 1.0
 set_ped_density_multiplier 1.0
 mission_has_finished
