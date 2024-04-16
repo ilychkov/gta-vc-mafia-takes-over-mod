@@ -18503,12 +18503,12 @@ while True
 end
 
 set_char_coordinates $player_actor -1065.099 -300.7289 10.1277
-set_fixed_camera_position -1065.099 -300.7289 21.1277 0.0 0.0 0.0
-point_camera_at_point -1060.0048 -298.2625 21.1819 2
+set_fixed_camera_position -998.1198 -297.2706 16.7628 0.0 0.0 0.0
+point_camera_at_point -997.1342 -294.1393 15.7592 2
 wait 0
 set_interpolation_parameters 0.0 10000
-set_fixed_camera_position -1065.099 -300.7289 16.1277 0.0 0.0 0.0
-point_camera_at_point -1060.0048 -298.2625 16.1819 1
+set_fixed_camera_position -998.1198 -297.2706 11.2628 0.0 0.0 0.0
+point_camera_at_point -997.1342 -294.1393 11.7592 1
 
 15@ = 0
 TIMERA = 0
