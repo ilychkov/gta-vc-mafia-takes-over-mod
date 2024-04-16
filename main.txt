@@ -18975,7 +18975,7 @@ set_car_heading $mission_car_1 82.6811
 change_car_colour $mission_car_1 60 0
 mark_model_as_no_longer_needed #WASHING
 
-create_char $mission_actor_1 4 #SPECIAL01 -1010.2638 -276.8648 9.6421
+create_char $mission_actor_1 4 #SPECIAL01 -1008.2638 -276.8648 9.6421
 set_char_heading $mission_actor_1 276.634
 clear_char_threat_search $mission_actor_1
 set_char_suffers_critical_hits $mission_actor_1 dismemberment_possible 0
@@ -19098,10 +19098,8 @@ clear_area 0 at -706.783 -1554.7404 11.5353 range 200.0
 set_car_density_multiplier 0.0
 set_ped_density_multiplier 0.0
 
-create_pickup_with_ammo $mission_weapon_pickup_1 = create_weapon_pickup #UZI 3 ammo 600 at -691.9859 -1581.9039 13.7854
-
 mark_car_as_no_longer_needed $mission_car_2
-warp_char_from_car_to_coord $player_actor -701.968 -1577.3588 11.5446
+warp_player_from_car_to_coord $player_char -701.968 -1577.3588 11.5446
 clear_area 0 at -701.968 -1577.3588 11.5446 range 100.0
 
 create_char $tommy 4 #NULL -698.0997 -1576.1699 11.5469
@@ -19385,7 +19383,7 @@ while True
         point_camera_at_point -691.587 -1577.8044 12.5424 2
         set_char_coordinates $player_actor -693.8342 -1581.8142 11.5333
         set_char_heading $player_actor 339.1741
-        give_weapon_to_player $player_char weapon 33 ammo 75
+        give_weapon_to_player $player_char weapon 33 ammo 50
         set_current_player_weapon $player_char armed_weapon_to 33
         15@++
         TIMERA = 0
@@ -19708,7 +19706,6 @@ mark_char_as_no_longer_needed $mission_actor_8
 mark_char_as_no_longer_needed $mission_actor_9
 mark_char_as_no_longer_needed $mission_actor_10
 mark_char_as_no_longer_needed $mission_actor_11
-remove_pickup $mission_weapon_pickup_1
 mark_model_as_no_longer_needed #UZI
 mark_model_as_no_longer_needed #MP5LNG
 mark_model_as_no_longer_needed #M4
