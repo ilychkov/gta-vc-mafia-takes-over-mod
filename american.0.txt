@@ -1,5 +1,5 @@
 [MAIN]
-ITBEG   = [os]In the beginning...
+ITBEG   = [MTO]In the beginning...
 INTSKIP = You get a ~b~wanted star~w~ as a ~r~punishment~w~ for skipping the beautiful intro
 INTSKI2 = jk you're good
 INFOCNT = Found ~1~ out of ~1~ info pickups
@@ -38,14 +38,14 @@ CLOTH4  = Soiree outfit delivered to the Safehouse.
 CLOTH5  = Policeman outfit delivered to the Safehouse.
 PARKCA1 = A speed boat has been delivered to the Safehouse.
 GOLFMIS = 'A Little Game of Golf'
-GLFMISS = [os]'A Little Game of Golf'
+GLFMISS = [MTO]'A Little Game of Golf'
 GOLFNO  = You need a ~g~golf cart~w~ to start this mission.
 NEW_REC = ~g~New Record Set!!!!! ~w~~1~ minutes ~g~and ~w~~1~ seconds.
 STFT_17 = Fastest time on 'A Little Game of Golf'
 POLICE1 = Special Delivery
-POLIC1S = [os]Special Delivery
+POLIC1S = [MTO]Special Delivery
 POLICE2 = Midnight Car Escape
-POLIC2S = [os]Midnight Car Escape
+POLIC2S = [MTO]Midnight Car Escape
 NPCCOP1 = Sorry, sir, no entry. We are investigating a murder.
 NPCCOP2 = Okay, now you're gonna get it!
 NPCCOP3 = Oh no... you were not supposed to see how glitchy this is.
@@ -69,15 +69,15 @@ UNCALL1 = Hey Tommy! I hope you haven't forgotten your dear old uncle?
 UNCALL2 = It's been a while. Why don't you come pay me a visit?
 UNCALL3 = I'll be waiting nearby the Printworks.
 BIKER1  = The Clearout
-BIKER1S = [os]The Clearout
+BIKER1S = [MTO]The Clearout
 CUBAN1  = Sea Scouts
-CUBAN1S = [os]Sea Scouts
+CUBAN1S = [MTO]Sea Scouts
 CUBAN2  = A Treasure Hunt
-CUBAN2S = [os]A Treasure Hunt
+CUBAN2S = [MTO]A Treasure Hunt
 CORTEZ1 = Sobre El Mar
-CORTZ1S = [os]Sobre El Mar
-FINALM  = Last Regards
-FINALMS = [os]Last Regards
+CORTZ1S = [MTO]Sobre El Mar
+FINALM  = The Mafia Takes Over
+FINALMS = The Mafia Takes Over
 M_PASS2 = MISSION PASSED!
 THANKYU = ~t~Thank you for playing my mod!
 
@@ -262,8 +262,8 @@ WHY     = ~r~Bruh
 HELIWR  = ~r~The heli is destroyed!
 
 [FINAL]
-TITLE1  = Vice City: The Other Story
-TITLE2  = Chapter 2. The Mafian Takeover
+TITLE1  = Vice City, year 1986
+TITLE2  = Chapter 2. The Mafia Takes Over
 INTRO1  = Tommy!
 INTRO2  = So nice of you to come over. How have you been?
 INTRO3  = Not bad. And you, Sonny?

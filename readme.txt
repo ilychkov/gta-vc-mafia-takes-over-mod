@@ -1,5 +1,4 @@
-Vice City: The Other Story
-Chapter 2. The Mafian Takeover
+Vice City: The Mafia Takes Over
 Made by Ivan Lychkov
 (formerly Vayan, author of Vice City Second Wave)
 
