@@ -19378,7 +19378,7 @@ request_model #MINIGUN
 request_model #MINIGUN2
 
 set_time_of_day 23 30
-force_weather_now 1
+force_weather 1
 $always_rain = 0
 
 clear_area 0 at -706.783 -1554.7404 11.5353 range 200.0
