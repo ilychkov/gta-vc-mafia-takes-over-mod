@@ -239,9 +239,6 @@ launch_mission @INTERIO
 launch_mission @CARGEN
 launch_mission @AUDIO
 
-//todo
-start_mission FINAL
-
 :MAIN
 wait 1000 ms
 if
@@ -3318,8 +3315,7 @@ then
     set_char_never_targeted $npc_biker_3 untargetable 1
     turn_char_to_face_char $npc_biker_2 $npc_biker_3
     turn_char_to_face_char $npc_biker_3 $npc_biker_2
-    set_char_wait_state $npc_biker_2 anim 19 wait_state_time 9999999
-    set_char_wait_state $npc_biker_3 anim 19 wait_state_time 9999999
+    set_chars_chatting $npc_biker_2 $npc_biker_3 converse_in 9999999
 end
 $npcs_bikers_state = 1
 return
@@ -20296,7 +20292,269 @@ delete_char $mission_actor_7
 delete_char $mission_actor_8
 delete_char $mission_actor_9
 
+freeze_car_position $mission_car_1 in_current_position 1
+freeze_char_position $tommy in_current_position 1
+
 //credits
+
+set_time_of_day 5 25
+release_weather
+
+request_model #CUBAN
+request_model #VOODOO
+request_model #ANGEL
+request_model #BKA
+request_model #BKB
+request_model #CBA
+request_model #CBB
+request_model #HNA
+request_model #HNB
+load_all_models_now
+request_animation 'STRIP'
+while not has_animation_loaded 'STRIP'
+    wait 0
+end
+switch_widescreen 1
+load_scene -820.0 -1660.0 55.0
+set_fixed_camera_position -820.0 -1660.0 55.0 0.0 0.0 0.0
+point_camera_at_point -793.0 -1624.0 55.0 2
+fade 1 1500
+
+14@ = 0
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if and
+        15@ == 0
+        TIMERA > 5000
+    then
+        fade 0 1500
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 1
+        TIMERA > 1500
+    then
+        load_scene -639.5 -923.0 19.6
+        set_fixed_camera_position -639.5 -923.0 19.2 0.0 0.0 0.0
+        point_camera_at_point -642.8 -930.9 18.2 2
+        fade 1 1500
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 2
+        TIMERA > 5000
+    then
+        fade 0 1500
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 3
+        TIMERA > 2500
+    then
+        request_collision -1002.7365 -600.2956
+        set_player_coordinates $player_char -1002.7365 -600.2956 19.411
+
+        load_scene -1162.3687 -604.5949 11.206
+        //set_fixed_camera_position -1184.3365 -599.2521 13.4716 0.0 0.0 0.0
+        //point_camera_at_point -1183.3203 -599.6951 13.3709 2
+        set_fixed_camera_position -1180.5135 -593.9868 12.4718 0.0 0.0 0.0
+        point_camera_at_point -1173.8434 -598.2114 11.4718 2
+        wait 0
+        set_interpolation_parameters 0.0 7000
+        set_fixed_camera_position -1175.5135 -593.9868 11.4718 0.0 0.0 0.0
+        point_camera_at_point -1173.8434 -598.2114 11.4718 1
+
+        create_car $mission_car_2 #CUBAN -1176.5767 -609.0972 10.4939
+        set_car_heading $mission_car_2 150.4087
+        create_car $mission_car_3 #VOODOO -1164.7427 -602.2789 10.4946
+        set_car_heading $mission_car_3 69.3321
+
+        create_char $mission_actor_1 4 #CBA -1172.0314 -606.5991 10.634
+        create_char $mission_actor_2 4 #HNB -1171.4285 -605.1976 10.6365
+        create_char $mission_actor_3 4 #CBA -1176.5592 -608.4964 12.2003
+        set_char_heading $mission_actor_3 32.4622
+        create_char $mission_actor_4 4 #HNA -1168.2458 -601.4624 10.6415
+        create_char $mission_actor_5 4 #CBB -1168.1951 -603.3029 10.6415
+
+        clear_char_threat_search $mission_actor_1
+        clear_char_threat_search $mission_actor_2
+        clear_char_threat_search $mission_actor_3
+        clear_char_threat_search $mission_actor_4
+        clear_char_threat_search $mission_actor_5
+
+        turn_char_to_face_char $mission_actor_1 $mission_actor_2
+        turn_char_to_face_char $mission_actor_2 $mission_actor_1
+        set_chars_chatting $mission_actor_1 $mission_actor_2 converse_in 9999999
+
+        turn_char_to_face_char $mission_actor_4 $mission_actor_5
+        turn_char_to_face_char $mission_actor_5 $mission_actor_4
+        set_chars_chatting $mission_actor_4 $mission_actor_5 converse_in 9999999
+
+        set_char_wait_state $mission_actor_3 anim 32 wait_state_time 9999999
+
+        fade 1 1500
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 4
+        TIMERA > 7000
+    then
+        fade 0 1500
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 5
+        TIMERA > 2500
+    then
+        delete_car $mission_car_2
+        delete_car $mission_car_3
+        delete_char $mission_actor_1
+        delete_char $mission_actor_2
+        delete_char $mission_actor_3
+        delete_char $mission_actor_4
+        delete_char $mission_actor_5
+
+        request_collision -696.2249 729.1182
+        set_player_coordinates $player_char -696.2249 729.1182 11.1166
+
+        request_collision -617.0494 657.2789
+        load_scene -617.0494 657.2789 9.5612
+        set_fixed_camera_position -576.4868 662.3199 11.9056 0.0 0.0 0.0
+        point_camera_at_point -578.8713 661.8872 11.9056 2
+
+        clear_area 0 at -587.0291 655.3294 10.0717 range 50.0
+
+        create_car $mission_car_2 #ANGEL -617.0494 657.2789 9.5612
+        set_car_heading $mission_car_2 281.8842
+        create_char_inside_car $mission_actor_1 = create_actor 4 #BKA in_car $mission_car_2
+        clear_char_threat_search $mission_actor_1
+        car_goto_coordinates_accurate $mission_car_2 drive_to_point -590.5488 658.2352 10.7273
+
+        create_char $mission_actor_2 4 #BKA -587.0291 655.3294 10.0717
+        create_char $mission_actor_3 4 #BKB -586.3276 657.0265 10.0728
+        clear_char_threat_search $mission_actor_2
+        clear_char_threat_search $mission_actor_3
+        turn_char_to_face_char $mission_actor_2 $mission_actor_3
+        turn_char_to_face_char $mission_actor_3 $mission_actor_2
+        set_chars_chatting $mission_actor_2 $mission_actor_3 converse_in 5000
+
+        fade 1 1500
+        15@++
+        TIMERA = 0
+    end
+    if
+        15@ == 6
+    then
+        if or
+            locate_stopped_car_2d $mission_car_2 stopped 0 -590.5488 658.2352 radius 7.0 7.0
+            TIMERA > 5000
+        then
+            set_char_obj_leave_any_car $mission_actor_1
+            15@++
+            TIMERA = 0
+        end
+    end
+    if
+        15@ == 7
+    then
+        if or
+            not is_char_in_any_car $mission_actor_1
+            TIMERA > 3000
+        then
+            15@++
+            TIMERA = 0
+        end
+    end
+    if and
+        15@ == 8
+        TIMERA > 500
+    then
+        turn_char_to_face_char $mission_actor_1 $mission_actor_2
+        turn_char_to_face_char $mission_actor_2 $mission_actor_1
+        turn_char_to_face_char $mission_actor_3 $mission_actor_1
+        set_chars_chatting $mission_actor_2 $mission_actor_1 converse_in 9999999
+        set_chars_chatting $mission_actor_3 $mission_actor_1 converse_in 9999999
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 9
+        TIMERA > 4000
+    then
+        fade 0 1500
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 10
+        TIMERA > 2500
+    then
+        delete_car $mission_car_2
+        delete_char $mission_actor_1
+        delete_char $mission_actor_2
+        delete_char $mission_actor_3
+
+        load_scene -652.0 626.0 70.0
+        set_fixed_camera_position -652.0 626.0 70.0 0.0 0.0 0.0
+        point_camera_at_point -645.0 597.0 68.0 2
+        wait 0
+        set_interpolation_parameters 0.0 10000
+        set_fixed_camera_position -652.0 626.0 50.0 0.0 0.0 0.0
+        point_camera_at_point -645.0 597.0 48.0 1
+        fade 1 1500
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 11
+        TIMERA > 10000
+    then
+        break
+    end
+    if
+        not is_button_pressed 0 pressed_button 16
+    then
+        14@ = 1
+    end
+    if and
+        14@ == 1
+        is_button_pressed 0 pressed_button 16
+    then
+        break
+    end
+end
+
+fade 0 1500
+while get_fading_status
+    wait 0
+end
+
+delete_car $mission_car_2
+delete_car $mission_car_3
+delete_char $mission_actor_1
+delete_char $mission_actor_2
+delete_char $mission_actor_3
+delete_char $mission_actor_4
+delete_char $mission_actor_5
+
+mark_model_as_no_longer_needed #CUBAN
+mark_model_as_no_longer_needed #VOODOO
+mark_model_as_no_longer_needed #ANGEL
+mark_model_as_no_longer_needed #BKA
+mark_model_as_no_longer_needed #BKB
+mark_model_as_no_longer_needed #CBA
+mark_model_as_no_longer_needed #CBB
+mark_model_as_no_longer_needed #HNA
+mark_model_as_no_longer_needed #HNB
+
+remove_animation 'STRIP'
 
 load_mission_audio 'MOBRING' as 1
 request_model #VICE3
@@ -20311,6 +20569,12 @@ while True
     end
     wait 0
 end
+
+request_collision -755.3224 -1503.0618
+set_player_coordinates $player_char -755.3224 -1503.0618 10.546
+
+freeze_car_position $mission_car_1 in_current_position 0
+freeze_char_position $tommy in_current_position 0
 
 clear_all_char_anims $tommy
 set_char_wait_state $tommy anim 21 wait_state_time -1
