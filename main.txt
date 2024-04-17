@@ -20309,6 +20309,7 @@ freeze_char_position $tommy in_current_position 1
 
 set_time_of_day 5 25
 release_weather
+$always_rain = 0
 
 request_model #CUBAN
 request_model #VOODOO
