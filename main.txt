@@ -19086,7 +19086,8 @@ $mission_car_6_angle = 66.141
 1@ = 0
 2@ = 0
 const fm_car_spawn_distance = 150.0
-const fm_car_activation_distance = 50.0
+const fm_car_activation_distance = 100.0
+const fm_car_shooting_distance = 50.0
 
 :FINAL_CAR_CHASE
 wait 0
@@ -19133,22 +19134,40 @@ then
             create_car $mission_car_3 #ADMIRAL $mission_car_2_x $mission_car_2_y $mission_car_2_z
             set_car_heading $mission_car_3 $mission_car_2_angle
             change_car_colour $mission_car_3 0 0
-            0@ = 1
+            0@ = 2
         end
     end
 end
-if
+if or
     0@ == 1
+    0@ == 2
 then
-    if or
-        locate_player_any_means_2d $player_char 0 $mission_car_1_x $mission_car_1_y radius fm_car_activation_distance fm_car_activation_distance
-        locate_player_any_means_2d $player_char 0 $mission_car_2_x $mission_car_2_y radius fm_car_activation_distance fm_car_activation_distance
+    if
+        locate_player_any_means_car_2d $player_char near_car $mission_car_3 radius fm_car_activation_distance fm_car_activation_distance 0
     then
         set_lvar_int_to_var_int 3@ = $mission_car_3
-        FINAL_CREATE_MAFIA_CAR()
+        FINAL_ACTIVATE_MAFIA_CAR()
         set_var_int_to_lvar_int $mission_actor_4 = 4@
         set_var_int_to_lvar_int $mission_actor_5 = 5@
-        0@ = 2
+        if
+            0@ == 1
+        then
+            car_goto_coordinates_accurate $mission_car_3 drive_to_point -870.9737 -286.0145 10.6386
+        else
+            car_goto_coordinates_accurate $mission_car_3 drive_to_point -998.3477 -495.8316 10.7756
+        end
+        0@ = 3
+    end
+end
+if
+    0@ == 3
+then
+    if
+        locate_player_any_means_car_2d $player_char near_car $mission_car_3 radius fm_car_shooting_distance fm_car_shooting_distance 0
+    then
+        set_lvar_int_to_var_int 3@ = $mission_car_3
+        FINAL_MAFIA_CAR_START_SHOOTING()
+        0@ = 4
     end
 end
 if
@@ -19176,22 +19195,40 @@ then
             create_car $mission_car_4 #REGINA $mission_car_4_x $mission_car_4_y $mission_car_4_z
             set_car_heading $mission_car_4 $mission_car_4_angle
             change_car_colour $mission_car_4 0 0
-            1@ = 1
+            1@ = 2
         end
     end
 end
-if
+if or
     1@ == 1
+    1@ == 2
 then
-    if or
-        locate_player_any_means_2d $player_char 0 $mission_car_3_x $mission_car_3_y radius fm_car_activation_distance fm_car_activation_distance
-        locate_player_any_means_2d $player_char 0 $mission_car_4_x $mission_car_4_y radius fm_car_activation_distance fm_car_activation_distance
+    if
+        locate_player_any_means_car_2d $player_char near_car $mission_car_4 radius fm_car_activation_distance fm_car_activation_distance 0
     then
         set_lvar_int_to_var_int 3@ = $mission_car_4
-        FINAL_CREATE_MAFIA_CAR()
+        FINAL_ACTIVATE_MAFIA_CAR()
         set_var_int_to_lvar_int $mission_actor_6 = 4@
         set_var_int_to_lvar_int $mission_actor_7 = 5@
-        1@ = 2
+        if
+            0@ == 1
+        then
+            car_goto_coordinates_accurate $mission_car_4 drive_to_point -838.279 -611.1748 10.9266
+        else
+            car_goto_coordinates_accurate $mission_car_4 drive_to_point -1133.25 -721.5348 11.7067
+        end
+        1@ = 3
+    end
+end
+if
+    1@ == 3
+then
+    if
+        locate_player_any_means_car_2d $player_char near_car $mission_car_4 radius fm_car_shooting_distance fm_car_shooting_distance 0
+    then
+        set_lvar_int_to_var_int 3@ = $mission_car_4
+        FINAL_MAFIA_CAR_START_SHOOTING()
+        1@ = 4
     end
 end
 if
@@ -19219,22 +19256,40 @@ then
             create_car $mission_car_5 #ADMIRAL $mission_car_6_x $mission_car_6_y $mission_car_6_z
             set_car_heading $mission_car_5 $mission_car_6_angle
             change_car_colour $mission_car_5 0 0
-            2@ = 1
+            2@ = 2
         end
     end
 end
-if
+if or
     2@ == 1
+    2@ == 2
 then
-    if or
-        locate_player_any_means_2d $player_char 0 $mission_car_5_x $mission_car_5_y radius fm_car_activation_distance fm_car_activation_distance
-        locate_player_any_means_2d $player_char 0 $mission_car_6_x $mission_car_6_y radius fm_car_activation_distance fm_car_activation_distance
+    if
+        locate_player_any_means_car_2d $player_char near_car $mission_car_5 radius fm_car_activation_distance fm_car_activation_distance 0
     then
         set_lvar_int_to_var_int 3@ = $mission_car_5
-        FINAL_CREATE_MAFIA_CAR()
+        FINAL_ACTIVATE_MAFIA_CAR()
         set_var_int_to_lvar_int $mission_actor_8 = 4@
         set_var_int_to_lvar_int $mission_actor_9 = 5@
-        2@ = 2
+        if
+            0@ == 1
+        then
+            car_goto_coordinates_accurate $mission_car_5 drive_to_point -766.1263 -1236.6731 10.9259
+        else
+            car_goto_coordinates_accurate $mission_car_5 drive_to_point -910.9998 -1227.5422 11.6556
+        end
+        2@ = 3
+    end
+end
+if
+    2@ == 3
+then
+    if
+        locate_player_any_means_car_2d $player_char near_car $mission_car_5 radius fm_car_shooting_distance fm_car_shooting_distance 0
+    then
+        set_lvar_int_to_var_int 3@ = $mission_car_5
+        FINAL_MAFIA_CAR_START_SHOOTING()
+        2@ = 4
     end
 end
 if
@@ -20149,6 +20204,20 @@ end
 switch_widescreen 0
 clear_extra_colours 0
 
+delete_car $mission_car_1
+delete_car $mission_car_2
+delete_car $mission_car_3
+delete_car $mission_car_4
+delete_char $mission_actor_1
+delete_char $mission_actor_2
+delete_char $mission_actor_3
+delete_char $mission_actor_4
+delete_char $mission_actor_5
+delete_char $mission_actor_6
+delete_char $mission_actor_7
+delete_char $mission_actor_8
+delete_char $mission_actor_9
+
 //credits
 
 load_mission_audio 'MOBRING' as 1
@@ -20299,7 +20368,7 @@ add_explosion_no_sound 5@ 6@ 7@ type 6
 shake_cam 200
 return
 
-:FINAL_CREATE_MAFIA_CAR
+:FINAL_ACTIVATE_MAFIA_CAR
 create_char_inside_car 4@ = create_actor 4 #SPECIAL02 in_car 3@
 create_char 5@ 4 #SPECIAL03 0.0 0.0 0.0
 attach_char_to_car 5@ into_turret_on_car 3@ at_car_offset 0.5 0.0 0.8 position 0 angle 360.0 with_weapon 23
@@ -20310,11 +20379,16 @@ set_char_suffers_critical_hits 5@ dismemberment_possible 0
 
 set_car_traction 3@ improve_handling 2.0
 lock_car_doors 3@ door_status_to 2
+set_car_cruise_speed 3@ max_speed_to 10.0
+set_car_driving_style 3@ traffic_behavior_to 2
+set_car_straight_line_distance 3@ abandon_path_radius 40
+set_car_change_lane 3@ change_lane 0
+return
+
+:FINAL_MAFIA_CAR_START_SHOOTING
 set_car_cruise_speed 3@ max_speed_to 100.0
 set_car_driving_style 3@ traffic_behavior_to 2
 set_car_mission 3@ driver_behaviour_to 2
-set_car_straight_line_distance 3@ abandon_path_radius 40
-set_car_change_lane 3@ change_lane 0
 
 set_char_obj_kill_player_on_foot 5@ $player_char
 set_char_accuracy 5@ 50
