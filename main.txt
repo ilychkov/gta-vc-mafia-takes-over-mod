@@ -5312,7 +5312,11 @@ goto_if_false @FINAL_MARKER_LOOP_END
 if
     locate_player_on_foot_3d $player_char 0 $final_x $final_y $final_z radius 1.2 1.2 2.0
 then
-    print_big 'FINALM' 15000 ms 2
+    if
+        $mod_title_seen == 1
+    then
+        print_big 'FINALM' 15000 ms 2
+    end
     start_mission FINAL
 end
 goto @FINAL_MARKER_LOOP
