@@ -18516,6 +18516,7 @@ set_car_density_multiplier 0.0
 set_ped_density_multiplier 0.0
 
 set_time_of_day 21 30
+force_weather_now 5
 
 request_model #WASHING
 request_model #VICE3
