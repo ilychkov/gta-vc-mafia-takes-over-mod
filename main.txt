@@ -701,7 +701,7 @@ switch_widescreen 0
 restore_camera_jumpcut
 set_camera_behind_player
 set_time_of_day 4@ 5@
-release_weather
+RESTORE_WEATHER()
 $allow_police_chases = 1
 switch_car_generator $1860 cars_to_generate_to 101
 INFOPICS_FOUND()
@@ -5226,6 +5226,7 @@ while get_fading_status
 end
 
 force_weather 5
+$always_rain = 1
 
 request_model #CELLPHONE
 load_all_models_now
@@ -7945,6 +7946,19 @@ $1577 = 0
 :AUDIO1_1790
 goto @AUDIO1_94
 
+//-------------weather helpers---------------
+//
+
+:RESTORE_WEATHER
+if
+    $always_rain == 1
+then
+    force_weather 5
+else
+    release_weather
+end
+return
+
 //-------------Mission 0---------------
 // Initial
 
@@ -8022,6 +8036,7 @@ $passed_cuban_2 = 0
 $passed_cortez_1 = 0
 $passed_final = 0
 $mod_title_seen = 0
+$always_rain = 0
 
 add_short_range_sprite_blip_for_contact_point $icon_vercetti = create_asset_radar_marker_with_icon 29 at -246.0713 -324.6199 10.2586
 change_blip_display $icon_vercetti display 2
@@ -20474,6 +20489,7 @@ player_made_progress 1
 $passed_final = 1
 remove_blip $icon_final
 release_weather
+$always_rain = 0
 start_new_script @THANKYOU
 create_clothes_pickup $clothes_pickup_4 = create_clothes_pickup 2 at -237.7 -310.6 10.0
 $clothes_pickup_4_available = 1
