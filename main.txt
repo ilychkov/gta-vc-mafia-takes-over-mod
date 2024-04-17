@@ -18544,11 +18544,12 @@ while True
     wait 0
 end
 
+set_player_coordinates $player_char -1065.099 -300.7289 10.1277
+
 if
     $mod_title_seen == 0
 goto_if_false @FINAL_INTRO
 
-set_char_coordinates $player_actor -1065.099 -300.7289 10.1277
 set_fixed_camera_position -994.8042 -286.3174 12.7658 0.0 0.0 0.0
 point_camera_at_point -990.7083 -285.8002 11.759 2
 wait 0
