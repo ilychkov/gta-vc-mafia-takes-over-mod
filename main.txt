@@ -19973,7 +19973,7 @@ while True
     end
     if and
         15@ == 6
-        TIMERA > 2000
+        TIMERA > 1500 // 2000
     then
         set_char_obj_no_obj $mission_actor_2
         set_char_wait_state $mission_actor_2 anim 19 wait_state_time 1500
@@ -19983,7 +19983,7 @@ while True
     end
     if and
         15@ == 7
-        TIMERA > 3500
+        TIMERA > 2500 // 3500
     then
         set_fixed_camera_position -675.1436 -1565.8906 12.0086 0.0 0.0 0.0
         point_camera_at_char $mission_actor_1 15 2
@@ -20029,10 +20029,6 @@ create_car $mission_car_4 #POLICE -730.949 -1497.4388 9.9904
 set_car_heading $mission_car_4 294.2021
 create_car $mission_car_5 #POLICE -728.777 -1494.3057 9.9577
 set_car_heading $mission_car_5 65.8344
-switch_car_siren $mission_car_2 siren = 1
-switch_car_siren $mission_car_3 siren = 1
-switch_car_siren $mission_car_4 siren = 1
-switch_car_siren $mission_car_5 siren = 1
 mark_model_as_no_longer_needed #POLICE
 
 create_char $mission_actor_1 4 #SPECIAL01 -725.121 -1504.5569 10.4688
@@ -20074,6 +20070,8 @@ set_char_wait_state $mission_actor_9 anim 17 wait_state_time 9999999
 set_fixed_camera_position -724.7064 -1499.3519 11.9302 0.0 0.0 0.0
 point_camera_at_point -725.121 -1504.5569 10.4688 2
 
+set_extra_colours 11 fade 0
+
 switch_widescreen 1
 fade 1 1000
 
@@ -20096,6 +20094,10 @@ while True
             is_char_objective_passed $mission_actor_1
             TIMERA > 5000
         then
+            switch_car_siren $mission_car_2 siren = 1
+            switch_car_siren $mission_car_3 siren = 1
+            switch_car_siren $mission_car_4 siren = 1
+            switch_car_siren $mission_car_5 siren = 1
             15@++
             TIMERA = 0
         end
@@ -20143,7 +20145,9 @@ fade 0 1500
 while get_fading_status
     wait 0
 end
+
 switch_widescreen 0
+clear_extra_colours 0
 
 //credits
 
@@ -20257,7 +20261,7 @@ while True
     end
     if and
         15@ == 8
-        TIMERA > 1500
+        TIMERA > 2000
     then
         break
     end
