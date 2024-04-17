@@ -19208,6 +19208,8 @@ then
         locate_player_any_means_car_2d $player_char near_car $mission_car_3 radius fm_car_shooting_distance fm_car_shooting_distance 0
     then
         set_lvar_int_to_var_int 3@ = $mission_car_3
+        set_lvar_int_to_var_int 4@ = $mission_actor_4
+        set_lvar_int_to_var_int 5@ = $mission_actor_5
         FINAL_MAFIA_CAR_START_SHOOTING()
         0@ = 4
     end
@@ -19269,6 +19271,8 @@ then
         locate_player_any_means_car_2d $player_char near_car $mission_car_4 radius fm_car_shooting_distance fm_car_shooting_distance 0
     then
         set_lvar_int_to_var_int 3@ = $mission_car_4
+        set_lvar_int_to_var_int 4@ = $mission_actor_6
+        set_lvar_int_to_var_int 5@ = $mission_actor_7
         FINAL_MAFIA_CAR_START_SHOOTING()
         1@ = 4
     end
@@ -19330,6 +19334,8 @@ then
         locate_player_any_means_car_2d $player_char near_car $mission_car_5 radius fm_car_shooting_distance fm_car_shooting_distance 0
     then
         set_lvar_int_to_var_int 3@ = $mission_car_5
+        set_lvar_int_to_var_int 4@ = $mission_actor_8
+        set_lvar_int_to_var_int 5@ = $mission_actor_9
         FINAL_MAFIA_CAR_START_SHOOTING()
         2@ = 4
     end
