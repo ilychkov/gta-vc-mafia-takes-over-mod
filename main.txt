@@ -19983,6 +19983,15 @@ while True
     end
     if and
         15@ == 7
+        TIMERA > 3500
+    then
+        set_fixed_camera_position -675.1436 -1565.8906 12.0086 0.0 0.0 0.0
+        point_camera_at_char $mission_actor_1 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 8
         TIMERA > 2000
     then
         break
@@ -19991,12 +20000,13 @@ end
 
 set_time_scale 1.0
 
+set_var_int_to_var_int $tommy = $mission_actor_1
+
 fade 0 1500
 while get_fading_status
     wait 0
 end
 
-delete_char $mission_actor_1
 delete_char $mission_actor_2
 
 switch_widescreen 0
@@ -20135,12 +20145,146 @@ while get_fading_status
 end
 switch_widescreen 0
 
-restore_camera
+//credits
+
+load_mission_audio 'MOBRING' as 1
+request_model #VICE3
+request_model #CELLPHONE
+while True
+    if and
+        has_mission_audio_loaded 1
+        has_model_loaded #VICE3
+        has_model_loaded #CELLPHONE
+    then
+        break
+    end
+    wait 0
+end
+
+clear_all_char_anims $tommy
+set_char_wait_state $tommy anim 21 wait_state_time -1
+wait 1000
+
+set_fixed_camera_position -675.1436 -1565.8906 12.0086 0.0 0.0 0.0
+point_camera_at_char $tommy 15 2
+
+create_char $mission_actor_1 4 #VICE3 -710.1561 -1467.1998 10.2272
+set_char_heading $mission_actor_1 272.3618
+clear_char_threat_search $mission_actor_1
+mark_model_as_no_longer_needed #VICE3
+
+set_char_answering_mobile $mission_actor_1 hold_cellphone 1
+
+switch_widescreen 1
+fade 1 1500
+
+15@ = 0
+TIMERA = 0
+while True
+    wait 0
+    if and
+        15@ == 0
+        TIMERA > 2000
+    then
+        set_char_wait_state $tommy anim 23 wait_state_time -1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 1
+        TIMERA > 1500
+    then
+        play_mission_audio 1
+        set_interpolation_parameters 0.0 3000
+        set_fixed_camera_position -675.1436 -1565.8906 13.0086 0.0 0.0 0.0
+        point_camera_at_char $tommy 15 1
+        15@++
+        TIMERA = 0
+    end
+    if
+        15@ == 2
+    then
+        if or
+            has_mission_audio_finished 1
+            TIMERA > 5000
+        then
+            set_char_answering_mobile $tommy hold_cellphone 1
+            15@++
+            TIMERA = 0
+        end
+    end
+    if and
+        15@ == 3
+        TIMERA > 1500
+    then
+        set_fixed_camera_position -708.05 -1474.0326 12.2668 0.0 0.0 0.0
+        point_camera_at_char $mission_actor_1 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 4
+        TIMERA > 1000
+    then
+        print_now 'GIORGI1' time 2500 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 5
+        TIMERA > 2500
+    then
+        set_fixed_camera_position -676.3121 -1562.5059 13.499 0.0 0.0 0.0
+        point_camera_at_char $tommy 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 6
+        TIMERA > 1000
+    then
+        print_now 'GIORGI2' time 2500 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 7
+        TIMERA > 3000
+    then
+        set_char_answering_mobile $tommy hold_cellphone 0
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 8
+        TIMERA > 1500
+    then
+        break
+    end
+end
+
+fade 0 1500
+while get_fading_status
+    wait 0
+end
+
+clear_mission_audio 1
+mark_model_as_no_longer_needed #CELLPHONE
+
+set_player_coordinates $player_char -690.8304 -1487.6919 10.7027
+set_player_heading $player_char 11.0627
+
 set_player_control $player_char 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
-fade 1 500
-return
+
+restore_camera_jumpcut
+set_camera_behind_player
+
+switch_widescreen 0
+fade 1 1000
+
+goto @FINAL_PASS
 
 :FINAL_MAFIA_CAR_EXPLOSION
 get_car_coordinates 5@ 5@ 6@ 7@
