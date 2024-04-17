@@ -19514,7 +19514,7 @@ while True
         set_car_proofs $mission_car_2 immunities 1 1 1 1 1
         set_car_proofs $mission_car_3 immunities 1 1 1 1 1
         set_car_proofs $mission_car_4 immunities 1 1 1 1 1
-        set_car_proofs $mission_car_5 immunities 1 1 1 1 1        
+        set_car_proofs $mission_car_5 immunities 1 1 1 1 1
 
         //car_goto_coordinates_accurate $mission_car_1 drive_to_point -684.8295 -1562.4559 12.0807
         car_goto_coordinates_accurate $mission_car_1 drive_to_point -684.8295 -1565.4559 12.0807
@@ -19617,6 +19617,19 @@ while True
         15@ == 3
         TIMERA > 1000
     then
+        //for some reason doesn't work when they're in the cars...
+        set_char_proofs $mission_actor_1 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_2 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_3 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_4 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_5 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_6 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_7 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_8 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_9 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_10 immunities 1 1 1 1 1
+        set_char_proofs $mission_actor_11 immunities 1 1 1 1 1
+
         set_fixed_camera_position -700.7686 -1573.5593 12.5529 0.0 0.0 0.0
         point_camera_at_car $mission_car_5 15 2
         wait 0
@@ -20021,8 +20034,8 @@ while True
         15@ == 1
         TIMERA > 1000
     then
-        get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car_1 offset 2.0 0.0 -1.0
-        set_char_coordinates $mission_actor_1 0@ 1@ 2@
+        get_offset_from_car_in_world_coords $mission_actor_1_x $mission_actor_1_y $mission_actor_1_z from_car $mission_car_1 offset 2.0 0.0 -1.0
+        set_char_coordinates $mission_actor_1 $mission_actor_1_x $mission_actor_1_y $mission_actor_1_z
         set_char_heading $mission_actor_1 157.1953
         char_look_at_char_always $mission_actor_1 $mission_actor_2
         set_fixed_camera_position -682.348 -1578.8979 15.0079 0.0 0.0 0.0
@@ -20125,13 +20138,12 @@ end
 
 set_time_scale 1.0
 
-set_var_int_to_var_int $tommy = $mission_actor_1
-
 fade 0 1500
 while get_fading_status
     wait 0
 end
 
+delete_char $mission_actor_1
 delete_char $mission_actor_2
 
 switch_widescreen 0
@@ -20302,8 +20314,7 @@ delete_char $mission_actor_7
 delete_char $mission_actor_8
 delete_char $mission_actor_9
 
-freeze_car_position $mission_car_1 in_current_position 1
-freeze_char_position $tommy in_current_position 1
+freeze_car_position_and_dont_load_collision $mission_car_1 position_and_dont_load_collision 1
 
 //credits
 
@@ -20584,10 +20595,9 @@ end
 request_collision -755.3224 -1503.0618
 set_player_coordinates $player_char -755.3224 -1503.0618 10.546
 
-freeze_car_position $mission_car_1 in_current_position 0
-freeze_char_position $tommy in_current_position 0
-
-clear_all_char_anims $tommy
+create_char $tommy 4 #NULL $mission_actor_1_x $mission_actor_1_y $mission_actor_1_z
+set_char_heading $tommy 157.1953
+clear_char_threat_search $tommy
 set_char_wait_state $tommy anim 21 wait_state_time -1
 wait 1000
 
@@ -20693,6 +20703,9 @@ fade 0 1500
 while get_fading_status
     wait 0
 end
+
+delete_char $tommy
+delete_char $mission_actor_1
 
 clear_mission_audio 1
 mark_model_as_no_longer_needed #CELLPHONE
