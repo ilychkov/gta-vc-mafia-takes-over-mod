@@ -19722,6 +19722,12 @@ set_car_proofs $mission_car_5 immunities 0 0 0 0 0
 
 :FINAL_MOB_LOOP
 wait 0
+get_random_car_of_type_in_area_no_save 10@ = get_random_car_with_actors #FIRETRUK in_area -850.0 -1500.0 -650.0 -1350.0
+if
+    10@ <> -1
+then
+    delete_car 10@
+end
 if and
     is_car_dead $mission_car_1
     0@ == 0
@@ -19806,6 +19812,12 @@ set_char_obj_goto_coord_on_foot $mission_actor_1 -685.5568 -1558.5228
 TIMERA = 0
 while True
     wait 0
+    get_random_car_of_type_in_area_no_save 10@ = get_random_car_with_actors #FIRETRUK in_area -850.0 -1500.0 -650.0 -1350.0
+    if
+        10@ <> -1
+    then
+        delete_car 10@
+    end
     if
         15@ == 0
     then
@@ -19933,6 +19945,16 @@ fade 1 1000
 TIMERA = 0
 while True
     wait 0
+    if
+        15@ >= 3
+    then
+        get_random_car_of_type_in_area_no_save 10@ = get_random_car_with_actors #FIRETRUK in_area -850.0 -1500.0 -650.0 -1350.0
+        if
+            10@ <> -1
+        then
+            delete_car 10@
+        end
+    end
     if
         15@ == 0
     then
@@ -20149,23 +20171,37 @@ while True
             TIMERA > 5000
         then
             switch_car_siren $mission_car_2 siren = 1
-            switch_car_siren $mission_car_3 siren = 1
-            switch_car_siren $mission_car_4 siren = 1
-            switch_car_siren $mission_car_5 siren = 1
             15@++
             TIMERA = 0
         end
     end
     if and
         15@ == 2
-        TIMERA > 1000
+        TIMERA > 200
     then
-        print_now 'SONNYE2' time 3000 1
+        switch_car_siren $mission_car_5 siren = 1
         15@++
         TIMERA = 0
     end
     if and
         15@ == 3
+        TIMERA > 500
+    then
+        switch_car_siren $mission_car_3 siren = 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 4
+        TIMERA > 300
+    then
+        switch_car_siren $mission_car_4 siren = 1
+        print_now 'SONNYE2' time 3000 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 5
         TIMERA > 1000
     then
         set_interpolation_parameters 0.0 7000
@@ -20180,7 +20216,7 @@ while True
         TIMERA = 0
     end
     if and
-        15@ == 4
+        15@ == 6
         TIMERA > 2000
     then
         set_char_wait_state $mission_actor_1 anim 17 wait_state_time 9999999
@@ -20188,7 +20224,7 @@ while True
         TIMERA = 0
     end
     if and
-        15@ == 5
+        15@ == 7
         TIMERA > 7000
     then
         break
