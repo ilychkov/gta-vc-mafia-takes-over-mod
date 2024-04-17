@@ -19792,6 +19792,12 @@ delete_char $mission_actor_8
 delete_char $mission_actor_9
 delete_char $mission_actor_10
 
+mark_car_as_no_longer_needed $mission_car_1
+mark_car_as_no_longer_needed $mission_car_2
+mark_car_as_no_longer_needed $mission_car_3
+mark_car_as_no_longer_needed $mission_car_4
+mark_car_as_no_longer_needed $mission_car_5
+
 set_player_control $player_char 0
 set_police_ignore_player $player_char ignored_by_cops_state_to 1
 set_everyone_ignore_player $player_char ignored_by_everyone_to 1
@@ -20041,6 +20047,7 @@ while True
         turn_char_to_face_char $mission_actor_2 $mission_actor_1
         clear_char_threat_search $mission_actor_2
         give_weapon_to_char $mission_actor_2 weapon 20 ammo 1
+        clear_area 1 at -681.0527 -1571.7163 12.5534 range 5.0
         set_fixed_camera_position -681.0527 -1571.7163 12.5534 0.0 0.0 0.0
         point_camera_at_char $mission_actor_2 15 2
         set_time_scale 1.0
@@ -20239,10 +20246,10 @@ end
 switch_widescreen 0
 clear_extra_colours 0
 
-delete_car $mission_car_1
 delete_car $mission_car_2
 delete_car $mission_car_3
 delete_car $mission_car_4
+delete_car $mission_car_5
 delete_char $mission_actor_1
 delete_char $mission_actor_2
 delete_char $mission_actor_3
