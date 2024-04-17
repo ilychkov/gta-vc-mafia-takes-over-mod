@@ -19377,7 +19377,7 @@ request_model #SHOTGSPA
 request_model #MINIGUN
 request_model #MINIGUN2
 
-set_time_of_day 1 30
+set_time_of_day 23 30
 force_weather_now 1
 $always_rain = 0
 
