@@ -22,6 +22,9 @@ NPCs locations:
 - Downtown, near the V-Rock building
 - Leaf Links??? Or Vice Point??? (secret!)
 
-Playing with Frame Limiter on is recommended for scripted scenes to play as intended.
+GitHub repo: https://github.com/ilychkov/gta-vc-mafia-takes-over-mod
+
+Playing with Frame Limiter on is recommended for some scripted things to work as intended.
 
 If anyone wants to reuse my work or parts of it, please ask me for permission.
+Posting gameplay videos is fine!
