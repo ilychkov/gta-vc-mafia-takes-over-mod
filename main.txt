@@ -18573,6 +18573,7 @@ mark_model_as_no_longer_needed #VICE3
 
 create_char $tommy 4 #NULL -1008.9224 -272.327 9.7615
 set_char_heading $tommy 87.4932
+clear_char_threat_search $tommy
 set_char_obj_goto_coord_on_foot $tommy -1015.841 -272.0242
 
 char_look_at_char_always $mission_actor_1 $tommy
@@ -19806,6 +19807,8 @@ switch_widescreen 1
 set_fixed_camera_position -683.7825 -1556.6606 13.4652 0.0 0.0 0.0
 point_camera_at_point -692.8977 -1575.3418 12.5483 2
 
+clear_area 0 at -683.616 -1554.0352 11.474 range 2.0
+clear_area 0 at -685.5568 -1558.5228 11.474 range 2.0
 create_char $mission_actor_1 4 #SPECIAL01 -683.616 -1554.0352 11.474
 set_char_heading $mission_actor_1 157.7526
 clear_char_threat_search $mission_actor_1
@@ -20047,7 +20050,7 @@ while True
         turn_char_to_face_char $mission_actor_2 $mission_actor_1
         clear_char_threat_search $mission_actor_2
         give_weapon_to_char $mission_actor_2 weapon 20 ammo 1
-        clear_area 1 at -681.0527 -1571.7163 12.5534 range 5.0
+        clear_area 0 at -681.0527 -1571.7163 12.5534 range 5.0
         set_fixed_camera_position -681.0527 -1571.7163 12.5534 0.0 0.0 0.0
         point_camera_at_char $mission_actor_2 15 2
         set_time_scale 1.0
