@@ -19211,7 +19211,7 @@ then
         set_var_int_to_lvar_int $mission_actor_6 = 4@
         set_var_int_to_lvar_int $mission_actor_7 = 5@
         if
-            0@ == 1
+            1@ == 1
         then
             car_goto_coordinates_accurate $mission_car_4 drive_to_point -838.279 -611.1748 10.9266
         else
@@ -19272,7 +19272,7 @@ then
         set_var_int_to_lvar_int $mission_actor_8 = 4@
         set_var_int_to_lvar_int $mission_actor_9 = 5@
         if
-            0@ == 1
+            2@ == 1
         then
             car_goto_coordinates_accurate $mission_car_5 drive_to_point -766.1263 -1236.6731 10.9259
         else
