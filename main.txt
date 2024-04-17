@@ -19786,7 +19786,7 @@ set_car_proofs $mission_car_5 immunities 0 0 0 0 0
 
 :FINAL_MOB_LOOP
 wait 0
-get_random_car_of_type_in_area_no_save 10@ = get_random_car_with_actors #FIRETRUK in_area -850.0 -1500.0 -650.0 -1350.0
+get_random_car_of_type_in_area_no_save 10@ = get_random_car_with_actors #FIRETRUK in_area -1200.0 -1800.0 -600.0 -1300.0
 if
     10@ <> -1
 then
@@ -19884,7 +19884,7 @@ set_char_obj_goto_coord_on_foot $mission_actor_1 -685.5568 -1558.5228
 TIMERA = 0
 while True
     wait 0
-    get_random_car_of_type_in_area_no_save 10@ = get_random_car_with_actors #FIRETRUK in_area -850.0 -1500.0 -650.0 -1350.0
+    get_random_car_of_type_in_area_no_save 10@ = get_random_car_with_actors #FIRETRUK in_area -1200.0 -1800.0 -600.0 -1300.0
     if
         10@ <> -1
     then
@@ -20020,7 +20020,7 @@ while True
     if
         15@ >= 3
     then
-        get_random_car_of_type_in_area_no_save 10@ = get_random_car_with_actors #FIRETRUK in_area -850.0 -1500.0 -650.0 -1350.0
+        get_random_car_of_type_in_area_no_save 10@ = get_random_car_with_actors #FIRETRUK in_area -1200.0 -1800.0 -600.0 -1300.0
         if
             10@ <> -1
         then
@@ -20233,7 +20233,7 @@ while True
     if
         2 >= 15@
     then
-        get_random_car_of_type_in_area_no_save 10@ = get_random_car_with_actors #FIRETRUK in_area -850.0 -1500.0 -650.0 -1350.0
+        get_random_car_of_type_in_area_no_save 10@ = get_random_car_with_actors #FIRETRUK in_area -1200.0 -1800.0 -600.0 -1300.0
         if
             10@ <> -1
         then
