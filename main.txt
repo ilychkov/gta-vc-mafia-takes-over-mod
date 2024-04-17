@@ -19372,7 +19372,7 @@ request_model #MINIGUN
 request_model #MINIGUN2
 
 set_time_of_day 1 30
-release_weather
+force_weather_now 1
 $always_rain = 0
 
 clear_area 0 at -706.783 -1554.7404 11.5353 range 200.0
@@ -20326,6 +20326,8 @@ freeze_car_position_and_dont_load_collision $mission_car_1 position_and_dont_loa
 //credits
 
 set_time_of_day 5 25
+force_weather_now 0
+$always_rain = 0
 
 request_model #CUBAN
 request_model #VOODOO
@@ -20782,6 +20784,8 @@ register_mission_passed 'FINALMS'
 player_made_progress 1
 $passed_final = 1
 remove_blip $icon_final
+release_weather
+$always_rain = 0
 start_new_script @THANKYOU
 create_clothes_pickup $clothes_pickup_4 = create_clothes_pickup 2 at -237.7 -310.6 10.0
 $clothes_pickup_4_available = 1
