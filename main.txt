@@ -19378,8 +19378,6 @@ request_model #MINIGUN
 request_model #MINIGUN2
 
 set_time_of_day 23 30
-force_weather 1
-$always_rain = 0
 
 clear_area 0 at -706.783 -1554.7404 11.5353 range 200.0
 set_car_density_multiplier 0.0
@@ -20102,7 +20100,7 @@ while True
         TIMERA > 200
     then
         freeze_car_position $mission_car_1 in_current_position 0
-        explode_car $mission_car_1
+        set_car_health $mission_car_1 0
         15@++
         TIMERA = 0
     end
@@ -20327,12 +20325,12 @@ delete_char $mission_actor_7
 delete_char $mission_actor_8
 delete_char $mission_actor_9
 
-freeze_car_position_and_dont_load_collision $mission_car_1 position_and_dont_load_collision 1
+freeze_car_position $mission_car_1 in_current_position 1
 
 //credits
 
 set_time_of_day 5 25
-force_weather_now 0
+force_weather_now 1
 $always_rain = 0
 
 request_model #CUBAN
@@ -20762,6 +20760,7 @@ set_car_cruise_speed 3@ max_speed_to 10.0
 set_car_driving_style 3@ traffic_behavior_to 2
 set_car_straight_line_distance 3@ abandon_path_radius 40
 set_car_change_lane 3@ change_lane 0
+car_set_idle 3@
 return
 
 :FINAL_MAFIA_CAR_START_SHOOTING
