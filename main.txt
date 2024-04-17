@@ -5233,7 +5233,8 @@ request_model #CELLPHONE
 load_all_models_now
 do_fade 1 1500
 switch_widescreen 1
-clear_area 0 at 482.4622 244.5908 10.10115 range 5.0
+clear_area 0 at 482.4622 244.5908 10.10115 range 100.0
+set_ped_density_multiplier 0.0
 set_player_coordinates $player_char at 482.4622 244.5908 10.10115
 set_player_heading $player_char z_angle_to 359.0237
 set_fixed_camera_position 489.3029 243.0936 15.9715 rotation 0.0 0.0 0.0
@@ -5281,6 +5282,8 @@ do_fade 0 1500
 while get_fading_status
     wait 0
 end
+
+set_ped_density_multiplier 1.0
 
 switch_widescreen 0
 restore_camera_jumpcut
