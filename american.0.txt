@@ -79,7 +79,7 @@ CORTZ1S = [os]Sobre El Mar
 FINALM  = Last Regards
 FINALMS = [os]Last Regards
 M_PASS2 = MISSION PASSED!
-THANKYU = ~t~~f~Thank you for playing my mod!
+THANKYU = ~t~Thank you for playing my mod!
 
 [GOLF]
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!

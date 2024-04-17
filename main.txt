@@ -1361,7 +1361,7 @@ if and
     is_int_var_greater_than_int_var $now > $last_help_printing_time
 goto_if_false @CLOTH1_LOOP
 print_help 'CLOTH1'
-get_game_timer $last_help_printing_time
+UPDATE_LAST_HELP_PRINTING_TIME()
 terminate_this_script
 
 :CLOTH2
@@ -1379,7 +1379,7 @@ if and
     is_int_var_greater_than_int_var $now > $last_help_printing_time
 goto_if_false @CLOTH2_LOOP
 print_help 'CLOTH2'
-get_game_timer $last_help_printing_time
+UPDATE_LAST_HELP_PRINTING_TIME()
 terminate_this_script
 
 :CLOTH3
@@ -1397,7 +1397,7 @@ if and
     is_int_var_greater_than_int_var $now > $last_help_printing_time
 goto_if_false @CLOTH3_LOOP
 print_help 'CLOTH3'
-get_game_timer $last_help_printing_time
+UPDATE_LAST_HELP_PRINTING_TIME()
 terminate_this_script
 
 :CLOTH4
@@ -1415,7 +1415,7 @@ if and
     is_int_var_greater_than_int_var $now > $last_help_printing_time
 goto_if_false @CLOTH4_LOOP
 print_help 'CLOTH4'
-get_game_timer $last_help_printing_time
+UPDATE_LAST_HELP_PRINTING_TIME()
 terminate_this_script
 
 :CLOTH5
@@ -1433,7 +1433,7 @@ if and
     is_int_var_greater_than_int_var $now > $last_help_printing_time
 goto_if_false @CLOTH5_LOOP
 print_help 'CLOTH5'
-get_game_timer $last_help_printing_time
+UPDATE_LAST_HELP_PRINTING_TIME()
 terminate_this_script
 
 :PARKCAR1
@@ -1451,7 +1451,7 @@ if and
     is_int_var_greater_than_int_var $now > $last_help_printing_time
 goto_if_false @PARKCAR1_LOOP
 print_help 'PARKCA1'
-get_game_timer $last_help_printing_time
+UPDATE_LAST_HELP_PRINTING_TIME()
 terminate_this_script
 
 :THANKYOU
@@ -1469,7 +1469,7 @@ if and
     is_int_var_greater_than_int_var $now > $last_help_printing_time
 goto_if_false @THANKYOU_LOOP
 print_help 'THANKYU'
-get_game_timer $last_help_printing_time
+UPDATE_LAST_HELP_PRINTING_TIME()
 terminate_this_script
 
 
