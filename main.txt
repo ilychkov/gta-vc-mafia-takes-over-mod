@@ -19102,10 +19102,10 @@ then
     if
         TIMERB > 3500
     then
-        get_car_coordinates $mission_car_1 position_to 0@ 1@ 2@
-        get_closest_car_node_with_heading 0@ 1@ 2@ store_nearby_vector_to 0@ 1@ 2@ 3@
-        set_car_coordinates $mission_car_1 0@ 1@ 2@
-        set_car_heading $mission_car_1 3@
+        get_car_coordinates $mission_car_1 position_to 3@ 4@ 5@
+        get_closest_car_node_with_heading 3@ 4@ 5@ store_nearby_vector_to 3@ 4@ 5@ 6@
+        set_car_coordinates $mission_car_1 3@ 4@ 5@
+        set_car_heading $mission_car_1 6@
         TIMERB = 0
     end
 end
