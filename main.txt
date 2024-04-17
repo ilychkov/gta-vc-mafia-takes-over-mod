@@ -1454,6 +1454,24 @@ print_help 'PARKCA1'
 get_game_timer $last_help_printing_time
 terminate_this_script
 
+:THANKYOU
+script_name 'THANKYU'
+TIMERA = 0
+
+:THANKYOU_LOOP
+wait $default_wait_time
+if
+    is_player_playing $player_char
+goto_if_false @THANKYOU_LOOP
+get_game_timer $now
+if and
+    TIMERA > 3000
+    is_int_var_greater_than_int_var $now > $last_help_printing_time
+goto_if_false @THANKYOU_LOOP
+print_help 'THANKYU'
+get_game_timer $last_help_printing_time
+terminate_this_script
+
 
 //-------------Hail a taxi---------------
 //
@@ -20456,6 +20474,10 @@ player_made_progress 1
 $passed_final = 1
 remove_blip $icon_final
 release_weather
+start_new_script @THANKYOU
+create_clothes_pickup $clothes_pickup_4 = create_clothes_pickup 2 at -237.7 -310.6 10.0
+$clothes_pickup_4_available = 1
+start_new_script @CLOTH4
 return
 
 :FINAL_CLEANUP
