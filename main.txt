@@ -20100,7 +20100,7 @@ while True
         TIMERA > 200
     then
         freeze_car_position $mission_car_1 in_current_position 0
-        set_car_health $mission_car_1 0
+        explode_car $mission_car_1
         15@++
         TIMERA = 0
     end
@@ -20153,6 +20153,8 @@ fade 0 1500
 while get_fading_status
     wait 0
 end
+
+freeze_car_position $mission_car_1 in_current_position 1
 
 delete_char $mission_actor_1
 delete_char $mission_actor_2
@@ -20325,12 +20327,10 @@ delete_char $mission_actor_7
 delete_char $mission_actor_8
 delete_char $mission_actor_9
 
-freeze_car_position $mission_car_1 in_current_position 1
-
 //credits
 
 set_time_of_day 5 25
-force_weather_now 1
+release_weather
 $always_rain = 0
 
 request_model #CUBAN
