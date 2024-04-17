@@ -20143,27 +20143,28 @@ while True
         15@ == 8
         TIMERA > 2000
     then
+        set_time_scale 1.0
+        fade 0 1500
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 9
+        TIMERA > 1500
+    then
+        freeze_car_position $mission_car_1 in_current_position 1
+        delete_char $mission_actor_1
+        delete_char $mission_actor_2
+        switch_widescreen 0
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 10
+        TIMERA > 1500
+    then
         break
     end
-end
-
-set_time_scale 1.0
-
-fade 0 1500
-while get_fading_status
-    wait 0
-end
-
-freeze_car_position $mission_car_1 in_current_position 1
-
-delete_char $mission_actor_1
-delete_char $mission_actor_2
-
-switch_widescreen 0
-
-TIMERA = 0
-while 1500 > TIMERA
-    wait 0
 end
 
 request_model #POLICE
@@ -20229,6 +20230,16 @@ fade 1 1000
 TIMERA = 0
 while True
     wait 0
+    if
+        2 >= 15@
+    then
+        get_random_car_of_type_in_area_no_save 10@ = get_random_car_with_actors #FIRETRUK in_area -850.0 -1500.0 -650.0 -1350.0
+        if
+            10@ <> -1
+        then
+            delete_car 10@
+        end
+    end
     if and
         15@ == 0
         TIMERA > 1500
@@ -20330,7 +20341,7 @@ delete_char $mission_actor_9
 //credits
 
 set_time_of_day 5 25
-release_weather
+force_weather_now 0
 $always_rain = 0
 
 request_model #CUBAN
