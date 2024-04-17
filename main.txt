@@ -243,20 +243,24 @@ launch_mission @AUDIO
 wait 1000 ms
 if
     $final_mission_activated == 0
-goto_if_false @MAIN_2
-if and
-    $passed_police_1 == 1
-    $passed_police_2 == 1
-    $passed_biker_1 == 1
-    $passed_cuban_1 == 1
-    $passed_cuban_2 == 1
-    $passed_cortez_1 == 1
 then
-    start_new_script @FINAL_MISSION
-    $final_mission_activated = 1
+    if and
+        $passed_police_1 == 1
+        $passed_police_2 == 1
+        $passed_biker_1 == 1
+        $passed_cuban_1 == 1
+        $passed_cuban_2 == 1
+        $passed_cortez_1 == 1
+    then
+        start_new_script @FINAL_MISSION
+        $final_mission_activated = 1
+    end
 end
-
-:MAIN_2
+if
+    $always_rain == 1
+then
+    force_weather 5
+end
 if
     $game_completed == 0
 goto_if_false @MAIN
