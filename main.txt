@@ -5116,6 +5116,7 @@ if
     $phone_ringing == 1
 goto_if_false @FINAL_MISSION_PHONE_LOOP
 clear_mission_audio 1
+clear_help
 $phone_ringing = 0
 goto @FINAL_MISSION_PHONE_LOOP
     
