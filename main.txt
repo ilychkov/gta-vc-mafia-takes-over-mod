@@ -19265,7 +19265,7 @@ then
         2@ = 1
     else
         if
-            locate_player_any_means_2d $player_char 0 $mission_car_6_x $mission_car_6_y radius fm_car_spawn_distance fm_car_spawn_distance
+            locate_player_any_means_2d $player_char 0 $mission_car_6_x $mission_car_6_y radius 100.0 100.0
         then
             request_model #ADMIRAL
             while not has_model_loaded #ADMIRAL
