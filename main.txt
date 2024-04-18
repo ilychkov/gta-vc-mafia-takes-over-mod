@@ -12449,7 +12449,7 @@ if
     $passed_car_mechanic_count == 0
 then
     player_made_progress 1
-    print_now 'CAR_WON' time 5000 1 // Car Mechanic Mission Complete. Your max Body Armor increased to 150.
+    print_now 'CAR_WON' time 5000 1 // Car Mechanic Mission Complete! Your max Body Armor increased to 150.
     increase_player_max_armour $player_char max_armour += 50
 end
 $passed_car_mechanic_count++

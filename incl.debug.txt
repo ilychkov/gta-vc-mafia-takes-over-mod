@@ -1,7 +1,7 @@
-$start_x = -256.4567
-$start_y = -375.562
-$start_z = 10.4109
-$skip_intro = 0
-$mission_debug = 0
+//$start_x = -256.4567
+//$start_y = -375.562
+//$start_z = 10.4109
+//$skip_intro = 0
+//$mission_debug = 0
 const start_time_hours = 5
 const start_time_minutes = 30
