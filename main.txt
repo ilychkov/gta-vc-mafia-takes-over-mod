@@ -5181,6 +5181,9 @@ set_player_control $player_char 1
 set_police_ignore_player $player_char ignored_by_cops_state_to 0
 set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 
+force_weather 5
+$always_rain = 1
+
 $final_phone_x = 482.5293
 $final_phone_y = 244.276
 $final_phone_z = 10.09
@@ -5230,9 +5233,6 @@ do_fade 0 1500
 while get_fading_status
     wait 0
 end
-
-force_weather 5
-$always_rain = 1
 
 request_model #CELLPHONE
 load_all_models_now
