@@ -1,6 +1,6 @@
 Vice City: The Mafia Takes Over
-Made by Ivan Lychkov
-(formerly Vayan, author of Vice City Second Wave)
+
+Made by Ivan Lychkov (formerly Vayan, author of Vice City Second Wave)
 
 Features
 - 7 new storyline missions
@@ -21,6 +21,11 @@ NPCs locations:
 - East of Viceport, outside of the docks
 - Downtown, near the V-Rock building
 - Leaf Links??? Or Vice Point??? (secret!)
+
+Installation:
+1) copy main.scm to the Data directory in your GTA: Vice City folder
+2) copy american.gxt to the Text directory in your GTA: Vice City folder
+First back up the original files!!!
 
 GitHub repo: https://github.com/ilychkov/gta-vc-mafia-takes-over-mod
 
