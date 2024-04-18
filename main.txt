@@ -5070,7 +5070,7 @@ if and
     not is_wanted_level_greater $player_char wanted_level > 0
 goto_if_false @FINAL_MISSION_PHONE_LOOP_END
 if
-    TIMERA > 5000
+    TIMERA > 20000
 goto_if_false @FINAL_MISSION_PHONE_LOOP
 if
     $phone_ringing == 0
@@ -5233,7 +5233,7 @@ request_model #CELLPHONE
 load_all_models_now
 do_fade 1 1500
 switch_widescreen 1
-clear_area 0 at 482.4622 244.5908 10.10115 range 100.0
+clear_area_of_chars 382.0 145.0 5.0 582.0 345.0 15.0
 set_ped_density_multiplier 0.0
 set_player_coordinates $player_char at 482.4622 244.5908 10.10115
 set_player_heading $player_char z_angle_to 359.0237
