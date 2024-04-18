@@ -4877,7 +4877,12 @@ if and
     is_player_in_model $player_char driving_vehicle_type #PONY
     can_player_start_mission $player_char
 goto_if_false @CAR_MECHANIC_ACTIVATE_LOOP
-print_help 'CARMHNT'
+get_game_timer $now
+if
+    is_int_var_greater_than_int_var $now > $last_help_printing_time
+then
+    print_help 'CARMHNT'
+end
 $car_mechanic_button_pressed = 0
 
 :CAR_MECHANIC_ACTIVATE_WAIT
