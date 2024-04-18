@@ -33,3 +33,9 @@ Playing with Frame Limiter on is recommended for some scripted things to work as
 
 If anyone wants to reuse my work or parts of it, please ask me for permission.
 Posting gameplay videos is fine!
+
+Thanks:
+- Rockstar Games for the wonderful game which is GTA: Vice City
+- Seemann for Sanny Builder
+- all my old friends from the Vice City days
+- everyone who played Vice City Second Wave and made videos about it, which made me finally start working on a new mod
