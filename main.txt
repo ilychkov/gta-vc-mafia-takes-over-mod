@@ -18577,7 +18577,7 @@ while True
         15@ == 1
         TIMERA > 1000
     then
-        print_big_q 'TITLE1' time 4000 style 5
+        print_big_q 'TITLE1' time 4000 style 6
         15@++
         TIMERA = 0
     end
@@ -18585,7 +18585,7 @@ while True
         15@ == 2
         TIMERA > 5000
     then
-        print_big_q 'TITLE2' time 4000 style 5
+        print_big_q 'TITLE2' time 4000 style 6
         15@++
         TIMERA = 0
     end
