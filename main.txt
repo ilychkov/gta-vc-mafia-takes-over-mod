@@ -3686,8 +3686,8 @@ end
 if
     pc_gang_car_model == #GANGBUR
 then
-    pc_gang_1_model = #CLA
-    pc_gang_2_model = #CLB
+    pc_gang_1_model = #SGA
+    pc_gang_2_model = #SGB
 end
 if
     pc_gang_car_model == #CUBAN
