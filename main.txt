@@ -17,11 +17,10 @@ set_fading_colour 0 0 0
 fade 0 (in) 0 ms
 set_total_number_of_missions 0 // not used in VC
 // 16 info pickups
-// 13 unique stunts
 // 7 story missions
 // 2 side missions
 // 1 music pickup
-set_progress_total 39
+set_progress_total 26
 set_max_wanted_level 2
 set_collectable1_total 0
 set_deatharrest_state 0
@@ -5746,6 +5745,8 @@ terminate_this_script
 //
 
 :USJ
+script_name 'USJ'
+set_deatharrest_state 0
 $usj_1_passed = 0
 $usj_2_passed = 0
 $usj_3_passed = 0
@@ -5786,10 +5787,9 @@ $790 = 100
 $792 = 0
 $791 = 0
 $794 = 0
-set_deatharrest_state 0
 $unique_jumps_total = 13
 set_unique_jumps_total $unique_jumps_total
-script_name 'USJ'
+const usj_visible_radius = 30.0
 
 :USJ_298
 wait 0
@@ -5813,131 +5813,137 @@ end
 if
     is_player_in_zone $player_char in_zone 'A_PORT' // Escobar International
 goto_if_false @USJ_BEACH2
-if and
-    $793 == 0
-    $onmission == 0
+if
+    locate_player_in_car_2d $player_char sphere 0 near_point_in_car -1350.6602 -575.4534 radius usj_visible_radius usj_visible_radius
 then
-    if
+    if and
+        $793 == 0
+        $onmission == 0
         $usj_1_passed == 0
     then
         draw_corona 5.0 type 6 lensflares 0 with_color 150 150 0 at -1350.6602 -575.4534 14.2025
     end
-end
-if
-    $may_start_jump == 1
-goto_if_false @USJ_298
-if
-    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -1350.6602 -575.4534 14.2025 radius 5.0 5.0 5.0
-then
-    $792 = 1
-    $832 = -1374.5565
-    $833 = -569.8319
-    $834 = 24.8675
-    $835 = -1348.636
-    $836 = -583.5212
-    $837 = 22.6631
-    goto @USJ_5369
+    if and
+        $may_start_jump == 1
+        locate_player_in_car_3d $player_char sphere 0 near_point_in_car -1350.6602 -575.4534 14.2025 radius 5.0 5.0 5.0
+    then
+        $792 = 1
+        $832 = -1374.5565
+        $833 = -569.8319
+        $834 = 24.8675
+        $835 = -1348.636
+        $836 = -583.5212
+        $837 = 22.6631
+        goto @USJ_5369
+    end
 end
 goto @USJ_298
 
 :USJ_BEACH2
-if or
+if
     is_player_in_zone $player_char in_zone 'BEACH2' // Washington Beach
-    is_player_in_zone $player_char in_zone 'BEACH3' // Vice Point
-    is_player_in_area_2d $player_char 0 50.0 -352.0 170.0 -270.0
-goto_if_false @USJ_HAVANA
-if and
-    $793 == 0
-    $onmission == 0
+goto_if_false @USJ_BEACH3
+if
+    locate_player_in_car_2d $player_char sphere 0 near_point_in_car 167.1703 -497.5499 radius usj_visible_radius usj_visible_radius
 then
-    if
+    if and
+        $793 == 0
+        $onmission == 0
         $usj_2_passed == 0
     then
         draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 167.1703 -497.5499 12.8351
     end
-    if
-        $usj_3_passed == 0
+    if and
+        $may_start_jump == 1
+        locate_player_in_car_3d $player_char sphere 0 near_point_in_car 167.1703 -497.5499 12.8351 radius 3.0 3.0 3.0
     then
-        draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 197.65 -304.5664 12.8274
+        $792 = 2
+        $832 = 165.3209
+        $833 = -508.4918
+        $834 = 14.7937
+        $835 = 161.4518
+        $836 = -499.2184
+        $837 = 16.57
+        goto @USJ_5369
     end
-    if
-        $usj_5_passed == 0
-    then
-        draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 58.3801 -280.7855 12.1762
-    end
-    if
+end
+if
+    locate_player_in_car_2d $player_char sphere 0 near_point_in_car 408.0301 -673.4932 radius usj_visible_radius usj_visible_radius
+then
+    if and
+        $793 == 0
+        $onmission == 0
         $usj_8_passed == 0
     then
         draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 408.0301 -673.4932 12.6285
     end
-    if
+    if and
+        $may_start_jump == 1
+        locate_player_in_car_3d $player_char sphere 0 near_point_in_car 408.0301 -673.4932 12.6285 radius 3.0 3.0 3.0
+    then
+        $792 = 8
+        $832 = 382.2866
+        $833 = -660.8958
+        $834 = 20.6553
+        $835 = 381.0317
+        $836 = -663.313
+        $837 = 23.3764
+        goto @USJ_5369
+    end
+end
+goto @USJ_298
+
+:USJ_BEACH3
+if
+    is_player_in_zone $player_char in_zone 'BEACH3' // Vice Point
+goto_if_false @USJ_HAVANA
+if
+    locate_player_in_car_2d $player_char sphere 0 near_point_in_car 197.65 -304.5664 radius usj_visible_radius usj_visible_radius
+then
+    if and
+        $793 == 0
+        $onmission == 0
+        $usj_3_passed == 0
+    then
+        draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 197.65 -304.5664 12.8274
+    end
+    if and
+        $may_start_jump == 1
+        locate_player_in_car_3d $player_char sphere 0 near_point_in_car 197.65 -304.5664 12.8274 radius 3.0 3.0 3.0
+    then
+        $792 = 3
+        $832 = 210.244
+        $833 = -293.1355
+        $834 = 12.6485
+        $835 = 197.65
+        $836 = -304.5664
+        $837 = 12.8274
+        goto @USJ_5369
+    end
+end
+if
+    locate_player_in_car_2d $player_char sphere 0 near_point_in_car 529.3526 318.5157 radius usj_visible_radius usj_visible_radius
+then
+    if and
+        $793 == 0
+        $onmission == 0
         $usj_9_passed == 0
     then
         draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 529.3526 318.5157 15.6223
     end
-end
-if
-    $may_start_jump == 1
-goto_if_false @USJ_298
-if
-    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 167.1703 -497.5499 12.8351 radius 3.0 3.0 3.0
-then
-    $792 = 2
-    $832 = 165.3209
-    $833 = -508.4918
-    $834 = 14.7937
-    $835 = 161.4518
-    $836 = -499.2184
-    $837 = 16.57
-    goto @USJ_5369
-end
-if
-    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 197.65 -304.5664 12.8274 radius 3.0 3.0 3.0
-then
-    $792 = 3
-    $832 = 210.244
-    $833 = -293.1355
-    $834 = 12.6485
-    $835 = 197.65
-    $836 = -304.5664
-    $837 = 12.8274
-    goto @USJ_5369
-end
-if
-    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 58.3801 -280.7855 12.1762 radius 3.0 3.0 3.0
-then
-    $792 = 5
-    $832 = 61.1236
-    $833 = -246.2242
-    $834 = 8.9821
-    $835 = 57.0192
-    $836 = -265.9685
-    $837 = 16.8497
-    goto @USJ_5369
-end
-if
-    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 408.0301 -673.4932 12.6285 radius 3.0 3.0 3.0
-then
-    $792 = 8
-    $832 = 382.2866
-    $833 = -660.8958
-    $834 = 20.6553
-    $835 = 381.0317
-    $836 = -663.313
-    $837 = 23.3764
-    goto @USJ_5369
-end
-if
-    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 529.3526 318.5157 15.6223 radius 3.0 3.0 3.0
-then
-    $792 = 9
-    $832 = 544.4255
-    $833 = 341.1689
-    $834 = 16.9942
-    $835 = 536.4199
-    $836 = 333.2578
-    $837 = 18.3971
-    goto @USJ_5369
+    if and
+        $may_start_jump == 1
+        locate_player_in_car_3d $player_char sphere 0 near_point_in_car 529.3526 318.5157 15.6223 radius 3.0 3.0 3.0
+    then
+        $792 = 9
+        $832 = 544.4255
+        $833 = 341.1689
+        $834 = 16.9942
+        $835 = 536.4199
+        $836 = 333.2578
+        $837 = 18.3971
+        goto @USJ_5369
+    end
 end
 goto @USJ_298
 
@@ -5945,30 +5951,29 @@ goto @USJ_298
 if
     is_player_in_zone $player_char in_zone 'HAVANA' // Little Havana
 goto_if_false @USJ_BEACH1
-if and
-    $793 == 0
-    $onmission == 0
+if
+    locate_player_in_car_2d $player_char sphere 0 near_point_in_car -809.9098 -490.0857 radius usj_visible_radius usj_visible_radius
 then
-    if
+    if and
+        $793 == 0
+        $onmission == 0
         $usj_4_passed == 0
     then
         draw_corona 5.0 type 6 lensflares 0 with_color 150 150 0 at -809.9098 -490.0857 19.3901
     end
-end
-if
-    $may_start_jump == 1
-goto_if_false @USJ_298
-if
-    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -809.9098 -490.0857 19.3901 radius 5.0 5.0 5.0
-then
-    $792 = 4
-    $832 = -841.8424
-    $833 = -520.1641
-    $834 = 10.9241
-    $835 = -808.1541
-    $836 = -501.5899
-    $837 = 28.9661
-    goto @USJ_5369
+    if and
+        $may_start_jump == 1
+        locate_player_in_car_3d $player_char sphere 0 near_point_in_car -809.9098 -490.0857 19.3901 radius 5.0 5.0 5.0
+    then
+        $792 = 4
+        $832 = -841.8424
+        $833 = -520.1641
+        $834 = 10.9241
+        $835 = -808.1541
+        $836 = -501.5899
+        $837 = 28.9661
+        goto @USJ_5369
+    end
 end
 goto @USJ_298
 
@@ -5976,47 +5981,53 @@ goto @USJ_298
 if
     is_player_in_zone $player_char in_zone 'BEACH1' // Ocean Beach
 goto_if_false @USJ_DTOWN
-if and
-    $793 == 0
-    $onmission == 0
+if
+    locate_player_in_car_2d $player_char sphere 0 near_point_in_car 8.4339 -1494.3721 radius usj_visible_radius usj_visible_radius
 then
-    if
+    if and
+        $793 == 0
+        $onmission == 0
         $usj_6_passed == 0
     then
         draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 8.4339 -1494.3721 12.0914
     end
-    if
+    if and
+        $may_start_jump == 1
+        locate_player_in_car_3d $player_char sphere 0 near_point_in_car 8.4339 -1494.3721 12.0914 radius 3.0 3.0 3.0
+    then
+        $792 = 6
+        $832 = 32.3471
+        $833 = -1491.7144
+        $834 = 17.2075
+        $835 = 14.3512
+        $836 = -1493.9012
+        $837 = 14.7461
+        goto @USJ_5369
+    end
+end
+if
+    locate_player_in_car_2d $player_char sphere 0 near_point_in_car 35.9051 -1493.8719 radius usj_visible_radius usj_visible_radius
+then
+    if and
+        $793 == 0
+        $onmission == 0
         $usj_7_passed == 0
     then
         draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 35.9051 -1493.8719 16.7796
     end
-end
-if
-    $may_start_jump == 1
-goto_if_false @USJ_298
-if
-    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 8.4339 -1494.3721 12.0914 radius 3.0 3.0 3.0
-then
-    $792 = 6
-    $832 = 32.3471
-    $833 = -1491.7144
-    $834 = 17.2075
-    $835 = 14.3512
-    $836 = -1493.9012
-    $837 = 14.7461
-    goto @USJ_5369
-end
-if
-    locate_player_in_car_3d $player_char sphere 0 near_point_in_car 35.9051 -1493.8719 16.7796 radius 3.0 3.0 3.0
-then
-    $792 = 7
-    $832 = 41.727
-    $833 = -1486.6896
-    $834 = 14.4866
-    $835 = 35.3583
-    $836 = -1484.2842
-    $837 = 14.4296
-    goto @USJ_5369
+    if and
+        $may_start_jump == 1
+        locate_player_in_car_3d $player_char sphere 0 near_point_in_car 35.9051 -1493.8719 16.7796 radius 3.0 3.0 3.0
+    then
+        $792 = 7
+        $832 = 41.727
+        $833 = -1486.6896
+        $834 = 14.4866
+        $835 = 35.3583
+        $836 = -1484.2842
+        $837 = 14.4296
+        goto @USJ_5369
+    end
 end
 goto @USJ_298
 
@@ -6024,47 +6035,53 @@ goto @USJ_298
 if
     is_player_in_zone $player_char in_zone 'DTOWN' // Downtown
 goto_if_false @USJ_HAITI
-if and
-    $793 == 0
-    $onmission == 0
+if
+    locate_player_in_car_2d $player_char sphere 0 near_point_in_car -992.7476 1324.7122 radius usj_visible_radius usj_visible_radius
 then
-    if
+    if and
+        $793 == 0
+        $onmission == 0
         $usj_10_passed == 0
     then
         draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at -992.7476 1324.7122 11.5037
     end
-    if
+    if and
+        $may_start_jump == 1
+        locate_player_in_car_3d $player_char sphere 0 near_point_in_car -992.7476 1324.7122 11.5037 radius 3.0 3.0 3.0
+    then
+        $792 = 10
+        $832 = -1019.894
+        $833 = 1338.2388
+        $834 = 8.7368
+        $835 = -1006.0764
+        $836 = 1327.2264
+        $837 = 14.3023
+        goto @USJ_5369
+    end
+end
+if
+    locate_player_in_car_2d $player_char sphere 0 near_point_in_car -742.4 774.7 radius usj_visible_radius usj_visible_radius
+then
+    if and
+        $793 == 0
+        $onmission == 0
         $usj_11_passed == 0
     then
         draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at -742.4 774.7 14.0
     end
-end
-if
-    $may_start_jump == 1
-goto_if_false @USJ_298
-if
-    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -992.7476 1324.7122 11.5037 radius 3.0 3.0 3.0
-then
-    $792 = 10
-    $832 = -1019.894
-    $833 = 1338.2388
-    $834 = 8.7368
-    $835 = -1006.0764
-    $836 = 1327.2264
-    $837 = 14.3023
-    goto @USJ_5369
-end
-if
-    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -742.4 774.7 14.0 radius 3.0 3.0 3.0
-then
-    $792 = 11
-    $832 = -750.7026
-    $833 = 737.7878
-    $834 = 11.9159
-    $835 = -742.3757
-    $836 = 766.8336
-    $837 = 20.5888
-    goto @USJ_5369
+    if and
+        $may_start_jump == 1
+        locate_player_in_car_3d $player_char sphere 0 near_point_in_car -742.4 774.7 14.0 radius 3.0 3.0 3.0
+    then
+        $792 = 11
+        $832 = -750.7026
+        $833 = 737.7878
+        $834 = 11.9159
+        $835 = -742.3757
+        $836 = 766.8336
+        $837 = 20.5888
+        goto @USJ_5369
+    end
 end
 goto @USJ_298
 
@@ -6072,61 +6089,92 @@ goto @USJ_298
 if
     is_player_in_zone $player_char in_zone 'HAITI' // Little Haiti
 goto_if_false @USJ_DOCKS
-if and
-    $793 == 0
-    $onmission == 0
+if
+    locate_player_in_car_2d $player_char sphere 0 near_point_in_car -935.7979 13.2934 radius usj_visible_radius usj_visible_radius
 then
-    if
+    if and
+        $793 == 0
+        $onmission == 0
         $usj_12_passed == 0
     then
         draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at -935.7979 13.2934 10.7082
     end
-end
-if
-    $may_start_jump == 1
-goto_if_false @USJ_298
-if
-    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -935.7979 13.2934 10.7082 radius 3.0 3.0 3.0
-then
-    $792 = 12
-    $832 = -926.6302
-    $833 = 60.159
-    $834 = 11.6767
-    $835 = -935.1532
-    $836 = 29.8964
-    $837 = 13.7501
-    goto @USJ_5369
+    if and
+        $may_start_jump == 1
+        locate_player_in_car_3d $player_char sphere 0 near_point_in_car -935.7979 13.2934 10.7082 radius 3.0 3.0 3.0
+    then
+        $792 = 12
+        $832 = -926.6302
+        $833 = 60.159
+        $834 = 11.6767
+        $835 = -935.1532
+        $836 = 29.8964
+        $837 = 13.7501
+        goto @USJ_5369
+    end
 end
 goto @USJ_298
 
 :USJ_DOCKS
 if
     is_player_in_zone $player_char in_zone 'DOCKS' // Viceport
-goto_if_false @USJ_298
-if and
-    $793 == 0
-    $onmission == 0
+goto_if_false @USJ_OTHER
+if
+    locate_player_in_car_2d $player_char sphere 0 near_point_in_car -646.4009 -1366.9537 radius usj_visible_radius usj_visible_radius
 then
-    if
+    if and
+        $793 == 0
+        $onmission == 0
         $usj_13_passed == 0
     then
         draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at -646.4009 -1366.9537 16.2779
     end
+    if and
+        $may_start_jump == 1
+        locate_player_in_car_3d $player_char sphere 0 near_point_in_car -646.4009 -1366.9537 16.2779 radius 3.0 3.0 3.0
+    then
+        $792 = 13
+        $832 = -670.8126
+        $833 = -1370.2648
+        $834 = 11.0712
+        $835 = -657.4781
+        $836 = -1370.8634
+        $837 = 15.5587
+        goto @USJ_5369
+    end
 end
+goto @USJ_298
+
+:USJ_OTHER
 if
-    $may_start_jump == 1
+    is_player_in_zone $player_char in_zone 'VICE_C' // Vice City
 goto_if_false @USJ_298
 if
-    locate_player_in_car_3d $player_char sphere 0 near_point_in_car -646.4009 -1366.9537 16.2779 radius 3.0 3.0 3.0
+    is_player_in_area_2d $player_char 0 50.0 -352.0 170.0 -270.0
+goto_if_false @USJ_298
+if
+    locate_player_in_car_2d $player_char sphere 0 near_point_in_car 58.3801 -280.7855 radius usj_visible_radius usj_visible_radius
 then
-    $792 = 13
-    $832 = -670.8126
-    $833 = -1370.2648
-    $834 = 11.0712
-    $835 = -657.4781
-    $836 = -1370.8634
-    $837 = 15.5587
-    goto @USJ_5369
+    if and
+        $793 == 0
+        $onmission == 0
+        $usj_5_passed == 0
+    then
+        draw_corona 3.0 type 6 lensflares 0 with_color 150 150 0 at 58.3801 -280.7855 12.1762
+    end
+    if and
+        $may_start_jump == 1
+        locate_player_in_car_3d $player_char sphere 0 near_point_in_car 58.3801 -280.7855 12.1762 radius 3.0 3.0 3.0
+    then
+        $792 = 5
+        $832 = 61.1236
+        $833 = -246.2242
+        $834 = 8.9821
+        $835 = 57.0192
+        $836 = -265.9685
+        $837 = 16.8497
+        goto @USJ_5369
+    end
 end
 goto @USJ_298
 
@@ -6197,7 +6245,6 @@ if and
 goto_if_false @USJ_5747
 $usj_1_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_5747
@@ -6207,7 +6254,6 @@ if and
 goto_if_false @USJ_5797
 $usj_2_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_5797
@@ -6217,7 +6263,6 @@ if and
 goto_if_false @USJ_5847
 $usj_3_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_5847
@@ -6227,7 +6272,6 @@ if and
 goto_if_false @USJ_5897
 $usj_4_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_5897
@@ -6237,7 +6281,6 @@ if and
 goto_if_false @USJ_5947
 $usj_5_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_5947
@@ -6247,7 +6290,6 @@ if and
 goto_if_false @USJ_5997
 $usj_6_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_5997
@@ -6257,7 +6299,6 @@ if and
 goto_if_false @USJ_6047
 $usj_7_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6047
@@ -6267,7 +6308,6 @@ if and
 goto_if_false @USJ_6097
 $usj_8_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6097
@@ -6277,7 +6317,6 @@ if and
 goto_if_false @USJ_6147
 $usj_9_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6147
@@ -6287,7 +6326,6 @@ if and
 goto_if_false @USJ_6197
 $usj_10_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6197
@@ -6297,7 +6335,6 @@ if and
 goto_if_false @USJ_6247
 $usj_11_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6247
@@ -6307,7 +6344,6 @@ if and
 goto_if_false @USJ_6297
 $usj_12_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6297
@@ -6317,7 +6353,6 @@ if and
 goto_if_false @USJ_6347
 $usj_13_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6347
@@ -6327,7 +6362,6 @@ if and
 goto_if_false @USJ_6397
 $usj_14_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6397
@@ -6337,7 +6371,6 @@ if and
 goto_if_false @USJ_6447
 $usj_15_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6447
@@ -6347,7 +6380,6 @@ if and
 goto_if_false @USJ_6497
 $usj_16_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6497
@@ -6357,7 +6389,6 @@ if and
 goto_if_false @USJ_6547
 $usj_17_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6547
@@ -6367,7 +6398,6 @@ if and
 goto_if_false @USJ_6597
 $usj_18_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6597
@@ -6377,7 +6407,6 @@ if and
 goto_if_false @USJ_6647
 $usj_19_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6647
@@ -6387,7 +6416,6 @@ if and
 goto_if_false @USJ_6697
 $usj_20_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6697
@@ -6397,7 +6425,6 @@ if and
 goto_if_false @USJ_6747
 $usj_21_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6747
@@ -6407,7 +6434,6 @@ if and
 goto_if_false @USJ_6797
 $usj_22_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6797
@@ -6417,7 +6443,6 @@ if and
 goto_if_false @USJ_6847
 $usj_23_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6847
@@ -6427,7 +6452,6 @@ if and
 goto_if_false @USJ_6897
 $usj_24_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6897
@@ -6437,7 +6461,6 @@ if and
 goto_if_false @USJ_6947
 $usj_25_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6947
@@ -6447,7 +6470,6 @@ if and
 goto_if_false @USJ_6997
 $usj_26_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_6997
@@ -6457,7 +6479,6 @@ if and
 goto_if_false @USJ_7047
 $usj_27_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_7047
@@ -6467,7 +6488,6 @@ if and
 goto_if_false @USJ_7097
 $usj_28_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_7097
@@ -6477,7 +6497,6 @@ if and
 goto_if_false @USJ_7147
 $usj_29_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_7147
@@ -6487,7 +6506,6 @@ if and
 goto_if_false @USJ_7197
 $usj_30_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_7197
@@ -6497,7 +6515,6 @@ if and
 goto_if_false @USJ_7247
 $usj_31_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_7247
@@ -6507,7 +6524,6 @@ if and
 goto_if_false @USJ_7297
 $usj_32_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_7297
@@ -6517,7 +6533,6 @@ if and
 goto_if_false @USJ_7347
 $usj_33_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_7347
@@ -6527,7 +6542,6 @@ if and
 goto_if_false @USJ_7397
 $usj_34_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_7397
@@ -6537,7 +6551,6 @@ if and
 goto_if_false @USJ_7447
 $usj_35_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_7447
@@ -6547,7 +6560,6 @@ if and
 goto_if_false @USJ_7497
 $usj_36_passed = 1
 $791 += 1
-player_made_progress 1
 goto @USJ_7504
 
 :USJ_7497
