@@ -8556,6 +8556,11 @@ dont_remove_object $ob_ap_door
 create_object_no_offset $ramp_1 = init_object #WATERJUMP1 at 58.5874 -283.3163 9.457
 set_object_heading $ramp_1 z_angle_to 3.4672
 dont_remove_object $ramp_1
+create_object_no_offset $ramp_2 = init_object #WATERJUMP1 at 56.7876 -240.5148 9.1383
+set_object_heading $ramp_2 z_angle_to 193.5797
+dont_remove_object $ramp_2
+swap_nearest_building_model 568.5 -4.8 13.3 radius 10.0 from #od_chariot_lghts02 to #FAKETARGET
+swap_nearest_building_model 568.5 -4.8 13.3 radius 10.0 from #lodchariot_lghts02 to #FAKETARGET
 
 create_car_generator $1992 = init_car_generator #ADMIRAL 8 8 force_spawn 0 alarm 50 door_lock 0 min_delay 0 max_delay 10000 at -401.2715 -534.6655 11.7534 angle 149.2032
 switch_car_generator $1992 cars_to_generate_to 101
