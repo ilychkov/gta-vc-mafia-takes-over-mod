@@ -40,7 +40,7 @@ PARKCA1 = A speed boat has been delivered to the Safehouse.
 GOLFMIS = 'A Little Game of Golf'
 GLFMISS = [MTO]'A Little Game of Golf'
 GOLFNO  = You need a ~g~golf cart~w~ to start this mission.
-NEW_REC = ~g~New Record Set!!!!! ~w~~1~ minutes ~g~and ~w~~1~ seconds.
+NEW_REC = ~g~New record, woohoo!! ~w~~1~ minutes ~g~and ~w~~1~ seconds.
 STFT_17 = Fastest time on 'A Little Game of Golf'
 POLICE1 = Special Delivery
 POLIC1S = [MTO]Special Delivery
@@ -82,6 +82,7 @@ M_PASS2 = MISSION PASSED!
 THANKYU = ~t~Thank you for playing my mod!
 
 [GOLF]
+GLFLEFT = Left:
 GOLF1   = ~g~Collect all the ~y~checkpoints~g~. Good luck!
 GOLF_F  = ~r~You bailed!
 GOLF_W  = ~r~There goes the golf car

@@ -8010,7 +8010,7 @@ $golf_x = -173.0759
 $golf_y = 418.5642
 $golf_z = 7.4777
 $passed_golf = 0
-$golf_record_seconds = 99999
+$golf_record_seconds = 300
 $police_x = 349.17
 $police_y = -530.1183
 $police_z = 9.8841
@@ -9541,6 +9541,11 @@ add_blip_for_coord $race_marker_2 = create_checkpoint_at $race_point_2_x $race_p
 dim_blip $race_marker_2 brightness_to 1
 set_player_control $player_char can_move 1
 TIMERA = 0
+set_var_int_to_var_int $mission_timer = $golf_record_seconds
+$mission_timer *= 1000
+$mission_counter = 30
+display_onscreen_timer_with_string $mission_timer type 1 text 'RACES' // TIME:
+display_nth_onscreen_counter_with_string $mission_counter 0 line 1 'GLFLEFT' // Left:
 
 :GOLF_1
 wait 0
@@ -9590,6 +9595,10 @@ if
 goto_if_false @GOLF_PASS_WAIT
 
 if
+    $mission_timer > 0
+goto_if_false @GOLF_TIMEOUT
+
+if
     $race_step == 29
 then
     draw_corona 1.0 type 5 lensflares 0 with_color 200 0 0 at $race_point_current_x $race_point_current_y $race_point_current_z
@@ -9608,6 +9617,7 @@ remove_blip $race_marker_1
 set_var_int_to_var_int $race_marker_1 = $race_marker_2
 dim_blip $race_marker_1 brightness_to 2
 add_one_off_sound 1 at $race_point_current_x $race_point_current_y $race_point_current_z
+$mission_counter--
 
 if
     28 > $race_step
@@ -9829,6 +9839,11 @@ print_now 'GOLF_W' time 5000 2
 GOLF_FAIL()
 return
 
+:GOLF_TIMEOUT
+print_now 'BMXFAIL' time 5000 2
+GOLF_FAIL()
+return
+
 :GOLF_FAIL
 print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
 return
@@ -9912,6 +9927,8 @@ mark_model_as_no_longer_needed #WATERJUMP1
 mark_model_as_no_longer_needed #BARREL2
 remove_animation 'RIOT'
 remove_animation 'STRIP'
+clear_onscreen_timer $mission_timer
+clear_onscreen_counter $mission_counter
 mission_has_finished
 return
 
@@ -18599,7 +18616,7 @@ while True
         15@ == 2
         TIMERA > 5000
     then
-        print_big_q 'TITLE2' time 4000 style 6
+        print_big_q 'TITLE2' time 5000 style 6
         15@++
         TIMERA = 0
     end
