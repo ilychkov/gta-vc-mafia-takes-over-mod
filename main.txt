@@ -9,7 +9,7 @@ DEFINE MISSION 6 AT @BIKER_1           // The Clearout
 DEFINE MISSION 7 AT @CUBAN_1           // Sea Scouts
 DEFINE MISSION 8 AT @CUBAN_2           // A Treasure Hunt
 DEFINE MISSION 9 AT @CORTEZ_1          // Sobre El Mar
-DEFINE MISSION 10 AT @FINAL            // Last Regards
+DEFINE MISSION 10 AT @FINAL            // The Mafia Takes Over
 
 //-------------MAIN---------------
 thread 'MAIN'
@@ -11019,6 +11019,7 @@ else
         3@ = 1398.85
     end
 end
+$mission_counter = 5
 4@ = 0
 CAR_MECHANIC_GENERATE_RANDOM_COORDS()
 set_var_float_to_lvar_float $mission_car_1_x = 12@
@@ -11314,34 +11315,40 @@ if
 then
     generate_random_int_in_range $mission_car_6_broken = random_int_in_ranges 2 5
     add_blip_for_coord $mission_car_6_marker = create_checkpoint_at $mission_car_6_x $mission_car_6_y $mission_car_6_z
+    $mission_counter++
 end
 if
     $passed_car_mechanic_count > 1
 then
     generate_random_int_in_range $mission_car_7_broken = random_int_in_ranges 2 5
     add_blip_for_coord $mission_car_7_marker = create_checkpoint_at $mission_car_7_x $mission_car_7_y $mission_car_7_z
+    $mission_counter++
 end
 if
     $passed_car_mechanic_count > 2
 then
     generate_random_int_in_range $mission_car_8_broken = random_int_in_ranges 2 5
     add_blip_for_coord $mission_car_8_marker = create_checkpoint_at $mission_car_8_x $mission_car_8_y $mission_car_8_z
+    $mission_counter++
 end
 if
     $passed_car_mechanic_count > 3
 then
     generate_random_int_in_range $mission_car_9_broken = random_int_in_ranges 2 5
     add_blip_for_coord $mission_car_9_marker = create_checkpoint_at $mission_car_9_x $mission_car_9_y $mission_car_9_z
+    $mission_counter++
 end
 if
     $passed_car_mechanic_count > 4
 then
     generate_random_int_in_range $mission_car_10_broken = random_int_in_ranges 2 5
     add_blip_for_coord $mission_car_10_marker = create_checkpoint_at $mission_car_10_x $mission_car_10_y $mission_car_10_z
+    $mission_counter++
 end
-$mission_objective_shown = 0
+$near_any_mission_car = 0
 $mission_timer = 600000
 display_onscreen_timer_with_string $mission_timer type 1 text 'RACES' // TIME:
+display_nth_onscreen_counter_with_string $mission_counter 0 line 1 'CMLEFT' // Left:
 $mission_car_marker_active = 0
 $mission_car_current_marker_active = 0
 $player_weapon_set = 0
@@ -11350,7 +11357,7 @@ $cm_repair_meter_shown = 0
 $cm_repair_meter_value = 0
 $cm_repair_meter_total = 0
 $mission_hint_shown = 0
-TIMERA = 0
+get_game_timer $mission_start_time
 $cm_cancel_button_pressed = 0
 const cm_spawn_distance = 125.0
 const cm_despawn_distance = 150.0
@@ -11384,14 +11391,18 @@ then
     print_now 'CMCANCL' time 5000 1 // ~r~Car Mechanic mission cancelled!
     goto @CAR_MECHANIC_FAIL
 end
-if and
+if
     $mission_hint_shown == 0
-    TIMERA > 10000
 then
-    print_help 'CMHINT'
-    $mission_hint_shown = 1
+    get_game_timer $timer
+    $timer -= 10000
+    if
+        is_int_var_greater_than_int_var $timer > $mission_start_time
+    then
+        print_help 'CMHINT'
+        $mission_hint_shown = 1
+    end
 end
-$near_any_mission_car = 0
 if
     $mission_car_1_broken > 0
 then
@@ -11971,18 +11982,12 @@ then
         then
             clear_wanted_level $player_char
         end
-        if
-            $cm_barrel <> -1
-        then
-            delete_object $cm_barrel
-        end
-        request_model #BARREL4
-        while not has_model_loaded #BARREL4
-            wait 0
-        end
+        remove_blip $cm_barrel_marker
+        mark_object_as_no_longer_needed $cm_barrel
         get_offset_from_car_in_world_coords 0@ 1@ 2@ from_car $mission_car offset 0.0 -2.7 -0.5
         create_object $cm_barrel = create_object #BARREL4 at 0@ 1@ 2@
         set_object_dynamic $cm_barrel toggle_in_moving_list 1
+        add_blip_for_object $cm_barrel_marker = create_marker_above_object $cm_barrel
         get_car_heading 2@ = car $mission_car
         2@ -= 180.0
         cos 0@ = cosine 2@
@@ -11992,7 +11997,6 @@ then
         add_to_object_velocity $cm_barrel scatter 0@ 1@ 1.0
     end
 else
-    $mission_objective_shown = 0
     if
         not is_player_in_car $player_char in_car $mission_car
     then
@@ -12251,21 +12255,20 @@ return
 :CAR_MECHANIC_CAR_VISIBLE
 15@ = 0
 get_car_coordinates 0@ position_to 6@ 7@ 8@
-if and
+if
     $near_any_mission_car == 0
-    locate_car_2d $mission_car sphere 0 near_point 6@ 7@ radius 20.0 20.0
 then
-    $near_any_mission_car = 1
     if
-        $mission_objective_shown == 0
+        locate_car_2d $mission_car sphere 0 near_point 6@ 7@ radius 30.0 30.0
     then
-        $mission_objective_shown = 1
+        $near_any_mission_car = 1
+        clear_car_last_weapon_damage $mission_car
         CAR_MECHANIC_SHOW_OBJECTIVE()
         if
             2@ <> 3
         then
             $cm_repair_meter_value = 0
-            display_nth_onscreen_counter_with_string $cm_repair_meter_value 1 line 1 'CMMETER' // Repair:
+            display_nth_onscreen_counter_with_string $cm_repair_meter_value 1 line 2 'CMMETER' // Repair:
             $cm_repair_meter_shown = 1
             set_var_int_to_lvar_int $cm_repair_meter_total = 3@
         end
@@ -12362,8 +12365,9 @@ else
         then
             get_car_coordinates 0@ position_to 12@ 13@ 14@
             if
-                locate_object_3d $cm_barrel near_point 12@ 13@ 14@ radius 1.4 1.4 1.4 flag 0
+                locate_object_3d $cm_barrel near_point 12@ 13@ 14@ radius 1.7 1.7 1.7 flag 1
             then
+                remove_blip $cm_barrel_marker
                 delete_object $cm_barrel
                 $cm_barrel = -1
                 3@ = 0
@@ -12381,6 +12385,7 @@ then
     15@ = 1
     remove_blip $mission_car_current_marker
     $mission_car_current_marker_active = 0
+    $near_any_mission_car = 0
 else
     get_car_health 14@ = car 0@
     if
@@ -12417,6 +12422,7 @@ return
 add_score $player_char money += 100
 print_with_number_big 'CMFIXED' number 100 time 3000 style 4 // Car fixed! $~1~
 register_life_saved
+$mission_counter--
 CAR_MECHANIC_DRIVE_AWAY()
 return
 
@@ -12442,6 +12448,7 @@ print_big 'M_FAIL' 5000 ms 1 // MISSION FAILED!
 return
 
 :CAR_MECHANIC_PASSED
+clear_this_print 'CMBACK' // ~g~Return to the truck.
 print_with_number_big 'M_PASS' number 1000 time 5000 style 1 // MISSION PASSED! $~1~
 play_mission_passed_tune 1
 add_score $player_char money += 1000
@@ -12469,6 +12476,7 @@ remove_blip $mission_car_7_marker
 remove_blip $mission_car_8_marker
 remove_blip $mission_car_9_marker
 remove_blip $mission_car_10_marker
+remove_blip $cm_barrel_marker
 mark_car_as_no_longer_needed $mission_car
 set_lvar_int_to_var_int 0@ = $mission_car_1
 set_lvar_int_to_var_int 1@ = $mission_car_1_driver
@@ -12514,6 +12522,7 @@ mark_model_as_no_longer_needed #BMYRI
 mark_model_as_no_longer_needed #HAMMER
 mark_model_as_no_longer_needed #BARREL4
 clear_onscreen_timer $mission_timer
+clear_onscreen_counter $mission_counter
 clear_onscreen_counter $cm_repair_meter_value
 mission_has_finished
 return
@@ -18499,7 +18508,7 @@ mission_has_finished
 return
 
 //-------------Mission 10---------------
-// Last Regards
+// The Mafia Takes Over
 
 :FINAL
 script_name 'FINAL'

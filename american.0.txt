@@ -103,6 +103,7 @@ CMFAIL2 = ~r~You are out of time. You're fired.
 CMFAIL3 = ~r~You destroyed our truck! You're fired.
 CMFAIL4 = ~r~You scared the customer! You're fired.
 CAR_WON = Car Mechanic Mission Complete! Your max Body Armor increased to 150.
+CMLEFT  = Left:
 CMMETER = Repair:
 
 [POLICE1]
