@@ -4825,6 +4825,8 @@ create_pickup $weapon_pickup_1 = create_pickup #NITESTICK type 15 at -251.84 -31
 create_pickup_with_ammo $weapon_pickup_2 = create_weapon_pickup #GRENADE 15 ammo 15 at -250.45 -312.58 10.1
 create_pickup_with_ammo $weapon_pickup_3 = create_weapon_pickup #COLT45 15 ammo 170 at -249.06 -311.115 10.085
 create_pickup_with_ammo $weapon_pickup_4 = create_weapon_pickup #UZI 15 ammo 300 at -247.67 -309.65 10.07
+create_pickup $safehouse_health_pickup = create_pickup #HEALTH type 2 at -265.8683 -368.2676 11.0187
+create_pickup $safehouse_armor_pickup = create_pickup #BODYARMOUR type 2 at -267.5349 -366.9858 11.0187
 terminate_this_script
 
 
