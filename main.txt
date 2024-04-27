@@ -3750,10 +3750,10 @@ while 10000 > TIMERA
         6@ > police_chase_min_spawn_distance
     then
         if or // outside of Leaf Links
-            -300.0 > 0@
-            0@ > 300.0
-            -250.0 > 1@
-            1@ > 650.0
+            -280.0 > 0@
+            0@ > 290.0
+            -270.0 > 1@
+            1@ > 670.0
         then
             break
         end
