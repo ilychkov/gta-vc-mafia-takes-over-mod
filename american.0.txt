@@ -78,6 +78,7 @@ CORTEZ1 = Sobre El Mar
 CORTZ1S = [MTO]Sobre El Mar
 FINALM  = The Mafia Takes Over
 FINALMS = The Mafia Takes Over
+FNLGUNS = ~g~You're going to need some guns for this mission.
 M_PASS2 = MISSION PASSED!
 THANKYU = ~t~Thank you for playing my mod!
 

@@ -5252,6 +5252,7 @@ while get_fading_status
 end
 
 print_now 'UNCALL1' time 3500 1
+14@ = 0
 15@ = 0
 TIMERA = -3500
 
@@ -5277,6 +5278,18 @@ while True
         15@ == 2
         TIMERA > 500
     then
+        break
+    end
+    if
+        not is_button_pressed 0 pressed_button 16
+    then
+        14@ = 1
+    end
+    if and
+        14@ == 1
+        is_button_pressed 0 pressed_button 16
+    then
+        clear_prints
         break
     end
 end
@@ -5306,6 +5319,8 @@ set_everyone_ignore_player $player_char ignored_by_everyone_to 0
 
 add_sprite_blip_for_contact_point $icon_final = create_icon_marker_and_sphere 9 at $final_x $final_y $final_z
 
+0@ = 0
+
 :FINAL_MARKER_LOOP
 wait $default_wait_time
 if
@@ -5319,6 +5334,27 @@ goto_if_false @FINAL_MARKER_LOOP
 if
     $passed_final == 0
 goto_if_false @FINAL_MARKER_LOOP_END
+if
+    0@ == 0
+then
+    if
+        locate_player_any_means_2d $player_char 0 $final_x $final_y radius 15.0 15.0
+    then
+        GET_PLAYER_GUN_COUNT()
+        if
+            2 > 15@
+        then
+            print_now 'FNLGUNS' time 5000 1
+        end
+        0@ = 1
+    end
+else
+    if
+        not locate_player_any_means_2d $player_char 0 $final_x $final_y radius 10.0 10.0
+    then
+        0@ = 0
+    end
+end
 if
     locate_player_on_foot_3d $player_char 0 $final_x $final_y $final_z radius 1.2 1.2 2.0
 then
@@ -7983,6 +8019,37 @@ then
     force_weather 5
 else
     release_weather
+end
+return
+
+//-------------weather helpers---------------
+//
+
+:GET_PLAYER_GUN_COUNT
+15@ = 0
+get_char_weapon_in_slot $player_actor slot 4 weapon $player_weapon_id ammo $player_weapon_ammo model $player_weapon_model
+if
+    $player_weapon_ammo > 0
+then
+    15@++
+end
+get_char_weapon_in_slot $player_actor slot 5 weapon $player_weapon_id ammo $player_weapon_ammo model $player_weapon_model
+if
+    $player_weapon_ammo > 0
+then
+    15@++
+end
+get_char_weapon_in_slot $player_actor slot 6 weapon $player_weapon_id ammo $player_weapon_ammo model $player_weapon_model
+if
+    $player_weapon_ammo > 0
+then
+    15@++
+end
+get_char_weapon_in_slot $player_actor slot 7 weapon $player_weapon_id ammo $player_weapon_ammo model $player_weapon_model
+if
+    $player_weapon_ammo > 0
+then
+    15@++
 end
 return
 
