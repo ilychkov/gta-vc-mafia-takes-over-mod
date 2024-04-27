@@ -17315,7 +17315,7 @@ if
     $mission_flag_b_1 == 0
 then
     if
-        locate_player_in_car_2d $player_char 0 -106.8265 605.7441 radius 50.0 50.0
+        locate_player_in_car_2d $player_char 0 -67.2485 556.9781 radius 30.0 30.0
     then
         clear_all_char_anims $mission_actor_1
         set_char_wait_state $mission_actor_1 anim 19 wait_state_time 4000
