@@ -1,0 +1,13 @@
+?
+- Car Mechanic: added car counter; improved refueling
+- Golf Race: added a timer and checkpoint counter
+- Midnight Car Escape: made the objective clearer; moved the box out of the way
+- unique stunt jumps are now unrequired for 100%
+- added a ramp in the golf club to easily go back after performing a unique stunt jump
+- added health and armour pickups in the safehouse
+- warn the players about needing guns before launching the final mission
+- A Treasure Hunt: added a hint
+- (hopefully) fixed police chases spawning in the golf club
+
+0.9
+- initial version
