@@ -12754,21 +12754,42 @@ if
     0@ == 0
 then
     if
-        locate_player_on_foot_3d $player_char 1 -84.8288 865.179 9.9451 radius 2.0 2.0 2.0
+        locate_player_any_means_2d $player_char 0 -84.8288 865.179 radius 50.0 50.0
     then
-        override_next_restart 493.5 703.1 11.1 angle 90.0
-        $restart_overriden = 1
-        remove_blip $objective_point_marker
         mark_car_as_no_longer_needed $mission_car_1
-        add_blip_for_coord $objective_point_marker = create_checkpoint_at -117.8015 1027.7056 10.0265
-        create_object $mission_obj_1 #WOODENBOX -117.732 1030.0739 9.9134
-        set_object_heading $mission_obj_1 274.5784
-        print_now 'START2' time 5000 1
+        print_now 'START1C' time 5000 1
         0@ = 1
     end
 end
 if
     0@ == 1
+then
+    if
+        locate_player_on_foot_3d $player_char 1 -84.8288 865.179 9.9451 radius 2.0 2.0 2.0
+    then
+        override_next_restart 493.5 703.1 11.1 angle 90.0
+        $restart_overriden = 1
+        remove_blip $objective_point_marker
+        add_blip_for_coord $objective_point_marker = create_checkpoint_at -117.2844 888.2415 9.0918
+        create_object $mission_obj_1 #WOODENBOX -117.732 1030.0739 9.9134
+        set_object_heading $mission_obj_1 274.5784
+        print_now 'START2' time 5000 1
+        0@ = 2
+    end
+end
+if
+    0@ == 2
+then
+    if
+        locate_player_on_foot_3d $player_char 1 -117.2844 888.2415 9.0918 radius 2.0 2.0 2.0
+    then
+        remove_blip $objective_point_marker
+        add_blip_for_coord $objective_point_marker = create_checkpoint_at -117.8015 1027.7056 10.0265
+        0@ = 3
+    end
+end
+if
+    0@ == 3
 then
     if
         not locate_stopped_player_on_foot_3d $player_char 1 -117.8015 1027.7056 10.0265 radius 1.0 1.0 1.0
@@ -12782,7 +12803,6 @@ freeze_onscreen_timer 1
 set_player_control $player_char 0
 fade 0 500
 wait 500
-delete_object $mission_obj_1
 request_model #WMYRI
 request_model #UZI
 request_model #WOODENBOX
@@ -12831,8 +12851,8 @@ while True
         TIMERA = 0
         set_char_wait_state $mission_actor_1 anim 8 wait_state_time 2000
         set_char_crouch $player_actor crouch 1 9999999
-        create_object $mission_obj_1 #WOODENBOX -117.8015 1027.7056 10.0265
-        set_object_heading $mission_obj_1 267.9984
+        create_object $mission_obj_2 #WOODENBOX -117.8015 1027.7056 10.0265
+        set_object_heading $mission_obj_2 267.9984
     end
     if and
         15@ == 2
@@ -12871,6 +12891,7 @@ end
 set_near_clip 0.9
 set_char_crouch $player_actor crouch 0 9999999
 mark_object_as_no_longer_needed $mission_obj_1
+delete_object $mission_obj_2
 delete_char $mission_actor_1
 request_model #POLICE
 request_model #PACKER
@@ -12961,6 +12982,7 @@ switch_widescreen 0
 restore_camera_jumpcut
 set_camera_behind_player
 print_now 'START3' time 5000 1
+print 'START3B' time 5000 1
 $notice_counter = 0
 display_nth_onscreen_counter_with_string $notice_counter 1 line 1 'NOTICE' // Notice:
 const notice_min_distance = 20.0
