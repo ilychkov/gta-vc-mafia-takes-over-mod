@@ -233,6 +233,7 @@ TALK2   = They have a nice pizzeria around here...
 TALK3   = That's a nice yacht.
 TALK4   = There's a real good donut bakery around here.
 TALK5   = A lot of villas on that island.
+TALK_A1 = Maybe it's in that canal over to the South?
 WRECKED = ~r~Bruh
 WHY     = ~r~Bruh
 OUTRO1  = That was some grand work! You guys got real big cojones!

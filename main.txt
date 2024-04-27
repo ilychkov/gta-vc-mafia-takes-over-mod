@@ -17063,6 +17063,7 @@ $mission_flag_a_2 = 0 // voice line 2 spoken
 $mission_flag_a_3 = 0 // voice line 3 spoken
 $mission_flag_a_4 = 0 // voice line 4 spoken
 $mission_flag_a_5 = 0 // voice line 5 spoken
+$mission_flag_b_1 = 0 // voice line A1 spoken
 $mission_meter = 0
 $mission_counter = 4
 $mission_step = 0
@@ -17307,6 +17308,20 @@ then
         print 'TALK5' time 3000 1
         TIMERA = -3000
         $mission_flag_a_5 = 1
+        $mission_flag_3 = 1
+    end
+end
+if
+    $mission_flag_b_1 == 0
+then
+    if
+        locate_player_in_car_2d $player_char 0 -106.8265 605.7441 radius 50.0 50.0
+    then
+        clear_all_char_anims $mission_actor_1
+        set_char_wait_state $mission_actor_1 anim 19 wait_state_time 4000
+        print 'TALK_A1' time 4000 1
+        TIMERA = -4000
+        $mission_flag_b_1 = 1
         $mission_flag_3 = 1
     end
 end
