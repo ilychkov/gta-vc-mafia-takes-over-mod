@@ -19835,7 +19835,7 @@ while True
         point_camera_at_point -691.587 -1577.8044 12.5424 2
         set_char_coordinates $player_actor -693.8342 -1581.8142 11.5333
         set_char_heading $player_actor 339.1741
-        give_weapon_to_player $player_char weapon 33 ammo 50
+        give_weapon_to_player $player_char weapon 33 ammo 100
         set_current_player_weapon $player_char armed_weapon_to 33
         15@++
         TIMERA = 0
@@ -20836,15 +20836,15 @@ while True
     end
     if and
         15@ == 4
-        TIMERA > 1000
+        TIMERA > 500
     then
-        print_now 'GIORGI1' time 2500 1
+        print_now 'GIORGI1' time 1500 1
         15@++
         TIMERA = 0
     end
     if and
         15@ == 5
-        TIMERA > 2500
+        TIMERA > 1500
     then
         set_fixed_camera_position -676.3121 -1562.5059 13.499 0.0 0.0 0.0
         point_camera_at_char $tommy 15 2
@@ -20853,22 +20853,56 @@ while True
     end
     if and
         15@ == 6
-        TIMERA > 1000
+        TIMERA > 500
     then
-        print_now 'GIORGI2' time 2500 1
+        print_now 'GIORGI2' time 3500 1
         15@++
         TIMERA = 0
     end
     if and
         15@ == 7
-        TIMERA > 3000
+        TIMERA > 3500
+    then
+        set_fixed_camera_position -708.05 -1474.0326 12.2668 0.0 0.0 0.0
+        point_camera_at_char $mission_actor_1 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 8
+        TIMERA > 500
+    then
+        print_now 'GIORGI3' time 5000 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 9
+        TIMERA > 5000
+    then
+        set_fixed_camera_position -676.3121 -1562.5059 13.499 0.0 0.0 0.0
+        point_camera_at_char $tommy 15 2
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 10
+        TIMERA > 500
+    then
+        print_now 'GIORGI4' time 1000 1
+        15@++
+        TIMERA = 0
+    end
+    if and
+        15@ == 11
+        TIMERA > 1000
     then
         set_char_answering_mobile $tommy hold_cellphone 0
         15@++
         TIMERA = 0
     end
     if and
-        15@ == 8
+        15@ == 12
         TIMERA > 2000
     then
         break

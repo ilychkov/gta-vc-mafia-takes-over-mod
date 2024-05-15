@@ -301,6 +301,7 @@ SONNYS4 = Farewell.
 SONNYE1 = Okay, guys, now-
 SONNYE2 = Oh Cristo...
 MAFDEAD = ~r~Forelli is dead! You don't want this kind of trouble.
-GIORGI1 = Hey, Tommy. Thank you.
-GIORGI2 = Thank you, Giorgio.
-
+GIORGI1 = Hey Tommy.
+GIORGI2 = Hey Giorgio. So, what the heck was this all about?
+GIORGI3 = I don't know! Seems like the mod's author couldn't think of a good plot. Lol
+GIORGI4 = Lol
