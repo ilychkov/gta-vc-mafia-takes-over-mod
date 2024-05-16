@@ -1,5 +1,3 @@
-- check that the car chase in Special Delivery can't get broken
-
 - why do police chases still happen in the golf club?
 
 - green sanchez near golf club sometimes doesn't spawn
@@ -7,11 +5,9 @@ info pickup?? 114.3028 253.6243 21.7326
 
 - Sea Scouts mission name doesn't show up
 
-- Midnight Car Escape - make sure the player walks to the entrance on foot
-- Midnight Car Escape - the box gets in the way
 - Midnight Car Escape - a firetruck siren sound sneaks in
 - Midnight Car Escape - Giorgio doesn't move his arms while talking in the ending??
 
 - some unique jumps are a bit weird
 
-- add an armour pickup to the safehouse
+- Sobre El Mar - a funny glitch happens if the player gets into a car before the helicopter lands
