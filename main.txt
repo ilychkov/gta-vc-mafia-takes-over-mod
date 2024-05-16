@@ -3508,7 +3508,7 @@ return
 :DROPMONEY
 script_name 'DROPMON'
 set_deatharrest_state 0
-$dropped_money_pickups_exist = 1
+$dropped_money_pickups_exist = 0
 
 :DROPMONEY_LOOP
 wait $default_wait_time
@@ -3525,11 +3525,9 @@ end
 if
     not is_player_health_greater $player_char health > 0
 goto_if_false @DROPMONEY_LOOP
-if
-    $dropped_money_pickups_exist == 1
-then
-    DROPMONEY_DESTROYPICKUPS()
-end
+
+DROPMONEY_DESTROYPICKUPS()
+
 get_dead_char_pickup_coords $player_actor store_to 0@ 1@ 2@
 get_dead_char_pickup_coords $player_actor store_to 3@ 4@ 5@
 get_dead_char_pickup_coords $player_actor store_to 6@ 7@ 8@
@@ -3540,6 +3538,8 @@ create_money_pickup $player_dropped_cash_2 = create_cash_pickup 20 at 3@ 4@ 5@
 create_money_pickup $player_dropped_cash_3 = create_cash_pickup 20 at 6@ 7@ 8@
 create_money_pickup $player_dropped_cash_4 = create_cash_pickup 20 at 9@ 10@ 11@
 create_money_pickup $player_dropped_cash_5 = create_cash_pickup 20 at 12@ 13@ 14@
+
+$dropped_money_pickups_exist = 1
 
 :DROPMONEY_WAIT
 wait 0
